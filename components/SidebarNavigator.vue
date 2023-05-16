@@ -164,7 +164,7 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 .v-list-item {
   margin-left: 7%;
   margin-right: 7%;
