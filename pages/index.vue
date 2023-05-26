@@ -1,14 +1,15 @@
 <script lang="ts">
 export default {
-  data () {
-    return {}
+  emits: ['currentPage'],
+  created () {
+    this.$emit('currentPage', 'inicio')
   }
 }
 </script>
 
 <template>
   <div>
-    <h1>Index</h1>
+    <h1>Inicio</h1>
   </div>
 </template>
 

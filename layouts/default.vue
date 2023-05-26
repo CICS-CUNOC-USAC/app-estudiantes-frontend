@@ -28,6 +28,7 @@
     <v-main>
       <NuxtPage
         :theme="theme"
+        class="ma-4"
         @current-page="currentPage = $event"
       />
       <v-footer
