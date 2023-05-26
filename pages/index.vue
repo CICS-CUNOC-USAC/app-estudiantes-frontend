@@ -15,7 +15,7 @@
         La aplicacion esta compuesta por secciones con informacion y herramientas.
       </p>
     </div>
-    <div class="section-divider">
+    <!-- <div class="section-divider">
       <h2 class="green">
         Informacion Básica
       </h2>
@@ -131,7 +131,7 @@
           :route="item.route"
         />
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 <script lang="ts">
