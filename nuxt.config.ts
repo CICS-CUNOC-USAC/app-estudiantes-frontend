@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify']
   },
+  components: [
+    { path: '~/components/cards' }
+  ],
   app: {
     head: {
       link: [
