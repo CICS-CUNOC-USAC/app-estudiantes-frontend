@@ -5,7 +5,7 @@
       <img
         alt="Logo USAC"
         class="logo"
-        src="@/assets/img/universidad-de-san-carlos-de-guatemala.svg"
+        src="@/assets/img/usac-logo.svg"
         width="125"
         height="125"
         style="filter: invert(50%); margin-top: 10px; margin-bottom: -5px;"
@@ -103,7 +103,7 @@
       </p>
       <v-list-item
         prepend-icon="mdi-information-outline"
-        to="about"
+        to="/extras/about"
         class="rounded-lg"
         active-class="bg-orange-accent-4 rounded-pill"
       >
@@ -129,24 +129,20 @@ export default {
   emits: ['theme'],
   data () {
     return {
-      items: [
-        { text: 'Real-Time', icon: 'mdi-clock', route: '/home' },
-        { text: 'Audience', icon: 'mdi-account', route: '/about' }
-      ],
       basicInfoItems: [
-        ['mdi-calendar-month-outline', 'Horarios', '/horarios'],
-        ['mdi-card-bulleted-settings-outline', 'Pensums', '/pensums'],
-        ['mdi-help-box-outline', 'FAQ | Primer Ingreso', '/faq-primer-ingreso'],
-        ['mdi-help-box-outline', 'FAQ', '/faq']
+        ['mdi-calendar-month-outline', 'Horarios', '/basic-info/horarios'],
+        ['mdi-card-bulleted-settings-outline', 'Pensums', '/basic-info/pensums'],
+        ['mdi-help-box-outline', 'FAQ | Primer Ingreso', '/basic-info/faq-primer-ingreso'],
+        ['mdi-help-box-outline', 'FAQ', '/basic-info/faq']
       ],
       associations: [
-        ['mdi-account-group-outline', 'CICS', '/cics'],
-        ['mdi-account-group-outline', 'AEIO', '/aeio']
+        ['mdi-account-group-outline', 'CICS', '/associations/cics'],
+        ['mdi-account-group-outline', 'AEIO', '/associations/aeio']
       ],
       resources: [
-        ['mdi-file-document-multiple-outline', 'Manuales', '/manuales'],
-        ['mdi-book-open-page-variant-outline', 'Biblioteca', '/biblioteca'],
-        ['mdi-book-account-outline', 'Tesario', '/tesario']
+        ['mdi-file-document-multiple-outline', 'Manuales', '/resources/manuales'],
+        ['mdi-book-open-page-variant-outline', 'Biblioteca', '/resources/biblioteca'],
+        ['mdi-book-account-outline', 'Tesario', '/resources/tesario']
       ],
       theme: 'light',
       tools: [

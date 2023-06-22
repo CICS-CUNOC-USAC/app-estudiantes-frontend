@@ -29,6 +29,7 @@
       <v-container align="center">
       <NuxtPage
         :theme="theme"
+        class="ma-4"
         @current-page="currentPage = $event"
       />
       </v-container>
