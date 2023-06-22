@@ -8,7 +8,7 @@
               mdi-wrench
             </v-icon>
             <h6 style="color: darkcyan; font-style: italic">
-              Pensum
+                Pensum {{$route.params.carrera}}
             </h6>
             <strong>En construcción...</strong>
           </v-card-title>
