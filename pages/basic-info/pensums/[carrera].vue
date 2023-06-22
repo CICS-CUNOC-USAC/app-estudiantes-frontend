@@ -8,7 +8,7 @@
               mdi-wrench
             </v-icon>
             <h6 style="color: darkcyan; font-style: italic">
-              Horarios
+              Pensum
             </h6>
             <strong>En construcción...</strong>
           </v-card-title>
@@ -23,7 +23,7 @@
 
 <script lang="ts">
 export default {
-  name: 'Horarios'
+  name: 'Pensum',
 }
 </script>
 
