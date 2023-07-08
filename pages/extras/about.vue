@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <div>
     <p>
       La Aplicación para Estudiantes de Ingenieria del CUNOC, nació como un proyecto hecho por y para estudiantes con el fin de facilitarles
       el acceso a información de la División para ayudarles en su viaje a lo largo de la carrera.
@@ -79,20 +79,163 @@
       <br>
       ● Contexto adicional
     </p>
-  </v-container>
+    TESTING
+    <p>
+      Hay dos formas en las que puedes contribuir a la aplicación, la primera forma es contribuir a su mantenimiento y expansión, para esto hemos creado el apartado <strong>Herramientas</strong> con el fin
+      de que interesados puedan desarrollar y proponer sus propios snippets hechos en Vue 3 para ampliar la funcionalidad de la aplicación con herramientas que ellos consideren importantes.
+      Para esto puedes contactar al CICS, el correo estara en el apartado del mismo nombre.
+
+      La siguiente forma de contribuir al desarrollo de la aplicación es la de reportar los posibles errores encontrados al utilizar la página,
+      hay dos formas de hacer esto, la primera es abrir un <strong>Issue</strong> en el repositorio de GitHub para que quienes mantenemos la página podamos solucionarlo,
+      y la segunda forma es enviar un correo al CICS con el asunto "Reporte de Error - App CICS".
+      <br>
+      <br>
+      Debido a la complejidad de la pagina les pedimos encarecidamente que los reportes de los errores sean lo mas específicos posibles para que nosotros podamos resolverlos de la
+      manera mas rápida y eficiente posible, por ello mismo hemos listado un conjunto de aspectos que sugerimos que el reporte del error tenga.
+      <br>
+      <br>
+      ● Una descripción clara y detallada de como es el error.
+      <br>
+      ● Detalles técnicos del dispositivo, si se utilizo en móvil o computadora, nombre del dispositivo, sistema operativo, nombre del navegador, etc.
+      <br>
+      ● ¿Como reproducir el error?
+      <br>
+      &emsp;Por ejemplo:
+      <br>
+      &emsp;&emsp;1. Abrir la seccion "Pensums"
+      <br>
+      &emsp;&emsp;2. Ingresar al Pensum de Ingenieria Civil
+      <br>
+      &emsp;&emsp;3. Pulsar "X" boton
+      <br>
+      &emsp;&emsp;4. Pulsar Enter
+      <br>
+      ● El comportamiento que se esperaba que ocurriera
+      <br>
+      ● Capturas de pantalla del error
+      <br>
+      ● Contexto adicional
+    </p>
+    <p>
+      Hay dos formas en las que puedes contribuir a la aplicación, la primera forma es contribuir a su mantenimiento y expansión, para esto hemos creado el apartado <strong>Herramientas</strong> con el fin
+      de que interesados puedan desarrollar y proponer sus propios snippets hechos en Vue 3 para ampliar la funcionalidad de la aplicación con herramientas que ellos consideren importantes.
+      Para esto puedes contactar al CICS, el correo estara en el apartado del mismo nombre.
+
+      La siguiente forma de contribuir al desarrollo de la aplicación es la de reportar los posibles errores encontrados al utilizar la página,
+      hay dos formas de hacer esto, la primera es abrir un <strong>Issue</strong> en el repositorio de GitHub para que quienes mantenemos la página podamos solucionarlo,
+      y la segunda forma es enviar un correo al CICS con el asunto "Reporte de Error - App CICS".
+      <br>
+      <br>
+      Debido a la complejidad de la pagina les pedimos encarecidamente que los reportes de los errores sean lo mas específicos posibles para que nosotros podamos resolverlos de la
+      manera mas rápida y eficiente posible, por ello mismo hemos listado un conjunto de aspectos que sugerimos que el reporte del error tenga.
+      <br>
+      <br>
+      ● Una descripción clara y detallada de como es el error.
+      <br>
+      ● Detalles técnicos del dispositivo, si se utilizo en móvil o computadora, nombre del dispositivo, sistema operativo, nombre del navegador, etc.
+      <br>
+      ● ¿Como reproducir el error?
+      <br>
+      &emsp;Por ejemplo:
+      <br>
+      &emsp;&emsp;1. Abrir la seccion "Pensums"
+      <br>
+      &emsp;&emsp;2. Ingresar al Pensum de Ingenieria Civil
+      <br>
+      &emsp;&emsp;3. Pulsar "X" boton
+      <br>
+      &emsp;&emsp;4. Pulsar Enter
+      <br>
+      ● El comportamiento que se esperaba que ocurriera
+      <br>
+      ● Capturas de pantalla del error
+      <br>
+      ● Contexto adicional
+    </p>
+    <p>
+      Hay dos formas en las que puedes contribuir a la aplicación, la primera forma es contribuir a su mantenimiento y expansión, para esto hemos creado el apartado <strong>Herramientas</strong> con el fin
+      de que interesados puedan desarrollar y proponer sus propios snippets hechos en Vue 3 para ampliar la funcionalidad de la aplicación con herramientas que ellos consideren importantes.
+      Para esto puedes contactar al CICS, el correo estara en el apartado del mismo nombre.
+
+      La siguiente forma de contribuir al desarrollo de la aplicación es la de reportar los posibles errores encontrados al utilizar la página,
+      hay dos formas de hacer esto, la primera es abrir un <strong>Issue</strong> en el repositorio de GitHub para que quienes mantenemos la página podamos solucionarlo,
+      y la segunda forma es enviar un correo al CICS con el asunto "Reporte de Error - App CICS".
+      <br>
+      <br>
+      Debido a la complejidad de la pagina les pedimos encarecidamente que los reportes de los errores sean lo mas específicos posibles para que nosotros podamos resolverlos de la
+      manera mas rápida y eficiente posible, por ello mismo hemos listado un conjunto de aspectos que sugerimos que el reporte del error tenga.
+      <br>
+      <br>
+      ● Una descripción clara y detallada de como es el error.
+      <br>
+      ● Detalles técnicos del dispositivo, si se utilizo en móvil o computadora, nombre del dispositivo, sistema operativo, nombre del navegador, etc.
+      <br>
+      ● ¿Como reproducir el error?
+      <br>
+      &emsp;Por ejemplo:
+      <br>
+      &emsp;&emsp;1. Abrir la seccion "Pensums"
+      <br>
+      &emsp;&emsp;2. Ingresar al Pensum de Ingenieria Civil
+      <br>
+      &emsp;&emsp;3. Pulsar "X" boton
+      <br>
+      &emsp;&emsp;4. Pulsar Enter
+      <br>
+      ● El comportamiento que se esperaba que ocurriera
+      <br>
+      ● Capturas de pantalla del error
+      <br>
+      ● Contexto adicional
+    </p>
+    <p>
+      Hay dos formas en las que puedes contribuir a la aplicación, la primera forma es contribuir a su mantenimiento y expansión, para esto hemos creado el apartado <strong>Herramientas</strong> con el fin
+      de que interesados puedan desarrollar y proponer sus propios snippets hechos en Vue 3 para ampliar la funcionalidad de la aplicación con herramientas que ellos consideren importantes.
+      Para esto puedes contactar al CICS, el correo estara en el apartado del mismo nombre.
+
+      La siguiente forma de contribuir al desarrollo de la aplicación es la de reportar los posibles errores encontrados al utilizar la página,
+      hay dos formas de hacer esto, la primera es abrir un <strong>Issue</strong> en el repositorio de GitHub para que quienes mantenemos la página podamos solucionarlo,
+      y la segunda forma es enviar un correo al CICS con el asunto "Reporte de Error - App CICS".
+      <br>
+      <br>
+      Debido a la complejidad de la pagina les pedimos encarecidamente que los reportes de los errores sean lo mas específicos posibles para que nosotros podamos resolverlos de la
+      manera mas rápida y eficiente posible, por ello mismo hemos listado un conjunto de aspectos que sugerimos que el reporte del error tenga.
+      <br>
+      <br>
+      ● Una descripción clara y detallada de como es el error.
+      <br>
+      ● Detalles técnicos del dispositivo, si se utilizo en móvil o computadora, nombre del dispositivo, sistema operativo, nombre del navegador, etc.
+      <br>
+      ● ¿Como reproducir el error?
+      <br>
+      &emsp;Por ejemplo:
+      <br>
+      &emsp;&emsp;1. Abrir la seccion "Pensums"
+      <br>
+      &emsp;&emsp;2. Ingresar al Pensum de Ingenieria Civil
+      <br>
+      &emsp;&emsp;3. Pulsar "X" boton
+      <br>
+      &emsp;&emsp;4. Pulsar Enter
+      <br>
+      ● El comportamiento que se esperaba que ocurriera
+      <br>
+      ● Capturas de pantalla del error
+      <br>
+      ● Contexto adicional
+    </p>
+  </div>
 </template>
 <script lang="ts">
 export default {
   emits: ['currentPage'],
-  head: {
-    title: 'Acerca de | CICS App'
+  head () {
+    return {
+      title: 'Acerca de - App CICS'
+    }
   },
   created () {
     this.$emit('currentPage', 'Acerca de')
   }
 }
 </script>
-
-<style scoped lang="scss">
-
-</style>

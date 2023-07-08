@@ -130,19 +130,19 @@ export default {
   data () {
     return {
       basicInfoItems: [
-        ['mdi-calendar-month-outline', 'Horarios', '/basic-info/horarios'],
-        ['mdi-card-bulleted-settings-outline', 'Pensums', '/basic-info/pensums'],
-        ['mdi-help-box-outline', 'FAQ | Primer Ingreso', '/basic-info/faq-primer-ingreso'],
-        ['mdi-help-box-outline', 'FAQ', '/basic-info/faq']
+        ['mdi-calendar-month-outline', 'Horarios', '/general/horarios'],
+        ['mdi-card-bulleted-settings-outline', 'Pensums', '/general/pensums'],
+        ['mdi-help-box-outline', 'FAQ | Primer Ingreso', '/general/faq-primer-ingreso'],
+        ['mdi-help-box-outline', 'FAQ', '/general/faq']
       ],
       associations: [
-        ['mdi-account-group-outline', 'CICS', '/associations/cics'],
-        ['mdi-account-group-outline', 'AEIO', '/associations/aeio']
+        ['mdi-account-group-outline', 'CICS', '/asociaciones/cics'],
+        ['mdi-account-group-outline', 'AEIO', '/asociaciones/aeio']
       ],
       resources: [
-        ['mdi-file-document-multiple-outline', 'Manuales', '/resources/manuales'],
-        ['mdi-book-open-page-variant-outline', 'Biblioteca', '/resources/biblioteca'],
-        ['mdi-book-account-outline', 'Tesario', '/resources/tesario']
+        ['mdi-file-document-multiple-outline', 'Manuales', '/recursos/manuales'],
+        ['mdi-book-open-page-variant-outline', 'Biblioteca', '/recursos/biblioteca'],
+        ['mdi-book-account-outline', 'Tesario', '/recursos/tesario']
       ],
       theme: 'light',
       tools: [
