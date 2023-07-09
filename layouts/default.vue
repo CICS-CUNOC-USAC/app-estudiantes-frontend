@@ -26,12 +26,12 @@
     </v-navigation-drawer>
 
     <v-main>
-      <v-container align="center">
-      <NuxtPage
-        :theme="theme"
-        class="ma-4"
-        @current-page="currentPage = $event"
-      />
+      <v-container>
+        <NuxtPage
+          :theme="theme"
+          class="ma-4"
+          @current-page="currentPage = $event"
+        />
       </v-container>
       <v-footer
         :color="theme === 'light' ? 'white':'#121212'"
