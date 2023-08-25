@@ -1,44 +1,40 @@
 <template>
-  <v-hover v-slot="{ isHovering, props }">
-    <v-card
-      v-bind="props"
-      :to="route"
-      :elevation="isHovering ? 6 : 2"
-      rounded="lg"
-    >
-      <v-img 
-        height="150"
-        :src="img"
-        cover
-      />
-      <v-container class="pa-2">
-        <v-card-item>
-          <v-card-subtitle
-            align="left"
-            class="mb-2"
-          >
-            <p class="card-subtitle">
-              {{ subtitle }}
-            </p>  
-          </v-card-subtitle>
-          <v-card-title
-            class="text-orange-accent-4"
-            align="left"
-          >
-            <p class="card-title">
-              {{ title }}
-            </p>
-          </v-card-title>
-        </v-card-item>
-  
-        <v-card-text align="left">
-          <p class="card-description">
-            {{ description }}
+  <v-card
+    :to="route"
+    rounded="lg"
+  >
+    <v-img
+      height="150"
+      :src="img"
+      cover
+    />
+    <v-container class="pa-2">
+      <v-card-item>
+        <v-card-subtitle
+          align="left"
+          class="mb-2"
+        >
+          <p class="card-subtitle">
+            {{ subtitle }}
           </p>
-        </v-card-text>
-      </v-container>
-    </v-card>
-  </v-hover>
+        </v-card-subtitle>
+        <v-card-title
+          class="text-orange-accent-4"
+          align="left"
+        >
+          <p class="card-title">
+            {{ title }}
+          </p>
+        </v-card-title>
+      </v-card-item>
+
+      <v-card-text align="left">
+        <p class="card-description">
+          {{ description }}
+        </p>
+      </v-card-text>
+    </v-container>
+  </v-card>
 </template>
 <script lang="ts">
 export default {
@@ -49,7 +45,8 @@ export default {
     },
     subtitle: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     },
     title: {
       type: String,
@@ -57,7 +54,8 @@ export default {
     },
     description: {
       type: String,
-      required: false
+      required: false,
+      default: ''
     },
     route: {
       type: String,

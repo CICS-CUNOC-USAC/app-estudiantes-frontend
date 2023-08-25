@@ -4,6 +4,11 @@ import * as directives from 'vuetify/directives'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
+    defaults: {
+      global: {
+        ripple: false
+      }
+    },
     ssr: true,
     components,
     directives
