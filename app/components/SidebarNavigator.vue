@@ -25,9 +25,9 @@
       <v-divider
         thickness="2"
       />
-      <p class="text-overline">
-        informacion basica
-      </p>
+      <span class="text-overline">
+        informacion básica
+      </span>
       <v-list-item
         v-for="([icon,title,route], i) in basicInfoItems"
         :key="i"
@@ -44,9 +44,9 @@
       <v-divider
         thickness="2"
       />
-      <p class="text-overline">
+      <span class="text-overline">
         asociaciones
-      </p>
+      </span>
       <v-list-item
         v-for="([icon,title,route], i) in associations"
         :key="i"
@@ -63,9 +63,9 @@
       <v-divider
         thickness="2"
       />
-      <p class="text-overline">
+      <span class="text-overline">
         recursos
-      </p>
+      </span>
       <v-list-item
         v-for="([icon,title,route], i) in resources"
         :key="i"
@@ -98,9 +98,9 @@
       <v-divider
         thickness="2"
       />
-      <p class="text-overline">
+      <span class="text-overline">
         extra
-      </p>
+      </span>
       <v-list-item
         prepend-icon="mdi-information-outline"
         to="/extras/about"
@@ -172,7 +172,7 @@ export default {
   font-size: 1.1rem !important;
 }
 
-p {
+span {
   margin-left: 8.5%;
   font-weight: bold;
 }

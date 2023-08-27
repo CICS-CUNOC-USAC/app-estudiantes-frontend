@@ -13,7 +13,22 @@
 
       <v-app-bar-title class="mt-n1">
         <strong>{{ currentPage.toUpperCase() }} </strong> - APP
+        <!-- <v-spacer /> -->
       </v-app-bar-title>
+
+      <v-tooltip text="Iniciar sesión" location="bottom">
+        <template #activator="{ props }">
+          <v-btn
+            to="/login"
+            icon
+            v-bind="props"
+          >
+            <v-icon>
+              mdi-account-circle-outline
+            </v-icon>
+          </v-btn>
+        </template>
+      </v-tooltip>
     </v-app-bar>
 
     <v-navigation-drawer
