@@ -11,6 +11,12 @@ export default defineNuxtPlugin((nuxtApp) => {
         variant: 'tonal',
         color: 'orange-accent-4'
       },
+      VTextField: {
+        variant: 'underlined'
+      },
+      VCard: {
+        rounded: 'xl'
+      },
       global: {
         ripple: false
       }

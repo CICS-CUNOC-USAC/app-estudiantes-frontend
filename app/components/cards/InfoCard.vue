@@ -22,9 +22,9 @@
           class="text-orange-accent-4"
           align="left"
         >
-          <p class="card-title">
+          <span class="card-title">
             {{ title }}
-          </p>
+          </span>
         </v-card-title>
       </v-card-item>
 
@@ -64,10 +64,10 @@ export default {
   }
 }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
   .card-title {
     font-weight: 600;
-    font-size: 2rem;
+    font-size: 1.7rem;
   }
   .card-subtitle {
     font-weight: 400;

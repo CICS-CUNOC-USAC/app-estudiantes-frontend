@@ -2,16 +2,16 @@
   <section class="login-page">
     <v-row justify="center" no-gutters>
       <v-col cols="11" sm="8" md="8" lg="4" xl="4">
-        <LoginForm />
+        <SignupForm />
       </v-col>
     </v-row>
   </section>
 </template>
 <script>
-import LoginForm from '~/components/forms/accounts/LoginForm.vue'
+import SignupForm from '@/components/forms/accounts/SignupForm.vue'
 export default {
   components: {
-    LoginForm
+    SignupForm
   },
   setup() {
     definePageMeta({
