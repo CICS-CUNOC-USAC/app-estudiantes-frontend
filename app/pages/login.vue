@@ -20,6 +20,10 @@ export default {
     useHead({
       title: 'Iniciar sesión'
     })
+    // Testing custom fetch composable
+    const data = useApiFetch('/auth/login', {
+      method
+    })
   },
   data() {
     return {

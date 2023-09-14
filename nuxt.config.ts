@@ -4,9 +4,10 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify']
   },
-  components: [
-    { path: '~/components/cards' }
-  ],
+  runtimeConfig: {
+    baseURL: process.env.BASE_URL || 'http://localhost:8000'
+  },
+  components: [{ path: '~/components/cards' }],
   app: {
     head: {
       link: [
@@ -19,10 +20,7 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' }
   },
-  modules: [
-    '@pinia/nuxt',
-    '@nuxtjs/google-fonts'
-  ],
+  modules: ['@pinia/nuxt', '@nuxtjs/google-fonts'],
   vite: {
     define: {
       'process.env.DEBUG': false
