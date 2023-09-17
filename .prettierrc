@@ -2,6 +2,5 @@
   "semi": false,
   "arrowParens": "always",
   "singleQuote": true,
-  "trailingComma": "none",
-  "insertSpaceBeforeFunctionParenthesis": false
+  "trailingComma": "none"
 }
