@@ -16,7 +16,7 @@
         prepend-icon="mdi-home-outline"
         class="rounded-lg"
         active-class="bg-orange-accent-4 rounded-pill"
-        to="/dashboard/home"
+        to="/admin/home"
       >
         <v-list-item-title> Tablero </v-list-item-title>
       </v-list-item>
@@ -24,7 +24,7 @@
         prepend-icon="mdi-account-outline"
         class="rounded-lg"
         active-class="bg-orange-accent-4 rounded-pill"
-        to="/dashboard/me"
+        to="/admin/me"
       >
         <v-list-item-title> Perfil </v-list-item-title>
       </v-list-item>
@@ -54,7 +54,7 @@
       </v-list-item>
       <v-container align="center">
         <v-switch
-          v-model="modelSwitch"
+          v-model="themeBoolean"
           :prepend-icon="'mdi-weather-sunny'"
           inset
           :append-icon="'mdi-weather-night'"
@@ -66,6 +66,8 @@
   </div>
 </template>
 <script lang="ts">
+import { mapWritableState } from 'pinia'
+import { useConfigsStore } from '~/stores/config'
 export default {
   emits: ['theme'],
   data() {
@@ -76,21 +78,18 @@ export default {
           'mdi-card-bulleted-settings-outline',
           'Pensums',
           '/portal/general/pensums'
-        ],
+        ]
       ],
       theme: 'light',
       tools: []
     }
   },
   computed: {
-    modelSwitch() {
-      return this.theme !== 'light'
-    }
+    ...mapWritableState(useConfigsStore, ['themeBoolean'])
   },
   methods: {
     changeTheme() {
-      this.theme = this.theme === 'light' ? 'dark' : 'light'
-      this.$emit('theme', this.theme)
+      this.$emit('theme')
     }
   }
 }

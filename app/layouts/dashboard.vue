@@ -32,7 +32,7 @@
       v-model="drawer"
       :width="$vuetify.display.mdAndUp ? 340 : 300"
     >
-      <DashboardNavigator @theme="(theme: string) => changeTheme(theme)" />
+      <DashboardNavigator @theme="(theme: string) => changeTheme()" />
     </v-navigation-drawer>
 
     <v-main>
@@ -55,6 +55,7 @@
 import { mapState, mapActions } from 'pinia'
 import DashboardNavigator from '~/components/partials/DashboardNavigator.vue'
 import { useRegularAuthStore } from '~/stores/regular-auth'
+import { useConfigsStore } from '~/stores/config'
 import { useAuthStore } from '~/stores/auth'
 export default {
   components: {
@@ -63,21 +64,21 @@ export default {
   data() {
     return {
       drawer: true,
-      theme: 'light',
       currentPage: ''
     }
   },
   computed: {
+    ...mapState(useConfigsStore, ['theme']),
     ...mapState(useRegularAuthStore, ['user', 'authenticated']),
     elevation() {
       return this.drawer ? 2 : 0
     }
   },
   methods: {
-    changeTheme(value: string) {
-      this.theme = value
+    ...mapActions(useConfigsStore, ['switchTheme']),
+    changeTheme() {
+      this.switchTheme()
     },
-    ...mapActions(useRegularAuthStore, ['myProfile']),
     ...mapActions(useAuthStore, ['logout'])
   }
 }

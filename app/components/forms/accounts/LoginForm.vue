@@ -56,7 +56,7 @@
           <span>
             ¿No tienes una cuenta?
             <NuxtLink
-              to="/signup"
+              to="/sign-up"
               class="text-orange-darken-3 text-decoration-none nav-link ml-1"
               ><strong>Regístrate</strong></NuxtLink
             >

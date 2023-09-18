@@ -6,6 +6,16 @@ type UserPayload = {
   password: string
 }
 
+export type SignupPayload = {
+  firstName: string
+  lastName: string
+  user: {
+    email: string
+    ra: string
+    password: string
+  }
+}
+
 export type Profile = {
   id: number
   first_name: string
@@ -33,7 +43,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
   state: () => ({
     authenticated: false,
     loading: false,
-    error: null as any | null,
+    error: null as any | string[] | null,
     user: null as User | null
   }),
   actions: {
@@ -78,6 +88,58 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       // Return the data and error
       this.loading = false
       return { data, error: false }
+    },
+    async signupUser(payload: SignupPayload) {
+      const { firstName, lastName, ...payloadRest } = payload
+      const newPayload = {
+        first_name: firstName,
+        last_name: lastName,
+        user: payloadRest
+      }
+      this.loading = true
+      this.error = null
+      const router = useRouter()
+      // Fetch the data from the API
+      const { data, error } = await useCustomFetch<LoginResponse>(
+        'auth/sign-up',
+        {
+          method: 'POST',
+          body: newPayload
+        }
+      )
+      // Error handling
+      if (error.value?.data) {
+        // Check if the error message is an array or just a string
+        if (Array.isArray(error.value.data.message)) {
+          this.error = convertArrayErrors(error.value.data.message)
+        } else {
+          this.error = convertError(error.value.data.message)
+        }
+        this.loading = false
+        return
+      } else if (error.value?.cause) {
+        this.loading = false
+        this.error = convertError(error.value.message)
+        return
+      }
+      // Success
+      // Set cookies, user and role
+      const tokenCookie = useCookie('cicsapp-user-token')
+      const roleCookie = useCookie('cicsapp-roleuser')
+      tokenCookie.value = data?.value?.token
+      roleCookie.value = 'regular'
+      // Set the user in the store
+      this.user = data?.value?.user ?? null
+      this.authenticated = true
+      // Set the token and role in the auth store
+      const authStore = useAuthStore()
+      authStore.role = 'regular'
+      authStore.token = data?.value?.token ?? ''
+      authStore.isAuthenticated = true
+      // Redirect to the dashboard
+      router.push('/dashboard/home')
+      // Return the data and error
+      this.loading = false
     },
     async myProfile() {
       this.loading = true

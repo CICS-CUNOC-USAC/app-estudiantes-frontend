@@ -7,7 +7,7 @@
 export default {
   setup() {
     definePageMeta({
-      layout: 'dashboard'
+      layout: 'admin'
     })
   }
 }

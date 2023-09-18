@@ -2,12 +2,18 @@
   <section class="login-page">
     <v-row justify="center" no-gutters>
       <v-col cols="11" sm="8" md="8" lg="4" xl="4">
-        <SignupForm />
+        <SignupForm
+          :loading="loading"
+          :error="error"
+          @signup="signUp($event)"
+        />
       </v-col>
     </v-row>
   </section>
 </template>
-<script>
+<script lang="ts">
+import { mapState, mapActions } from 'pinia'
+import { useRegularAuthStore, SignupPayload } from '~/stores/regular-auth'
 import SignupForm from '@/components/forms/accounts/SignupForm.vue'
 export default {
   components: {
@@ -18,28 +24,20 @@ export default {
       layout: 'empty'
     })
     useHead({
-      title: 'Iniciar sesión'
+      title: 'Registro'
     })
   },
   data() {
-    return {
-      email: '',
-      password: '',
-      emailRules: [
-        (v) => !!v || 'E-mail is required',
-        (v) => /.+@.+\..+/.test(v) || 'E-mail must be valid'
-      ],
-      passwordRules: [
-        (v) => !!v || 'Password is required',
-        (v) => v.length >= 8 || 'Password must be at least 8 characters'
-      ]
-    }
+    return {}
+  },
+  computed: {
+    ...mapState(useRegularAuthStore, ['loading', 'error'])
   },
   methods: {
-    signUp() {
-      console.log('sign up')
-      // this.$router.push('/dashboard')
-    }
+    signUp(payload: SignupPayload) {
+      this.signupUser(payload)
+    },
+    ...mapActions(useRegularAuthStore, ['signupUser'])
   }
 }
 </script>

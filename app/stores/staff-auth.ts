@@ -6,7 +6,7 @@ type LoginPayload = {
   password: string
 }
 
-type Staff = {
+export type Staff = {
   id: number
   first_name: string
   last_name: string

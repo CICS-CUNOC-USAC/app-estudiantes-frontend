@@ -87,12 +87,12 @@ export const useAuthStore = defineStore('auth', {
     getRole: (state) => state.role,
     getToken: (state) => state.token,
     user: (state) => {
-      if (state.role === 'staff') {
-        const staffAuthStore = useStaffAuthStore()
-        return staffAuthStore.user
-      } else {
+      if (state.role === 'regular') {
         const regularAuthStore = useRegularAuthStore()
         return regularAuthStore.user
+      } else {
+        const staffAuthStore = useStaffAuthStore()
+        return staffAuthStore.user
       }
     }
   }

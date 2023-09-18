@@ -16,12 +16,17 @@ import { mapState, mapActions } from 'pinia'
 import { useStaffAuthStore } from '~/stores/staff-auth'
 import { useAuthStore } from '~/stores/auth'
 
-export default {
+export default defineNuxtComponent({
   setup() {
     definePageMeta({
-      layout: 'dashboard'
+      layout: 'admin'
     })
   },
+  // asyncData({ $pinia }) {
+  //   const store = useAuthStore($pinia)
+  //   store.fetchUser()
+  //   return {}
+  // },
   computed: {
     ...mapState(useStaffAuthStore, ['user', 'authenticated'])
   },
@@ -29,6 +34,6 @@ export default {
     ...mapActions(useStaffAuthStore, ['myProfile']),
     ...mapActions(useAuthStore, ['logout'])
   }
-}
+})
 </script>
 <style lang="scss"></style>
