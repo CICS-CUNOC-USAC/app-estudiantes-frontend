@@ -1,27 +1,14 @@
 <template>
-  <v-card
-    :to="route"
-    rounded="lg"
-  >
-    <v-img
-      height="150"
-      :src="img"
-      cover
-    />
+  <v-card :to="route" rounded="lg">
+    <v-img height="150" :src="img" cover />
     <v-container class="pa-2">
       <v-card-item>
-        <v-card-subtitle
-          align="left"
-          class="mb-2"
-        >
+        <v-card-subtitle align="left" class="mb-2">
           <p class="card-subtitle">
             {{ subtitle }}
           </p>
         </v-card-subtitle>
-        <v-card-title
-          class="text-orange-accent-4"
-          align="left"
-        >
+        <v-card-title class="text-orange-accent-4" align="left">
           <span class="card-title">
             {{ title }}
           </span>
@@ -65,16 +52,16 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .card-title {
-    font-weight: 600;
-    font-size: 1.7rem;
-  }
-  .card-subtitle {
-    font-weight: 400;
-    font-size: 1.1rem;
-  }
-  .card-description {
-    font-weight: normal;
-    font-size: 1.1rem;
-  }
+.card-title {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+.card-subtitle {
+  font-weight: 400;
+  font-size: 0.9rem;
+}
+.card-description {
+  font-weight: normal;
+  font-size: 1rem;
+}
 </style>

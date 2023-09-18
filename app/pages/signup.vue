@@ -36,8 +36,8 @@ export default {
     }
   },
   methods: {
-    login() {
-      console.log('login')
+    signUp() {
+      console.log('sign up')
       // this.$router.push('/dashboard')
     }
   }

@@ -1,12 +1,12 @@
 <template>
   <section class="login-page">
     <v-row justify="center" no-gutters>
-      <v-col cols="11" sm="8" md="8" lg="4" xl="4">
+      <v-col cols="11" sm="8" md="8" lg="5" xl="5">
         <LoginForm
           :loading="loading"
           :error="error"
-          :admin="false"
-          :show-signup="true"
+          admin
+          :show-signup="false"
           @login="login($event)"
         />
       </v-col>
@@ -15,7 +15,7 @@
 </template>
 <script lang="ts">
 import { mapState, mapActions } from 'pinia'
-import { useRegularAuthStore } from '~/stores/regular-auth'
+import { useStaffAuthStore } from '~/stores/staff-auth'
 import LoginForm from '~/components/forms/accounts/LoginForm.vue'
 export default {
   components: {
@@ -33,13 +33,13 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(useRegularAuthStore, ['loading', 'error'])
+    ...mapState(useStaffAuthStore, ['loading', 'error'])
   },
   methods: {
     login(credentials: { email: string; password: string }) {
-      this.loginUser(credentials)
+      this.loginStaff(credentials)
     },
-    ...mapActions(useRegularAuthStore, ['loginUser'])
+    ...mapActions(useStaffAuthStore, ['loginStaff'])
   }
 }
 </script>
@@ -52,3 +52,4 @@ export default {
   width: 100%;
 }
 </style>
+~/stores/staff-auth

@@ -61,10 +61,10 @@
         <v-col cols="12">
           <span>
             ¿Ya tienes una cuenta?
-            <NuxtLink to="/login"
-              ><strong class="text-orange-darken-4 text-decoration-underline"
-                >Inicia sesión</strong
-              ></NuxtLink
+            <NuxtLink
+              to="/login"
+              class="text-orange-darken-3 text-decoration-none nav-link ml-1"
+              ><strong>Inicia sesión</strong></NuxtLink
             >
           </span>
         </v-col>
@@ -89,3 +89,13 @@ const login = () => {
   }, 2000)
 }
 </script>
+<style scoped lang="scss">
+.nav-link {
+  &:hover {
+    color: #fb8c00 !important;
+  }
+  &:active {
+    color: #bf360c !important;
+  }
+}
+</style>

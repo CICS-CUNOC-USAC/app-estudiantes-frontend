@@ -3,20 +3,17 @@
     <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
 
     <div class="greetings">
-      <h1>Aplicación para Estudiantes</h1>
+      <h1>Portal - Ingenieria CUNOC</h1>
       <v-divider thickness="3" />
       <div class="my-6">
         <p>
-          La aplicación para los estudiantes de Ingenieria del Centro
+          El nuevo portal para los estudiantes de Ingenieria del Centro
           Universitario De Occidente fue creada con el fin de apoyar a los
           estudiantes a encontrar informacion que les puede ser util a lo largo
           de su carrera.
         </p>
         <br />
-        <p>
-          La aplicacion esta compuesta por secciones con informacion y
-          herramientas.
-        </p>
+        <p>Está compuesta por secciones con informacion y herramientas.</p>
       </div>
       <div class="section-divider">
         <h2 class="green">Informacion Básica</h2>

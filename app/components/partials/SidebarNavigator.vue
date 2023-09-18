@@ -8,8 +8,8 @@
         src="@/assets/img/usac-logo.svg"
         width="125"
         height="125"
-        style="filter: invert(50%); margin-top: 10px; margin-bottom: -5px;"
-      >
+        style="filter: invert(50%); margin-top: 10px; margin-bottom: -5px"
+      />
     </v-container>
     <v-list density="compact">
       <v-list-item
@@ -18,18 +18,12 @@
         active-class="bg-orange-accent-4 rounded-pill"
         to="/"
       >
-        <v-list-item-title>
-          Inicio
-        </v-list-item-title>
+        <v-list-item-title> Inicio </v-list-item-title>
       </v-list-item>
-      <v-divider
-        thickness="2"
-      />
-      <span class="text-overline">
-        informacion básica
-      </span>
+      <v-divider thickness="2" />
+      <span class="text-overline"> informacion básica </span>
       <v-list-item
-        v-for="([icon,title,route], i) in basicInfoItems"
+        v-for="([icon, title, route], i) in basicInfoItems"
         :key="i"
         :prepend-icon="icon"
         :to="route"
@@ -41,14 +35,10 @@
         </v-list-item-title>
       </v-list-item>
 
-      <v-divider
-        thickness="2"
-      />
-      <span class="text-overline">
-        asociaciones
-      </span>
+      <v-divider thickness="2" />
+      <span class="text-overline"> asociaciones </span>
       <v-list-item
-        v-for="([icon,title,route], i) in associations"
+        v-for="([icon, title, route], i) in associations"
         :key="i"
         :prepend-icon="icon"
         :to="route"
@@ -60,14 +50,10 @@
         </v-list-item-title>
       </v-list-item>
 
-      <v-divider
-        thickness="2"
-      />
-      <span class="text-overline">
-        recursos
-      </span>
+      <v-divider thickness="2" />
+      <span class="text-overline"> recursos </span>
       <v-list-item
-        v-for="([icon,title,route], i) in resources"
+        v-for="([icon, title, route], i) in resources"
         :key="i"
         :prepend-icon="icon"
         :to="route"
@@ -88,28 +74,20 @@
             active-class="bg-orange-accent-4 rounded-pill"
             prepend-icon="mdi-toolbox-outline"
           >
-            <v-list-item-title>
-              Herramientas
-            </v-list-item-title>
+            <v-list-item-title> Herramientas </v-list-item-title>
           </v-list-item>
         </template>
       </v-list-group>
 
-      <v-divider
-        thickness="2"
-      />
-      <span class="text-overline">
-        extra
-      </span>
+      <v-divider thickness="2" />
+      <span class="text-overline"> extra </span>
       <v-list-item
         prepend-icon="mdi-information-outline"
-        to="/extras/about"
+        to="/portal/extras/about"
         class="rounded-lg"
         active-class="bg-orange-accent-4 rounded-pill"
       >
-        <v-list-item-title>
-          Acerca de
-        </v-list-item-title>
+        <v-list-item-title> Acerca de </v-list-item-title>
       </v-list-item>
       <v-container align="center">
         <v-switch
@@ -117,7 +95,7 @@
           :prepend-icon="'mdi-weather-sunny'"
           inset
           :append-icon="'mdi-weather-night'"
-          style="width:45%;"
+          style="width: 45%"
           @click="changeTheme"
         />
       </v-container>
@@ -127,33 +105,50 @@
 <script lang="ts">
 export default {
   emits: ['theme'],
-  data () {
+  data() {
     return {
       basicInfoItems: [
-        ['mdi-calendar-month-outline', 'Horarios', '/general/horarios'],
-        ['mdi-card-bulleted-settings-outline', 'Pensums', '/general/pensums'],
-        ['mdi-help-box-outline', 'FAQ | Primer Ingreso', '/general/faq-primer-ingreso'],
-        ['mdi-help-box-outline', 'FAQ', '/general/faq']
+        ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
+        [
+          'mdi-card-bulleted-settings-outline',
+          'Pensums',
+          '/portal/general/pensums'
+        ],
+        [
+          'mdi-help-box-outline',
+          'FAQ | Primer Ingreso',
+          '/portal/general/faq-primer-ingreso'
+        ],
+        ['mdi-help-box-outline', 'FAQ', '/portal/general/faq']
       ],
       associations: [
-        ['mdi-account-group-outline', 'CICS', '/asociaciones/cics'],
-        ['mdi-account-group-outline', 'AEIO', '/asociaciones/aeio']
+        ['mdi-account-group-outline', 'CICS', '/portal/asociaciones/cics'],
+        ['mdi-account-group-outline', 'AEIO', '/portal/asociaciones/aeio']
       ],
       resources: [
-        ['mdi-file-document-multiple-outline', 'Manuales', '/recursos/manuales'],
-        ['mdi-book-open-page-variant-outline', 'Biblioteca', '/recursos/biblioteca'],
-        ['mdi-book-account-outline', 'Tesario', '/recursos/tesario']
+        [
+          'mdi-file-document-multiple-outline',
+          'Manuales',
+          '/portal/recursos/manuales'
+        ],
+        [
+          'mdi-book-open-page-variant-outline',
+          'Biblioteca',
+          '/portal/recursos/biblioteca'
+        ],
+        ['mdi-book-account-outline', 'Tesario', '/portal/recursos/tesario']
       ],
       theme: 'light',
-      tools: [
-      ]
+      tools: []
     }
   },
   computed: {
-    modelSwitch () { return this.theme !== 'light' }
+    modelSwitch() {
+      return this.theme !== 'light'
+    }
   },
   methods: {
-    changeTheme () {
+    changeTheme() {
       this.theme = this.theme === 'light' ? 'dark' : 'light'
       this.$emit('theme', this.theme)
     }
@@ -169,14 +164,14 @@ export default {
   height: 45px !important;
 }
 .v-list-item-title {
-  font-size: 1.1rem !important;
+  font-size: 1rem !important;
 }
 
 span {
   margin-left: 8.5%;
   font-weight: bold;
 }
-.v-divider  {
+.v-divider {
   margin: 5%;
   width: 90%;
 }
