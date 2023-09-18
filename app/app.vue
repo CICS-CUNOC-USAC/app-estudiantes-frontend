@@ -1,7 +1,11 @@
 <template>
-  <NuxtLayout />
+  <main :style="{ backgroundColor: bgColor }">
+    <NuxtLayout />
+  </main>
 </template>
 <script>
+import { mapState } from 'pinia'
+import { useConfigsStore } from '~/stores/config'
 export default {
   setup() {
     useHead({
@@ -12,6 +16,12 @@ export default {
           : 'CUNOC ∙ Ingenieria App'
       }
     })
+  },
+  computed: {
+    ...mapState(useConfigsStore, ['theme']),
+    bgColor() {
+      return this.theme === 'light' ? '#fff' : '#121212'
+    }
   }
 }
 </script>
@@ -40,7 +50,7 @@ Styles used for page and layout transitions - Start
 .layout-enter-from {
   opacity: 0;
   transform: translateX(0.5rem);
-  filter: blur(8px);
+  filter: blur(4px);
 }
 /*
 Styles used for page and layout transitions - End

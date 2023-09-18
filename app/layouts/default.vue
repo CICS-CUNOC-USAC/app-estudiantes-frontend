@@ -50,12 +50,12 @@
       v-model="drawer"
       :width="$vuetify.display.mdAndUp ? 340 : 300"
     >
-      <SidebarNavigator @theme="(theme: string) => changeTheme(theme)" />
+      <SidebarNavigator @theme="(theme: string) => changeTheme()" />
     </v-navigation-drawer>
 
     <v-main>
       <v-container>
-        <NuxtPage :theme="theme" />
+        <NuxtPage />
       </v-container>
       <v-footer
         :color="theme === 'light' ? 'white' : '#121212'"
@@ -71,8 +71,9 @@
 
 <script lang="ts">
 import { mapState, mapActions } from 'pinia'
+import { useConfigsStore } from '~/stores/config'
 import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
-import { useRegularAuthStore } from '~/stores/regular-auth'
+import { useAuthStore } from '~/stores/auth'
 export default {
   components: {
     SidebarNavigator
@@ -80,21 +81,21 @@ export default {
   data() {
     return {
       drawer: true,
-      theme: 'light',
       currentPage: ''
     }
   },
   computed: {
-    ...mapState(useRegularAuthStore, ['user', 'authenticated']),
+    ...mapState(useConfigsStore, ['theme']),
+    ...mapState(useAuthStore, ['user']),
     elevation() {
       return this.drawer ? 2 : 0
     }
   },
   methods: {
-    changeTheme(value: string) {
-      this.theme = value
-    },
-    ...mapActions(useRegularAuthStore, ['logoutUser'])
+    ...mapActions(useConfigsStore, ['switchTheme']),
+    changeTheme() {
+      this.switchTheme()
+    }
   }
 }
 </script>
