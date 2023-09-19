@@ -4,30 +4,33 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "dev:host": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxtjs/eslint-config-typescript": "^12.0.0",
-    "@nuxtjs/eslint-module": "^4.0.2",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/google-fonts": "^3.0.2",
-    "@typescript-eslint/parser": "^5.62.0",
-    "eslint": "^8.37.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.0",
+    "eslint": "^8.49.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "nuxt": "^3.6.5",
-    "prettier": "^3.0.2",
-    "sass": "^1.60.0",
-    "sass-loader": "^13.2.2",
-    "typescript": "^5.0.3"
+    "nuxt": "^3.7.3",
+    "prettier": "^3.0.3",
+    "sass": "^1.67.0",
+    "sass-loader": "^13.3.2",
+    "typescript": "^5.2.2"
   },
   "dependencies": {
     "@mdi/font": "^7.2.96",
-    "@pinia/nuxt": "^0.4.7",
-    "pinia": "^2.0.33",
+    "@pinia/nuxt": "^0.4.11",
+    "jwt-decode": "^3.1.2",
+    "pinia": "^2.1.6",
     "vite-plugin-vuetify": "^1.0.2",
-    "vuetify": "^3.1.4"
+    "vuetify": "^3.3.16"
   },
   "overrides": {
     "vue": "latest"

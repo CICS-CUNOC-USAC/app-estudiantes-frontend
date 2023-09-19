@@ -9,11 +9,14 @@
 </template>
 
 <script lang="ts">
+import { mapState } from 'pinia'
+import { useConfigsStore } from '~/stores/config'
 export default {
   data() {
-    return {
-      theme: 'light'
-    }
+    return {}
+  },
+  computed: {
+    ...mapState(useConfigsStore, ['theme'])
   }
 }
 </script>

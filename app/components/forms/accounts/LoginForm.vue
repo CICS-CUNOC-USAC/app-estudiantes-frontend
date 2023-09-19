@@ -13,7 +13,7 @@
           :disabled="loading"
         >
           <template #prepend>
-            <v-icon icon="mdi-email-outline" size="small" />
+            <v-icon :icon="emailIcon" size="small" />
           </template>
         </v-text-field>
         <v-text-field
@@ -35,18 +35,41 @@
     </v-card-text>
     <v-card-actions>
       <v-row>
+        <v-col v-if="error" cols="12">
+          <span class="text-red d-flex align-center">
+            <v-icon class="mr-3"> mdi-alert-circle-outline </v-icon>
+            <span class="font-weight-medium text-body-2">{{ error }}</span>
+          </span>
+        </v-col>
         <v-col cols="12">
-          <v-btn variant="tonal" width="100%" :loading="loading" @click="login">
+          <v-btn
+            variant="tonal"
+            width="100%"
+            :loading="loading"
+            :color="admin ? 'red' : 'orange-accent-4'"
+            @click="login"
+          >
             Iniciar sesión
           </v-btn>
         </v-col>
-        <v-col cols="12">
+        <v-col v-if="showSignup" cols="12">
           <span>
             ¿No tienes una cuenta?
-            <NuxtLink to="/signup"
-              ><strong class="text-orange-darken-4 text-decoration-underline"
-                >Regístrate</strong
-              ></NuxtLink
+            <NuxtLink
+              to="/sign-up"
+              class="text-orange-darken-3 text-decoration-none nav-link ml-1"
+              ><strong>Regístrate</strong></NuxtLink
+            >
+          </span>
+        </v-col>
+        <v-col cols="12">
+          <span>
+            <NuxtLink
+              to="/"
+              class="text-decoration-none nav-link"
+              :class="[linkColor]"
+            >
+              <strong>Regresar al portal</strong></NuxtLink
             >
           </span>
         </v-col>
@@ -54,23 +77,70 @@
     </v-card-actions>
   </v-card>
 </template>
-<script setup>
-const router = useRouter()
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
-const loading = ref(false)
-const login = () => {
-  loading.value = true
-  // simulate login with a timeout
-  setTimeout(() => {
-    loading.value = false
-    router.push('/')
-  }, 1000)
+<script lang="ts">
+export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    admin: {
+      type: Boolean,
+      default: false
+    },
+    showSignup: {
+      type: Boolean,
+      default: true
+    },
+    error: {
+      type: String,
+      default: () => null
+    }
+  },
+  emits: ['login'],
+  data() {
+    return {
+      email: '',
+      password: '',
+      showPassword: false
+    }
+  },
+  computed: {
+    linkColor() {
+      return this.admin
+        ? 'text-deep-orange-accent-4 nav-link--admin'
+        : 'text-orange-darken-3'
+    },
+    emailIcon() {
+      return this.admin ? 'mdi-shield-crown-outline' : 'mdi-email-outline'
+    }
+  },
+  methods: {
+    login() {
+      const newCredentials = {
+        email: this.email.toLowerCase().replace(/\s/g, '').trim(),
+        password: this.password
+      }
+      this.$emit('login', newCredentials)
+    }
+  }
 }
 </script>
-<style lang="scss" scoped>
-.login-card {
-  // outline: 1px solid #212121;
+<style scoped lang="scss">
+.nav-link {
+  &:hover {
+    color: #fb8c00 !important;
+  }
+  &:active {
+    color: #bf360c !important;
+  }
+  &--admin {
+    &:hover {
+      color: #ff6e40 !important;
+    }
+    &:active {
+      color: #bf360c !important;
+    }
+  }
 }
 </style>

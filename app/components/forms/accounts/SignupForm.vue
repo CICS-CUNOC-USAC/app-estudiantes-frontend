@@ -4,14 +4,43 @@
       <h3 class="text-center mb-4">Regístrate</h3>
     </v-card-title>
     <v-card-text>
-      <v-form>
+      <v-form
+        id="signup-form"
+        ref="form"
+        :disabled="loading"
+        @submit.prevent="signup"
+      >
+        <v-text-field
+          v-model="firstName"
+          label="Nombre(s)"
+          type="text"
+          :rules="[validationRules.required, ...validationRules.name]"
+          pattern="[a-zA-Z]{100}"
+          required
+        >
+          <template #prepend>
+            <v-icon icon="mdi-account-outline" size="small" />
+          </template>
+        </v-text-field>
+        <v-text-field
+          v-model="lastName"
+          label="Apellido(s)"
+          type="text"
+          :rules="[validationRules.required, ...validationRules.name]"
+          pattern="[a-zA-Z]{100}"
+          required
+        >
+          <template #prepend>
+            <v-icon icon="mdi-account-outline" size="small" />
+          </template>
+        </v-text-field>
         <v-text-field
           v-model="ra"
           label="Registro Académico"
           type="text"
-          pattern="[0-9]{8}"
+          :rules="[validationRules.required, ...validationRules.ra]"
+          pattern="[0-9]{9}"
           required
-          :disabled="loading"
         >
           <template #prepend>
             <v-icon icon="mdi-numeric" size="small" />
@@ -20,9 +49,9 @@
         <v-text-field
           v-model="email"
           label="Correo electrónico"
-          type="email"
+          :rules="[validationRules.required, ...validationRules.email]"
+          type="text"
           required
-          :disabled="loading"
         >
           <template #prepend>
             <v-icon icon="mdi-email-open-outline" size="small" />
@@ -35,8 +64,23 @@
           "
           label="Contraseña"
           :type="showPassword ? 'text' : 'password'"
+          :rules="[validationRules.required, ...validationRules.password]"
           required
-          :disabled="loading"
+          @click:append="showPassword = !showPassword"
+        >
+          <template #prepend>
+            <v-icon icon="mdi-dots-horizontal" size="small" />
+          </template>
+        </v-text-field>
+        <v-text-field
+          v-model="confirmPassword"
+          :append-icon="
+            showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
+          "
+          label="Confirmar contraseña"
+          :type="showPassword ? 'text' : 'password'"
+          :rules="[validationRules.required, ...confirmPasswordRules]"
+          required
           @click:append="showPassword = !showPassword"
         >
           <template #prepend>
@@ -47,13 +91,31 @@
     </v-card-text>
     <v-card-actions>
       <v-row>
+        <v-col v-if="error && !Array.isArray(error)" cols="12">
+          <span class="text-red d-flex align-center">
+            <v-icon class="mr-3"> mdi-alert-circle-outline </v-icon>
+            <span class="font-weight-medium text-body-2">{{ error }}</span>
+          </span>
+        </v-col>
+        <v-col v-if="Array.isArray(error)" cols="12">
+          <span class="text-red">
+            <v-icon class="mr-3 mb-2"> mdi-alert-circle-outline </v-icon>
+            <div
+              v-for="e in error"
+              :key="e as string"
+              class="font-weight-medium text-body-2"
+            >
+              {{ e }}
+            </div>
+          </span>
+        </v-col>
         <v-col cols="12">
           <v-btn
+            type="submit"
+            form="signup-form"
             variant="tonal"
             width="100%"
             :loading="loading"
-            class="sbutton"
-            @click="login"
           >
             Continuar
           </v-btn>
@@ -61,10 +123,10 @@
         <v-col cols="12">
           <span>
             ¿Ya tienes una cuenta?
-            <NuxtLink to="/login"
-              ><strong class="text-orange-darken-4 text-decoration-underline"
-                >Inicia sesión</strong
-              ></NuxtLink
+            <NuxtLink
+              to="/login"
+              class="text-orange-darken-3 text-decoration-none nav-link ml-1"
+              ><strong>Inicia sesión</strong></NuxtLink
             >
           </span>
         </v-col>
@@ -72,20 +134,80 @@
     </v-card-actions>
   </v-card>
 </template>
-<script setup>
-const router = useRouter()
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
-const ra = ref('')
-const loading = ref(false)
-
-const login = () => {
-  loading.value = true
-  // simulate login with a timeout
-  setTimeout(() => {
-    router.push('/')
-    loading.value = false
-  }, 2000)
+<script lang="ts">
+export default {
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
+    },
+    error: {
+      type: [String, Array],
+      default: () => null
+    }
+  },
+  emits: ['signup'],
+  data() {
+    return {
+      firstName: '',
+      lastName: '',
+      ra: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+      showPassword: false,
+      validationRules: {
+        required: (v: string) => !!v || 'Campo requerido',
+        name: [
+          (v: string) =>
+            (v && v.length <= 100) ||
+            'El nombre no debe exceder los 100 caracteres'
+        ],
+        email: [(v: string) => /.+@.+\..+/.test(v) || 'E-mail debe ser válido'],
+        ra: [
+          (v: string) =>
+            (v && v.length === 9) || 'El RA debe tener 9 caracteres',
+          (v: string) => /[0-9]{9}/.test(v) || 'El RA debe ser numérico'
+        ],
+        password: [
+          (v: string) =>
+            (v && v.length >= 8) ||
+            'La contraseña debe tener al menos 8 caracteres'
+        ]
+      }
+    }
+  },
+  computed: {
+    confirmPasswordRules() {
+      return [
+        (v: string) => v === this.password || 'Las contraseñas no coinciden'
+      ]
+    }
+  },
+  methods: {
+    async signup() {
+      const formRef = await this.$refs.form.validate()
+      if (formRef.valid) {
+        const payload = {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          ra: this.ra,
+          email: this.email,
+          password: this.password
+        }
+        this.$emit('signup', payload)
+      }
+    }
+  }
 }
 </script>
+<style scoped lang="scss">
+.nav-link {
+  &:hover {
+    color: #fb8c00 !important;
+  }
+  &:active {
+    color: #bf360c !important;
+  }
+}
+</style>

@@ -1,27 +1,22 @@
 <template>
   <v-container>
-    <v-img max-width="450" alt="Logo CICS" :src="getLogo()" />
+    <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
 
     <div class="greetings">
-      <h1>Aplicación para Estudiantes</h1>
+      <h1>Portal - Ingenieria CUNOC</h1>
       <v-divider thickness="3" />
       <div class="my-6">
         <p>
-          La aplicación para los estudiantes de Ingenieria del Centro
+          El nuevo portal para los estudiantes de Ingenieria del Centro
           Universitario De Occidente fue creada con el fin de apoyar a los
-          estudiantes a encontrar informacion que les puede ser util a lo largo de
-          su carrera.
+          estudiantes a encontrar informacion que les puede ser util a lo largo
+          de su carrera.
         </p>
-        <br>
-        <p>
-          La aplicacion esta compuesta por secciones con informacion y
-          herramientas.
-        </p>
+        <br />
+        <p>Está compuesta por secciones con informacion y herramientas.</p>
       </div>
       <div class="section-divider">
-        <h2 class="green">
-          Informacion Básica
-        </h2>
+        <h2 class="green">Informacion Básica</h2>
         <v-divider thickness="3" />
       </div>
       <v-row justify="center">
@@ -62,9 +57,7 @@
       </v-row>
 
       <div class="section-divider">
-        <h2 class="green">
-          Asociaciones Estudiantiles
-        </h2>
+        <h2 class="green">Asociaciones Estudiantiles</h2>
         <v-divider thickness="3" />
       </div>
       <v-row justify="center">
@@ -87,9 +80,7 @@
       </v-row>
 
       <div class="section-divider">
-        <h2 class="green">
-          Material y Recursos
-        </h2>
+        <h2 class="green">Material y Recursos</h2>
         <v-divider thickness="3" />
       </div>
       <v-row>
@@ -112,9 +103,7 @@
       </v-row>
 
       <div class="section-divider">
-        <h2 class="green">
-          Extra
-        </h2>
+        <h2 class="green">Extra</h2>
         <v-divider thickness="3" />
       </div>
       <v-row justify="center">
@@ -141,7 +130,7 @@
 <script lang="ts">
 export default {
   props: ['theme'],
-  data () {
+  data() {
     return {
       sections: {
         basicInfo: [
@@ -150,7 +139,7 @@ export default {
             subtitle: 'Para organizarte',
             description:
               'Horarios de clases y laboratorios del semestre en curso',
-            route: '/general/horarios',
+            route: '/portal/general/horarios',
             img: new URL('@/assets/img/horario.jpg', import.meta.url).href
           },
           {
@@ -158,7 +147,7 @@ export default {
             subtitle: 'Para planificar',
             description:
               ' Recopilatorio de los pensums de las diferentes carreras de la division, y herramienta para calcular diferentes datos acerca de tu pensum.',
-            route: '/general/pensums',
+            route: '/portal/general/pensums',
             img: new URL('@/assets/img/pensum.jpeg', import.meta.url).href
           },
           {
@@ -166,14 +155,14 @@ export default {
             subtitle: 'Para ayudarte al inicio',
             description:
               'Preguntas Frecuentes para los estudiantes de primer ingreso',
-            route: '/general/faq-primer-ingreso',
+            route: '/portal/general/faq-primer-ingreso',
             img: new URL('@/assets/img/faq.jpg', import.meta.url).href
           },
           {
             title: 'FAQ',
             subtitle: 'Para ayudarte',
             description: 'Preguntas Frecuentes para estudiantes de reingreso',
-            route: '/general/faq',
+            route: '/portal/general/faq',
             img: new URL('@/assets/img/faq.jpg', import.meta.url).href
           }
         ],
@@ -183,7 +172,7 @@ export default {
             subtitle: 'Acerca del comite',
             description:
               'Informacion relevante del Comite de Ingenieria en Ciencias y Sistemas',
-            route: '/asociaciones/cics',
+            route: '/portal/asociaciones/cics',
             img: new URL('@/assets/img/cics.png', import.meta.url).href
           },
           {
@@ -191,7 +180,7 @@ export default {
             subtitle: 'Acerca de la asociacion',
             description:
               'Informacion relevante de la Asociacion de Estudiantes de Ingenieria de Occidente',
-            route: '/asociaciones/aeio',
+            route: '/portal/asociaciones/aeio',
             img: new URL('@/assets/img/aeio.jpg', import.meta.url).href
           }
         ],
@@ -201,7 +190,7 @@ export default {
             subtitle: 'Para orientarte',
             description:
               'Manuales e infografias acerca de procesos importantes en la universidad',
-            route: '/recursos/manuales',
+            route: '/portal/recursos/manuales',
             img: new URL('@/assets/img/manuales.jpg', import.meta.url).href
           },
           {
@@ -209,7 +198,7 @@ export default {
             subtitle: 'Para estudiar',
             description:
               'Material de estudio de los diferentes cursos de la Division',
-            route: '/recursos/biblioteca',
+            route: '/portal/recursos/biblioteca',
             img: new URL('@/assets/img/biblioteca.jpg', import.meta.url).href
           },
           {
@@ -217,7 +206,7 @@ export default {
             subtitle: 'Para investigar',
             description:
               'Recopilacion de las tesis de estudiantes de ingenieria a lo largo del tiempo.',
-            route: '/recursos/tesario',
+            route: '/portal/recursos/tesario',
             img: new URL('@/assets/img/tesario.jpg', import.meta.url).href
           }
         ],
@@ -227,20 +216,20 @@ export default {
             subtitle: 'Más informacion',
             description:
               'Conoce más acerca de esta aplicacion, su desarrollo, y cómo puedes contribuir',
-            route: '/extras/about',
+            route: '/portal/extras/about',
             img: new URL('@/assets/img/acerca_de.jpg', import.meta.url).href
           }
         ]
       }
     }
   },
-  head () {
+  head() {
     return {
       title: 'Home'
     }
   },
   methods: {
-    getLogo () {
+    getLogo() {
       if (this.theme === 'light') {
         return new URL('@/assets/img/logo-cics-light.png', import.meta.url).href
       }
@@ -253,12 +242,10 @@ export default {
 /*Estilo para los textos*/
 h2 {
   font-weight: 700;
-  font-size: 1.8rem;
   text-transform: uppercase;
 }
 h1 {
   font-weight: 400;
-  font-size: 2.4rem;
   text-transform: uppercase;
 }
 
