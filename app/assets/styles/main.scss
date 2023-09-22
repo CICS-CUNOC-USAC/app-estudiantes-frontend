@@ -5,3 +5,23 @@
 
   font-family: 'IBM Plex Sans', sans-serif !important;
 }
+
+.page-v-container {
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+  // background-color: salmon !important;
+
+  @media (min-width: 960px) {
+    // background-color: red !important;
+  }
+
+  @media (min-width: 1280px) {
+    // background-color: blue !important;
+  }
+
+  @media (min-width: 1920px) {
+    // background-color: green !important;
+    max-width: 1300px !important;
+  }
+  // max-width: 65dvw !important;
+}

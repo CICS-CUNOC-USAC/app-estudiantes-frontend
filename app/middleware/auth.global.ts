@@ -13,7 +13,7 @@ export default defineNuxtRouteMiddleware((to, _from) => {
   // If token exists and user is trying to access login page redirect to dashboard
   if (token.value && to.fullPath.includes('login')) {
     if (getRole.value === 'regular') {
-      return navigateTo('/dashboard/me')
+      return navigateTo('/dashboard/profile')
     } else {
       return navigateTo('/admin/home')
     }

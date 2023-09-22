@@ -6,6 +6,15 @@ type UserPayload = {
   password: string
 }
 
+export type UserUpdatePayload = {
+  first_name?: string
+  last_name?: string
+  user?: {
+    email?: string
+    password?: string
+  }
+}
+
 export type SignupPayload = {
   firstName: string
   lastName: string
@@ -51,6 +60,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       this.loading = true
       this.error = null
       const router = useRouter()
+      console.log(payload)
       // Fetch the data from the API
       const { data, error } = await useCustomFetch<LoginResponse>(
         'auth/login',
@@ -148,6 +158,27 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         this.user = data?.value
       }
       this.loading = false
+    },
+    async updateProfile(payload: UserUpdatePayload) {
+      this.loading = true
+      const router = useRouter()
+      const { data, error } = await useCustomFetch<User>('auth/me', {
+        method: 'PUT',
+        body: payload
+      })
+      if (error.value) {
+        console.log(error.value)
+        this.loading = false
+        return
+      }
+      if (data.value) {
+        this.myProfile()
+        router.push('/dashboard/profile')
+      }
+      this.loading = false
+    },
+    clearError() {
+      this.error = null
     },
     clear() {
       this.user = null
