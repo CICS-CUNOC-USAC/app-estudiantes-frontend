@@ -1,9 +1,6 @@
 <template>
   <v-app :theme="theme">
-    <v-app-bar
-      :color="theme === 'light' ? 'white ' : '#121212'"
-      :elevation="elevation"
-    >
+    <v-app-bar :elevation="elevation">
       <template #prepend>
         <v-btn
           :icon="drawer ? 'mdi-backburger' : 'mdi-menu'"
@@ -13,7 +10,6 @@
 
       <v-app-bar-title class="mt-n1">
         <strong>Dashboard </strong> - CICS APP
-        <!-- <v-spacer /> -->
       </v-app-bar-title>
 
       <v-tooltip text="Cerrar sesión" location="bottom">
@@ -36,17 +32,17 @@
     </v-navigation-drawer>
 
     <v-main>
-      <v-container>
-        <NuxtPage :theme="theme" @current-page="currentPage = $event" />
+      <v-container class="page-v-container">
+        <NuxtPage :theme="theme" />
       </v-container>
-      <v-footer
+      <!-- <v-footer
         :color="theme === 'light' ? 'white' : '#121212'"
         justify="center"
       >
         <v-col class="text-center mt-4" cols="12">
           <strong>CICS</strong> — {{ new Date().getFullYear() }}
         </v-col>
-      </v-footer>
+      </v-footer> -->
     </v-main>
   </v-app>
 </template>
@@ -63,7 +59,7 @@ export default {
   },
   data() {
     return {
-      drawer: true,
+      drawer: false,
       currentPage: ''
     }
   },
@@ -83,6 +79,4 @@ export default {
   }
 }
 </script>
-<style lang="scss">
-@import '@/assets/styles/main.scss';
-</style>
+<style lang="scss"></style>

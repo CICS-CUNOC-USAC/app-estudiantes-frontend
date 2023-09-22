@@ -11,8 +11,11 @@ const errorMap: ErrorMap = {
     'Credenciales inválidas, por favor verifica tus datos',
   'email already exists':
     'Parece que este correo ya está registrado, por favor intenta con otro',
+  'ra already exists':
+    'Parece que este número de registro ya está registrado, por favor intenta con otro',
   'internal server error':
-    'Ha ocurrido un error interno, por favor intenta más tarde'
+    'Ha ocurrido un error interno, por favor intenta más tarde',
+  unauthorized: 'Creedenciales inválidas, por favor verifica tus datos'
   // Add more error messages here as needed
 }
 

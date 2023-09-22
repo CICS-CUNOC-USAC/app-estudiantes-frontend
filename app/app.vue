@@ -50,7 +50,6 @@ Styles used for page and layout transitions - Start
 .layout-enter-from {
   opacity: 0;
   transform: translateX(0.5rem);
-  filter: blur(4px);
 }
 /*
 Styles used for page and layout transitions - End

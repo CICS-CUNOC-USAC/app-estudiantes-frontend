@@ -1,7 +1,7 @@
 <template>
   <section class="login-page">
     <v-row justify="center" no-gutters>
-      <v-col cols="11" sm="8" md="8" lg="4" xl="4">
+      <v-col cols="11" sm="8" md="8" lg="5" xl="4">
         <LoginForm
           :loading="loading"
           :error="error"

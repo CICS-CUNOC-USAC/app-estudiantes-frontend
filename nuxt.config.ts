@@ -4,6 +4,9 @@ export default defineNuxtConfig({
   build: {
     transpile: ['vuetify']
   },
+  imports: {
+    dirs: ['stores']
+  },
   runtimeConfig: {
     baseURL: process.env.BASE_URL || 'http://localhost:8000'
   },

@@ -24,7 +24,7 @@
         prepend-icon="mdi-account-outline"
         class="rounded-lg"
         active-class="bg-orange-accent-4 rounded-pill"
-        to="/dashboard/me"
+        to="/dashboard/profile"
       >
         <v-list-item-title> Perfil </v-list-item-title>
       </v-list-item>

@@ -1,7 +1,7 @@
 <template>
   <section class="login-page">
     <v-row justify="center" no-gutters>
-      <v-col cols="11" sm="8" md="8" lg="4" xl="4">
+      <v-col cols="10" sm="8" md="8" lg="5" xl="5">
         <SignupForm
           :loading="loading"
           :error="error"
@@ -12,10 +12,15 @@
   </section>
 </template>
 <script lang="ts">
-import { mapState, mapActions } from 'pinia'
+import { mapState, mapActions, Pinia } from 'pinia'
 import { useRegularAuthStore, SignupPayload } from '~/stores/regular-auth'
 import SignupForm from '@/components/forms/accounts/SignupForm.vue'
-export default {
+export default defineNuxtComponent({
+  asyncData({ $pinia }: { $pinia: Pinia }) {
+    const store = useRegularAuthStore($pinia)
+    store.clearError()
+    return {}
+  },
   components: {
     SignupForm
   },
@@ -39,7 +44,7 @@ export default {
     },
     ...mapActions(useRegularAuthStore, ['signupUser'])
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .login-page {

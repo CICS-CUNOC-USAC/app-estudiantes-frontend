@@ -34,7 +34,7 @@
             <v-avatar
               v-bind="props"
               class="app-bar__avatar"
-              @click="$router.push('/dashboard/me')"
+              @click="$router.push('/dashboard/profile')"
             >
               <strong>
                 {{ loggedUser?.profile?.first_name[0]
@@ -63,7 +63,7 @@
             <v-avatar
               v-bind="props"
               class="app-bar__avatar"
-              @click="$router.push('/dashboard/me')"
+              @click="$router.push('/dashboard/profile')"
             >
               <strong>
                 {{ loggedStaff?.first_name[0] }}{{ loggedStaff?.last_name[0] }}
@@ -82,7 +82,7 @@
     </v-navigation-drawer>
 
     <v-main>
-      <v-container>
+      <v-container class="page-v-container">
         <NuxtPage />
       </v-container>
       <v-footer
