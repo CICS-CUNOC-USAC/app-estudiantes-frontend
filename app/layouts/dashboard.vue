@@ -44,6 +44,7 @@
         </v-col>
       </v-footer> -->
     </v-main>
+    <GeneralSnackbar />
   </v-app>
 </template>
 
@@ -53,9 +54,12 @@ import DashboardNavigator from '~/components/partials/DashboardNavigator.vue'
 import { useRegularAuthStore } from '~/stores/regular-auth'
 import { useConfigsStore } from '~/stores/config'
 import { useAuthStore } from '~/stores/auth'
+import GeneralSnackbar from '~/components/partials/GeneralSnackbar.vue'
+
 export default {
   components: {
-    DashboardNavigator
+    DashboardNavigator,
+    GeneralSnackbar
   },
   data() {
     return {
