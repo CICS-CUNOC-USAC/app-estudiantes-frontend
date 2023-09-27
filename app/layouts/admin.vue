@@ -48,6 +48,7 @@
         </v-col>
       </v-footer>
     </v-main>
+    <GeneralSnackbar />
   </v-app>
 </template>
 
@@ -57,10 +58,12 @@ import AdminNavigator from '~/components/partials/AdminNavigator.vue'
 import { useStaffAuthStore } from '~/stores/staff-auth'
 import { useConfigsStore } from '~/stores/config'
 import { useAuthStore } from '~/stores/auth'
+import GeneralSnackbar from '~/components/partials/GeneralSnackbar.vue'
 
 export default {
   components: {
-    AdminNavigator
+    AdminNavigator,
+    GeneralSnackbar
   },
   data() {
     return {

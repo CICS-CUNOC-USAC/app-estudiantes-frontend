@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
+import { SnackbarType } from './snackbar'
 
 type UserPayload = {
   email: string
@@ -60,8 +61,8 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       this.loading = true
       this.error = null
       const router = useRouter()
-      console.log(payload)
       // Fetch the data from the API
+
       const { data, error } = await useCustomFetch<LoginResponse>(
         'auth/login',
         {
@@ -69,14 +70,22 @@ export const useRegularAuthStore = defineStore('regular-auth', {
           body: payload
         }
       )
-      // Error handling
-      if (error.value?.data) {
-        this.error = convertError(error.value.data.message)
+      if (error.value) {
+        if (error.value.data) {
+          useSnackbarStore().showSnackbar({
+            title: 'Error',
+            message: convertError(error.value.data.message),
+            type: SnackbarType.ERROR
+          })
+        }
+        if (error.value.cause) {
+          useSnackbarStore().showSnackbar({
+            title: 'Error',
+            message: convertError(error.value!.message),
+            type: SnackbarType.ERROR
+          })
+        }
         this.loading = false
-        return
-      } else if (error.value?.cause) {
-        this.loading = false
-        this.error = convertError(error.value.message)
         return
       }
       // Success
@@ -95,6 +104,12 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       authStore.isAuthenticated = true
       // Redirect to the dashboard
       router.push('/dashboard/home')
+      // Show success snackbar
+      useSnackbarStore().showSnackbar({
+        title: 'Session iniciada',
+        message: `Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`,
+        type: SnackbarType.SUCCESS
+      })
       // Return the data and error
       this.loading = false
       return { data, error: false }
@@ -132,6 +147,24 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         this.error = convertError(error.value.message)
         return
       }
+
+      if (error.value && error.value.data) {
+        useSnackbarStore().showSnackbar({
+          title: 'Error',
+          message: convertError(error.value.data.message),
+          type: SnackbarType.ERROR
+        })
+        this.loading = false
+        return
+      } else if (error.value && error.value.cause) {
+        useSnackbarStore().showSnackbar({
+          title: 'Error',
+          message: convertError(error.value!.message),
+          type: SnackbarType.ERROR
+        })
+        this.loading = false
+        return
+      }
       // Success
       // Set cookies, user and role
       const tokenCookie = useCookie('cicsapp-user-token')
@@ -153,9 +186,18 @@ export const useRegularAuthStore = defineStore('regular-auth', {
     },
     async myProfile() {
       this.loading = true
+      // const snackbarStore = useSnackbarStore()
+
       const { data } = await useCustomFetch<User>('auth/me')
       if (data.value) {
         this.user = data?.value
+      } else {
+        useSnackbarStore().showSnackbar({
+          title: 'Error de sesión',
+          message:
+            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde',
+          type: SnackbarType.ERROR
+        })
       }
       this.loading = false
     },

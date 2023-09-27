@@ -94,6 +94,7 @@
         </v-col>
       </v-footer>
     </v-main>
+    <GeneralSnackbar />
   </v-app>
 </template>
 
@@ -104,9 +105,11 @@ import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
 import { useAuthStore } from '~/stores/auth'
 import { User } from '~/stores/regular-auth'
 import { Staff } from '~/stores/staff-auth'
+import GeneralSnackbar from '~/components/partials/GeneralSnackbar.vue'
 export default {
   components: {
-    SidebarNavigator
+    SidebarNavigator,
+    GeneralSnackbar
   },
   data() {
     return {

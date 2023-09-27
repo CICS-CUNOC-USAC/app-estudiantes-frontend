@@ -6,27 +6,23 @@ import { useAuthStore } from '~/stores/auth'
 export default defineNuxtRouteMiddleware((to, _from) => {
   const { user, getRole } = storeToRefs(useAuthStore()) // Make authenticated state reactive
 
-  const copyUser = user.value as any // Copy user object to access profile_id
-
   const token = useCookie('cicsapp-user-token') // Get token from cookies
 
-  // If token exists and user is trying to access login page redirect to dashboard
-  if (token.value && to.fullPath.includes('login')) {
+  if (
+    !user.value &&
+    (to.fullPath.includes('dashboard') || to.fullPath.includes('admin'))
+  ) {
+    return navigateTo('/')
+  }
+
+  // If token and user exists and user is trying to access login page redirect to dashboard
+  if (token.value && user.value && to.fullPath.includes('login')) {
     if (getRole.value === 'regular') {
       return navigateTo('/dashboard/profile')
     } else {
       return navigateTo('/admin/home')
     }
   }
-  // Alternate version checking for profile_id
-  // if (token.value && to.fullPath.includes('login')) {
-  //   if (copyUser.profile_id) {
-  //     return navigateTo('/dashboard/me')
-  //   } else {
-  //     return navigateTo('/admin/home')
-  //   }
-  // }
-
   // If token doesn't exist redirect to log in
   if (!token.value && to?.fullPath.includes('dashboard')) {
     return navigateTo('/login')
