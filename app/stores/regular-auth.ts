@@ -21,6 +21,7 @@ export type SignupPayload = {
   lastName: string
   user: {
     email: string
+    career_code: number
     ra: string
     password: string
   }
@@ -38,6 +39,10 @@ export type User = {
   id: number
   email: string
   ra: string
+  career: {
+    code: number
+    name: string
+  }
   profile_id: number
   created_at: Date
   updated_at: Date
@@ -133,20 +138,20 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         }
       )
       // Error handling
-      if (error.value?.data) {
-        // Check if the error message is an array or just a string
-        if (Array.isArray(error.value.data.message)) {
-          this.error = convertArrayErrors(error.value.data.message)
-        } else {
-          this.error = convertError(error.value.data.message)
-        }
-        this.loading = false
-        return
-      } else if (error.value?.cause) {
-        this.loading = false
-        this.error = convertError(error.value.message)
-        return
-      }
+      // if (error.value?.data) {
+      //   // Check if the error message is an array or just a string
+      //   if (Array.isArray(error.value.data.message)) {
+      //     this.error = convertArrayErrors(error.value.data.message)
+      //   } else {
+      //     this.error = convertError(error.value.data.message)
+      //   }
+      //   this.loading = false
+      //   return
+      // } else if (error.value?.cause) {
+      //   this.loading = false
+      //   this.error = convertError(error.value.message)
+      //   return
+      // }
 
       if (error.value && error.value.data) {
         useSnackbarStore().showSnackbar({
