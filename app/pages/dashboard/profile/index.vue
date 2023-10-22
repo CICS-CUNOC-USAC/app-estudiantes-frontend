@@ -1,37 +1,32 @@
 <template>
-  <div>
-    <v-skeleton-loader
-      v-if="loading"
-      type="list-item-two-line"
-    ></v-skeleton-loader>
-    <section v-else>
-      <p>
-        Mi nombre es:
-        <strong
-          >{{ user?.profile.first_name }} {{ user?.profile.last_name }}</strong
-        >
-      </p>
-      <p>
-        Mi email es: <strong>{{ user?.email }}</strong>
-      </p>
-      <p>
-        Mi registro academico es: <strong>{{ user?.ra }}</strong>
-      </p>
-      <v-btn @click="logout">Salir</v-btn>
-      <v-btn to="/dashboard/profile/edit">Editar</v-btn>
+  <main>
+    <header class="mb-4">
+      <h1>Mi perfil</h1>
+      <v-btn
+        prepend-icon="mdi-pencil-outline"
+        to="/dashboard/profile/edit"
+        class="mt-3"
+      >
+        Editar
+      </v-btn>
+    </header>
+    <section class="profile-edit-section">
+      <PersonalInfoDetails :src="user" />
     </section>
-  </div>
+  </main>
 </template>
 <script lang="ts">
 import { mapState, mapActions, Pinia } from 'pinia'
-import { useRegularAuthStore } from '~/stores/regular-auth'
-import { useAuthStore } from '~/stores/auth'
+import PersonalInfoDetails from '@/components/profile/details/PersonalInfoDetails.vue'
 
 export default defineNuxtComponent({
   asyncData({ $pinia }: { $pinia: Pinia }) {
-    const store = useRegularAuthStore($pinia)
-    store.myProfile()
+    const store = useAuthStore($pinia)
+    store.fetchUser()
     return {}
+  },
+  components: {
+    PersonalInfoDetails
   },
   setup() {
     definePageMeta({
@@ -39,12 +34,23 @@ export default defineNuxtComponent({
     })
   },
   computed: {
-    ...mapState(useRegularAuthStore, ['user', 'authenticated', 'loading'])
+    ...mapState(useRegularAuthStore, ['user', 'authenticated']),
+    ...mapState(useRegularAuthStore, ['loading'])
   },
   methods: {
-    ...mapActions(useRegularAuthStore, ['myProfile']),
+    updateUserProfile(user: UserUpdatePayload) {
+      this.updateProfile(user)
+    },
+    updateUserPassword(userWithPassword: UserUpdatePayload) {
+      this.updateProfile(userWithPassword)
+    },
+    ...mapActions(useRegularAuthStore, ['myProfile', 'updateProfile']),
     ...mapActions(useAuthStore, ['logout'])
   }
 })
 </script>
-<style lang="scss"></style>
+<style lang="scss" scoped>
+.profile-edit-section {
+  margin-bottom: 1.5rem;
+}
+</style>
