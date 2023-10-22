@@ -1,8 +1,9 @@
+import '@mdi/font/css/materialdesignicons.css'
+import 'vuetify/styles'
+import { es } from 'vuetify/locale'
 import { createVuetify } from 'vuetify'
-import * as components from 'vuetify/components'
-import * as labsComponents from 'vuetify/labs/components'
-import * as directives from 'vuetify/directives'
 import { md3 } from 'vuetify/blueprints'
+import { aliases, mdi } from 'vuetify/iconsets/mdi'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
@@ -15,19 +16,37 @@ export default defineNuxtPlugin((nuxtApp) => {
       VTextField: {
         variant: 'underlined'
       },
+      VAutocomplete: {
+        variant: 'underlined'
+      },
       VCard: {
         rounded: 'xl'
+      },
+      VChip: {
+        rounded: 'lg'
+      },
+      VProgressLinear: {
+        rounded: '2xl',
+        height: 6
       },
       global: {
         ripple: false
       }
     },
-    ssr: true,
-    components: {
-      ...components,
-      ...labsComponents
+    icons: {
+      defaultSet: 'mdi',
+      aliases,
+      sets: {
+        mdi
+      }
     },
-    directives
+    locale: {
+      locale: 'es',
+      fallback: 'es',
+
+      messages: { es }
+    },
+    ssr: true
   })
 
   nuxtApp.vueApp.use(vuetify)
