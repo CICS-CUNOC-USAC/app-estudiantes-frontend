@@ -1,19 +1,15 @@
 <template>
   <div>
-    <p>
-      Pagina inicial del dashboard
-    </p>
+    <p>Pagina inicial del dashboard</p>
   </div>
 </template>
 <script>
 export default {
-  setup(){
+  setup() {
     definePageMeta({
       layout: 'dashboard'
     })
   }
 }
 </script>
-<style lang="">
-  
-</style>
+<style lang=""></style>

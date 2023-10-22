@@ -1,12 +1,16 @@
 <template>
-  <v-container fluid class="h-75 w-auto" style="display: flex; align-items: center;">
+  <v-container
+    fluid
+    class="h-75 w-auto"
+    style="display: flex; align-items: center"
+  >
     <v-row justify="center">
       <v-col cols="12" sm="6" md="6" lg="6">
         <v-card style="text-align: center">
-          <v-card-title class="headline d-flex flex-column justify-center align-center">
-            <v-icon>
-              mdi-wrench
-            </v-icon>
+          <v-card-title
+            class="headline d-flex flex-column justify-center align-center"
+          >
+            <v-icon> mdi-wrench </v-icon>
             <h6 style="color: darkcyan; font-style: italic">
               {{ section }}
             </h6>
@@ -33,6 +37,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>
