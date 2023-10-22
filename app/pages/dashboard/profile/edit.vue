@@ -2,6 +2,9 @@
   <main>
     <header class="mb-4">
       <h1>Editar perfil</h1>
+      <v-btn prepend-icon="mdi-arrow-left" to="/dashboard/profile" class="mt-3">
+        Regresar
+      </v-btn>
     </header>
     <section class="profile-edit-section">
       <PersonalInfoForm
