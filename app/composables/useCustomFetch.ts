@@ -9,7 +9,7 @@ export function useCustomFetch<T>(
   const config = useRuntimeConfig()
 
   const defaults: UseFetchOptions<T> = {
-    baseURL: (config.baseUrl as string) ?? 'http://192.168.0.4:8000/',
+    baseURL: process.env.API_BASE_URL,
     // cache request
     key: url,
 
