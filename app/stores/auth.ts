@@ -51,10 +51,10 @@ export const useAuthStore = defineStore('auth', {
     async fetchAuth() {
       // const role = useCookie('cicsapp-roleuser')
       // this.role = role.value ?? null
-      const token = useCookie('cicsapp-user-token')
-      this.token = token.value ?? null
-      if (token.value) {
-        const decoded = jwtDecode<UserJwt>(token.value)
+      const tokenCookie = useCookie('cicsapp-user-token')
+      this.token = tokenCookie.value ?? null
+      if (tokenCookie.value) {
+        const decoded = jwtDecode<UserJwt>(tokenCookie.value)
         this.role = decoded.profile_id ? 'regular' : 'staff'
         this.isAuthenticated = true
         if (this.role === 'staff') {

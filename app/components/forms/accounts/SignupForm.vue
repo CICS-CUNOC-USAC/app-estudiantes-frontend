@@ -46,6 +46,19 @@
             <v-icon icon="mdi-numeric" size="small" />
           </template>
         </v-text-field>
+        <v-autocomplete
+          v-model="careerCode"
+          :items="careerItems"
+          item-value="value"
+          item-title="text"
+          label="Carrera"
+          :rules="[validationRules.required]"
+          required
+        >
+          <template #prepend>
+            <v-icon icon="mdi-numeric" size="small" />
+          </template>
+        </v-autocomplete>
         <v-text-field
           v-model="email"
           label="Correo electrónico"
@@ -149,9 +162,32 @@ export default {
   emits: ['signup'],
   data() {
     return {
+      careerItems: [
+        {
+          text: 'Ingeniería Civil',
+          value: 33
+        },
+        {
+          text: 'Ingeniería Mécánica',
+          value: 34
+        },
+        {
+          text: 'Ingeniería Industrial',
+          value: 35
+        },
+        {
+          text: 'Ingeniería Mécanica Industrial',
+          value: 36
+        },
+        {
+          text: 'Ingeniería en Ciencias y Sistemas',
+          value: 58
+        }
+      ],
       firstName: '',
       lastName: '',
       ra: '',
+      careerCode: null,
       email: '',
       password: '',
       confirmPassword: '',
@@ -192,6 +228,7 @@ export default {
           firstName: this.firstName,
           lastName: this.lastName,
           ra: this.ra,
+          career_code: this.careerCode,
           email: this.email,
           password: this.password
         }

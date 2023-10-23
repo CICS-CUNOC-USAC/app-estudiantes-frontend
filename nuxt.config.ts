@@ -1,4 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+
 export default defineNuxtConfig({
   srcDir: 'app/',
   build: {
@@ -23,15 +25,29 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' }
   },
-  modules: ['@pinia/nuxt', '@nuxtjs/google-fonts'],
+  modules: [
+    '@pinia/nuxt',
+    '@nuxtjs/google-fonts',
+    (_options, nuxt) => {
+      nuxt.hooks.hook('vite:extendConfig', (config) => {
+        // @ts-expect-error
+        config.plugins.push(vuetify({ autoImport: true }))
+      })
+    }
+  ],
   vite: {
     define: {
       'process.env.DEBUG': false
+    },
+    vue: {
+      template: {
+        transformAssetUrls
+      }
     }
   },
   css: [
-    'vuetify/lib/styles/main.sass',
-    '@mdi/font/css/materialdesignicons.min.css'
+    // 'vuetify/lib/styles/main.sass',
+    // '@mdi/font/css/materialdesignicons.min.css'
   ],
   plugins: [
     // Use Vuetify as a plugin
@@ -41,6 +57,7 @@ export default defineNuxtConfig({
     display: 'swap',
     families: {
       'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700]
+      // Sarabun: [100, 200, 300, 400, 500, 600, 700, 800]
     }
   }
 })

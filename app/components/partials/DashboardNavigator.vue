@@ -77,7 +77,7 @@ export default {
         [
           'mdi-card-bulleted-settings-outline',
           'Pensums',
-          '/portal/general/pensums'
+          '/dashboard/pensum/progress'
         ]
       ],
       theme: 'light',
