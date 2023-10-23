@@ -6,10 +6,9 @@ export function useCustomFetch<T>(
   options: UseFetchOptions<T> = {}
 ) {
   const userAuth = useCookie('cicsapp-user-token')
-  const config = useRuntimeConfig()
 
   const defaults: UseFetchOptions<T> = {
-    baseURL: (config.baseUrl as string) ?? 'http://192.168.0.4:8000/',
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     // cache request
     key: url,
 
