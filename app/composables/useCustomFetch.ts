@@ -6,10 +6,9 @@ export function useCustomFetch<T>(
   options: UseFetchOptions<T> = {}
 ) {
   const userAuth = useCookie('cicsapp-user-token')
-  const config = useRuntimeConfig()
 
   const defaults: UseFetchOptions<T> = {
-    baseURL: process.env.API_BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     // cache request
     key: url,
 
