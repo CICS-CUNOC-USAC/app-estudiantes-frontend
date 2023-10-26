@@ -27,10 +27,10 @@
       <v-card rounded="lg" max-height="5rem">
         <v-row>
           <v-col
+            cols="1"
             :style="{
               backgroundColor: getFieldColor(course.career_course.field)
             }"
-            cols="1"
           >
           </v-col>
           <v-col cols="2" class="d-flex flex-column align-center">
@@ -43,11 +43,11 @@
             >
           </v-col>
           <v-col class="my-auto" cols="7">
-            <v-card-title
-              style="line-height: 1.3"
-              class="text-wrap text-body-2"
-              >{{ course.career_course.course.name }}</v-card-title
-            >
+            <CourseDialog
+              :field="course.career_course.field"
+              :course-code="course.career_course.course_code"
+              :course-name="course.career_course.course.name"
+            />
           </v-col>
           <v-col cols="1" class="d-flex align-center">
             <v-checkbox
@@ -62,6 +62,8 @@
   </v-card>
 </template>
 <script setup lang="ts">
+import CourseDialog from '@/components/dialogs/courses/CourseDialog.vue'
+const { openAndFetchCareerCourse } = useCoursesStore()
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterProgress: SemesterProgress
@@ -83,46 +85,3 @@ const updateItem = (courseProgressId: number, approved: boolean) => {
   })
 }
 </script>
-<!-- <script lang="ts">
-export default {
-  props: {
-    primaryColor: {
-      type: String,
-      required: true
-    },
-    secondaryColor: {
-      type: String,
-      required: true
-    },
-    terciaryColor: {
-      type: String,
-      required: true
-    },
-    semestre: {
-      type: Object,
-      required: true
-    },
-    codigoCarrera: {
-      type: Number,
-      required: true
-    }
-  },
-  data() {
-    return {
-      cursos: Array<Object>
-    }
-  },
-  async mounted() {
-    const cursos = await fetch(
-      'http://localhost:8000/career-courses/' +
-        this.codigoCarrera +
-        '/semester/' +
-        this.semestre.numero
-    )
-      .then((res) => res.json())
-      .then((res) => {
-        this.cursos = res
-      })
-  }
-}
-</script> -->

@@ -1,5 +1,14 @@
 <template>
   <main style="position: relative">
+    <v-btn
+      icon="mdi-help"
+      variant="elevated"
+      position="fixed"
+      location="bottom right"
+      class="ma-10"
+      style="z-index: 10"
+    >
+    </v-btn>
     <PensumProgressDetails
       :career-progress="coursesProgress"
       :loading="loading"
