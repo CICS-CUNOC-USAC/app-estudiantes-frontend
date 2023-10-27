@@ -46,7 +46,9 @@
             <CourseDialog
               :field="course.career_course.field"
               :course-code="course.career_course.course_code"
+              :mandatory="course.career_course.mandatory"
               :course-name="course.career_course.course.name"
+              :career-code="course.career_course.career_code"
             />
           </v-col>
           <v-col cols="1" class="d-flex align-center">

@@ -11,6 +11,7 @@ export type CareerCourse = {
   course_code: string
   semester: number
   field: number
+  field_name: string
   mandatory: boolean
   course: Course
 }

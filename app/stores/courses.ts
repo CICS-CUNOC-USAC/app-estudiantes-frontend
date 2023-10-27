@@ -8,6 +8,7 @@ export const useCoursesStore = defineStore('courses', () => {
     course_code: '',
     semester: 0,
     field: 0,
+    field_name: '',
     mandatory: false,
     course: {
       code: '',
@@ -17,10 +18,10 @@ export const useCoursesStore = defineStore('courses', () => {
     }
   })
 
-  const fetchCareerCourse = async (code: string) => {
+  const fetchCareerCourse = async (code: string, careerCode: number) => {
     loading.value = true
     const { data, error } = await useCustomFetch<CareerCourse>(
-      `courses/${code}`,
+      `courses/${code}/${careerCode}`,
       {
         method: 'GET'
       }
