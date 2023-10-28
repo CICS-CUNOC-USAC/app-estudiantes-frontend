@@ -20,19 +20,19 @@
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <h6 class="text-overline">Créditos acumulados:</h6>
-          <strong>{{ careerProgress?.current_credits }}</strong>
+          <strong>{{ careerProgress?.current_credits.total_credits }}</strong>
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <h6 class="text-overline">Créditos obligatorios:</h6>
           <strong
-            >{{ careerProgress?.current_credits }} /
+            >{{ careerProgress?.current_credits.mandatory_credits }} /
             {{ careerProgress?.mandatory_credits }}</strong
           >
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <h6 class="text-overline">Créditos disponibles:</h6>
           <strong
-            >{{ careerProgress?.current_credits }} /
+            >{{ careerProgress?.current_credits.total_credits }} /
             {{ careerProgress?.available_credits }}</strong
           >
         </v-col>
@@ -52,19 +52,19 @@
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <span class="text-overline">Créditos acumulados:</span>
-          <strong>{{ careerProgress?.current_credits }}</strong>
+          <strong>{{ careerProgress?.current_credits.total_credits }}</strong>
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <span class="text-overline">Créditos obligatorios:</span>
           <strong
-            >{{ careerProgress?.current_credits }} /
+            >{{ careerProgress?.current_credits.mandatory_credits }} /
             {{ careerProgress?.mandatory_credits }}</strong
           >
         </v-col>
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <span class="text-overline">Créditos disponibles:</span>
           <strong
-            >{{ careerProgress?.current_credits }} /
+            >{{ careerProgress?.current_credits.total_credits }} /
             {{ careerProgress?.available_credits }}</strong
           >
         </v-col>
