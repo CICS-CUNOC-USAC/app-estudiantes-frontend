@@ -1,5 +1,6 @@
 <template>
   <main :style="{ backgroundColor: bgColor }">
+    <NuxtLoadingIndicator :throttle="130" :height="4" :color="loadingColor" />
     <NuxtLayout />
   </main>
 </template>
@@ -21,6 +22,9 @@ export default {
     ...mapState(useConfigsStore, ['theme']),
     bgColor() {
       return this.theme === 'light' ? '#fff' : '#121212'
+    },
+    loadingColor() {
+      return this.theme === 'light' ? '#121212' : '#fff'
     }
   }
 }
