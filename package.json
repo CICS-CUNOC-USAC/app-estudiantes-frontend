@@ -13,24 +13,24 @@
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@nuxtjs/eslint-module": "^4.1.0",
     "@nuxtjs/google-fonts": "^3.0.2",
-    "@typescript-eslint/eslint-plugin": "^6.7.0",
-    "@typescript-eslint/parser": "^6.7.0",
-    "eslint": "^8.49.0",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
-    "eslint-plugin-prettier": "^5.0.0",
-    "nuxt": "^3.7.3",
+    "eslint-plugin-prettier": "^5.0.1",
+    "nuxt": "^3.8.0",
     "prettier": "^3.0.3",
-    "sass": "^1.67.0",
+    "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "@mdi/font": "^7.2.96",
-    "@pinia/nuxt": "^0.4.11",
-    "jwt-decode": "^3.1.2",
-    "pinia": "^2.1.6",
+    "@mdi/font": "^7.3.67",
+    "@pinia/nuxt": "^0.5.1",
+    "jwt-decode": "^4.0.0",
+    "pinia": "^2.1.7",
     "vite-plugin-vuetify": "^1.0.2",
-    "vuetify": "^3.3.16"
+    "vuetify": "^3.3.23"
   },
   "overrides": {
     "vue": "latest"

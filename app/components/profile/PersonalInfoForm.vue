@@ -67,8 +67,7 @@
   </section>
 </template>
 <script lang="ts">
-import { PropType } from 'nuxt/dist/app/compat/capi'
-import { User } from '~/stores/regular-auth'
+import { type User } from '~/stores/regular-auth'
 
 export default {
   props: {

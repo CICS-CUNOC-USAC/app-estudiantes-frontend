@@ -15,40 +15,20 @@
     </section>
   </main>
 </template>
-<script lang="ts">
-import { mapState, mapActions, Pinia } from 'pinia'
-import PersonalInfoDetails from '@/components/profile/details/PersonalInfoDetails.vue'
 
-export default defineNuxtComponent({
-  asyncData({ $pinia }: { $pinia: Pinia }) {
-    const store = useAuthStore($pinia)
-    store.fetchUser()
-    return {}
-  },
-  components: {
-    PersonalInfoDetails
-  },
-  setup() {
-    definePageMeta({
-      layout: 'dashboard'
-    })
-  },
-  computed: {
-    ...mapState(useRegularAuthStore, ['user', 'authenticated']),
-    ...mapState(useRegularAuthStore, ['loading'])
-  },
-  methods: {
-    updateUserProfile(user: UserUpdatePayload) {
-      this.updateProfile(user)
-    },
-    updateUserPassword(userWithPassword: UserUpdatePayload) {
-      this.updateProfile(userWithPassword)
-    },
-    ...mapActions(useRegularAuthStore, ['myProfile', 'updateProfile']),
-    ...mapActions(useAuthStore, ['logout'])
-  }
+<script setup lang="ts">
+import { storeToRefs } from 'pinia'
+import PersonalInfoDetails from '~/components/profile/details/PersonalInfoDetails.vue'
+
+const authStore = useAuthStore()
+await authStore.fetchUser()
+const regularAuthStore = useRegularAuthStore()
+const { user } = storeToRefs(regularAuthStore)
+definePageMeta({
+  layout: 'dashboard'
 })
 </script>
+
 <style lang="scss" scoped>
 .profile-edit-section {
   margin-bottom: 1.5rem;
