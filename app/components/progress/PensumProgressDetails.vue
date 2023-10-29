@@ -1,5 +1,5 @@
 <template>
-  <div style="position: sticky !important; top: 0; z-index: 1">
+  <div style="position: sticky !important; top: 4rem; z-index: 1">
     <v-sheet
       v-if="$vuetify.display.smAndUp"
       class="pa-4"
@@ -15,9 +15,9 @@
         indeterminate
       ></v-progress-linear>
       <v-row justify="center" class="text-center">
-        <v-col cols="12">
+        <!-- <v-col cols="12">
           <h2>Progreso de carrera:</h2>
-        </v-col>
+        </v-col> -->
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <h6 class="text-overline">Créditos acumulados:</h6>
           <strong>{{ careerProgress?.current_credits.total_credits }}</strong>
@@ -47,9 +47,9 @@
         indeterminate
       ></v-progress-linear>
       <v-row justify="center" class="text-center" no-gutters>
-        <v-col cols="12" class="mb-2">
+        <!-- <v-col cols="12" class="mb-2">
           <h2>Progreso de carrera:</h2>
-        </v-col>
+        </v-col> -->
         <v-col cols="12" sm="4" md="4" lg="4" xl="4">
           <span class="text-overline">Créditos acumulados:</span>
           <strong>{{ careerProgress?.current_credits.total_credits }}</strong>

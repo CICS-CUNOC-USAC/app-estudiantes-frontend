@@ -1,4 +1,4 @@
-import jwtDecode from 'jwt-decode'
+import { jwtDecode } from 'jwt-decode'
 import { defineStore } from 'pinia'
 import { useRegularAuthStore } from './regular-auth'
 import { useStaffAuthStore } from './staff-auth'

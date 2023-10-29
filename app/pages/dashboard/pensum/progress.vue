@@ -1,5 +1,8 @@
 <template>
   <main style="position: relative">
+    <header class="mb-4">
+      <h1>Progreso de carrera</h1>
+    </header>
     <v-btn
       icon="mdi-help"
       variant="elevated"

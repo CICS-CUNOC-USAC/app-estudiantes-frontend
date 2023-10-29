@@ -23,7 +23,7 @@
   </main>
 </template>
 <script lang="ts">
-import { mapState, mapActions, Pinia } from 'pinia'
+import { mapState, mapActions, type Pinia } from 'pinia'
 import PersonalInfoForm from '~/components/profile/PersonalInfoForm.vue'
 import PasswordProfileForm from '~/components/profile/PasswordProfileForm.vue'
 

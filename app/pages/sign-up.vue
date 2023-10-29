@@ -12,8 +12,8 @@
   </section>
 </template>
 <script lang="ts">
-import { mapState, mapActions, Pinia } from 'pinia'
-import { useRegularAuthStore, SignupPayload } from '~/stores/regular-auth'
+import { mapState, mapActions, type Pinia } from 'pinia'
+import { useRegularAuthStore, type SignupPayload } from '~/stores/regular-auth'
 import SignupForm from '@/components/forms/accounts/SignupForm.vue'
 export default defineNuxtComponent({
   asyncData({ $pinia }: { $pinia: Pinia }) {

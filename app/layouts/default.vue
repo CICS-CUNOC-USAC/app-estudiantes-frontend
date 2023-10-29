@@ -103,8 +103,8 @@ import { mapState, mapActions } from 'pinia'
 import { useConfigsStore } from '~/stores/config'
 import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
 import { useAuthStore } from '~/stores/auth'
-import { User } from '~/stores/regular-auth'
-import { Staff } from '~/stores/staff-auth'
+import { type User } from '~/stores/regular-auth'
+import { type Staff } from '~/stores/staff-auth'
 import GeneralSnackbar from '~/components/partials/GeneralSnackbar.vue'
 export default {
   components: {
