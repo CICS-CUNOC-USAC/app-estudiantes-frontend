@@ -21,7 +21,7 @@ export const useCoursesStore = defineStore('courses', () => {
   const fetchCareerCourse = async (code: string, careerCode: number) => {
     loading.value = true
     const { data, error } = await useCustomFetch<CareerCourse>(
-      `courses/${code}/${careerCode}`,
+      `/courses/${code}/${careerCode}`,
       {
         method: 'GET'
       }
