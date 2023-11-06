@@ -39,14 +39,14 @@
       <v-container class="page-v-container">
         <NuxtPage :theme="theme" />
       </v-container>
-      <v-footer
+      <!-- <v-footer
         :color="theme === 'light' ? 'white' : '#121212'"
         justify="center"
       >
         <v-col class="text-center mt-4" cols="12">
           <strong>CICS</strong> — {{ new Date().getFullYear() }}
         </v-col>
-      </v-footer>
+      </v-footer> -->
     </v-main>
     <GeneralSnackbar />
   </v-app>

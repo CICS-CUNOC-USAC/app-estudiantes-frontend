@@ -29,7 +29,7 @@
         <v-list-item-title> Perfil </v-list-item-title>
       </v-list-item>
       <v-divider thickness="2" />
-      <span class="text-overline"> Mis recursos </span>
+      <span class="text-overline"> Recursos </span>
       <v-list-item
         v-for="([icon, title, route], i) in basicInfoItems"
         :key="i"
@@ -73,12 +73,10 @@ export default {
   data() {
     return {
       basicInfoItems: [
-        ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
-        [
-          'mdi-card-bulleted-settings-outline',
-          'Pensums',
-          '/portal/general/pensums'
-        ]
+        ['mdi-newspaper', 'Artículos', '/admin/articles'],
+        ['mdi-book-open-page-variant', 'Manuales', '/admin/manuals'],
+        ['mdi-bookshelf', 'Biblioteca', '/admin/library'],
+        ['mdi-book-open-page-variant', 'Tesario', '/admin/thesis']
       ],
       theme: 'light',
       tools: []

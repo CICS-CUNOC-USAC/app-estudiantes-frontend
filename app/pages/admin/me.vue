@@ -1,39 +1,27 @@
 <template>
-  <div>
-    <span> Estoy autenticado: {{ authenticated }} </span>
-    <p>
-      Mi nombre es:
-      <strong>{{ user?.first_name }} {{ user?.last_name }}</strong>
-    </p>
-    <p>
-      Mi email es: <strong>{{ user?.email }}</strong>
-    </p>
-    <v-btn @click="logout">Salir</v-btn>
-  </div>
+  <main>
+    <header class="mb-4">
+      <h1>Mi perfil</h1>
+      <v-btn
+        prepend-icon="mdi-pencil-outline"
+        to="/admin/profile/edit"
+        class="mt-3"
+      >
+        Editar
+      </v-btn>
+    </header>
+    <section class="profile-edit-section">
+      <AdminPersonalInfoDetails :user="user" />
+    </section>
+  </main>
 </template>
-<script lang="ts">
-import { mapState, mapActions } from 'pinia'
-import { useStaffAuthStore } from '~/stores/staff-auth'
-import { useAuthStore } from '~/stores/auth'
-
-export default defineNuxtComponent({
-  setup() {
-    definePageMeta({
-      layout: 'admin'
-    })
-  },
-  // asyncData({ $pinia }) {
-  //   const store = useAuthStore($pinia)
-  //   store.fetchUser()
-  //   return {}
-  // },
-  computed: {
-    ...mapState(useStaffAuthStore, ['user', 'authenticated'])
-  },
-  methods: {
-    ...mapActions(useStaffAuthStore, ['myProfile']),
-    ...mapActions(useAuthStore, ['logout'])
-  }
+<script lang="ts" setup>
+import AdminPersonalInfoDetails from '~/components/profile/details/AdminPersonalInfoDetails.vue'
+const { user } = storeToRefs(useStaffAuthStore())
+const staffAuthStore = useStaffAuthStore()
+await staffAuthStore.myProfile()
+definePageMeta({
+  layout: 'admin'
 })
 </script>
 <style lang="scss"></style>

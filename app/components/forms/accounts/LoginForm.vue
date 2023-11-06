@@ -35,12 +35,12 @@
     </v-card-text>
     <v-card-actions>
       <v-row>
-        <v-col v-if="error" cols="12">
+        <!-- <v-col v-if="error" cols="12">
           <span class="text-red d-flex align-center">
             <v-icon class="mr-3"> mdi-alert-circle-outline </v-icon>
             <span class="font-weight-medium text-body-2">{{ error }}</span>
           </span>
-        </v-col>
+        </v-col> -->
         <v-col cols="12">
           <v-btn
             variant="tonal"
@@ -91,11 +91,11 @@ export default {
     showSignup: {
       type: Boolean,
       default: true
-    },
-    error: {
-      type: String,
-      default: () => null
     }
+    // error: {
+    //   type: String,
+    //   default: () => null
+    // }
   },
   emits: ['login'],
   data() {
