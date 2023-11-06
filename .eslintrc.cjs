@@ -12,6 +12,12 @@ module.exports = {
   plugins: [],
   rules: {
     // disable camelcase error
-    camelcase: 'off'
+    camelcase: 'off',
+    'vue/valid-v-slot': [
+      'error',
+      {
+        allowModifiers: true
+      }
+    ]
   }
 }

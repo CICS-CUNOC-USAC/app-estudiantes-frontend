@@ -24,30 +24,43 @@ export const useStaffAuthStore = defineStore('staff-auth', {
   state: () => ({
     authenticated: false,
     loading: false,
-    error: null as any | {} as any | null,
+    // error: null as any | {} as any | null,
     user: null as Staff | null
   }),
   actions: {
     async loginStaff(payload: LoginPayload) {
       this.loading = true
-      this.error = null
+      // this.error = null
       const router = useRouter()
       // Fetch the data from the API
       const { data, error } = await useCustomFetch<LoginResponse>(
-        'staff-auth/login',
+        '/staff-auth/login',
         {
           method: 'POST',
           body: payload
         }
       )
-      // Error handling
-      if (error.value?.data) {
-        this.error = convertError(error.value.data.message)
+      if (error.value) {
+        if (error.value.data) {
+          useSnackbarStore().showSnackbar({
+            title: 'Error',
+            message: convertError(error.value.data.message),
+            type: SnackbarType.ERROR
+          })
+        }
+        if (error.value.cause) {
+          useSnackbarStore().showSnackbar({
+            title: 'Error',
+            message: convertError(error.value!.message),
+            type: SnackbarType.ERROR
+          })
+        }
+        /*
+        Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
+        and be able to make the request again
+        */
+        error.value = null
         this.loading = false
-        return
-      } else if (error.value?.cause) {
-        this.loading = false
-        this.error = convertError(error.value.message)
         return
       }
       // Success
@@ -73,10 +86,10 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     async myProfile() {
       this.loading = true
       try {
-        const { data } = await useCustomFetch<Staff>('staff-auth/me')
+        const { data } = await useCustomFetch<Staff>('/staff-auth/me')
         this.user = data?.value ?? null
       } catch (error) {
-        this.error = error
+        // this.error = error
         console.log(error)
       } finally {
         this.loading = false
@@ -85,7 +98,7 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     clear() {
       this.user = null
       this.authenticated = false
-      this.error = null
+      // this.error = null
     }
   }
 })

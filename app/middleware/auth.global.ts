@@ -10,7 +10,8 @@ export default defineNuxtRouteMiddleware((to, _from) => {
 
   if (
     !user.value &&
-    (to.fullPath.includes('dashboard') || to.fullPath.includes('admin'))
+    (to.fullPath.includes('dashboard') ||
+      (to.fullPath.includes('admin') && !to.fullPath.includes('admin/login')))
   ) {
     return navigateTo('/')
   }
