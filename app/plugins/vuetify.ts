@@ -16,6 +16,9 @@ export default defineNuxtPlugin((nuxtApp) => {
       VTextField: {
         variant: 'underlined'
       },
+      VTextarea: {
+        variant: 'underlined'
+      },
       VAutocomplete: {
         variant: 'underlined'
       },

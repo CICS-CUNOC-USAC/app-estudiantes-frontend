@@ -67,7 +67,7 @@ export const useCareerProgressStoreC = defineStore('career_progress', () => {
     loading.value = true
 
     const { data, error } = await useCustomFetch<ProgressResponse>(
-      'user-courses-progress',
+      '/user-courses-progress',
       {
         method: 'GET'
       }
@@ -108,7 +108,7 @@ export const useCareerProgressStoreC = defineStore('career_progress', () => {
     } = payload
 
     const { data, error } = await useCustomFetch(
-      `user-courses-progress/${careerProgressId}`,
+      `/user-courses-progress/${careerProgressId}`,
       {
         method: 'PATCH',
         body: {

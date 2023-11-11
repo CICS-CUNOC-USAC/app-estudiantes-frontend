@@ -48,7 +48,7 @@ export default {
         case SnackbarType.ERROR:
           return 'text-red-lighten-1'
         case SnackbarType.SUCCESS:
-          return 'text-light-green'
+          return 'text-teal'
         case SnackbarType.WARNING:
           return 'text-yellow'
         case SnackbarType.MESSAGE:

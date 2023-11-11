@@ -69,7 +69,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       // Fetch the data from the API
 
       const { data, error } = await useCustomFetch<LoginResponse>(
-        'auth/login',
+        '/auth/login',
         {
           method: 'POST',
           body: payload
@@ -90,6 +90,11 @@ export const useRegularAuthStore = defineStore('regular-auth', {
             type: SnackbarType.ERROR
           })
         }
+        /*
+        Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
+        and be able to make the request again
+        */
+        error.value = null
         this.loading = false
         return
       }
@@ -131,7 +136,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       const router = useRouter()
       // Fetch the data from the API
       const { data, error } = await useCustomFetch<LoginResponse>(
-        'auth/sign-up',
+        '/auth/sign-up',
         {
           method: 'POST',
           body: newPayload
@@ -193,7 +198,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       this.loading = true
       // const snackbarStore = useSnackbarStore()
 
-      const { data } = await useCustomFetch<User>('auth/me')
+      const { data } = await useCustomFetch<User>('/auth/me')
       if (data.value) {
         this.user = data?.value
       } else {
@@ -209,7 +214,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
     async updateProfile(payload: UserUpdatePayload) {
       this.loading = true
       const router = useRouter()
-      const { data, error } = await useCustomFetch<User>('auth/me', {
+      const { data, error } = await useCustomFetch<User>('/auth/me', {
         method: 'PUT',
         body: payload
       })

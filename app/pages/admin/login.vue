@@ -4,7 +4,6 @@
       <v-col cols="11" sm="8" md="8" lg="5" xl="5">
         <LoginForm
           :loading="loading"
-          :error="error"
           admin
           :show-signup="false"
           @login="login($event)"
@@ -33,11 +32,11 @@ export default {
     return {}
   },
   computed: {
-    ...mapState(useStaffAuthStore, ['loading', 'error'])
+    ...mapState(useStaffAuthStore, ['loading'])
   },
   methods: {
-    login(credentials: { email: string; password: string }) {
-      this.loginStaff(credentials)
+    async login(credentials: { email: string; password: string }) {
+      await this.loginStaff(credentials)
     },
     ...mapActions(useStaffAuthStore, ['loginStaff'])
   }
@@ -52,4 +51,3 @@ export default {
   width: 100%;
 }
 </style>
-~/stores/staff-auth
