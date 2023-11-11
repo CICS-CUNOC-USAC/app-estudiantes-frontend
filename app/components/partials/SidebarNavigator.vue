@@ -114,6 +114,11 @@ export default {
         ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
         [
           'mdi-card-bulleted-settings-outline',
+          'Programas de curso',
+          '/portal/general/cursos/programas'
+        ],
+        [
+          'mdi-card-bulleted-settings-outline',
           'Pensums',
           '/portal/general/pensums'
         ],
