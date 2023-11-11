@@ -7,10 +7,15 @@
     </p>
     <v-row align="center" justify="start">
       <v-col cols="12" md="3">
-        <v-btn block>
-          <v-icon>mdi-plus</v-icon>
-          Nuevo manual
-        </v-btn>
+        <NewManualDialog
+          #="{ open }"
+          @new-item="createNewManual($event as ManualPayload)"
+        >
+          <v-btn block :disabled="loading" @click="open">
+            <v-icon>mdi-plus</v-icon>
+            Nuevo manual
+          </v-btn>
+        </NewManualDialog>
       </v-col>
       <v-col cols="12" md="3">
         <v-text-field
@@ -40,18 +45,26 @@
             </template>
 
             <template #item.actions="{ item }">
-              <v-btn
-                :to="`/admin/manuals/edit/${item.id}`"
-                icon="mdi-pencil-outline"
-                variant="text"
-                density="comfortable"
-              />
-              <v-btn
-                color="red"
-                icon="mdi-delete-outline"
-                variant="text"
-                density="comfortable"
-              />
+              <div class="d-flex align-center">
+                <v-btn
+                  :to="`/admin/manuals/edit/${item.id}`"
+                  icon="mdi-pencil-outline"
+                  variant="text"
+                  density="comfortable"
+                />
+                <DeleteItemDialog
+                  v-slot="{ open }"
+                  @confirm="deleteManualById(item.id)"
+                >
+                  <v-btn
+                    color="red"
+                    icon="mdi-delete-outline"
+                    variant="text"
+                    density="comfortable"
+                    @click="open"
+                  />
+                </DeleteItemDialog>
+              </div>
             </template>
           </v-data-table-server>
         </v-sheet>
@@ -62,11 +75,13 @@
 <script setup lang="ts">
 import { useDate } from 'vuetify/labs/date'
 import { VDataTableServer } from 'vuetify/lib/labs/VDataTable/index.mjs'
+import DeleteItemDialog from '~/components/dialogs/DeleteItemDialog.vue'
+import NewManualDialog from '~/components/dialogs/admin/manuals/NewManualDialog.vue'
 definePageMeta({
   layout: 'admin'
 })
 
-const { fetchAllManuals } = useAdminManualsStore()
+const { fetchAllManuals, deleteManual, createManual } = useAdminManualsStore()
 const { loading, manuals, responseMeta } = storeToRefs(useAdminManualsStore())
 await fetchAllManuals()
 const name = ref('')
@@ -97,6 +112,15 @@ const updateOptions = async ({
     orderBy: formatOrderBy(sortBy)
   })
 }
+const deleteManualById = async (id: number) => {
+  await deleteManual(id)
+  await fetchAllManuals()
+}
+const createNewManual = async (item: ManualPayload) => {
+  await createManual(item)
+  await fetchAllManuals()
+}
+
 const formatedDate = (date: string) =>
   vDate.format(date.split('T', 1), 'fullDateWithWeekday')
 
