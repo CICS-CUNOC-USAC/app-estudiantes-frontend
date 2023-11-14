@@ -4,6 +4,7 @@
       :items="data || []"
       :headers="headers"
       :search="teacherSearch"
+      :loading="loading"
     >
       <template #item.name="{ item }">
         <span class="font-weight-medium">{{ item.name }}</span>
@@ -21,11 +22,11 @@
   </v-sheet>
 </template>
 <script setup lang="ts">
-import { VDataTable } from 'vuetify/lib/labs/VDataTable/index.mjs'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
 defineProps<{
   teacherSearch: string
   data: ScrapedProgram[] | null
+  loading: boolean
 }>()
 const headers = [
   {

@@ -1,6 +1,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { type FetchError } from 'ofetch'
 import type { MediaResponse } from './media'
+import type { Metadata } from '~/utils/types/fetching'
 export type Manual = {
   id: number
   name: string
@@ -12,15 +13,8 @@ export type Manual = {
   media: MediaResponse
 }
 
-export type ManualsAdminResponse = {
+export type ManualsResponse = {
   results: Manual[]
-  total: number
-  limit: number
-  page: number
-  total_pages: number
-}
-
-type Metadata = {
   total: number
   limit: number
   page: number
@@ -47,10 +41,9 @@ export const useAdminManualsStore = defineStore('admin-manuals', () => {
   }) => {
     loading.value = true
 
-    const { data } = await useCustomFetch<ManualsAdminResponse>(
-      '/manuals/admin',
-      { params }
-    )
+    const { data } = await useCustomFetch<ManualsResponse>('/manuals/admin', {
+      params
+    })
 
     if (data.value) {
       const { results, ...meta } = data.value

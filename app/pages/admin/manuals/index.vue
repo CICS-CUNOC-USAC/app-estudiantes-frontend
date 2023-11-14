@@ -73,8 +73,8 @@
   </main>
 </template>
 <script setup lang="ts">
-import { useDate } from 'vuetify/labs/date'
-import { VDataTableServer } from 'vuetify/lib/labs/VDataTable/index.mjs'
+import { useDate } from 'vuetify'
+
 import DeleteItemDialog from '~/components/dialogs/DeleteItemDialog.vue'
 import NewManualDialog from '~/components/dialogs/admin/manuals/NewManualDialog.vue'
 definePageMeta({

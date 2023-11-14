@@ -41,7 +41,11 @@
         </v-text-field>
       </v-col>
       <v-col cols="12">
-        <ProgramsView :teacher-search="teacherSearch" :data="data" />
+        <ProgramsView
+          :teacher-search="teacherSearch"
+          :data="data"
+          :loading="pending"
+        />
       </v-col>
     </v-row>
   </main>
