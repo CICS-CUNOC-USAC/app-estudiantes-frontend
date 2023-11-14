@@ -1,9 +1,6 @@
 <template>
   <v-container>
-    <div
-      v-for="carrera, index in carreras"
-      :key="index"
-    >
+    <div v-for="(carrera, index) in carreras" :key="index">
       <InfoCard
         :img="carrera.img"
         :title="carrera.carrera"
@@ -16,7 +13,7 @@
 <script lang="ts">
 export default {
   name: 'Pensums',
-  data () {
+  data() {
     return {
       carreras: [
         {
@@ -36,12 +33,16 @@ export default {
         },
         {
           carrera: 'Industrial',
-          img: new URL('@/assets/img/logo_industrial.jpg', import.meta.url).href,
+          img: new URL('@/assets/img/logo_industrial.jpg', import.meta.url)
+            .href,
           route: 'pensums/industrial'
         },
         {
           carrera: 'Mecanica Industrial',
-          img: new URL('@/assets/img/logo_mecanica_industrial.jpg', import.meta.url).href,
+          img: new URL(
+            '@/assets/img/logo_mecanica_industrial.jpg',
+            import.meta.url
+          ).href,
           route: 'pensums/mecanica-industrial'
         }
       ]
@@ -50,6 +51,4 @@ export default {
 }
 </script>
 
-<style scoped lang="scss">
-
-</style>
+<style scoped lang="scss"></style>

@@ -87,7 +87,6 @@
   </main>
 </template>
 <script lang="ts" setup>
-import { VSkeletonLoader } from 'vuetify/lib/labs/VSkeletonLoader/index.mjs'
 import ElementNotFound from '@/components/partials/ElementNotFound.vue'
 import PdfPreview from '~/components/content/PdfPreview.vue'
 definePageMeta({

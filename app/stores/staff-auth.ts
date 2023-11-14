@@ -85,15 +85,20 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     },
     async myProfile() {
       this.loading = true
-      try {
-        const { data } = await useCustomFetch<Staff>('/staff-auth/me')
+      const { data } = await useCustomFetch<Staff>('/staff-auth/me')
+
+      if (data.value) {
         this.user = data?.value ?? null
-      } catch (error) {
-        // this.error = error
-        console.log(error)
-      } finally {
-        this.loading = false
+      } else {
+        useSnackbarStore().showSnackbar({
+          title: 'Error de sesión',
+          message:
+            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde',
+          type: SnackbarType.ERROR
+        })
       }
+
+      this.loading = false
     },
     clear() {
       this.user = null
