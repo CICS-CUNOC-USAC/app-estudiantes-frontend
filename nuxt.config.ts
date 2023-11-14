@@ -12,7 +12,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     baseURL: process.env.BASE_URL || 'http://localhost:8000'
   },
-  components: [{ path: '~/components/cards' }],
   app: {
     head: {
       link: [

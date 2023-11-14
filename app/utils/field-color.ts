@@ -10,5 +10,5 @@ export const getFieldColor = (field: number): string => {
     4: '#FFA000',
     5: '#FF6F00'
   }
-  return colorMap[field] ?? 'black'
+  return colorMap[field] ?? 'grey'
 }

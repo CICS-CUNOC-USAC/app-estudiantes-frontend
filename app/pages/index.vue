@@ -128,7 +128,11 @@
   </v-container>
 </template>
 <script lang="ts">
+import InfoCard from '@/components/cards/InfoCard.vue'
 export default {
+  components: {
+    InfoCard
+  },
   props: ['theme'],
   data() {
     return {

@@ -4,7 +4,7 @@
       <v-row no-gutters>
         <v-col class="d-flex align-center">
           <v-icon
-            :icon="`mdi-numeric-${semesterProgress.semester}`"
+            :icon="`mdi-numeric-${semesterCourses.semester}`"
             size="60"
           ></v-icon>
           <h3>Semestre</h3>
@@ -24,12 +24,12 @@
     </div>
 
     <v-container v-for="course in filteredCourses" :key="course.course_code">
-      <v-card rounded="lg" max-height="5rem">
+      <v-card rounded="lg" class="py-3">
         <v-row>
           <v-col
             cols="1"
             :style="{
-              backgroundColor: getFieldColor(course.career_course.field)
+              backgroundColor: getFieldColor(course.field)
             }"
           >
           </v-col>
@@ -38,25 +38,18 @@
               course.course_code
             }}</span>
             <strong class="h-50 d-flex align-center"
-              >{{ course.career_course.course.credits }}
+              >{{ course.course.credits }}
               <span class="text-body-1">Cr</span></strong
             >
           </v-col>
-          <v-col class="my-auto" cols="7">
+          <v-col class="my-auto" cols="8">
             <CourseDialog
-              :field="course.career_course.field"
-              :course-code="course.career_course.course_code"
-              :mandatory="course.career_course.mandatory"
-              :course-name="course.career_course.course.name"
-              :career-code="course.career_course.career_code"
+              :field="course.field"
+              :course-code="course.course_code"
+              :mandatory="course.mandatory"
+              :course-name="course.course.name"
+              :career-code="course.career_code"
             />
-          </v-col>
-          <v-col cols="1" class="d-flex align-center">
-            <v-checkbox
-              :model-value="course.approved"
-              color="orange"
-              @update:model-value="updateItem(course.id, $event)"
-            ></v-checkbox>
           </v-col>
         </v-row>
       </v-card>
@@ -65,24 +58,15 @@
 </template>
 <script setup lang="ts">
 import CourseDialog from '@/components/dialogs/courses/CourseDialog.vue'
+import type { CareerCourses } from '~/utils/types/career-courses'
 const onlyMandatory = ref()
 const props = defineProps<{
-  semesterProgress: SemesterProgress
+  semesterCourses: CareerCourses
 }>()
 const filteredCourses = computed(() => {
   if (onlyMandatory.value) {
-    return props.semesterProgress.courses_semester_progress.filter(
-      (course) => course.career_course.mandatory
-    )
+    return props.semesterCourses.courses.filter((course) => course.mandatory)
   }
-  return props.semesterProgress.courses_semester_progress
+  return props.semesterCourses.courses
 })
-const emits = defineEmits(['updateItem'])
-const updateItem = (courseProgressId: number, approved: boolean) => {
-  emits('updateItem', {
-    courseProgressId,
-    careerProgressId: props.semesterProgress.career_progress_id,
-    approved
-  })
-}
 </script>
