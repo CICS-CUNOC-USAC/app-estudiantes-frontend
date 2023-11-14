@@ -109,7 +109,6 @@
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { VSkeletonLoader } from 'vuetify/lib/labs/VSkeletonLoader/index.mjs'
 defineProps<{
   field: number
   courseCode: string

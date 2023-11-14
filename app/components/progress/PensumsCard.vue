@@ -65,7 +65,6 @@
 </template>
 <script setup lang="ts">
 import CourseDialog from '@/components/dialogs/courses/CourseDialog.vue'
-const { openAndFetchCareerCourse } = useCoursesStore()
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterProgress: SemesterProgress
