@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column align-center">
+  <div class="d-flex flex-column">
     <div class="mb-2 d-flex">
       <div>
         <v-btn
@@ -18,7 +18,7 @@
         />
       </div>
       <v-divider vertical class="mx-4" color="transparent" />
-      <div>
+      <div v-if="props.showZoom">
         <v-btn
           density="comfortable"
           icon="mdi-magnify-minus-outline"
@@ -33,22 +33,39 @@
       </div>
     </div>
     <p v-if="loading" class="text-center text-overline">Cargando...</p>
-    <VuePDF
-      v-else
-      :pdf="pdf"
-      :page="page"
-      :scale="scale"
-      class="rounded-lg"
-      style="outline: 2px solid #9e9e9e"
-    />
+    <div v-else class="d-flex justify-center">
+      <VuePDF
+        v-if="props.fitToPage"
+        :pdf="pdf"
+        :page="page"
+        :fit-parent="true"
+        style="outline: 2px solid #9e9e9e"
+      />
+      <VuePDF
+        v-else
+        :pdf="pdf"
+        :page="page"
+        :scale="scale"
+        class="rounded-lg"
+        style="outline: 2px solid #9e9e9e"
+      />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
 import '@tato30/vue-pdf/style.css'
-const props = defineProps<{
-  pdfUrl: string
-}>()
+const props = withDefaults(
+  defineProps<{
+    pdfUrl: string
+    showZoom?: boolean
+    fitToPage?: boolean
+  }>(),
+  {
+    showZoom: true,
+    fitToPage: false
+  }
+)
 const loading = computed(() => !pdf.value)
 const page = ref(1)
 const scale = ref(0.5)
