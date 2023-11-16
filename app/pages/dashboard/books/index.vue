@@ -5,16 +5,17 @@
       Libreria
     </h1>
     <p class="font-weight-light my-4">
-      En esta sección se podrán administrar todos los recursos de libros
-      disponibles en el portal de estudiantes (Solo usuarios registrados).
+      En esta sección podras encontrar libros de todos los temas que puedan
+      ayudarte en tu carrera y sean de tu interes.
     </p>
-    <LibraryView />
+    <UserLibraryView />
   </main>
 </template>
 <script setup lang="ts">
-import LibraryView from '@/components/admin/library/LibraryView.vue'
+import UserLibraryView from '~/components/dashboard/UserLibraryView.vue'
+
 definePageMeta({
-  layout: 'admin'
+  layout: 'dashboard'
 })
 </script>
 <style lang="scss" scoped></style>

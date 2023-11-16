@@ -1,6 +1,9 @@
 <template>
   <main>
-    <h1 class="mb-4">Manuales</h1>
+    <h1 class="mb-4">
+      <v-icon size="32" class="mr-2"> mdi-book-open-page-variant </v-icon>
+      Manuales
+    </h1>
     <p class="font-weight-light my-4">
       En esta sección se podrán administrar todos los manuales disponibles en el
       portal público.

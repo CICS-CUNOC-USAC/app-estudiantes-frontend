@@ -1,14 +1,6 @@
 <template>
   <section>
     <v-row align="center" justify="space-between">
-      <v-col cols="12" md="3">
-        <NewLibraryItemDialog #="{ open }" @new-item="saveBookItem($event)">
-          <v-btn block :disabled="loading" @click="open">
-            <v-icon>mdi-plus</v-icon>
-            Nuevo libro
-          </v-btn>
-        </NewLibraryItemDialog>
-      </v-col>
       <v-col cols="12" md="6">
         <v-row>
           <v-col>
@@ -45,23 +37,11 @@
             <template #item.actions="{ item }">
               <div class="d-flex align-center">
                 <v-btn
-                  :to="`/admin/books/edit/${item.id}`"
-                  icon="mdi-pencil-outline"
+                  :to="`/dashboard/books/${item.id}`"
+                  icon="mdi-eye-outline"
                   variant="text"
                   density="comfortable"
                 />
-                <DeleteItemDialog
-                  v-slot="{ open }"
-                  @confirm="() => deleteBookItem(item.id)"
-                >
-                  <v-btn
-                    color="red"
-                    icon="mdi-delete-outline"
-                    variant="text"
-                    density="comfortable"
-                    @click="open"
-                  />
-                </DeleteItemDialog>
               </div>
             </template>
           </v-data-table-server>
@@ -71,27 +51,12 @@
   </section>
 </template>
 <script setup lang="ts">
-import DeleteItemDialog from '@/components/dialogs/DeleteItemDialog.vue'
-import NewLibraryItemDialog from '~/components/dialogs/admin/library/NewLibraryItemDialog.vue'
-const { fetchAllBooks, createBookItem, deleteBookItem } = useAdminLibraryStore()
-const { books, loading, responseMeta } = storeToRefs(useAdminLibraryStore())
+const { books, loading, responseMeta } = storeToRefs(useUserLibraryStore())
+const { fetchAllBooks } = useUserLibraryStore()
 await useLazyAsyncData('admin-books', () => fetchAllBooks())
 const name = ref('')
 const author = ref('')
 const search = ref('')
-
-const headers = [
-  { title: 'ID', key: 'id' },
-  { title: 'Nombre', key: 'name' },
-  { title: 'Autor', key: 'author' },
-  { title: 'Fecha de creación', key: 'created_at' },
-  { title: 'Acciones', key: 'actions', sortable: false }
-]
-
-const saveBookItem = async (item: BookPayload) => {
-  await createBookItem(item)
-  await fetchAllBooks()
-}
 
 const updateOptions = async ({
   page,
@@ -112,6 +77,13 @@ const updateOptions = async ({
   })
 }
 
+const headers = [
+  { title: 'ID', key: 'id' },
+  { title: 'Nombre', key: 'name' },
+  { title: 'Autor', key: 'author' },
+  { title: 'Descripcion', key: 'description' },
+  { title: 'Ver', key: 'actions', sortable: false, width: '80px' }
+]
 watch([name, author], () => {
   search.value = String(Date.now())
 })

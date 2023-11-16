@@ -96,9 +96,12 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
     }
   }
 
-  const updateBookItem = async (id: number | string, payload: BookPayload) => {
+  const updateBookItem = async (
+    id: number | string,
+    payload: Partial<BookPayload>
+  ) => {
     try {
-      const response = await $api<Book>('/library/admin', {
+      const response = await $api<Book>(`/library/admin/${+id}`, {
         method: 'PATCH',
         body: payload
       })
@@ -130,6 +133,8 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
         message: 'Libro eliminado correctamente',
         type: SnackbarType.SUCCESS
       })
+      await fetchAllBooks()
+      return response
     } catch (error) {
       useSnackbarStore().showSnackbar({
         title: 'Error al eliminar el recurso',

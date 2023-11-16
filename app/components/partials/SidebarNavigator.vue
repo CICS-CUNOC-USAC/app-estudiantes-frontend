@@ -53,8 +53,9 @@
       <v-divider thickness="2" />
       <span class="text-overline"> recursos </span>
       <v-list-item
-        v-for="([icon, title, route], i) in resources"
+        v-for="([icon, title, route, disabled], i) in resources"
         :key="i"
+        :disabled="disabled"
         :prepend-icon="icon"
         :to="route"
         class="rounded-lg"
@@ -140,11 +141,11 @@ export default {
           '/portal/recursos/manuales'
         ],
         [
-          'mdi-book-open-page-variant-outline',
-          'Biblioteca',
-          '/portal/recursos/biblioteca'
-        ],
-        ['mdi-book-account-outline', 'Tesario', '/portal/recursos/tesario']
+          'mdi-book-account-outline',
+          'Tesario',
+          '/portal/recursos/tesario',
+          true
+        ]
       ],
       theme: 'light',
       tools: []
