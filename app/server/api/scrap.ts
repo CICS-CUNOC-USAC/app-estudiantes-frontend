@@ -31,6 +31,8 @@ export default defineEventHandler(async (event) => {
     // Remove single quotes and semicolon from pdfLink with regex
     pdfLink = pdfLink?.replace(/'/g, '').replace(/;/g, '')
     pdfLink = `${BASE_URL}${pdfLink}`
+    // Get the pdf id from pdfLink, spliting the string by '/' and getting the last element
+    const pdfId = pdfLink?.split('/').pop()
     // Get text content from tds
     const texts = Array.from(tds).map((td) => td.textContent)
     // Destructure texts
@@ -39,6 +41,7 @@ export default defineEventHandler(async (event) => {
     const newSemester = semester?.replace(/\t/g, '').trim()
     // Return object
     return {
+      id: pdfId,
       name,
       teacher,
       section,

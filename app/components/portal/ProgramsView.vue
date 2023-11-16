@@ -13,8 +13,7 @@
         <v-btn
           density="default"
           size="small"
-          :href="item.pdfLink"
-          target="_blank"
+          :to="`/portal/general/cursos/programa/${item.id}`"
           icon="mdi-open-in-new "
         />
       </template>
