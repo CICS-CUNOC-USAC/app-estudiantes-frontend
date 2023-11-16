@@ -15,16 +15,11 @@
             md="6"
             lg="4"
           >
-            <v-card>
+            <v-card :to="`/portal/recursos/manuales/${item.raw.id}`">
               <v-card-title>{{ item.raw.name }}</v-card-title>
               <v-card-text>{{ item.raw.description }}</v-card-text>
               <v-card-actions>
-                <v-btn
-                  variant="text"
-                  :to="`/portal/recursos/manuales/${item.raw.id}`"
-                  append-icon="mdi-arrow-right"
-                  >Ver
-                </v-btn>
+                <v-btn variant="text" append-icon="mdi-arrow-right">Ver </v-btn>
               </v-card-actions>
             </v-card>
           </v-col>

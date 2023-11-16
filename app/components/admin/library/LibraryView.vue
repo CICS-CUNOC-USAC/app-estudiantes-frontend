@@ -1,32 +1,33 @@
 <template>
-  <main>
-    <h1 class="mb-4">
-      <v-icon size="32" class="mr-2"> mdi-book-open-page-variant </v-icon>
-      Manuales
-    </h1>
-    <p class="font-weight-light my-4">
-      En esta sección se podrán administrar todos los manuales disponibles en el
-      portal público.
-    </p>
-    <v-row align="center" justify="start">
+  <section>
+    <v-row align="center" justify="space-between">
       <v-col cols="12" md="3">
-        <NewManualDialog
-          #="{ open }"
-          @new-item="createNewManual($event as ManualPayload)"
-        >
+        <NewLibraryItemDialog #="{ open }" @new-item="saveBookItem($event)">
           <v-btn block :disabled="loading" @click="open">
             <v-icon>mdi-plus</v-icon>
-            Nuevo manual
+            Nuevo libro
           </v-btn>
-        </NewManualDialog>
+        </NewLibraryItemDialog>
       </v-col>
-      <v-col cols="12" md="3">
-        <v-text-field
-          v-model="name"
-          append-icon="mdi-text-search"
-          label="Buscar"
-          clearable
-        ></v-text-field>
+      <v-col cols="12" md="6">
+        <v-row>
+          <v-col>
+            <v-text-field
+              v-model="name"
+              append-icon="mdi-text-search"
+              label="Buscar"
+              clearable
+            ></v-text-field>
+          </v-col>
+          <v-col>
+            <v-text-field
+              v-model="author"
+              append-icon="mdi-text-search"
+              label="Autor"
+              clearable
+            ></v-text-field>
+          </v-col>
+        </v-row>
       </v-col>
     </v-row>
     <v-row>
@@ -34,30 +35,24 @@
         <v-sheet color="transparent" rounded="lg" border elevation="0">
           <v-data-table-server
             :headers="headers"
-            :items="manuals"
+            :items="books"
             :search="search"
             :items-per-page="10"
             :items-length="responseMeta?.total!"
             :loading="loading"
             @update:options="updateOptions"
           >
-            <template #item.created_at="{ item }">
-              <span>
-                {{ formatedDate(item.created_at) }}
-              </span>
-            </template>
-
             <template #item.actions="{ item }">
               <div class="d-flex align-center">
                 <v-btn
-                  :to="`/admin/manuals/edit/${item.id}`"
+                  :to="`/admin/books/edit/${item.id}`"
                   icon="mdi-pencil-outline"
                   variant="text"
                   density="comfortable"
                 />
                 <DeleteItemDialog
                   v-slot="{ open }"
-                  @confirm="deleteManualById(item.id)"
+                  @confirm="() => deleteBookItem(item.id)"
                 >
                   <v-btn
                     color="red"
@@ -73,30 +68,30 @@
         </v-sheet>
       </v-col>
     </v-row>
-  </main>
+  </section>
 </template>
 <script setup lang="ts">
-import { useDate } from 'vuetify'
-
-import DeleteItemDialog from '~/components/dialogs/DeleteItemDialog.vue'
-import NewManualDialog from '~/components/dialogs/admin/manuals/NewManualDialog.vue'
-definePageMeta({
-  layout: 'admin'
-})
-
-const { fetchAllManuals, deleteManual, createManual } = useAdminManualsStore()
-const { loading, manuals, responseMeta } = storeToRefs(useAdminManualsStore())
-await fetchAllManuals()
+import DeleteItemDialog from '@/components/dialogs/DeleteItemDialog.vue'
+import NewLibraryItemDialog from '~/components/dialogs/admin/library/NewLibraryItemDialog.vue'
+const { fetchAllBooks, createBookItem, deleteBookItem } = useAdminLibraryStore()
+const { books, loading, responseMeta } = storeToRefs(useAdminLibraryStore())
+await useLazyAsyncData('admin-books', () => fetchAllBooks())
 const name = ref('')
+const author = ref('')
 const search = ref('')
-const vDate = useDate()
+
 const headers = [
   { title: 'ID', key: 'id' },
   { title: 'Nombre', key: 'name' },
-  { title: 'Descripción', key: 'description' },
+  { title: 'Autor', key: 'author' },
   { title: 'Fecha de creación', key: 'created_at' },
   { title: 'Acciones', key: 'actions', sortable: false }
 ]
+
+const saveBookItem = async (item: BookPayload) => {
+  await createBookItem(item)
+  await fetchAllBooks()
+}
 
 const updateOptions = async ({
   page,
@@ -108,26 +103,16 @@ const updateOptions = async ({
   sortBy: { key: string; order: string }[]
 }) => {
   const limit = itemsPerPage === -1 ? 'all' : itemsPerPage
-  await fetchAllManuals({
+  await fetchAllBooks({
     page,
     limit,
-    name: name.value,
+    name: name.value ? name.value : undefined,
+    author: author.value ? author.value : undefined,
     orderBy: formatOrderBy(sortBy)
   })
 }
-const deleteManualById = async (id: number) => {
-  await deleteManual(id)
-  await fetchAllManuals()
-}
-const createNewManual = async (item: ManualPayload) => {
-  await createManual(item)
-  await fetchAllManuals()
-}
 
-const formatedDate = (date: string) =>
-  vDate.format(date.split('T', 1), 'fullDateWithWeekday')
-
-watch([name], () => {
+watch([name, author], () => {
   search.value = String(Date.now())
 })
 </script>

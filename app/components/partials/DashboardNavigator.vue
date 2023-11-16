@@ -78,6 +78,11 @@ export default {
           'mdi-card-bulleted-settings-outline',
           'Pensums',
           '/dashboard/pensum/progress'
+        ],
+        [
+          'mdi-book-open-page-variant-outline',
+          'Biblioteca / Libros',
+          '/dashboard/books'
         ]
       ],
       theme: 'light',
