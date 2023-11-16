@@ -15,13 +15,14 @@ const errorMap: ErrorMap = {
     'Parece que este número de registro ya está registrado, por favor intenta con otro',
   'internal server error':
     'Ha ocurrido un error interno, por favor intenta más tarde',
-  unauthorized: 'Creedenciales inválidas, por favor verifica tus datos'
+  unauthorized: 'Creedenciales inválidas, por favor verifica tus datos',
+  "you don't have permission to authenticate as this user. no roles assigned.":
+    'No tienes permiso para autenticarte como este usuario. No se han asignado roles.'
   // Add more error messages here as needed
 }
 
 export function convertError(error: string): string {
   error = error.toLowerCase()
-
   const [, matchingValue] =
     Object.entries(errorMap).find(([key]) => error.includes(key)) || []
 

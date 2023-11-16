@@ -6,11 +6,21 @@ type LoginPayload = {
   password: string
 }
 
+export type Role = {
+  id: number
+  alias: string
+  name: string
+  description: string
+  created_at: Date
+  updated_at: Date
+}
+
 export type Staff = {
   id: number
   first_name: string
   last_name: string
   email: string
+  roles: Role[]
   created_at: Date
   updated_at: Date
 }
@@ -25,7 +35,8 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     authenticated: false,
     loading: false,
     // error: null as any | {} as any | null,
-    user: null as Staff | null
+    user: null as Staff | null,
+    staffRoles: [] as any[]
   }),
   actions: {
     async loginStaff(payload: LoginPayload) {
@@ -47,6 +58,9 @@ export const useStaffAuthStore = defineStore('staff-auth', {
             message: convertError(error.value.data.message),
             type: SnackbarType.ERROR
           })
+          error.value = null
+          this.loading = false
+          return
         }
         if (error.value.cause) {
           useSnackbarStore().showSnackbar({
@@ -54,14 +68,14 @@ export const useStaffAuthStore = defineStore('staff-auth', {
             message: convertError(error.value!.message),
             type: SnackbarType.ERROR
           })
+          error.value = null
+          this.loading = false
+          return
         }
         /*
         Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
         and be able to make the request again
         */
-        error.value = null
-        this.loading = false
-        return
       }
       // Success
       // Set cookies, user and role
@@ -71,7 +85,10 @@ export const useStaffAuthStore = defineStore('staff-auth', {
       roleCookie.value = 'staff'
       // Set the user in the store
       this.user = data?.value?.staff ?? null
+      // Set the authenticated flag
       this.authenticated = true
+      // Set the staff roles
+      this.staffRoles = data?.value?.staff?.roles ?? []
       // Set the token and role in the auth store
       const authStore = useAuthStore()
       authStore.role = 'staff'

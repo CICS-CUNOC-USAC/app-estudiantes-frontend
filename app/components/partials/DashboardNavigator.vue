@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       basicInfoItems: [
-        ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
+        // ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
         [
           'mdi-card-bulleted-settings-outline',
           'Pensums',

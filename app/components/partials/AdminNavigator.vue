@@ -73,10 +73,15 @@ export default {
   data() {
     return {
       basicInfoItems: [
-        ['mdi-newspaper', 'Artículos', '/admin/articles'],
+        // ['mdi-newspaper', 'Artículos', '/admin/articles'],
         ['mdi-book-open-page-variant', 'Manuales', '/admin/manuals'],
-        ['mdi-bookshelf', 'Biblioteca', '/admin/library'],
-        ['mdi-book-open-page-variant', 'Tesario', '/admin/thesis']
+        [
+          'mdi-account-group-outline',
+          'Usuarios Administrativos',
+          '/admin/users'
+        ]
+        // ['mdi-bookshelf', 'Biblioteca', '/admin/library'],
+        // ['mdi-book-open-page-variant', 'Tesario', '/admin/thesis']
       ],
       theme: 'light',
       tools: []

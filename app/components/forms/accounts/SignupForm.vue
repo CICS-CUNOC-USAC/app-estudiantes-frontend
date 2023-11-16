@@ -199,7 +199,11 @@ export default {
             (v && v.length <= 100) ||
             'El nombre no debe exceder los 100 caracteres'
         ],
-        email: [(v: string) => /.+@.+\..+/.test(v) || 'E-mail debe ser válido'],
+        email: [
+          (v: string) =>
+            /.+@cunoc\.edu\.gt$/.test(v) ||
+            'E-mail debe ser válido e institucional'
+        ],
         ra: [
           (v: string) =>
             (v && v.length === 9) || 'El RA debe tener 9 caracteres',
