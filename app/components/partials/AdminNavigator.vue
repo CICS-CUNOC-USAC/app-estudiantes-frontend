@@ -79,7 +79,8 @@ export default {
           'mdi-account-group-outline',
           'Usuarios Administrativos',
           '/admin/users'
-        ]
+        ],
+        ['mdi-book-open-page-variant', 'Libreria', '/admin/books']
         // ['mdi-bookshelf', 'Biblioteca', '/admin/library'],
         // ['mdi-book-open-page-variant', 'Tesario', '/admin/thesis']
       ],
