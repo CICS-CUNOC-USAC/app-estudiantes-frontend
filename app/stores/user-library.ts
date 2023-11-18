@@ -1,33 +1,5 @@
 import type { Metadata } from '~/utils/types/fetching'
 
-export type Book = {
-  id: number
-  name: string
-  description: string
-  file: null
-  source_url: string
-  author: string
-  created_at: Date
-  updated_at: Date
-  media: MediaResponse
-}
-
-export type BooksResponse = {
-  results: Book[]
-  total: number
-  limit: number
-  page: number
-  total_pages: number
-}
-
-export type BookPayload = {
-  name: string
-  author: string
-  description?: string
-  source_url: string
-  file?: File[] | undefined
-}
-
 export const useUserLibraryStore = defineStore('user-library', () => {
   const loading = ref<boolean>(false)
   const books = ref<Book[] | undefined>(undefined)
