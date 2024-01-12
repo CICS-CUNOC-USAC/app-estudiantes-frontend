@@ -76,7 +76,9 @@
 
     <v-navigation-drawer
       v-model="drawer"
-      :width="$vuetify.display.mdAndUp ? 340 : 300"
+      disable-route-watcher
+      disable-resize-watcher
+      width="300"
     >
       <SidebarNavigator @theme="(theme: string) => changeTheme()" />
     </v-navigation-drawer>

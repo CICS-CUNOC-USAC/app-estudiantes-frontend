@@ -1,6 +1,13 @@
 <template>
   <main>
-    <h1 align="center">
+    <v-progress-linear
+      v-if="loading"
+      absolute
+      color="orange"
+      height="5"
+      indeterminate
+    />
+    <h1 v-if="careerCourses" align="center">
       <span class="font-weight-light">Carrera:</span>
       {{ careerCourses?.career_name }} -
       <span>
@@ -22,7 +29,6 @@ const { data: careerCourses, pending: loading } =
   useCustomLazyFetch<CareerCoursesResponse>(
     `/career-courses/${route.params.codigoCarrera}`
   )
-
 // export default {
 //   components: {
 //     PensumsCard
