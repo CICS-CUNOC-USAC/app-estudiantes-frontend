@@ -46,31 +46,31 @@
             variant="tonal"
             width="100%"
             :loading="loading"
-            :color="admin ? 'red' : 'orange-accent-4'"
+            :color="admin ? 'red' : 'accent-4'"
             @click="login"
           >
             Iniciar sesión
           </v-btn>
         </v-col>
         <v-col v-if="showSignup" cols="12">
-          <span>
+          <span class="d-flex align-center">
             ¿No tienes una cuenta?
-            <NuxtLink
-              to="/sign-up"
-              class="text-orange-darken-3 text-decoration-none nav-link ml-1"
-              ><strong>Regístrate</strong></NuxtLink
-            >
+            <v-btn to="/sign-up" class="ml-1" variant="plain" :ripple="false">
+              <strong>Regístrate</strong>
+            </v-btn>
           </span>
         </v-col>
         <v-col cols="12">
           <span>
-            <NuxtLink
+            <v-btn
               to="/"
-              class="text-decoration-none nav-link"
-              :class="[linkColor]"
+              class="px-0"
+              variant="plain"
+              :ripple="false"
+              prepend-icon="mdi-arrow-left"
             >
-              <strong>Regresar al portal</strong></NuxtLink
-            >
+              <strong>Regresar al portal</strong>
+            </v-btn>
           </span>
         </v-col>
       </v-row>

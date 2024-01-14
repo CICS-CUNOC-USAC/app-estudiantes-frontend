@@ -4,11 +4,17 @@
     <NuxtLayout />
   </main>
 </template>
-<script>
-import { mapState } from 'pinia'
+<script lang="ts">
+import { useTheme } from 'vuetify/lib/framework.mjs'
 import { useConfigsStore } from '~/stores/config'
 export default {
   setup() {
+    const vTheme = useTheme()
+    const { theme } = storeToRefs(useConfigsStore())
+    const currentTheme = computed(() => {
+      return vTheme.computedThemes.value[theme.value]
+    })
+    vTheme.global.name.value = currentTheme.value.dark ? 'dark' : 'light'
     useHead({
       // Title template, if titleChunk is defined in a page, it will be injected into the template
       titleTemplate: (titleChunk) => {
@@ -17,15 +23,26 @@ export default {
           : 'CUNOC ∙ Ingenieria App'
       }
     })
+    const bgColor = computed(() => {
+      return currentTheme.value.dark ? '#121212' : '#fff'
+    })
+    const loadingColor = computed(() => {
+      return currentTheme.value.dark ? '#fff' : '#121212'
+    })
+    return {
+      theme,
+      bgColor,
+      loadingColor
+    }
   },
   computed: {
-    ...mapState(useConfigsStore, ['theme']),
-    bgColor() {
-      return this.theme === 'light' ? '#fff' : '#121212'
-    },
-    loadingColor() {
-      return this.theme === 'light' ? '#121212' : '#fff'
-    }
+    // ...mapState(useConfigsStore, ['theme']),
+    // bgColor() {
+    //   return this.theme === 'light' ? '#fff' : '#121212'
+    // },
+    // loadingColor() {
+    //   return this.theme === 'light' ? '#121212' : '#fff'
+    // }
   }
 }
 </script>

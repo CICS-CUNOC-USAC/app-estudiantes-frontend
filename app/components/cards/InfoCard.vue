@@ -8,7 +8,7 @@
             {{ subtitle }}
           </p>
         </v-card-subtitle>
-        <v-card-title class="text-orange-accent-4" align="left">
+        <v-card-title class="text-heading" align="left">
           <span class="card-title">
             {{ title }}
           </span>
