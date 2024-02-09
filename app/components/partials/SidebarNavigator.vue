@@ -5,9 +5,9 @@
       <img
         alt="Logo USAC"
         class="logo"
-        src="@/assets/img/usac-logo.svg"
-        width="125"
-        height="125"
+        src="@/assets/img/banner_cics.png"
+        width="250"
+        height="100"
         style="filter: invert(50%); margin-top: 10px; margin-bottom: -5px"
       />
     </v-container>
