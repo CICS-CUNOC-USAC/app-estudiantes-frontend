@@ -1,6 +1,10 @@
 <template>
   <main>
     <h1 class="mb-4">Programas de curso</h1>
+    <HelpDialog
+      title="Programas de Cursos"
+      content="Este es el Dialog de ayuda de los Programas de Curso"
+    ></HelpDialog>
     <p class="font-weight-light my-6">
       Escribe el nombre del curso para buscar los programas asociados.
     </p>
@@ -51,6 +55,7 @@
   </main>
 </template>
 <script setup lang="ts">
+import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import ProgramsView from '~/components/portal/ProgramsView.vue'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
 onMounted(() => {
