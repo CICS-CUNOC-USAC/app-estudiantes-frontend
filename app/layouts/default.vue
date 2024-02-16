@@ -83,7 +83,7 @@
         <NuxtPage />
       </v-container>
 
-      <v-footer style="flex-grow: 0;" class="pa-4">
+      <v-footer style="flex-grow: 0" class="pa-4">
         <v-col class="text-center" cols="12">
           <strong>CICS</strong> — {{ new Date().getFullYear() }}
         </v-col>

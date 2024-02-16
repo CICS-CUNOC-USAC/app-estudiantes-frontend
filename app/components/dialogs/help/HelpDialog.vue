@@ -15,23 +15,27 @@
       <v-card v-else class="HelpCard">
         <v-card-text>
           <v-row class="text-center">
-            <v-col cols="6" sm="4">
+            <v-col></v-col>
+            <v-col cols="6" sm="6">
               <v-sheet
                 rounded="lg"
-                class="pa-1 h-100 d-flex align-center flex-column justify-center"
+                class="pa-1 h-100 d-flex flex-column justify-center"
               >
-                <span class="font-weight-bold text-subtitle-1"
-                  >{{ title }}
-                </span>
+                <span class="font-weight-bold text-h4">{{ title }}</span>
               </v-sheet>
             </v-col>
+            <v-col></v-col>
           </v-row>
+          <v-divider></v-divider>
           <v-row>
             <v-col>
               <v-sheet>
+                <!--
                 <span class="pa-2 h-100 d-flex align-center"
                   >{{ content }}
                 </span>
+                -->
+                <MdPreview :model-value="content" />
               </v-sheet>
             </v-col>
           </v-row>
@@ -48,6 +52,8 @@
 </template>
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import { MdPreview } from 'md-editor-v3'
+import 'md-editor-v3/lib/style.css'
 defineProps<{
   title: string
   content: string
@@ -82,8 +88,8 @@ const openDialog = () => {
 
 .floating-open {
   position: fixed;
-  bottom: 40px;
-  right: 40px;
+  bottom: 7%;
+  right: 7%;
   text-align: center;
   z-index: 10;
 }
