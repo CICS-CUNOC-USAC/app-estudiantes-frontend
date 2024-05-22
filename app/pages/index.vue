@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container> 
     <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
 
     <div class="greetings">

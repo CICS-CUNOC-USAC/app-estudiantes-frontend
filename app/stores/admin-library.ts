@@ -25,7 +25,7 @@ export type BookPayload = {
   author: string
   description?: string
   source_url: string
-  file?: File[] | undefined
+  file?: File | undefined
 }
 
 export const useAdminLibraryStore = defineStore('admin-library', () => {
@@ -34,7 +34,7 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
   const book = ref<Book | null>(null)
   const responseMeta = ref<Metadata | null>(null)
 
-  const fetchAllBooks = async (params?: {}) => {
+  const fetchAllBooks = async (params: any) => {
     loading.value = true
     try {
       const response = await $api<BooksResponse>('/library/admin', {
@@ -68,7 +68,7 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
     loading.value = true
     try {
       const uploadedMedia = await useMediaStore().postMedia({
-        file: payload.file?.[0],
+        file: payload.file,
         path: 'library',
         attach_type: 'library'
       })
