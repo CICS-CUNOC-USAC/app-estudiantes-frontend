@@ -52,7 +52,7 @@ const { data, pending } = useFetch(
 </script>
 <style lang="scss">
 .official-post-content {
-  padding: 0;
+  padding: 1rem;
 
   @media (min-width: 768px) {
     padding: 1rem;
