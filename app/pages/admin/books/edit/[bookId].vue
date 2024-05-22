@@ -134,7 +134,7 @@ const updateBookFile = async () => {
   if (!valid) return
   if (file.value && book.value?.media?.id) {
     loading.value = true
-    await updateMedia(file.value[0], book.value.media.id)
+    await updateMedia(file.value, book.value.media.id)
     loading.value = false
     await refresh()
     enableBookEdit.value = false

@@ -15,7 +15,7 @@
       <v-list-item
         prepend-icon="mdi-home-outline"
         class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
+        active-class="bg-accent-4 rounded-pill active-item"
         to="/dashboard/home"
       >
         <v-list-item-title> Tablero </v-list-item-title>
@@ -23,10 +23,18 @@
       <v-list-item
         prepend-icon="mdi-account-outline"
         class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
+        active-class="bg-accent-4 rounded-pill active-item"
         to="/dashboard/profile"
       >
         <v-list-item-title> Perfil </v-list-item-title>
+      </v-list-item>
+      <v-list-item
+        prepend-icon="mdi-wifi-cog"
+        class="rounded-lg"
+        active-class="bg-accent-4 rounded-pill active-item"
+        to="/dashboard/wi-fi"
+      >
+        <v-list-item-title> Acceso WiFi </v-list-item-title>
       </v-list-item>
       <v-divider thickness="2" />
       <span class="text-overline"> Mis recursos </span>
@@ -36,7 +44,7 @@
         :prepend-icon="icon"
         :to="route"
         class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
+        active-class="bg-accent-4 rounded-pill active-item"
       >
         <v-list-item-title>
           {{ title }}
@@ -47,21 +55,11 @@
       <v-list-item
         prepend-icon="mdi-keyboard-backspace"
         class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
+        active-class="bg-accent-4 rounded-pill active-item"
         to="/"
       >
         <v-list-item-title> Regresar al portal </v-list-item-title>
       </v-list-item>
-      <v-container align="center">
-        <v-switch
-          v-model="themeBoolean"
-          :prepend-icon="'mdi-weather-sunny'"
-          inset
-          :append-icon="'mdi-weather-night'"
-          style="width: 45%"
-          @click="changeTheme"
-        />
-      </v-container>
     </v-list>
   </div>
 </template>
@@ -99,16 +97,25 @@ export default {
   }
 }
 </script>
-<style scoped>
+<style scoped lang="scss">
+.active-item {
+  :deep(.v-list-item__content .v-list-item-title) {
+    font-weight: bold !important;
+    font-size: 1.12rem !important;
+    transform: translateX(4px) !important;
+  }
+}
 .v-list-item {
   margin-left: 7%;
   margin-right: 7%;
   margin-bottom: 1.5%;
   font-size: 1rem;
   height: 45px !important;
-}
-.v-list-item-title {
-  font-size: 1rem !important;
+  :deep(.v-list-item__content .v-list-item-title) {
+    transition:
+      font-size 0.1s ease-out,
+      transform 0.1s ease-out !important;
+  }
 }
 
 span {

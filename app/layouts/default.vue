@@ -21,7 +21,7 @@
           <template #activator="{ props }">
             <v-avatar
               v-bind="props"
-              class="app-bar__avatar"
+              class="app-bar__avatar text-accent-4"
               @click="$router.push('/dashboard/home')"
             >
               <v-icon> mdi-view-dashboard-outline </v-icon>
@@ -33,7 +33,7 @@
           <template #activator="{ props }">
             <v-avatar
               v-bind="props"
-              class="app-bar__avatar"
+              class="app-bar__avatar text-accent-4"
               @click="$router.push('/dashboard/profile')"
             >
               <strong>
@@ -50,7 +50,7 @@
           <template #activator="{ props }">
             <v-avatar
               v-bind="props"
-              class="app-bar__avatar"
+              class="app-bar__avatar text-accent-4"
               @click="$router.push('/dashboard/home')"
             >
               <v-icon> mdi-view-dashboard-outline </v-icon>
@@ -62,7 +62,7 @@
           <template #activator="{ props }">
             <v-avatar
               v-bind="props"
-              class="app-bar__avatar"
+              class="app-bar__avatar text-accent-4"
               @click="$router.push('/dashboard/profile')"
             >
               <strong>
@@ -74,21 +74,15 @@
       </div>
     </v-app-bar>
 
-    <v-navigation-drawer
-      v-model="drawer"
-      :width="$vuetify.display.mdAndUp ? 340 : 300"
-    >
-      <SidebarNavigator @theme="(theme: string) => changeTheme()" />
+    <v-navigation-drawer v-model="drawer" disable-resize-watcher width="350">
+      <SidebarNavigator />
     </v-navigation-drawer>
 
     <v-main>
       <v-container class="page-v-container">
         <NuxtPage />
       </v-container>
-      <v-footer
-        :color="theme === 'light' ? 'white' : '#121212'"
-        justify="center"
-      >
+      <v-footer justify="center">
         <v-col class="text-center mt-4" cols="12">
           <strong>CICS</strong> — {{ new Date().getFullYear() }}
         </v-col>
@@ -131,10 +125,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(useConfigsStore, ['switchTheme']),
-    changeTheme() {
-      this.switchTheme()
-    }
+    ...mapActions(useConfigsStore, ['switchTheme', 'changeTheme'])
+    // changeTheme() {
+    //   this.switchTheme()
+    // }
   }
 }
 </script>

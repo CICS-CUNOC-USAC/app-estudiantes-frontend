@@ -24,7 +24,7 @@ export type ManualsResponse = {
 export type ManualPayload = {
   name: string
   description: string
-  file?: File[] | undefined
+  file?: File | undefined
 }
 
 export const useAdminManualsStore = defineStore('admin-manuals', () => {
@@ -62,11 +62,12 @@ export const useAdminManualsStore = defineStore('admin-manuals', () => {
   }
 
   const createManual = async (payload: ManualPayload) => {
+    console.log(payload)
     loading.value = true
     try {
       // First, upload the pdf file using media store to get the media item id
       const uploadedMedia = await useMediaStore().postMedia({
-        file: payload.file?.[0],
+        file: payload.file,
         path: 'manuals',
         attach_type: 'manual'
       })

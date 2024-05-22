@@ -52,16 +52,6 @@
       >
         <v-list-item-title> Regresar al portal </v-list-item-title>
       </v-list-item>
-      <v-container align="center">
-        <v-switch
-          v-model="themeBoolean"
-          :prepend-icon="'mdi-weather-sunny'"
-          inset
-          :append-icon="'mdi-weather-night'"
-          style="width: 45%"
-          @click="changeTheme"
-        />
-      </v-container>
     </v-list>
   </div>
 </template>

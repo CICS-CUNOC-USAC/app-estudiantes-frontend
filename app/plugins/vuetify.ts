@@ -4,14 +4,20 @@ import { es } from 'vuetify/locale'
 import { createVuetify } from 'vuetify'
 import { md3 } from 'vuetify/blueprints'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import * as customThemes from '@/utils/themes/themes'
 
 export default defineNuxtPlugin((nuxtApp) => {
   const vuetify = createVuetify({
     blueprint: md3,
+    theme: {
+      themes: {
+        ...customThemes
+      }
+    },
     defaults: {
       VBtn: {
         variant: 'tonal',
-        color: 'orange-accent-4'
+        color: 'accent-4'
       },
       VTextField: {
         variant: 'underlined'
@@ -33,7 +39,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         height: 6
       },
       global: {
-        ripple: false
+        // ripple: false
       }
     },
     icons: {
