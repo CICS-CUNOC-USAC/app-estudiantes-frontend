@@ -18,10 +18,12 @@
       :career-courses="careerCourses?.courses"
       :loading="loading"
     />
+    <HelpDialog title="Pensum" :content="content_help"></HelpDialog>
   </main>
 </template>
 
 <script setup lang="ts">
+import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import PensumPublicView from '~/components/portal/pensums/PensumPublicView.vue'
 import type { CareerCoursesResponse } from '~/utils/types/career-courses'
 const route = useRoute()
@@ -135,6 +137,20 @@ const { data: careerCourses, pending: loading } =
 //     }
 //   }
 // }
+const content_help = `En la seccion de Pensum se pueden visualizar toda la informacion del pensum de estudio de la carrera asi como informacion de cada uno de los cursos.
+  ## Funcionamiento:
+  ### Vista Principal:
+  Todos los cursos estan organizados por semestre de la carrera representado por una tarjeta permitiendo filtrar los cursos.
+  Cada tarjeta de curso cuenta de las siguientes partes:
+  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)
+  Esto permite una visualizacion integra de los cursos de la carrera con su codigo, area, creditos, prerequisitos y obligatoriedad.
+  ### Filtro:
+  Es posible filtrar los cursos mostrados por semestre basados en su obligatoriedad.
+  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)
+  ### Vista de Curso:
+  Cada curso tiene una vista personalizada al clickear sobre su nombre, esta cuenta con las siguientes partes.
+  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)
+  En esta vista se pueden observar todos los detalles de un curso en especifico inclyendo una breve descripcion del mismo.`
 </script>
 
 <style scoped lang="scss"></style>

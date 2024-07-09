@@ -21,7 +21,9 @@
                 rounded="lg"
                 class="pa-1 h-100 d-flex flex-column justify-center"
               >
-                <span class="font-weight-bold text-h4">{{ title }}</span>
+                <span class="font-weight-bold text-h4 help-title">{{
+                  title
+                }}</span>
               </v-sheet>
             </v-col>
             <v-col></v-col>
@@ -35,7 +37,11 @@
                   >{{ content }}
                 </span>
                 -->
-                <MdPreview :model-value="content" />
+                <MdPreview
+                  :model-value="content"
+                  preview-theme="cics"
+                  style="background-color: rgb(var(--v-theme-surface))"
+                />
               </v-sheet>
             </v-col>
           </v-row>
@@ -54,6 +60,7 @@
 import { storeToRefs } from 'pinia'
 import { MdPreview } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
+import '@/components/dialogs/help/cics-theme.css'
 defineProps<{
   title: string
   content: string
@@ -76,6 +83,10 @@ const openDialog = () => {
   }
 }
 
+.help-title {
+  word-wrap: normal;
+}
+
 .HelpDialog {
   max-width: 100%;
   @media (min-width: 900px) {
@@ -88,8 +99,8 @@ const openDialog = () => {
 
 .floating-open {
   position: fixed;
-  bottom: 7%;
-  right: 7%;
+  bottom: 12%;
+  right: 4%;
   text-align: center;
   z-index: 10;
 }

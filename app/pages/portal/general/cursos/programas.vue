@@ -48,7 +48,10 @@
         />
       </v-col>
     </v-row>
-    <HelpDialog title="Programas de Cursos" :content="content"></HelpDialog>
+    <HelpDialog
+      title="Programas de Cursos"
+      :content="content_help"
+    ></HelpDialog>
   </main>
 </template>
 <script setup lang="ts">
@@ -60,7 +63,7 @@ onMounted(() => {
   searchRef.value.focus()
 })
 
-const content = `Los Programas de Curso es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de los programas de cada curso todos los semestres.
+const content_help = `Los Programas de Curso es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de los programas de cada curso todos los semestres.
   ## Funcionamiento:
   ### Busqueda por Curso:
   Para poder buscar algun programa de curso se debe introducir el nombre del curso que se busca en la barra de busqueda.
@@ -88,4 +91,8 @@ watchDebounced(
   { debounce: 500 }
 )
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+HelpDialog {
+  margin-bottom: 50%;
+}
+</style>

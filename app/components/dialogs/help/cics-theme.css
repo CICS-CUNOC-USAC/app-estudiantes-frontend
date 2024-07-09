@@ -1,0 +1,19 @@
+.cics-theme {
+  background: rgb(var(--v-theme-surface));
+  font-family: 'IBM Plex Sans', sans-serif !important;
+
+  h1,
+  h2,
+  h3,
+  p {
+    color: rgb(var(--v-theme-on-surface));
+    margin-bottom: 16px;
+  }
+
+  word-break:keep-all;
+
+  img {
+    width: 75%;
+    padding-left: 15%;
+  }
+}
