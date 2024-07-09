@@ -48,15 +48,34 @@
         />
       </v-col>
     </v-row>
+    <HelpDialog
+      title="Programas de Cursos"
+      :content="content_help"
+    ></HelpDialog>
   </main>
 </template>
 <script setup lang="ts">
+import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import ProgramsView from '~/components/portal/ProgramsView.vue'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
+
 onMounted(() => {
   searchRef.value.focus()
 })
 
+const content_help = `Los Programas de Curso es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de los programas de cada curso todos los semestres.
+  ## Funcionamiento:
+  ### Busqueda por Curso:
+  Para poder buscar algun programa de curso se debe introducir el nombre del curso que se busca en la barra de busqueda.
+  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)
+  ### Busqueda por Docente:
+  Para poder buscar algun programa de curso es necesario primero haber introducido el nombre del curso que se busca en la barra de busqueda.
+  Una vez hecho esto se habilitara la opcion de poder buscar entre esos programas de curso por docente.
+  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)
+  ### Listado de Programas:
+  Cuando se haya realizado una busqueda se mostrara el listado de todos los programas que entren dentro del criterio de la busqueda en la tabla.
+  Aqui se podran ver los detalles de cada uno de los programas y tambien se podra abrir el PDF del mismo utilizando el boton de la columna Ver.
+  ![TestImage](https://upload.wikimedia.org/wikipedia/commons/6/6a/External_link_font_awesome.svg)`
 const searchRef = ref()
 const search = ref('')
 const teacherSearch = ref('')
@@ -72,4 +91,8 @@ watchDebounced(
   { debounce: 500 }
 )
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+HelpDialog {
+  margin-bottom: 50%;
+}
+</style>

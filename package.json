@@ -30,6 +30,7 @@
     "@tato30/vue-pdf": "^1.9.6",
     "jsdom": "^24.0.0",
     "jwt-decode": "^4.0.0",
+    "md-editor-v3": "^4.11.2",
     "pinia": "^2.1.7",
     "vite-plugin-vuetify": "^2.0.3",
     "vuetify": "^3.6.4"

@@ -1,5 +1,6 @@
 <template>
   <main>
+    <h1 class="mb-4">Pensums</h1>
     <v-row>
       <v-col v-for="(career, index) in careers" :key="index" cols="12" sm="6">
         <InfoCard
@@ -9,10 +10,12 @@
         />
       </v-col>
     </v-row>
+    <HelpDialog title="Pensums" :content="content_help"></HelpDialog>
   </main>
 </template>
 
 <script setup lang="ts">
+import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import InfoCard from '@/components/cards/InfoCard.vue'
 const careers = [
   {
@@ -42,6 +45,10 @@ const careers = [
     route: 'pensums/mecanicaindustrial-36'
   }
 ]
+
+const content_help = `Los Pensums son la seccion donde puedes acceder al pensum de estudio de cada una de las carreras de la Division de Ingenieria
+# Funcionamiento:
+Para acceder a un pensum solo debes clickear encima de cualquier tarjeta.`
 </script>
 
 <style scoped lang="scss"></style>

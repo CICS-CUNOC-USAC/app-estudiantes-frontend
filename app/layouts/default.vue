@@ -78,12 +78,13 @@
       <SidebarNavigator />
     </v-navigation-drawer>
 
-    <v-main>
-      <v-container class="page-v-container">
+    <v-main class="d-flex flex-column">
+      <v-container class="page-v-container" style="flex-grow: 1">
         <NuxtPage />
       </v-container>
-      <v-footer justify="center">
-        <v-col class="text-center mt-4" cols="12">
+
+      <v-footer style="flex-grow: 0" class="pa-4">
+        <v-col class="text-center" cols="12">
           <strong>CICS</strong> — {{ new Date().getFullYear() }}
         </v-col>
       </v-footer>
