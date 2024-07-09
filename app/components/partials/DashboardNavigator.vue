@@ -28,6 +28,14 @@
       >
         <v-list-item-title> Perfil </v-list-item-title>
       </v-list-item>
+      <v-list-item
+        prepend-icon="mdi-wifi-cog"
+        class="rounded-lg"
+        active-class="bg-accent-4 rounded-pill active-item"
+        to="/dashboard/wi-fi"
+      >
+        <v-list-item-title> Acceso WiFi </v-list-item-title>
+      </v-list-item>
       <v-divider thickness="2" />
       <span class="text-overline"> Mis recursos </span>
       <v-list-item
@@ -52,16 +60,6 @@
       >
         <v-list-item-title> Regresar al portal </v-list-item-title>
       </v-list-item>
-      <v-container align="center">
-        <v-switch
-          v-model="themeBoolean"
-          :prepend-icon="'mdi-weather-sunny'"
-          inset
-          :append-icon="'mdi-weather-night'"
-          style="width: 45%"
-          @click="changeTheme"
-        />
-      </v-container>
     </v-list>
   </div>
 </template>

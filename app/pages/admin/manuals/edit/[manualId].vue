@@ -121,7 +121,7 @@ const updateManualFile = async () => {
   if (!valid) return
   if (file.value && manual.value?.media?.id) {
     loading.value = true
-    await updateMedia(file.value[0]!, manual.value.media.id)
+    await updateMedia(file.value!, manual.value.media.id)
     loading.value = false
     await refresh()
   }

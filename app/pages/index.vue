@@ -16,6 +16,27 @@
         <p>Está compuesta por secciones con informacion y herramientas.</p>
       </div>
       <div class="section-divider">
+        <h2 class="d-flex align-center ga-2">
+          Publicaciones oficiales recientes
+          <v-tooltip text="Ver todas">
+            <template #activator="{ props }">
+              <v-btn
+                class="px-4 py-0"
+                :ripple="true"
+                density="comfortable"
+                icon="mdi-chevron-right"
+                variant="plain"
+                color="gray"
+                :to="'/portal/general/publicaciones'"
+                v-bind="props"
+              ></v-btn>
+            </template>
+          </v-tooltip>
+        </h2>
+        <v-divider thickness="3" />
+      </div>
+      <OfficialPostsView />
+      <div class="section-divider">
         <h2 class="green">Informacion Básica</h2>
         <v-divider thickness="3" />
       </div>
@@ -129,9 +150,11 @@
 </template>
 <script lang="ts">
 import InfoCard from '@/components/cards/InfoCard.vue'
+import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
 export default {
   components: {
-    InfoCard
+    InfoCard,
+    OfficialPostsView
   },
   props: ['theme'],
   data() {

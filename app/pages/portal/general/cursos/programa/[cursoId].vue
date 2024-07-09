@@ -9,7 +9,7 @@
     <p>Curso: {{ id }}</p>
     <ClientOnly>
       <PdfPreview
-        :pdf-url="`http://localhost:3000/api/pdfprogram?program=${id}`"
+        :pdf-url="`/api/pdfprogram?program=${id}`"
       />
     </ClientOnly>
   </div>

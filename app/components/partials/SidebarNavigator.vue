@@ -125,6 +125,11 @@ export default {
     return {
       themeSwitch: true,
       basicInfoItems: [
+        [
+          'mdi-post-outline',
+          'Publicaciones Oficiales',
+          '/portal/general/publicaciones'
+        ],
         ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
         [
           'mdi-card-bulleted-settings-outline',
@@ -178,8 +183,7 @@ export default {
 .active-item {
   :deep(.v-list-item__content .v-list-item-title) {
     font-weight: bold !important;
-    font-size: 1.12rem !important;
-    transform: translateX(4px) !important;
+    font-size: 1.1rem !important;
   }
 }
 .v-list-item {
