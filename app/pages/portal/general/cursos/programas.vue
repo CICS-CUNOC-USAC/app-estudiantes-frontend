@@ -20,7 +20,7 @@
             <v-fade-transition leave-absolute>
               <v-progress-circular
                 v-if="pending"
-                color="orange"
+                color="accent-1"
                 indeterminate
                 size="26"
               ></v-progress-circular>
@@ -63,6 +63,9 @@ onMounted(() => {
   searchRef.value.focus()
 })
 
+const router = useRouter()
+const route = useRoute()
+
 const content_help = `Los Programas de Curso es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de los programas de cada curso todos los semestres.
   ## Funcionamiento:
   ### Busqueda por Curso:
@@ -77,9 +80,9 @@ const content_help = `Los Programas de Curso es la seccion de la Aplicacion para
   Aqui se podran ver los detalles de cada uno de los programas y tambien se podra abrir el PDF del mismo utilizando el boton de la columna Ver.
   ![TestImage](https://upload.wikimedia.org/wikipedia/commons/6/6a/External_link_font_awesome.svg)`
 const searchRef = ref()
-const search = ref('')
+const search = ref(route.query.curso || '')
+const searchDeb = ref(route.query.curso || '')
 const teacherSearch = ref('')
-const searchDeb = ref('')
 const { data, pending } = await useFetch<ScrapedProgram[]>('/api/scrap', {
   query: { search }
 })
@@ -87,6 +90,7 @@ watchDebounced(
   searchDeb,
   () => {
     search.value = searchDeb.value
+    router.push({ query: { curso: searchDeb.value || undefined } })
   },
   { debounce: 500 }
 )
