@@ -1,16 +1,21 @@
 <template>
   <div>
     <v-btn
-      prepend-icon="mdi-arrow-left"
+      icon="mdi-arrow-left"
+      size="small"
+      class="mr-2"
       @click="() => $router.push(`/portal/general/cursos/programas`)"
-      >Regresar</v-btn
+    ></v-btn>
+    <v-btn
+      prepend-icon="mdi-download"
+      :href="`/api/pdfprogram?program=${id}`"
+      target="_blank"
+      >Descargar</v-btn
     >
     <h1>Programa de curso</h1>
     <p>Curso: {{ id }}</p>
     <ClientOnly>
-      <PdfPreview
-        :pdf-url="`/api/pdfprogram?program=${id}`"
-      />
+      <PdfPreview :pdf-url="`/api/pdfprogram?program=${id}`" />
     </ClientOnly>
   </div>
 </template>

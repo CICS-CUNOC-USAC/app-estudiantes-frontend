@@ -17,7 +17,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     defaults: {
       VBtn: {
         variant: 'tonal',
-        color: 'accent-4'
+        color: 'accent-2'
       },
       VTextField: {
         variant: 'underlined'
