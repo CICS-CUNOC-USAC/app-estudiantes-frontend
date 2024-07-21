@@ -1,11 +1,7 @@
 <template>
   <v-container>
-    <v-table class="elevation-1">
-      <template #top>
-        <v-toolbar flat>
-          <v-toolbar-title>Horarios de Clases</v-toolbar-title>
-        </v-toolbar>
-      </template>
+    <h1 class="mb-4">Horario de Clases</h1>
+    <v-table class="elevation-1" height="650px">
       <thead>
         <tr>
           <th rowspan="2" style="width: 150px">Hora</th>
@@ -23,7 +19,7 @@
       </thead>
       <tbody>
         <tr v-for="item in items" :key="item.hora">
-          <td class="text-center">{{ item.hora }}</td>
+          <td class="text-center fixed-column">{{ item.hora }}</td>
           <td v-for="header in headers[1].children" :key="header.value">
             <CursoHorario
               v-if="item[header.value]"
@@ -230,5 +226,23 @@ export default {
 <style scoped lang="scss">
 .text-center {
   text-align: center;
+}
+
+.fixed-column {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  --v-theme-overlay-multiplier: var(--v-theme-heading-overlay-multiplier);
+  background-color: rgb(var(--v-theme-heading)) !important;
+  color: rgb(var(--v-theme-on-heading)) !important;
+}
+
+thead tr th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  --v-theme-overlay-multiplier: var(--v-theme-heading-overlay-multiplier);
+  background-color: rgb(var(--v-theme-heading)) !important;
+  color: rgb(var(--v-theme-on-heading)) !important;
 }
 </style>
