@@ -12,11 +12,7 @@
           <th colspan="12" class="text-center">Salón</th>
         </tr>
         <tr>
-          <th
-            v-for="header in headers[1].children"
-            :key="header.value"
-            class="text-center"
-          >
+          <th v-for="header in headers[1].children" :key="header.value" class="text-center">
             {{ header.title }}
           </th>
         </tr>
@@ -25,10 +21,7 @@
         <tr v-for="item in items" :key="item.hora">
           <td class="text-center">{{ item.hora }}</td>
           <td v-for="header in headers[1].children" :key="header.value">
-            <CursoHorario
-              v-if="item[header.value]"
-              :curso="item[header.value]"
-            />
+            <CursoHorario v-if="item[header.value]" :curso="item[header.value]" />
           </td>
         </tr>
       </tbody>
@@ -125,13 +118,13 @@ export default {
             curso: 'Análisis y Diseño de Sistemas 1',
             docente: '',
             codigo: '2822',
-            semestre: ''
+            semestre: 'VIII'
           },
           s2: {
             curso: 'Sistemas de Bases de Datos 2',
             docente: '',
             codigo: '2821',
-            semestre: ''
+            semestre: 'VIII'
           },
           s12: {
             curso: 'Matemática de Computo 2',
@@ -173,44 +166,56 @@ export default {
             curso: 'Software Avanzado',
             docente: '',
             codigo: '2836',
-            semestre: ''
+            semestre: 'X'
+          },
+          s4: {
+            curso: 'Investigación de Operaciones 1',
+            docente: '',
+            codigo: '685',
+            semestre: 'VI'
+          },
+          s10: {
+            curso: 'Seminario de Sistemas 1',
+            docente: '',
+            codigo: '2823',
+            semestre: 'VIII'
           }
         },
         {
           hora: '19:30 - 20:20',
           s1: {
-            curso: 'Sistemas Operativos 2 - Ing. Otto Soto',
-            docente: '',
+            curso: 'Sistemas Operativos 2',
+            docente: 'Ing. Otto Soto',
             codigo: '2819',
-            semestre: ''
-          },
-          s3: {
-            curso: 'Sistemas de Bases de Datos 2',
-            docente: '',
-            codigo: '2821',
-            semestre: ''
+            semestre: 'VIII'
           }
         },
         {
           hora: '20:20 - 21:10',
           s1: {
+            curso: 'Sistemas de Bases de Datos 2',
+            docente: '',
+            codigo: '2821',
+            semestre: 'VIII'
+          },
+          s2: {
             curso: 'Análisis y Diseño de Sistemas 1',
             docente: '',
             codigo: '2822',
-            semestre: ''
+            semestre: 'VIII'
           },
-          s3: {
-            curso: 'Seminario de Sistemas 1',
-            docente: '',
-            codigo: '2823',
-            semestre: ''
+          s10: {
+            curso: 'Sistemas Organizacionales y Gerenciales 2',
+            docente: 'Ing. Otto Soto',
+            codigo: '2834',
+            semestre: 'X'
           }
         }
       ]
     }
   },
   methods: {
-    filtrarSalones() {}
+    filtrarSalones() { }
   }
 }
 </script>
