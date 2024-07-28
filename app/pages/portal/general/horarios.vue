@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <h1 class="mb-4">Horario de Clases</h1>
+    <h1 class="mb-4">Horario de Clases V1</h1>
     <v-table class="elevation-1" height="650px">
       <thead>
         <tr>
@@ -26,6 +26,33 @@
               :curso="item[header.value]"
             />
           </td>
+        </tr>
+      </tbody>
+    </v-table>
+    <h1 class="mb-4">Horario de Clases V2</h1>
+    <v-table class="elevation-1">
+      <thead>
+        <tr>
+          <th rowspan="2" style="width: 150px" class="text-center">Hora</th>
+          <th colspan="12" class="text-center">Lunes</th>
+          <th colspan="12" class="text-center">Miercoles</th>
+          <th colspan="12" class="text-center">Viernes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in response_items" :key="item.hora">
+          <td class="text-center fixed-column">{{ item.hora }}</td>
+          <v-select
+            label="Select"
+            :items="[
+              'California',
+              'Colorado',
+              'Florida',
+              'Georgia',
+              'Texas',
+              'Wyoming'
+            ]"
+          ></v-select>
         </tr>
       </tbody>
     </v-table>
@@ -213,6 +240,179 @@ export default {
             codigo: '2834',
             semestre: 'X'
           }
+        }
+      ],
+      response_items: [
+        {
+          hora: '13:40 - 14:30',
+          cursos: [
+            {
+              curso: 'Manejo e Implementación de Archivos',
+              docente: '',
+              codigo: '2812',
+              semestre: 'VI'
+            }
+          ]
+        },
+        {
+          hora: '14:30 - 15:20',
+          cursos: [
+            {
+              curso: 'Organización de Lenguajes y Compiladores 2',
+              docente: '',
+              codigo: '2810',
+              semestre: 'VI'
+            },
+            {
+              curso: 'Introducción a la Programación 1',
+              docente: '',
+              codigo: '2796',
+              semestre: 'III'
+            }
+          ]
+        },
+        {
+          hora: '15:20 - 16:10',
+          cursos: [
+            {
+              curso: 'Arquitectura de Computadoras y Ensambladores 1',
+              docente: '',
+              codigo: '2811',
+              semestre: 'VI'
+            }
+          ]
+        },
+        {
+          hora: '16:10 - 17:00',
+          cursos: [
+            {
+              curso: 'Teoría de Sistemas 1',
+              docente: '',
+              codigo: '2808',
+              semestre: 'VI'
+            },
+            {
+              curso: 'Práctica Final',
+              docente: '',
+              codigo: '2829',
+              semestre: 'X'
+            },
+            {
+              curso: 'Lenguajes Formales y de Programación',
+              docente: '',
+              codigo: '2798',
+              semestre: 'IV'
+            }
+          ]
+        },
+        {
+          hora: '17:00 - 17:50',
+          cursos: [
+            {
+              curso: 'Análisis y Diseño de Sistemas 1',
+              docente: '',
+              codigo: '2822',
+              semestre: 'VIII'
+            },
+            {
+              curso: 'Sistemas de Bases de Datos 2',
+              docente: '',
+              codigo: '2821',
+              semestre: 'VIII'
+            },
+            {
+              curso: 'Matemática de Computo 2',
+              docente: '',
+              codigo: '2799',
+              semestre: 'IV'
+            }
+          ]
+        },
+        {
+          hora: '17:50 - 18:40',
+          cursos: [
+            {
+              curso: 'Introducción a la Programación y Computación 2',
+              docente: '',
+              codigo: '2800',
+              semestre: 'IV'
+            },
+            {
+              curso: 'Redes de Computadoras 2',
+              docente: '',
+              codigo: '2820',
+              semestre: 'VIII'
+            },
+            {
+              curso: 'Economía',
+              docente: '',
+              codigo: '2809',
+              semestre: 'VI'
+            },
+            {
+              curso: 'Seminario de Investigación',
+              docente: '',
+              codigo: '2837',
+              semestre: 'X'
+            }
+          ]
+        },
+        {
+          hora: '18:40 - 19:30',
+          cursos: [
+            {
+              curso: 'Software Avanzado',
+              docente: '',
+              codigo: '2836',
+              semestre: 'X'
+            },
+            {
+              curso: 'Investigación de Operaciones 1',
+              docente: '',
+              codigo: '685',
+              semestre: 'VI'
+            },
+            {
+              curso: 'Seminario de Sistemas 1',
+              docente: '',
+              codigo: '2823',
+              semestre: 'VIII'
+            }
+          ]
+        },
+        {
+          hora: '19:30 - 20:20',
+          cursos: [
+            {
+              curso: 'Sistemas Operativos 2',
+              docente: 'Ing. Otto Soto',
+              codigo: '2819',
+              semestre: 'VIII'
+            }
+          ]
+        },
+        {
+          hora: '20:20 - 21:10',
+          cursos: [
+            {
+              curso: 'Sistemas de Bases de Datos 2',
+              docente: '',
+              codigo: '2821',
+              semestre: 'VIII'
+            },
+            {
+              curso: 'Análisis y Diseño de Sistemas 1',
+              docente: '',
+              codigo: '2822',
+              semestre: 'VIII'
+            },
+            {
+              curso: 'Sistemas Organizacionales y Gerenciales 2',
+              docente: 'Ing. Otto Soto',
+              codigo: '2834',
+              semestre: 'X'
+            }
+          ]
         }
       ]
     }
