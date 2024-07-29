@@ -8,11 +8,7 @@
           <th colspan="12" class="text-center">Salón</th>
         </tr>
         <tr>
-          <th
-            v-for="header in headers[1].children"
-            :key="header.value"
-            class="text-center"
-          >
+          <th v-for="header in headers[1].children" :key="header.value" class="text-center">
             {{ header.title }}
           </th>
         </tr>
@@ -21,10 +17,7 @@
         <tr v-for="item in items" :key="item.hora">
           <td class="text-center fixed-column">{{ item.hora }}</td>
           <td v-for="header in headers[1].children" :key="header.value">
-            <CursoHorario
-              v-if="item[header.value]"
-              :curso="item[header.value]"
-            />
+            <CursoHorario v-if="item[header.value]" :curso="item[header.value]" />
           </td>
         </tr>
       </tbody>
@@ -33,8 +26,8 @@
     <v-table class="elevation-1 rounded-lg">
       <thead>
         <tr>
-          <th rowspan="2" style="width: 150px" class="text-center">Hora</th>
-          <th colspan="12" class="text-center">Lunes/Miercoles/Viernes</th>
+          <th style="width: 150px" class="text-center">Hora</th>
+          <th class="text-center">Lunes/Miercoles/Viernes</th>
           <!-- <th colspan="12" class="text-center">Miercoles</th>
           <th colspan="12" class="text-center">Viernes</th> -->
         </tr>
@@ -45,14 +38,26 @@
             {{ item.hora }}
           </td>
           <td class="py-2 px-1">
-            <v-select
-              class="h-auto course-select"
-              variant="outlined"
-              :item-props="itemPromp"
-              :items="item.cursos"
-              label="Seleccione"
-            ></v-select>
+            <v-select class="h-auto course-select" variant="outlined" :item-props="itemPromp" :items="item.cursos"
+              label="Seleccione"></v-select>
           </td>
+        </tr>
+      </tbody>
+    </v-table>
+    <h1 class="mb-4">Horario de Calses V3</h1>
+    <v-table class="elevation-1 rounded-lg">
+      <thead>
+        <tr>
+          <th style="width: 150px" class="text-center">Hora</th>
+          <th class="text-center">Lunes/Miercoles/Viernes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="item in response_items" :key="item.hora">
+          <th class="text-center fixed-column">
+            {{ item.hora }}
+          </th>
+          <td class="py-2 px-1"></td>
         </tr>
       </tbody>
     </v-table>
@@ -483,7 +488,7 @@ export default {
 
 <style scoped lang="scss">
 .course-select {
-  :deep(.v-input__details){
+  :deep(.v-input__details) {
     display: none;
   }
 }
