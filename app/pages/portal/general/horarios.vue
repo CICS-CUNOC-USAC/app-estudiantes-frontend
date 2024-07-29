@@ -8,7 +8,11 @@
           <th colspan="12" class="text-center">Salón</th>
         </tr>
         <tr>
-          <th v-for="header in headers[1].children" :key="header.value" class="text-center">
+          <th
+            v-for="header in headers[1].children"
+            :key="header.value"
+            class="text-center"
+          >
             {{ header.title }}
           </th>
         </tr>
@@ -17,7 +21,10 @@
         <tr v-for="item in items" :key="item.hora">
           <td class="text-center fixed-column">{{ item.hora }}</td>
           <td v-for="header in headers[1].children" :key="header.value">
-            <CursoHorario v-if="item[header.value]" :curso="item[header.value]" />
+            <CursoHorario
+              v-if="item[header.value]"
+              :curso="item[header.value]"
+            />
           </td>
         </tr>
       </tbody>
@@ -38,8 +45,13 @@
             {{ item.hora }}
           </td>
           <td class="py-2 px-1">
-            <v-select class="h-auto course-select" variant="outlined" :item-props="itemPromp" :items="item.cursos"
-              label="Seleccione"></v-select>
+            <v-select
+              class="h-auto course-select"
+              variant="outlined"
+              :item-props="itemPromp"
+              :items="item.cursos"
+              label="Seleccione"
+            ></v-select>
           </td>
         </tr>
       </tbody>
