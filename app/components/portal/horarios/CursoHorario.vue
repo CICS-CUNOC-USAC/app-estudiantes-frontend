@@ -1,7 +1,7 @@
 <template>
   <v-container style="padding: 4px">
     <v-card
-      class="mx-auto"
+      class="mx-auto rounded-sm"
       :class="getCorrectClassCard(curso)"
       max-width="350"
       min-width="180"

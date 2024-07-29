@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <h1 class="mb-4">Horario de Clases V1</h1>
-    <v-table class="elevation-1" height="650px">
+    <v-table class="elevation-1 rounded-lg" height="650px">
       <thead>
         <tr>
           <th rowspan="2" style="width: 150px">Hora</th>
@@ -30,29 +30,29 @@
       </tbody>
     </v-table>
     <h1 class="mb-4">Horario de Clases V2</h1>
-    <v-table class="elevation-1">
+    <v-table class="elevation-1 rounded-lg">
       <thead>
         <tr>
           <th rowspan="2" style="width: 150px" class="text-center">Hora</th>
-          <th colspan="12" class="text-center">Lunes</th>
-          <th colspan="12" class="text-center">Miercoles</th>
-          <th colspan="12" class="text-center">Viernes</th>
+          <th colspan="12" class="text-center">Lunes/Miercoles/Viernes</th>
+          <!-- <th colspan="12" class="text-center">Miercoles</th>
+          <th colspan="12" class="text-center">Viernes</th> -->
         </tr>
       </thead>
       <tbody>
         <tr v-for="item in response_items" :key="item.hora">
-          <td class="text-center fixed-column">{{ item.hora }}</td>
-          <v-select
-            label="Select"
-            :items="[
-              'California',
-              'Colorado',
-              'Florida',
-              'Georgia',
-              'Texas',
-              'Wyoming'
-            ]"
-          ></v-select>
+          <td class="text-center fixed-column">
+            {{ item.hora }}
+          </td>
+          <td class="py-2 px-1">
+            <v-select
+              class="h-auto course-select"
+              variant="outlined"
+              :item-props="itemPromp"
+              :items="item.cursos"
+              label="Seleccione"
+            ></v-select>
+          </td>
         </tr>
       </tbody>
     </v-table>
@@ -61,6 +61,7 @@
 
 <script lang="ts">
 import CursoHorario from '~/components/portal/horarios/CursoHorario.vue'
+import type { ScheduleCourse } from '~/utils/types/schedule-courses'
 
 export default {
   name: 'Horarios',
@@ -75,12 +76,12 @@ export default {
             { title: '1', value: 's1' },
             { title: '3', value: 's2' },
             { title: '5', value: 's3' },
-            // { title: '6', value: 's4' },
+            { title: '6', value: 's4' },
             { title: '7', value: 's5' },
-            // { title: '8', value: 's6' },
+            { title: '8', value: 's6' },
             { title: '10', value: 's7' },
             { title: 'Salón Proyecciones', value: 's8' },
-            // { title: 'Salón TICS', value: 's9' },
+            { title: 'Salón TICS', value: 's9' },
             { title: 'Hugo Pineda', value: 's10' },
             { title: 'Salón Dibujo', value: 's11' },
             { title: 'Laboratorio de Aguas', value: 's12' }
@@ -250,7 +251,9 @@ export default {
               curso: 'Manejo e Implementación de Archivos',
               docente: '',
               codigo: '2812',
-              semestre: 'VI'
+              semestre: 'VI',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             }
           ]
         },
@@ -261,13 +264,17 @@ export default {
               curso: 'Organización de Lenguajes y Compiladores 2',
               docente: '',
               codigo: '2810',
-              semestre: 'VI'
+              semestre: 'VI',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             },
             {
               curso: 'Introducción a la Programación 1',
               docente: '',
               codigo: '2796',
-              semestre: 'III'
+              semestre: 'III',
+              codigo_salon: 's10',
+              nombre_salon: 'Hugo Pineda'
             }
           ]
         },
@@ -278,7 +285,9 @@ export default {
               curso: 'Arquitectura de Computadoras y Ensambladores 1',
               docente: '',
               codigo: '2811',
-              semestre: 'VI'
+              semestre: 'VI',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             }
           ]
         },
@@ -289,19 +298,25 @@ export default {
               curso: 'Teoría de Sistemas 1',
               docente: '',
               codigo: '2808',
-              semestre: 'VI'
+              semestre: 'VI',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             },
             {
               curso: 'Práctica Final',
               docente: '',
               codigo: '2829',
-              semestre: 'X'
+              semestre: 'X',
+              codigo_salon: 's10',
+              nombre_salon: 'Hugo Pineda'
             },
             {
               curso: 'Lenguajes Formales y de Programación',
               docente: '',
               codigo: '2798',
-              semestre: 'IV'
+              semestre: 'IV',
+              codigo_salon: 's11',
+              nombre_salon: 'Salón Dibujo'
             }
           ]
         },
@@ -312,19 +327,25 @@ export default {
               curso: 'Análisis y Diseño de Sistemas 1',
               docente: '',
               codigo: '2822',
-              semestre: 'VIII'
+              semestre: 'VIII',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             },
             {
               curso: 'Sistemas de Bases de Datos 2',
               docente: '',
               codigo: '2821',
-              semestre: 'VIII'
+              semestre: 'VIII',
+              codigo_salon: 's2',
+              nombre_salon: '3'
             },
             {
               curso: 'Matemática de Computo 2',
               docente: '',
               codigo: '2799',
-              semestre: 'IV'
+              semestre: 'IV',
+              codigo_salon: 's12',
+              nombre_salon: 'Laboratorio de Aguas'
             }
           ]
         },
@@ -335,25 +356,33 @@ export default {
               curso: 'Introducción a la Programación y Computación 2',
               docente: '',
               codigo: '2800',
-              semestre: 'IV'
+              semestre: 'IV',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             },
             {
               curso: 'Redes de Computadoras 2',
               docente: '',
               codigo: '2820',
-              semestre: 'VIII'
+              semestre: 'VIII',
+              codigo_salon: 's4',
+              nombre_salon: '6'
             },
             {
               curso: 'Economía',
               docente: '',
               codigo: '2809',
-              semestre: 'VI'
+              semestre: 'VI',
+              codigo_salon: 's8',
+              nombre_salon: 'Salón Proyecciones'
             },
             {
               curso: 'Seminario de Investigación',
               docente: '',
               codigo: '2837',
-              semestre: 'X'
+              semestre: 'X',
+              codigo_salon: 's10',
+              nombre_salon: 'Hugo Pineda'
             }
           ]
         },
@@ -364,19 +393,25 @@ export default {
               curso: 'Software Avanzado',
               docente: '',
               codigo: '2836',
-              semestre: 'X'
+              semestre: 'X',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             },
             {
               curso: 'Investigación de Operaciones 1',
               docente: '',
               codigo: '685',
-              semestre: 'VI'
+              semestre: 'VI',
+              codigo_salon: 's4',
+              nombre_salon: '6'
             },
             {
               curso: 'Seminario de Sistemas 1',
               docente: '',
               codigo: '2823',
-              semestre: 'VIII'
+              semestre: 'VIII',
+              codigo_salon: 's10',
+              nombre_salon: 'Hugo Pineda'
             }
           ]
         },
@@ -387,7 +422,9 @@ export default {
               curso: 'Sistemas Operativos 2',
               docente: 'Ing. Otto Soto',
               codigo: '2819',
-              semestre: 'VIII'
+              semestre: 'VIII',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             }
           ]
         },
@@ -398,19 +435,25 @@ export default {
               curso: 'Sistemas de Bases de Datos 2',
               docente: '',
               codigo: '2821',
-              semestre: 'VIII'
+              semestre: 'VIII',
+              codigo_salon: 's1',
+              nombre_salon: '1'
             },
             {
               curso: 'Análisis y Diseño de Sistemas 1',
               docente: '',
               codigo: '2822',
-              semestre: 'VIII'
+              semestre: 'VIII',
+              codigo_salon: 's2',
+              nombre_salon: '3'
             },
             {
               curso: 'Sistemas Organizacionales y Gerenciales 2',
               docente: 'Ing. Otto Soto',
               codigo: '2834',
-              semestre: 'X'
+              semestre: 'X',
+              codigo_salon: 's10',
+              nombre_salon: 'Hugo Pineda'
             }
           ]
         }
@@ -418,12 +461,37 @@ export default {
     }
   },
   methods: {
-    filtrarSalones() {}
+    filtroItems(items: Array<ScheduleCourse>) {
+      const result: Array<object> = []
+      for (const item of items) {
+        result.push({
+          title: item.curso,
+          subtitle: `Semestre: ${item.semestre}, Salon: ${item.nombre_salon}`
+        })
+      }
+      return result
+    },
+    itemPromp(item: ScheduleCourse) {
+      return {
+        title: item.curso,
+        subtitle: `Semestre: ${item.semestre}, Salon: ${item.nombre_salon}`
+      }
+    }
   }
 }
 </script>
 
 <style scoped lang="scss">
+.course-select {
+  :deep(.v-input__details){
+    display: none;
+  }
+}
+
+.combo_line {
+  padding: 0px;
+}
+
 .text-center {
   text-align: center;
 }
