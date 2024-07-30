@@ -22,7 +22,7 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
-        // @ts-expect-error
+        // @ts-expect-error vite-plugin-vuetify
         config.plugins.push(vuetify({ autoImport: true }))
       })
     },
@@ -42,7 +42,8 @@ export default defineNuxtConfig({
   googleFonts: {
     display: 'swap',
     families: {
-      'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700]
+      'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
+      'DM Sans': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
       // Sarabun: [100, 200, 300, 400, 500, 600, 700, 800]
     }
   }
