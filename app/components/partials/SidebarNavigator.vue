@@ -1,15 +1,7 @@
 <template>
   <div class="mb-16">
     <v-container align="center">
-      <!--Logo USAC (sujeto a cambios), se usa un filtro para volverlo gris para que se vea en ambos theme (sujeto a cambios)-->
-      <img
-        alt="Logo USAC"
-        class="logo"
-        src="@/assets/img/banner_cics.png"
-        width="250"
-        height="100"
-        style="filter: invert(50%); margin-top: 10px; margin-bottom: -5px"
-      />
+      <CICSLogo />
     </v-container>
     <v-list density="compact">
       <v-list-item
@@ -115,7 +107,9 @@
 import { mapWritableState } from 'pinia'
 import { useTheme } from 'vuetify/lib/framework.mjs'
 import { useConfigsStore } from '~/stores/config'
+import CICSLogo from './CICSLogo.vue'
 export default {
+  components: { CICSLogo },
   emits: ['theme'],
   setup() {
     const { changeTheme } = useConfigsStore()
