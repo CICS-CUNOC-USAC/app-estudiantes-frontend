@@ -1,15 +1,7 @@
 <template>
   <div>
     <v-container align="center">
-      <!--Logo USAC (sujeto a cambios), se usa un filtro para volverlo gris para que se vea en ambos theme (sujeto a cambios)-->
-      <img
-        alt="Logo USAC"
-        class="logo"
-        src="@/assets/img/usac-logo.svg"
-        width="125"
-        height="125"
-        style="filter: invert(50%); margin-top: 10px; margin-bottom: -5px"
-      />
+      <CICSLogo />
     </v-container>
     <v-list density="compact">
       <v-list-item
@@ -66,7 +58,9 @@
 <script lang="ts">
 import { mapWritableState } from 'pinia'
 import { useConfigsStore } from '~/stores/config'
+import CICSLogo from './CICSLogo.vue'
 export default {
+  components: { CICSLogo },
   emits: ['theme'],
   data() {
     return {

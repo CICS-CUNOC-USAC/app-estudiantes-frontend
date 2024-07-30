@@ -1,6 +1,7 @@
 .cics-theme {
   background: rgb(var(--v-theme-surface));
-  font-family: 'IBM Plex Sans', sans-serif !important;
+  /* font-family: 'IBM Plex Sans', sans-serif !important; */
+  font-family: 'DM Sans', sans-serif !important;
 
   h1,
   h2,
