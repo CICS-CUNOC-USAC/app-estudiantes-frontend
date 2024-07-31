@@ -46,5 +46,6 @@ export type Course = {
 export type LineSchedule = {
   start_time: string
   end_time: string
-  courses: Array<Course>
+  //La clave del curso es el codigo y la seccion
+  courses_map: Map<string, Course>
 }
