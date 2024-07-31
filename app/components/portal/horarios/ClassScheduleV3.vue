@@ -48,30 +48,50 @@ export default {
   data() {
     return {
       version: 3,
-      lines_schedule: [] as Array<LineSchedule>
+      lines_schedule: [] as Array<LineSchedule>,
+      times_key: new Map<string, number>()
     }
   },
   mounted() {
-    const startTime = new Date()
-    startTime.setHours(13, 40, 0, 0) // Establecer hora inicial a 13:40:00
-    const endTime = new Date()
-    endTime.setHours(21, 10, 0, 0) // Establecer hora final a 21:10:00
-
-    const interval = 50 // Intervalo de 50 minutos
-    let currentTime = startTime
-
-    while (currentTime <= endTime) {
-      const start: string = currentTime.toTimeString().split(' ')[0]
-      currentTime = this.addMinutes(currentTime, interval)
-      const end: string = currentTime.toTimeString().split(' ')[0]
-      this.lines_schedule.push({
-        start_time: start,
-        end_time: end,
-        courses: []
-      })
-    }
+    this.createHourColumn()
+    this.fillSchedule()
   },
   methods: {
+    fillSchedule() {
+      this.courses.forEach((course) => {
+        course.periods.forEach((period) => {
+          const key = `${period.start_time}-${period.end_time}`
+          console.log(key)
+          console.log(period)
+          const index = this.times_key.get(key)
+          console.log('index', index)
+          if (index !== undefined) {
+            this.lines_schedule[index].courses.push(course)
+          }
+        })
+      })
+    },
+    createHourColumn() {
+      const startTime = new Date()
+      startTime.setHours(13, 40, 0, 0) // Establecer hora inicial a 13:40:00
+      const endTime = new Date()
+      endTime.setHours(21, 10, 0, 0) // Establecer hora final a 21:10:00
+
+      const interval = 50 // Intervalo de 50 minutos
+      let currentTime = startTime
+
+      while (currentTime <= endTime) {
+        const start: string = currentTime.toTimeString().split(' ')[0]
+        currentTime = this.addMinutes(currentTime, interval)
+        const end: string = currentTime.toTimeString().split(' ')[0]
+        this.times_key.set(`${start}-${end}`, this.lines_schedule.length)
+        this.lines_schedule.push({
+          start_time: start,
+          end_time: end,
+          courses: []
+        })
+      }
+    },
     addMinutes(date: Date, minutes: number): Date {
       return new Date(date.getTime() + minutes * 60000)
     },
