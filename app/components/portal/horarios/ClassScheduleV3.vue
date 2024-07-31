@@ -61,10 +61,7 @@ export default {
       this.courses.forEach((course) => {
         course.periods.forEach((period) => {
           const key = `${period.start_time}-${period.end_time}`
-          console.log(key)
-          console.log(period)
           const index = this.times_key.get(key)
-          console.log('index', index)
           if (index !== undefined) {
             this.lines_schedule[index].courses.push(course)
           }
