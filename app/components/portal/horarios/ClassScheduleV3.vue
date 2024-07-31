@@ -16,7 +16,7 @@
         <td class="py-1 px-1">
           <v-container class="d-inline-flex py-0 px-0">
             <CoursePill
-              v-for="course in line.courses"
+              v-for="course in Array.from(line.courses_map.values())"
               :key="course.id"
               :curso="course"
             />
@@ -63,7 +63,12 @@ export default {
           const key = `${period.start_time}-${period.end_time}`
           const index = this.times_key.get(key)
           if (index !== undefined) {
-            this.lines_schedule[index].courses.push(course)
+            const course_key = `${course.course_code}-${course.section.name}`
+            const value_course =
+              this.lines_schedule[index].courses_map.get(course_key)
+            if (value_course === undefined) {
+              this.lines_schedule[index].courses_map.set(course_key, course)
+            }
           }
         })
       })
@@ -85,7 +90,7 @@ export default {
         this.lines_schedule.push({
           start_time: start,
           end_time: end,
-          courses: []
+          courses_map: new Map<string, Course>()
         })
       }
     },
