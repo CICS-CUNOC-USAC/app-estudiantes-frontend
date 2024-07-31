@@ -3,14 +3,15 @@
   <v-table class="elevation-1 rounded-lg">
     <thead>
       <tr>
-        <th class="text-center">Hora</th>
+        <th class="text-center hour_column">Hora</th>
         <th class="text-center">Lunes/Miercoles/Viernes</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="line in line_schedule" :key="line.start_time">
+      <tr v-for="line in lines_schedule" :key="line.start_time">
         <th class="text-center fixed-column">
-          {{ line.start_time }} - {{ line.end_time }}
+          {{ printFormatTime(line.start_time) }} -
+          {{ printFormatTime(line.end_time) }}
         </th>
         <td class="py-1 px-1">
           <v-container class="d-inline-flex py-0 px-0">
@@ -47,10 +48,38 @@ export default {
   data() {
     return {
       version: 3,
-      line_schedule: [] as Array<LineSchedule>
+      lines_schedule: [] as Array<LineSchedule>
     }
   },
-  methods: {}
+  mounted() {
+    const startTime = new Date()
+    startTime.setHours(13, 40, 0, 0) // Establecer hora inicial a 13:40:00
+    const endTime = new Date()
+    endTime.setHours(21, 10, 0, 0) // Establecer hora final a 21:10:00
+
+    const interval = 50 // Intervalo de 50 minutos
+    let currentTime = startTime
+
+    while (currentTime <= endTime) {
+      const start: string = currentTime.toTimeString().split(' ')[0]
+      currentTime = this.addMinutes(currentTime, interval)
+      const end: string = currentTime.toTimeString().split(' ')[0]
+      this.lines_schedule.push({
+        start_time: start,
+        end_time: end,
+        courses: []
+      })
+    }
+  },
+  methods: {
+    addMinutes(date: Date, minutes: number): Date {
+      return new Date(date.getTime() + minutes * 60000)
+    },
+    printFormatTime(date: string): string {
+      // El formato es el siguiente: HH:mmm:ss y se debe retornar HH:mm
+      return date.split(':').slice(0, 2).join(':')
+    }
+  }
 }
 </script>
 
@@ -63,6 +92,10 @@ export default {
 
 .combo_line {
   padding: 0px;
+}
+
+.hour_column {
+  width: 50px;
 }
 
 .text-center {
