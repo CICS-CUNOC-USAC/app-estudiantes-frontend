@@ -16,7 +16,7 @@ export type Period = {
   weekday_id: number
   start_time: string
   end_time: string
-  weekay: {
+  weekday: {
     name: string
   }
 }
@@ -31,6 +31,9 @@ export type Course = {
   career_course: {
     semester: number
     field: number
+    course: {
+      name: string
+    }
   }
   section: {
     name: string
@@ -38,4 +41,10 @@ export type Course = {
   classroom: {
     name: string
   }
+}
+
+export type LineSchedule = {
+  start_time: string
+  end_time: string
+  courses: Array<Course>
 }
