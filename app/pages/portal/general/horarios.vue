@@ -2,7 +2,7 @@
   <v-container>
     <ClassScheduleV1 />
     <ClassScheduleV2 />
-    <ClassScheduleV3 />
+    <ClassScheduleV3 :courses="data_model_final" />
   </v-container>
 </template>
 
@@ -118,24 +118,24 @@ export default {
           periods: [
             {
               weekday_id: 1,
-              start_time: '14:40:00',
-              end_time: '15:30:00',
+              start_time: '14:30:00',
+              end_time: '15:20:00',
               weekday: {
                 name: 'Lunes'
               }
             },
             {
               weekday_id: 2,
-              start_time: '14:40:00',
-              end_time: '15:30:00',
+              start_time: '14:30:00',
+              end_time: '15:20:00',
               weekday: {
                 name: 'Martes'
               }
             },
             {
               weekday_id: 3,
-              start_time: '14:40:00',
-              end_time: '15:30:00',
+              start_time: '14:30:00',
+              end_time: '15:20:00',
               weekday: {
                 name: 'Miercoles'
               }
@@ -164,16 +164,16 @@ export default {
           periods: [
             {
               weekday_id: 1,
-              start_time: '15:40:00',
-              end_time: '16:30:00',
+              start_time: '15:20:00',
+              end_time: '16:10:00',
               weekday: {
                 name: 'Lunes'
               }
             },
             {
               weekday_id: 2,
-              start_time: '15:40:00',
-              end_time: '16:30:00',
+              start_time: '15:20:00',
+              end_time: '16:10:00',
               weekday: {
                 name: 'Martes'
               }
@@ -202,16 +202,16 @@ export default {
           periods: [
             {
               weekday_id: 1,
-              start_time: '16:40:00',
-              end_time: '17:30:00',
+              start_time: '16:10:00',
+              end_time: '17:00:00',
               weekday: {
                 name: 'Lunes'
               }
             },
             {
               weekday_id: 3,
-              start_time: '16:40:00',
-              end_time: '17:30:00',
+              start_time: '16:10:00',
+              end_time: '17:00:00',
               weekday: {
                 name: 'Miercoles'
               }
@@ -241,15 +241,15 @@ export default {
             {
               weekday_id: 2,
               start_time: '17:40:00',
-              end_time: '18:30:00',
+              end_time: '17:50:00',
               weekday: {
                 name: 'Martes'
               }
             },
             {
               weekday_id: 3,
-              start_time: '17:40:00',
-              end_time: '18:30:00',
+              start_time: '17:00:00',
+              end_time: '17:50:00',
               weekday: {
                 name: 'Miercoles'
               }
@@ -316,16 +316,16 @@ export default {
           periods: [
             {
               weekday_id: 2,
-              start_time: '19:40:00',
-              end_time: '20:30:00',
+              start_time: '19:30:00',
+              end_time: '20:20:00',
               weekday: {
                 name: 'Martes'
               }
             },
             {
               weekday_id: 3,
-              start_time: '19:40:00',
-              end_time: '20:30:00',
+              start_time: '19:30:00',
+              end_time: '20:20:00',
               weekday: {
                 name: 'Miercoles'
               }
@@ -354,7 +354,7 @@ export default {
           periods: [
             {
               weekday_id: 1,
-              start_time: '20:40:00',
+              start_time: '20:20:00',
               end_time: '21:10:00',
               weekday: {
                 name: 'Lunes'
@@ -362,7 +362,7 @@ export default {
             },
             {
               weekday_id: 2,
-              start_time: '20:40:00',
+              start_time: '20:20:00',
               end_time: '21:10:00',
               weekday: {
                 name: 'Martes'

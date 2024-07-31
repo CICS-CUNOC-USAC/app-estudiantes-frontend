@@ -3,7 +3,7 @@
     <v-card
       class="mx-auto rounded-sm"
       :class="getColorCourse(curso as Course)"
-      max-width="180"
+      max-width="200"
       min-width="180"
     >
       <template #actions>
@@ -18,6 +18,11 @@
               <v-row>
                 <v-col class="text-center small-text">
                   {{ curso.course_code }}
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col class="text-center small-text">
+                  Seccion: {{ curso.section.name }}
                 </v-col>
               </v-row>
               <v-row>
@@ -56,8 +61,12 @@ export default {
         return 'card_color_smoth_green'
       } else if (curso.career_course.semester == 6) {
         return 'card_color_orage'
+      } else if (curso.career_course.semester == 7) {
+        return 'card_color_red'
       } else if (curso.career_course.semester == 8) {
         return 'card_color_magenta'
+      } else if (curso.career_course.semester == 9) {
+        return 'card_color_ocean'
       } else if (curso.career_course.semester == 10) {
         return 'card_color_blue'
       }
@@ -103,6 +112,16 @@ export default {
 
 .card_color_blue {
   background-color: #2196f3;
+  color: white;
+}
+
+.card_color_red {
+  background-color: #7d2f29;
+  color: white;
+}
+
+.card_color_ocean {
+  background-color: #00796b;
   color: white;
 }
 </style>
