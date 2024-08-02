@@ -1,8 +1,6 @@
 <template>
   <v-container>
-    <ClassScheduleV1 />
-    <ClassScheduleV2 />
-    <ClassScheduleV3 :courses="data_model_final" />
+    <ClassScheduleV1 :courses="data_model_final" />
   </v-container>
 </template>
 
