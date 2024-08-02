@@ -4,15 +4,20 @@
     <thead>
       <tr>
         <th rowspan="2" style="width: 150px">Hora</th>
-        <th colspan="12" class="text-center">Salón</th>
+        <th
+          :colspan="classroms.length === 0 ? 1 : classroms.length"
+          class="text-center"
+        >
+          Salón
+        </th>
       </tr>
       <tr>
         <th
-          v-for="header in headers[1].children"
-          :key="header.value"
+          v-for="classroom in classroms"
+          :key="classroms.indexOf(classroom)"
           class="text-center"
         >
-          {{ header.title }}
+          {{ classroom }}
         </th>
       </tr>
     </thead>
@@ -49,7 +54,9 @@ export default {
   data() {
     return {
       version: 3,
-      line_schedule: [] as Array<LineSchedule>,
+      classroms: [] as Array<string>,
+      lines_schedule: [] as Array<LineSchedule>,
+      times_key: new Map<string, number>(),
       headers: [
         { title: 'Hora', value: 'hora' },
         {
@@ -442,7 +449,51 @@ export default {
       ]
     }
   },
+  mounted() {
+    this.genClassroom()
+  },
   methods: {
+    genClassroom() {
+      const headers: Map<string, string> = new Map()
+      if (this.courses) {
+        for (const course of this.courses) {
+          const classroom = course.classroom.name
+          const value = headers.get(classroom)
+          if (!value) {
+            headers.set(classroom, classroom)
+          }
+        }
+      }
+      this.classroms = Array.from(headers.keys())
+    },
+    createHourColumn() {
+      const startTime = new Date()
+      startTime.setHours(13, 40, 0, 0) // Establecer hora inicial a 13:40:00
+      const endTime = new Date()
+      endTime.setHours(21, 10, 0, 0) // Establecer hora final a 21:10:00
+
+      const interval = 50 // Intervalo de 50 minutos
+      let currentTime = startTime
+
+      while (currentTime <= endTime) {
+        const start: string = currentTime.toTimeString().split(' ')[0]
+        currentTime = this.addMinutes(currentTime, interval)
+        const end: string = currentTime.toTimeString().split(' ')[0]
+        this.times_key.set(`${start}-${end}`, this.lines_schedule.length)
+        this.lines_schedule.push({
+          start_time: start,
+          end_time: end,
+          courses_map: new Map<string, Course>()
+        })
+      }
+    },
+    addMinutes(date: Date, minutes: number): Date {
+      return new Date(date.getTime() + minutes * 60000)
+    },
+    printFormatTime(date: string): string {
+      // El formato es el siguiente: HH:mmm:ss y se debe retornar HH:mm
+      return date.split(':').slice(0, 2).join(':')
+    },
     itemPromp(item: LineSchedule) {
       return {
         title: item.courses[0].career_course.course.name,

@@ -23,7 +23,7 @@ export type Period = {
 
 export type Course = {
   id: number
-  career_code: number
+  career_code: number | null
   course_code: string
   section_id: number
   classroom_id: number
