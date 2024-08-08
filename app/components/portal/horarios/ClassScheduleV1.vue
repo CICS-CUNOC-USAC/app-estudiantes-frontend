@@ -1,49 +1,61 @@
 <template>
   <h1 class="mb-4">Horario de Clases V1</h1>
   <v-table class="elevation-1 rounded-lg" height="650px">
-    <thead>
-      <tr>
-        <th rowspan="2" style="width: 150px">Hora</th>
-        <th
-          :colspan="classroms.length === 0 ? 1 : classroms.length"
-          class="text-center"
-        >
-          Salón
-        </th>
-      </tr>
-      <tr>
-        <th
-          v-for="classroom in classroms"
-          :key="classroms.indexOf(classroom)"
-          class="text-center"
-        >
-          {{ classroom }}
-        </th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="item in items" :key="item.hora">
-        <td class="text-center fixed-column">{{ item.hora }}</td>
-        <td v-for="header in headers[1].children" :key="header.value">
-          <CursoHorario v-if="item[header.value]" :curso="item[header.value]" />
-        </td>
-      </tr>
-    </tbody>
+    <tr v-if="!loadingClassrooms">
+      <th class="header" rowspan="2" style="width: 150px">Hora</th>
+      <th
+        :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
+        class="header"
+      >
+        Salón
+      </th>
+    </tr>
+    <tr>
+      <th v-for="classroom in classrooms" :key="classroom.id" class="header">
+        {{ classroom.name }}
+      </th>
+    </tr>
+    <tr v-for="hour in hours" :key="hour.id">
+      <th class="text-center fixed-column">
+        {{ hour.start_time + '-' + hour.end_time }}
+      </th>
+      <td v-for="schedule in schedules" :key="schedule.id">
+        <CursoHorario
+          v-if="schedule.periods[0].hour.start_time == hour.start_time"
+          :curso="schedule"
+        />
+        <v-container v-else height="50"></v-container>
+      </td>
+    </tr>
   </v-table>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import CursoHorario from '~/components/portal/horarios/CursoHorario.vue'
-import type { Course, LineSchedule } from '~/utils/types/schedule-courses'
+import type {
+  Classroom,
+  Course,
+  Hour,
+  LineSchedule
+} from '~/utils/types/schedule-courses'
 
+const { data: hours, pending: loadingHours } =
+  useCustomLazyFetch<Array<Hour>>(`hours`)
+
+const { data: classrooms, pending: loadingClassrooms } =
+  useCustomLazyFetch<Array<Classroom>>(`classrooms`)
+
+const { data: schedules, pending: loadingSchedules } =
+  useCustomLazyFetch<Array<Course>>(`schedules/courses`)
+/*
 export default {
   name: 'ClassScheduleV1',
   components: { CursoHorario },
   props: {
-    // eslint-disable-next-line vue/require-default-prop
     courses: {
       type: Array as () => Array<Course>,
-      required: false
+      required: false,
+      default: new Array([])
     },
     tittle: {
       type: String,
@@ -53,10 +65,7 @@ export default {
   },
   data() {
     return {
-      version: 3,
       classroms: [] as Array<string>,
-      lines_schedule: [] as Array<LineSchedule>,
-      times_key: new Map<string, number>(),
       headers: [
         { title: 'Hora', value: 'hora' },
         {
@@ -77,161 +86,7 @@ export default {
           ]
         }
       ],
-      items: [
-        {
-          hora: '13:40 - 14:30',
-          s1: {
-            curso: 'Manejo e Implementación de Archivos',
-            docente: '',
-            codigo: '2812',
-            semestre: 'VI'
-          }
-        },
-        {
-          hora: '14:30 - 15:20',
-          s1: {
-            curso: 'Organización de Lenguajes y Compiladores 2',
-            docente: '',
-            codigo: '2810',
-            semestre: 'VI'
-          },
-          s10: {
-            curso: 'Introducción a la Programación 1',
-            docente: '',
-            codigo: '2796',
-            semestre: 'III'
-          }
-        },
-        {
-          hora: '15:20 - 16:10',
-          s1: {
-            curso: 'Arquitectura de Computadoras y Ensambladores 1',
-            docente: '',
-            codigo: '2811',
-            semestre: 'VI'
-          }
-        },
-        {
-          hora: '16:10 - 17:00',
-          s1: {
-            curso: 'Teoría de Sistemas 1',
-            docente: '',
-            codigo: '2808',
-            semestre: 'VI'
-          },
-          s10: {
-            curso: 'Práctica Final',
-            docente: '',
-            codigo: '2829',
-            semestre: 'X'
-          },
-          s11: {
-            curso: 'Lenguajes Formales y de Programación',
-            docente: '',
-            codigo: '2798',
-            semestre: 'IV'
-          }
-        },
-        {
-          hora: '17:00 - 17:50',
-          s1: {
-            curso: 'Análisis y Diseño de Sistemas 1',
-            docente: '',
-            codigo: '2822',
-            semestre: 'VIII'
-          },
-          s2: {
-            curso: 'Sistemas de Bases de Datos 2',
-            docente: '',
-            codigo: '2821',
-            semestre: 'VIII'
-          },
-          s12: {
-            curso: 'Matemática de Computo 2',
-            docente: '',
-            codigo: '2799',
-            semestre: 'IV'
-          }
-        },
-        {
-          hora: '17:50 - 18:40',
-          s1: {
-            curso: 'Introducción a la Programación y Computación 2',
-            docente: '',
-            codigo: '2800',
-            semestre: 'IV'
-          },
-          s4: {
-            curso: 'Redes de Computadoras 2',
-            docente: '',
-            codigo: '2820',
-            semestre: 'VIII'
-          },
-          s8: {
-            curso: 'Economía',
-            docente: '',
-            codigo: '2809',
-            semestre: 'VI'
-          },
-          s10: {
-            curso: 'Seminario de Investigación',
-            docente: '',
-            codigo: '2837',
-            semestre: 'X'
-          }
-        },
-        {
-          hora: '18:40 - 19:30',
-          s1: {
-            curso: 'Software Avanzado',
-            docente: '',
-            codigo: '2836',
-            semestre: 'X'
-          },
-          s4: {
-            curso: 'Investigación de Operaciones 1',
-            docente: '',
-            codigo: '685',
-            semestre: 'VI'
-          },
-          s10: {
-            curso: 'Seminario de Sistemas 1',
-            docente: '',
-            codigo: '2823',
-            semestre: 'VIII'
-          }
-        },
-        {
-          hora: '19:30 - 20:20',
-          s1: {
-            curso: 'Sistemas Operativos 2',
-            docente: 'Ing. Otto Soto',
-            codigo: '2819',
-            semestre: 'VIII'
-          }
-        },
-        {
-          hora: '20:20 - 21:10',
-          s1: {
-            curso: 'Sistemas de Bases de Datos 2',
-            docente: '',
-            codigo: '2821',
-            semestre: 'VIII'
-          },
-          s2: {
-            curso: 'Análisis y Diseño de Sistemas 1',
-            docente: '',
-            codigo: '2822',
-            semestre: 'VIII'
-          },
-          s10: {
-            curso: 'Sistemas Organizacionales y Gerenciales 2',
-            docente: 'Ing. Otto Soto',
-            codigo: '2834',
-            semestre: 'X'
-          }
-        }
-      ],
+      items: [],
       response_items: [
         {
           hora: '13:40 - 14:30',
@@ -479,12 +334,6 @@ export default {
         const start: string = currentTime.toTimeString().split(' ')[0]
         currentTime = this.addMinutes(currentTime, interval)
         const end: string = currentTime.toTimeString().split(' ')[0]
-        this.times_key.set(`${start}-${end}`, this.lines_schedule.length)
-        this.lines_schedule.push({
-          start_time: start,
-          end_time: end,
-          courses_map: new Map<string, Course>()
-        })
       }
     },
     addMinutes(date: Date, minutes: number): Date {
@@ -502,6 +351,7 @@ export default {
     }
   }
 }
+*/
 </script>
 
 <style scoped lang="scss">
@@ -529,6 +379,15 @@ export default {
 }
 
 thead tr th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  // --v-theme-overlay-multiplier: var(--v-theme-accent-3-overlay-multiplier);
+  background-color: rgb(var(--v-theme-accent-3)) !important;
+  color: rgb(var(--v-theme-on-accent-3)) !important;
+}
+
+.header {
   position: sticky;
   top: 0;
   z-index: 2;

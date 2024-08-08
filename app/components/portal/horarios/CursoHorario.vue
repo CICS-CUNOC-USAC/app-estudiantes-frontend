@@ -2,7 +2,7 @@
   <v-container style="padding: 4px">
     <v-card
       class="mx-auto rounded-sm"
-      :class="getCorrectClassCard(curso)"
+      :class="getSemesterColor(curso.career_course.semester)"
       max-width="350"
       min-width="180"
     >
@@ -12,22 +12,22 @@
             <v-col class="text-center">
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.curso }}
+                  {{ curso.career_course.course.name }}
                 </v-col>
               </v-row>
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.codigo }}
+                  {{ curso.course_code }}
                 </v-col>
               </v-row>
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.docente }}
+                  {{ 'docente' + curso.classroom_id }}
                 </v-col>
               </v-row>
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.semestre }}
+                  {{ curso.career_course.semester }}
                 </v-col>
               </v-row>
             </v-col>
@@ -47,18 +47,24 @@ export default {
     }
   },
   methods: {
-    getCorrectClassCard(curso) {
-      if (curso.semestre == 'III') {
+    getSemesterColor(semester: number) {
+      if (semester == 1) {
+        return 'card_color_orange'
+      } else if (semester == 2) {
+        return 'card_color_ocean'
+      } else if (semester == 3) {
         return 'card_color_green'
-      } else if (curso.semestre == 'IV') {
+      } else if (semester == 4) {
         return 'card_color_yellow'
-      } else if (curso.semestre == 'V') {
+      } else if (semester == 5) {
         return 'card_color_smoth_green'
-      } else if (curso.semestre == 'VI') {
+      } else if (semester == 6) {
         return 'card_color_orage'
-      } else if (curso.semestre == 'VIII') {
+      } else if (semester == 8) {
         return 'card_color_magenta'
-      } else if (curso.semestre == 'X') {
+      } else if (semester == 9) {
+        return 'card_color_magenta'
+      } else if (semester == 10) {
         return 'card_color_blue'
       }
     }
@@ -90,9 +96,9 @@ export default {
   color: white;
 }
 
-.card_color_orage {
-  background-color: #ff9800;
-  color: white;
+.card_color_orange {
+  background-color: #f7aa36;
+  color: black;
 }
 
 .card_color_magenta {
@@ -102,6 +108,16 @@ export default {
 
 .card_color_blue {
   background-color: #2196f3;
+  color: white;
+}
+
+.card_color_red {
+  background-color: #7d2f29;
+  color: white;
+}
+
+.card_color_ocean {
+  background-color: #00796b;
   color: white;
 }
 </style>

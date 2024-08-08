@@ -1,14 +1,19 @@
 <template>
-  <v-container>
-    <ClassScheduleV1 :courses="data_model_final" />
+  <v-container v-if="!loading">
+    <ClassScheduleV1 :courses="scheduleCourses" />
   </v-container>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ClassScheduleV3 from '~/components/portal/horarios/ClassScheduleV3.vue'
 import ClassScheduleV2 from '~/components/portal/horarios/ClassScheduleV2.vue'
 import ClassScheduleV1 from '~/components/portal/horarios/ClassScheduleV1.vue'
+import type { ScheduleResponse } from '~/utils/types/schedule-courses'
 
+const { data: scheduleCourses, pending: loading } =
+  useCustomLazyFetch<ScheduleResponse>(`/schedules/courses`)
+
+/*
 export default {
   name: 'Horarios',
   components: { ClassScheduleV3, ClassScheduleV2, ClassScheduleV1 },
@@ -385,6 +390,6 @@ export default {
     }
   }
 }
+*/
 </script>
-
 <style scoped lang="scss"></style>
