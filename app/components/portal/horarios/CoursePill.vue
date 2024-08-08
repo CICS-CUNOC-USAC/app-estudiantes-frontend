@@ -60,7 +60,7 @@ export default {
       } else if (curso.career_course.semester == 5) {
         return 'card_color_smoth_green'
       } else if (curso.career_course.semester == 6) {
-        return 'card_color_orage'
+        return 'card_color_orange'
       } else if (curso.career_course.semester == 7) {
         return 'card_color_red'
       } else if (curso.career_course.semester == 8) {
@@ -100,7 +100,7 @@ export default {
   color: white;
 }
 
-.card_color_orage {
+.card_color_orange {
   background-color: #f7aa36;
   color: black;
 }
