@@ -19,12 +19,20 @@
       <th class="text-center fixed-column">
         {{ hour.start_time + '-' + hour.end_time }}
       </th>
-      <td v-for="schedule in schedules" :key="schedule.id">
-        <CursoHorario
-          v-if="schedule.periods[0].hour.start_time == hour.start_time"
-          :curso="schedule"
-        />
-        <v-container v-else height="50"></v-container>
+      <td v-for="classroom in classrooms" :key="classroom.id">
+        <v-container
+          v-for="schedule in schedules"
+          :key="schedule.id"
+          style="padding: 0px"
+        >
+          <CursoHorario
+            v-if="
+              schedule.periods[0].hour.start_time == hour.start_time &&
+              schedule.classroom_id == classroom.id
+            "
+            :curso="schedule"
+          />
+        </v-container>
       </td>
     </tr>
   </v-table>
