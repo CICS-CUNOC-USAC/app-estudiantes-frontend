@@ -1,3 +1,7 @@
+export type ScheduleResponse = {
+  courses: Course[]
+}
+
 export type ScheduleCourse = {
   curso: string
   docente: string
@@ -14,11 +18,25 @@ export type ScheduleLine = {
 
 export type Period = {
   weekday_id: number
-  start_time: string
-  end_time: string
+  hour_id: number
+  hour: {
+    start_time: string
+    end_time: string
+  }
   weekday: {
     name: string
   }
+}
+
+export type Hour = {
+  id: number
+  start_time: string
+  end_time: string
+}
+
+export type Classroom = {
+  id: number
+  name: string
 }
 
 export type Course = {
