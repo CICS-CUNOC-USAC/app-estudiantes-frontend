@@ -58,6 +58,7 @@ export default {
     return {
       basicInfoItems: [
         // ['mdi-newspaper', 'Artículos', '/admin/articles'],
+        ['mdi-calendar-month-outline', 'Horarios', '/admin/schedules'],
         ['mdi-book-open-page-variant', 'Manuales', '/admin/manuals'],
         [
           'mdi-account-group-outline',
