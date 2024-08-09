@@ -1,15 +1,12 @@
 <template>
-  <h1 class="mb-4">Horario de Clases V1</h1>
   <v-table class="elevation-1 rounded-lg" height="650px">
-    <tr v-if="!loadingClassrooms">
-      <th class="header" rowspan="2" style="width: 150px">Hora</th>
-      <th
-        :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
-        class="header"
-      >
-        Salón
-      </th>
-    </tr>
+    <th class="header" rowspan="2" style="width: 150px">Hora</th>
+    <th
+      :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
+      class="header"
+    >
+      Salón
+    </th>
     <tr>
       <th v-for="classroom in classrooms" :key="classroom.id" class="header">
         {{ classroom.name }}
@@ -40,21 +37,14 @@
 
 <script setup lang="ts">
 import CursoHorario from '~/components/portal/horarios/CursoHorario.vue'
-import type {
-  Classroom,
-  Course,
-  Hour,
-  LineSchedule
-} from '~/utils/types/schedule-courses'
+import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 
-const { data: hours, pending: loadingHours } =
-  useCustomLazyFetch<Array<Hour>>(`hours`)
+defineProps<{
+  hours: Array<Hour>
+  classrooms: Array<Classroom>
+  schedules: Array<Course>
+}>()
 
-const { data: classrooms, pending: loadingClassrooms } =
-  useCustomLazyFetch<Array<Classroom>>(`classrooms`)
-
-const { data: schedules, pending: loadingSchedules } =
-  useCustomLazyFetch<Array<Course>>(`schedules/courses`)
 /*
 export default {
   name: 'ClassScheduleV1',
