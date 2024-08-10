@@ -1,12 +1,14 @@
 <template>
   <v-table class="elevation-1 rounded-lg" height="650px">
-    <th class="header" rowspan="2" style="width: 150px">Hora</th>
-    <th
-      :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
-      class="header"
-    >
-      Salón
-    </th>
+    <tr>
+      <th class="header" rowspan="2" style="width: 150px">Hora</th>
+      <th
+        :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
+        class="header"
+      >
+        Salón
+      </th>
+    </tr>
     <tr>
       <th v-for="classroom in classrooms" :key="classroom.id" class="header">
         {{ classroom.name }}
