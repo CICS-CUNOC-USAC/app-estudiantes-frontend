@@ -66,6 +66,7 @@ export default {
 }
 .card-subtitle {
   font-weight: 400;
+  font-style: italic;
   font-size: 0.9rem;
 }
 .card-description {

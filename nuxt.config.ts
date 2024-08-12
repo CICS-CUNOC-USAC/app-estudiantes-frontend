@@ -13,6 +13,12 @@ export default defineNuxtConfig({
     baseURL: process.env.BASE_URL || 'http://localhost:8000'
   },
   app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://rsms.me/' },
+        { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
+      ]
+    },
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' }
   },
