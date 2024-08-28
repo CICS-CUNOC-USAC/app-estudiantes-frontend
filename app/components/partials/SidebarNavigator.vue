@@ -105,7 +105,6 @@
 </template>
 <script lang="ts">
 import { mapWritableState } from 'pinia'
-import { useTheme } from 'vuetify/lib/framework.mjs'
 import { useConfigsStore } from '~/stores/config'
 import CICSLogo from './CICSLogo.vue'
 export default {

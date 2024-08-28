@@ -48,9 +48,9 @@ export default defineNuxtConfig({
   googleFonts: {
     display: 'swap',
     families: {
-      'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
+      // 'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
       'DM Sans': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-      // Sarabun: [100, 200, 300, 400, 500, 600, 700, 800]
+      // Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
     }
   }
 })
