@@ -1,9 +1,26 @@
 *, .v-application {
   [class*='text-'] {
-    font-family: 'DM Sans', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
   }
 
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+:root {
+  font-family: 'Inter', 'DM Sans' sans-serif;
+  font-feature-settings: 'liga' 1, 'calt' 1, 'ss01' 1, 'ss08' 1, 'ss03' 1, 'cv12' 1, 'cv13' 1;
+}
+
+@supports (font-variation-settings: normal) {
+  :root { font-family: 'InterVariable', sans-serif; }
+
+  *, .v-application {
+    [class*='text-'] {
+      font-family: 'InterVariable', sans-serif !important;
+    }
+  
+    font-family: 'InterVariable', sans-serif !important;
+  }
 }
 
 

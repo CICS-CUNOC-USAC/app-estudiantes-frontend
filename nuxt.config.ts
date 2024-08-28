@@ -13,6 +13,12 @@ export default defineNuxtConfig({
     baseURL: process.env.BASE_URL || 'http://localhost:8000'
   },
   app: {
+    head: {
+      link: [
+        { rel: 'preconnect', href: 'https://rsms.me/' },
+        { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
+      ]
+    },
     pageTransition: { name: 'page', mode: 'out-in' },
     layoutTransition: { name: 'layout', mode: 'out-in' }
   },
@@ -42,9 +48,9 @@ export default defineNuxtConfig({
   googleFonts: {
     display: 'swap',
     families: {
-      'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
+      // 'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
       'DM Sans': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-      // Sarabun: [100, 200, 300, 400, 500, 600, 700, 800]
+      // Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
     }
   }
 })
