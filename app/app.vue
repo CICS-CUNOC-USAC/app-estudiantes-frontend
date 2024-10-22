@@ -2,49 +2,36 @@
   <main :style="{ backgroundColor: bgColor }">
     <NuxtLoadingIndicator :throttle="130" :height="4" :color="loadingColor" />
     <NuxtLayout />
+    <GeneralSnackbar />
   </main>
 </template>
-<script lang="ts">
-import { useTheme } from 'vuetify/lib/framework.mjs'
+<script lang="ts" setup>
+import { useTheme } from 'vuetify'
 import { useConfigsStore } from '~/stores/config'
-export default {
-  setup() {
-    const vTheme = useTheme()
-    const { theme } = storeToRefs(useConfigsStore())
-    const currentTheme = computed(() => {
-      return vTheme.computedThemes.value[theme.value]
-    })
-    vTheme.global.name.value = currentTheme.value.dark ? 'dark' : 'light'
-    useHead({
-      // Title template, if titleChunk is defined in a page, it will be injected into the template
-      titleTemplate: (titleChunk) => {
-        return titleChunk
-          ? `${titleChunk} ∙ Ing App CUNOC`
-          : 'CUNOC ∙ Ingenieria App'
-      }
-    })
-    const bgColor = computed(() => {
-      return currentTheme.value.dark ? '#121212' : '#fff'
-    })
-    const loadingColor = computed(() => {
-      return currentTheme.value.dark ? '#fff' : '#121212'
-    })
-    return {
-      theme,
-      bgColor,
-      loadingColor
-    }
-  },
-  computed: {
-    // ...mapState(useConfigsStore, ['theme']),
-    // bgColor() {
-    //   return this.theme === 'light' ? '#fff' : '#121212'
-    // },
-    // loadingColor() {
-    //   return this.theme === 'light' ? '#121212' : '#fff'
-    // }
+import GeneralSnackbar from './components/partials/GeneralSnackbar.vue'
+
+const vTheme = useTheme()
+const { theme } = storeToRefs(useConfigsStore())
+const currentTheme = computed(() => {
+  return vTheme.computedThemes.value[theme.value]
+})
+
+const bgColor = computed(() => {
+  return currentTheme.value.dark ? '#121212' : '#fff'
+})
+
+const loadingColor = computed(() => {
+  return currentTheme.value.dark ? '#fff' : '#121212'
+})
+
+useHead({
+  // Title template, if titleChunk is defined in a page, it will be injected into the template
+  titleTemplate: (titleChunk) => {
+    return titleChunk
+      ? `${titleChunk} ∙ Ing App CUNOC`
+      : 'CUNOC ∙ Ingenieria App'
   }
-}
+})
 </script>
 <style lang="scss">
 /*

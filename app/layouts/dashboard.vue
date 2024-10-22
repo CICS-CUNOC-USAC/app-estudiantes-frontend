@@ -35,52 +35,25 @@
       <v-container class="page-v-container">
         <NuxtPage :theme="theme" />
       </v-container>
-      <!-- <v-footer
-        :color="theme === 'light' ? 'white' : '#121212'"
-        justify="center"
-      >
-        <v-col class="text-center mt-4" cols="12">
-          <strong>CICS</strong> — {{ new Date().getFullYear() }}
-        </v-col>
-      </v-footer> -->
     </v-main>
-    <GeneralSnackbar />
   </v-app>
 </template>
 
-<script lang="ts">
-import { mapState, mapActions } from 'pinia'
+<script lang="ts" setup>
 import DashboardNavigator from '~/components/partials/DashboardNavigator.vue'
 import { useRegularAuthStore } from '~/stores/regular-auth'
 import { useConfigsStore } from '~/stores/config'
 import { useAuthStore } from '~/stores/auth'
-import GeneralSnackbar from '~/components/partials/GeneralSnackbar.vue'
 
-export default {
-  components: {
-    DashboardNavigator,
-    GeneralSnackbar
-  },
-  data() {
-    return {
-      drawer: false,
-      currentPage: ''
-    }
-  },
-  computed: {
-    ...mapState(useConfigsStore, ['theme']),
-    ...mapState(useRegularAuthStore, ['user', 'authenticated']),
-    elevation() {
-      return this.drawer ? 2 : 0
-    }
-  },
-  methods: {
-    ...mapActions(useConfigsStore, ['switchTheme']),
-    changeTheme() {
-      this.switchTheme()
-    },
-    ...mapActions(useAuthStore, ['logout'])
-  }
-}
+const { theme } = storeToRefs(useConfigsStore())
+const { user, authenticated } = storeToRefs(useRegularAuthStore())
+
+const { logout } = useAuthStore()
+const { switchTheme, changeTheme } = useConfigsStore()
+
+const elevation = computed(() => (drawer.value ? 2 : 0))
+
+const drawer = ref(false)
+const currentPage = ref('')
 </script>
 <style lang="scss"></style>

@@ -47,40 +47,24 @@
     </v-list>
   </div>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { mapWritableState } from 'pinia'
 import { useConfigsStore } from '~/stores/config'
 import CICSLogo from './CICSLogo.vue'
-export default {
-  components: { CICSLogo },
-  emits: ['theme'],
-  data() {
-    return {
-      basicInfoItems: [
-        // ['mdi-newspaper', 'Artículos', '/admin/articles'],
-        ['mdi-book-open-page-variant', 'Manuales', '/admin/manuals'],
-        [
-          'mdi-account-group-outline',
-          'Usuarios Administrativos',
-          '/admin/users'
-        ],
-        ['mdi-book-open-page-variant', 'Libreria', '/admin/books']
-        // ['mdi-bookshelf', 'Biblioteca', '/admin/library'],
-        // ['mdi-book-open-page-variant', 'Tesario', '/admin/thesis']
-      ],
-      theme: 'light',
-      tools: []
-    }
-  },
-  computed: {
-    ...mapWritableState(useConfigsStore, ['themeBoolean'])
-  },
-  methods: {
-    changeTheme() {
-      this.$emit('theme')
-    }
-  }
-}
+
+const emit = defineEmits(['theme'])
+
+const basicInfoItems = [
+  // ['mdi-newspaper', 'Artículos', '/admin/articles'],
+  ['mdi-book-open-page-variant', 'Manuales', '/admin/manuals'],
+  ['mdi-account-group-outline', 'Usuarios Administrativos', '/admin/users'],
+  ['mdi-book-open-page-variant', 'Libreria', '/admin/books']
+  // ['mdi-bookshelf', 'Biblioteca', '/admin/library'],
+  // ['mdi-book-open-page-variant', 'Tesario', '/admin/thesis']
+]
+
+const theme = ref('light')
+const tools = ref([])
 </script>
 <style scoped>
 .v-list-item {

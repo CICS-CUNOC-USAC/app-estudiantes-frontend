@@ -66,84 +66,67 @@
     </v-row>
   </section>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
+import type { VForm } from 'vuetify/components'
 import { type User } from '~/stores/regular-auth'
 
-export default {
-  props: {
-    src: {
-      type: Object as PropType<User | null>,
-      required: true
-    },
-    loading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['save'],
-  data() {
-    return {
-      profile: {
-        first_name: '',
-        last_name: ''
-      },
-      user: {
-        email: '',
-        ra: ''
-      }
-    }
-  },
-  computed: {
-    validationRules() {
-      return {
-        required: (v: string) => !!v || 'Campo requerido',
-        name: [
-          (v: string) =>
-            (v && v.length <= 100) ||
-            'El nombre no debe exceder los 100 caracteres'
-        ],
-        email: [
-          (v: string) =>
-            /.+@cunoc\.edu\.gt$/.test(v) || 'E-mail debe ser válido'
-        ],
-        ra: [
-          (v: string) =>
-            (v && v.length === 9) || 'El RA debe tener 9 caracteres',
-          (v: string) => /[0-9]{9}/.test(v) || 'El RA debe ser numérico'
-        ],
-        password: [
-          (v: string) =>
-            (v && v.length >= 8) ||
-            'La contraseña debe tener al menos 8 caracteres'
-        ]
-      }
-    }
-  },
-  watch: {
-    src: {
-      immediate: true,
-      handler(val) {
-        this.profile = { ...val.profile }
-        this.user = { ...val }
-      }
-    }
-  },
-  methods: {
-    async save() {
-      const form = await this.$refs.profileForm.validate()
-      if (!form.valid) return
-      const { first_name, last_name } = this.profile
-      const { email } = this.user
-      const newProfile = {
-        first_name,
-        last_name,
-        user: {
-          email
-        }
-      }
-      this.$emit('save', newProfile)
+const props = defineProps<{
+  src: User | null
+  loading: boolean
+}>()
+
+const emit = defineEmits(['save'])
+
+const profile = ref({
+  first_name: '',
+  last_name: ''
+})
+
+const user = ref({
+  email: '',
+  ra: ''
+})
+
+watch(
+  () => props.src,
+  (val) => {
+    profile.value = { ...val?.profile }
+    user.value = { ...val }
+  }
+)
+
+const validationRules = computed(() => ({
+  required: (v: string) => !!v || 'Campo requerido',
+  name: [
+    (v: string) =>
+      (v && v.length <= 100) || 'El nombre no debe exceder los 100 caracteres'
+  ],
+  email: [
+    (v: string) => /.+@cunoc\.edu\.gt$/.test(v) || 'E-mail debe ser válido'
+  ],
+  ra: [
+    (v: string) => (v && v.length === 9) || 'El RA debe tener 9 caracteres',
+    (v: string) => /[0-9]{9}/.test(v) || 'El RA debe ser numérico'
+  ],
+  password: [
+    (v: string) =>
+      (v && v.length >= 8) || 'La contraseña debe tener al menos 8 caracteres'
+  ]
+}))
+const profileForm = ref<VForm | null>(null)
+const save = async () => {
+  const form = await profileForm.value?.validate()
+  if (!form?.valid) return
+  const { first_name, last_name } = unref(profile)
+  const { email } = unref(user)
+  const newProfile = {
+    first_name,
+    last_name,
+    user: {
+      email
     }
   }
+  emit('save', newProfile)
 }
 </script>
 <style lang="scss" scoped></style>
