@@ -5,26 +5,13 @@
         <NuxtPage />
       </v-container>
     </v-main>
-    <GeneralSnackbar />
   </v-app>
 </template>
 
-<script lang="ts">
-import { mapState } from 'pinia'
+<script lang="ts" setup>
 import { useConfigsStore } from '~/stores/config'
-import GeneralSnackbar from '~/components/partials/GeneralSnackbar.vue'
 
-export default {
-  components: {
-    GeneralSnackbar
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    ...mapState(useConfigsStore, ['theme'])
-  }
-}
+const { theme } = storeToRefs(useConfigsStore())
 </script>
 <style lang="scss" scoped>
 .main-content {

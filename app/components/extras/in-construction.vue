@@ -24,17 +24,13 @@
     </v-row>
   </v-container>
 </template>
-
-<script lang="ts">
-export default {
-  name: 'InConstruction',
-  props: {
-    section: {
-      type: String,
-      required: true
-    }
+<script lang="ts" setup>
+defineProps({
+  section: {
+    type: String,
+    required: true
   }
-}
+})
 </script>
 
 <style scoped lang="scss"></style>

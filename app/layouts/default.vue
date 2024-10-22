@@ -79,7 +79,7 @@
     </v-navigation-drawer>
 
     <v-main class="d-flex flex-column">
-      <v-container class="page-v-container" style="flex-grow: 1">
+      <v-container id="appcont" class="page-v-container" style="flex-grow: 1">
         <NuxtPage />
       </v-container>
 
@@ -89,49 +89,26 @@
         </v-col>
       </v-footer>
     </v-main>
-    <GeneralSnackbar />
   </v-app>
 </template>
 
-<script lang="ts">
-import { mapState, mapActions } from 'pinia'
+<script lang="ts" setup>
 import { useConfigsStore } from '~/stores/config'
 import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
 import { useAuthStore } from '~/stores/auth'
 import { type User } from '~/stores/regular-auth'
 import { type Staff } from '~/stores/staff-auth'
-import GeneralSnackbar from '~/components/partials/GeneralSnackbar.vue'
-export default {
-  components: {
-    SidebarNavigator,
-    GeneralSnackbar
-  },
-  data() {
-    return {
-      drawer: false,
-      currentPage: ''
-    }
-  },
-  computed: {
-    ...mapState(useConfigsStore, ['theme']),
-    ...mapState(useAuthStore, ['user', 'role']),
-    elevation() {
-      return this.drawer ? 2 : 0
-    },
-    loggedUser() {
-      return this.user as User
-    },
-    loggedStaff() {
-      return this.user as Staff
-    }
-  },
-  methods: {
-    ...mapActions(useConfigsStore, ['switchTheme', 'changeTheme'])
-    // changeTheme() {
-    //   this.switchTheme()
-    // }
-  }
-}
+
+const { user, role } = storeToRefs(useAuthStore())
+const { theme } = storeToRefs(useConfigsStore())
+const { switchTheme, changeTheme } = useConfigsStore()
+
+const drawer = ref(false)
+const currentPage = ref('')
+
+const elevation = computed(() => (drawer.value ? 2 : 0))
+const loggedUser = computed(() => user.value as User)
+const loggedStaff = computed(() => user.value as Staff)
 </script>
 <style lang="scss" scoped>
 .app-bar {

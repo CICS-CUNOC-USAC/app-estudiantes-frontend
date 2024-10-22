@@ -35,12 +35,6 @@
     </v-card-text>
     <v-card-actions>
       <v-row>
-        <!-- <v-col v-if="error" cols="12">
-          <span class="text-red d-flex align-center">
-            <v-icon class="mr-3"> mdi-alert-circle-outline </v-icon>
-            <span class="font-weight-medium text-body-2">{{ error }}</span>
-          </span>
-        </v-col> -->
         <v-col cols="12">
           <v-btn
             variant="tonal"
@@ -77,53 +71,38 @@
     </v-card-actions>
   </v-card>
 </template>
-<script lang="ts">
-export default {
-  props: {
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    admin: {
-      type: Boolean,
-      default: false
-    },
-    showSignup: {
-      type: Boolean,
-      default: true
-    }
-    // error: {
-    //   type: String,
-    //   default: () => null
-    // }
+<script lang="ts" setup>
+const { admin } = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
   },
-  emits: ['login'],
-  data() {
-    return {
-      email: '',
-      password: '',
-      showPassword: false
-    }
+  admin: {
+    type: Boolean,
+    default: false
   },
-  computed: {
-    linkColor() {
-      return this.admin
-        ? 'text-deep-orange-accent-4 nav-link--admin'
-        : 'text-orange-darken-3'
-    },
-    emailIcon() {
-      return this.admin ? 'mdi-shield-crown-outline' : 'mdi-email-outline'
-    }
-  },
-  methods: {
-    login() {
-      const newCredentials = {
-        email: this.email.toLowerCase().replace(/\s/g, '').trim(),
-        password: this.password
-      }
-      this.$emit('login', newCredentials)
-    }
+  showSignup: {
+    type: Boolean,
+    default: true
   }
+})
+
+const emit = defineEmits(['login'])
+
+const email = ref('')
+const password = ref('')
+const showPassword = ref(false)
+
+const emailIcon = computed(() => {
+  return admin ? 'mdi-shield-crown-outline' : 'mdi-email-outline'
+})
+
+const login = () => {
+  const newCredentials = {
+    email: email.value.toLowerCase().replace(/\s/g, '').trim(),
+    password: password.value
+  }
+  emit('login', newCredentials)
 }
 </script>
 <style scoped lang="scss">

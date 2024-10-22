@@ -103,74 +103,43 @@
     </v-list>
   </div>
 </template>
-<script lang="ts">
-import { mapWritableState } from 'pinia'
-import { useConfigsStore } from '~/stores/config'
+<script lang="ts" setup>
 import CICSLogo from './CICSLogo.vue'
-export default {
-  components: { CICSLogo },
-  emits: ['theme'],
-  setup() {
-    const { changeTheme } = useConfigsStore()
-    return { changeTheme }
-  },
-  data() {
-    return {
-      themeSwitch: true,
-      basicInfoItems: [
-        [
-          'mdi-post-outline',
-          'Publicaciones Oficiales',
-          '/portal/general/publicaciones'
-        ],
-        ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
-        [
-          'mdi-card-bulleted-settings-outline',
-          'Programas de curso',
-          '/portal/general/cursos/programas'
-        ],
-        [
-          'mdi-card-bulleted-settings-outline',
-          'Pensums',
-          '/portal/general/pensums'
-        ],
-        [
-          'mdi-help-box-outline',
-          'FAQ | Primer Ingreso',
-          '/portal/general/faq-primer-ingreso'
-        ],
-        ['mdi-help-box-outline', 'FAQ', '/portal/general/faq']
-      ] as const,
-      associations: [
-        ['mdi-account-group-outline', 'CICS', '/portal/asociaciones/cics'],
-        ['mdi-account-group-outline', 'AEIO', '/portal/asociaciones/aeio']
-      ],
-      resources: [
-        [
-          'mdi-file-document-multiple-outline',
-          'Manuales',
-          '/portal/recursos/manuales'
-        ],
-        [
-          'mdi-book-account-outline',
-          'Tesario',
-          '/portal/recursos/tesario',
-          true
-        ]
-      ] as const,
-      // theme: 'light',
-      tools: []
-    }
-  },
-  computed: {
-    ...mapWritableState(useConfigsStore, ['themeBoolean', 'theme'])
-  },
-  methods: {
-    // changeTheme() {
-    //   this.$emit('theme')
-    // }
-  }
-}
+
+const basicInfoItems = [
+  [
+    'mdi-post-outline',
+    'Publicaciones Oficiales',
+    '/portal/general/publicaciones'
+  ],
+  ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
+  [
+    'mdi-card-bulleted-settings-outline',
+    'Programas de curso',
+    '/portal/general/cursos/programas'
+  ],
+  ['mdi-card-bulleted-settings-outline', 'Pensums', '/portal/general/pensums'],
+  [
+    'mdi-help-box-outline',
+    'FAQ | Primer Ingreso',
+    '/portal/general/faq-primer-ingreso'
+  ],
+  ['mdi-help-box-outline', 'FAQ', '/portal/general/faq']
+] as const
+
+const associations = [
+  ['mdi-account-group-outline', 'CICS', '/portal/asociaciones/cics'],
+  ['mdi-account-group-outline', 'AEIO', '/portal/asociaciones/aeio']
+]
+
+const resources = [
+  [
+    'mdi-file-document-multiple-outline',
+    'Manuales',
+    '/portal/recursos/manuales'
+  ],
+  ['mdi-book-account-outline', 'Tesario', '/portal/recursos/tesario', true]
+] as const
 </script>
 <style scoped lang="scss">
 .active-item {

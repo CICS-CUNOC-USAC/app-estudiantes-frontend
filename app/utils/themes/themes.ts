@@ -1,4 +1,4 @@
-import type { ThemeDefinition } from 'vuetify/lib/framework.mjs'
+import type { ThemeDefinition } from 'vuetify'
 
 // preview foregreound is used in the preview component/selector
 // and foreground is the same as primary
