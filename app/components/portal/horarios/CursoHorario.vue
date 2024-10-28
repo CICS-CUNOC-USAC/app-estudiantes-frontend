@@ -22,7 +22,7 @@
               </v-row>
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ 'docente' + curso.classroom_id }}
+                  {{ curso.profesor.name }}
                 </v-col>
               </v-row>
               <v-row>
@@ -59,7 +59,7 @@ export default {
       } else if (semester == 5) {
         return 'card_color_smoth_green'
       } else if (semester == 6) {
-        return 'card_color_orage'
+        return 'card_color_orange'
       } else if (semester == 8) {
         return 'card_color_magenta'
       } else if (semester == 9) {
