@@ -889,55 +889,6 @@ const tmp_schedules: Array<Course> = [
     }
   },
   {
-    id: 16,
-    career_code: 58,
-    course_code: '2819',
-    section_id: 1,
-    classroom_id: 10,
-    periods: [
-      {
-        weekday_id: 1,
-        start_time: '19:30',
-        end_time: '20:20',
-        weekday: {
-          name: 'Lunes'
-        }
-      },
-      {
-        weekday_id: 3,
-        start_time: '19:30',
-        end_time: '20:20',
-        weekday: {
-          name: 'Miercoles'
-        }
-      },
-      {
-        weekday_id: 5,
-        start_time: '19:30',
-        end_time: '20:20',
-        weekday: {
-          name: 'Viernes'
-        }
-      }
-    ],
-    career_course: {
-      semester: 8,
-      field: 3,
-      course: {
-        name: 'Sistemas Operativos 2'
-      }
-    },
-    profesor: {
-      name: 'Ing. Otto Soto'
-    },
-    section: {
-      name: 'A'
-    },
-    classroom: {
-      name: 'Hugo Pineda'
-    }
-  },
-  {
     id: 17,
     career_code: 58,
     course_code: '2834',

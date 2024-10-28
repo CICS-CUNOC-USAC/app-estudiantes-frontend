@@ -59,7 +59,7 @@ export default {
       } else if (semester == 5) {
         return 'card_color_smoth_green'
       } else if (semester == 6) {
-        return 'card_color_orage'
+        return 'card_color_orange'
       } else if (semester == 8) {
         return 'card_color_magenta'
       } else if (semester == 9) {
