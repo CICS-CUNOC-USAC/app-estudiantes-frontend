@@ -25,10 +25,7 @@
           style="padding: 0px"
         >
           <CursoHorario
-            v-if="
-              schedule.periods[0].hour.start_time == hour.start_time &&
-              schedule.classroom_id == classroom.id
-            "
+            v-if="setCurseVisible(schedule, classroom.id, hour.start_time)"
             :curso="schedule"
           />
         </v-container>
@@ -46,6 +43,25 @@ defineProps<{
   classrooms: Array<Classroom>
   schedules: Array<Course>
 }>()
+
+function setCurseVisible(
+  schedule: Course,
+  classroom_id: number,
+  hour_start: string
+): boolean {
+  const same_classroom = Number(schedule.classroom_id) === Number(classroom_id)
+  const same_hour = periodsHasInitHour(schedule.periods, hour_start)
+  return same_classroom && same_hour
+}
+
+function periodsHasInitHour(periods: Array<Hour>, hour_start: string): boolean {
+  for (const period of periods) {
+    if (period.start_time === hour_start) {
+      return true
+    }
+  }
+  return false
+}
 
 /*
 export default {
