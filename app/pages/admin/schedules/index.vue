@@ -10,10 +10,15 @@
     </p>
     <v-row align="center" justify="start">
       <v-col cols="12" md="3">
-        <v-btn block @click="console.log('crear horario')">
-          <v-icon>mdi-plus</v-icon>
-          Nuevo horario
-        </v-btn>
+        <AddScheduleDialog
+          #="{ open }"
+          @new-item="addNewSchedule($event as SchedulePayload)"
+        >
+          <v-btn block :disabled="loading" @click="open">
+            <v-icon>mdi-plus</v-icon>
+            Agregar Horario
+          </v-btn>
+        </AddScheduleDialog>
       </v-col>
       <!--
       <v-col cols="12" md="3">
@@ -40,6 +45,7 @@
   </main>
 </template>
 <script setup lang="ts">
+import AddScheduleDialog from '~/components/dialogs/admin/schedules/AddScheduleDialog.vue'
 import ClassScheduleV1 from '~/components/portal/horarios/ClassScheduleV1.vue'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 
@@ -48,6 +54,8 @@ definePageMeta({
 })
 
 const name = ref('')
+//const { responseMeta } = storeToRefs(useAdminSchedulesStore())
+const loading = ref(false)
 
 const { data: hours, pending: loadingHours } =
   useCustomLazyFetch<Array<Hour>>(`hours`)
@@ -57,5 +65,10 @@ const { data: classrooms, pending: loadingClassrooms } =
 
 const { data: schedules, pending: loadingSchedules } =
   useCustomLazyFetch<Array<Course>>(`schedules/courses`)
+
+const addNewSchedule = async (item: SchedulePayload) => {
+  //await createManual(item)
+  //await fetchAllManuals()
+}
 </script>
 <style lang="scss" scoped></style>
