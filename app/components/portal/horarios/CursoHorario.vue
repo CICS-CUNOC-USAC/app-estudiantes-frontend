@@ -22,7 +22,7 @@
               </v-row>
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.profesor.name }}
+                  {{ curso.profesor?.name ?? 'Profesor Pendiente' }}
                 </v-col>
               </v-row>
               <v-row>

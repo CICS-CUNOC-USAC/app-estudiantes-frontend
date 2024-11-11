@@ -1,7 +1,7 @@
 <template>
   <v-table class="elevation-1 rounded-lg" height="650px">
     <tr>
-      <th class="header" rowspan="2" style="width: 150px">Hora</th>
+      <th class="header" rowspan="2" style="width: 200px">Hora</th>
       <th
         :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
         class="header"
@@ -10,7 +10,11 @@
       </th>
     </tr>
     <tr>
-      <th v-for="classroom in classrooms" :key="classroom.id" class="header">
+      <th
+        v-for="classroom in filterClassrooms(classrooms, schedules)"
+        :key="classroom.id"
+        class="header"
+      >
         {{ classroom.name }}
       </th>
     </tr>
@@ -36,7 +40,12 @@
 
 <script setup lang="ts">
 import CursoHorario from '~/components/portal/horarios/CursoHorario.vue'
-import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
+import type {
+  Classroom,
+  Course,
+  Hour,
+  Period
+} from '~/utils/types/schedule-courses'
 
 defineProps<{
   hours: Array<Hour>
@@ -54,13 +63,27 @@ function setCurseVisible(
   return same_classroom && same_hour
 }
 
-function periodsHasInitHour(periods: Array<Hour>, hour_start: string): boolean {
+function periodsHasInitHour(
+  periods: Array<Period>,
+  hour_start: string
+): boolean {
   for (const period of periods) {
     if (period.start_time === hour_start) {
       return true
     }
   }
   return false
+}
+
+function filterClassrooms(
+  classrooms: Array<Classroom>,
+  schedules: Array<Course>
+): Array<Classroom> {
+  return classrooms.filter((classroom) => {
+    return schedules.some((schedule) => {
+      return Number(schedule.classroom_id) === Number(classroom.id)
+    })
+  })
 }
 
 /*

@@ -1,6 +1,7 @@
 <template>
   <main>
-    <h1 class="mb-4">Horario de Clases V1</h1>
+    <!-- {{ schedules }} -->
+    <h1 class="mb-4">Ingenieria en Sistemas</h1>
     <!-- <v-container
       v-if="!loadingHours && !loadingClassrooms && !loadingSchedules"
     >
@@ -10,14 +11,21 @@
         :schedules="schedules!"
       />
     </v-container> -->
-
-    <v-container>
+    <v-container v-if="!loadingClassrooms && !loadingSchedules">
       <ClassScheduleV1
         :hours="tmp_hours!"
-        :classrooms="tmp_classrooms!"
-        :schedules="tmp_schedules!"
+        :classrooms="classrooms!"
+        :schedules="schedules!"
       />
     </v-container>
+
+    <!-- <v-container>
+      <ClassScheduleV1
+        :hours="tmp_hours!"
+        :classrooms="classrooms!"
+        :schedules="schedules!"
+      />
+    </v-container> -->
   </main>
 </template>
 
@@ -28,15 +36,16 @@ import ClassScheduleV1 from '~/components/portal/horarios/ClassScheduleV1.vue'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 
 const tmp_hours: Array<Hour> = [
-  { id: 1, start_time: '13:40', end_time: '14:30' },
-  { id: 2, start_time: '14:30', end_time: '15:20' },
-  { id: 3, start_time: '15:20', end_time: '16:10' },
-  { id: 4, start_time: '16:10', end_time: '17:00' },
-  { id: 5, start_time: '17:00', end_time: '17:50' },
-  { id: 6, start_time: '17:50', end_time: '18:40' },
-  { id: 7, start_time: '18:40', end_time: '19:30' },
-  { id: 8, start_time: '19:30', end_time: '20:20' },
-  { id: 9, start_time: '20:20', end_time: '21:10' }
+  { id: 1, start_time: '13:00', end_time: '13:40' },
+  { id: 2, start_time: '13:40', end_time: '14:30' },
+  { id: 3, start_time: '14:30', end_time: '15:20' },
+  { id: 4, start_time: '15:20', end_time: '16:10' },
+  { id: 5, start_time: '16:10', end_time: '17:00' },
+  { id: 6, start_time: '17:00', end_time: '17:50' },
+  { id: 7, start_time: '17:50', end_time: '18:40' },
+  { id: 8, start_time: '18:40', end_time: '19:30' },
+  { id: 9, start_time: '19:30', end_time: '20:20' },
+  { id: 10, start_time: '20:20', end_time: '21:10' }
 ]
 
 const tmp_classrooms: Array<Classroom> = [
@@ -1038,7 +1047,7 @@ const tmp_schedules: Array<Course> = [
 ]
 
 const { data: hours, pending: loadingHours } =
-  useCustomLazyFetch<Array<Hour>>(`hours`)
+  useCustomLazyFetch<Array<Hour>>(` `)
 
 const { data: classrooms, pending: loadingClassrooms } =
   useCustomLazyFetch<Array<Classroom>>(`classrooms`)

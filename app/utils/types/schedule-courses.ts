@@ -18,11 +18,8 @@ export type ScheduleLine = {
 
 export type Period = {
   weekday_id: number
-  hour_id: number
-  hour: {
-    start_time: string
-    end_time: string
-  }
+  start_time: string
+  end_time: string
   weekday: {
     name: string
   }
@@ -57,6 +54,9 @@ export type Course = {
     name: string
   }
   classroom: {
+    name: string
+  }
+  profesor?: {
     name: string
   }
 }
