@@ -11,7 +11,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import CCard from '../cards/CCard.vue'
+import CCard from '../primitives/card/CCard.vue';
 
 const { data } = useFetch<
   {

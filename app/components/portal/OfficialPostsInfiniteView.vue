@@ -10,12 +10,11 @@
           sm="12"
           lg="6"
         >
-          <InfoCard
-            full-height
+          <CCard
             :title="item.title"
             :description="item.description"
-            :route="`/portal/post/${item.link}`"
-            :subtitle="item.posted_since"
+            :link="`/portal/post/${item.link}`"
+            :small="item.posted_since"
           />
         </v-col>
       </v-row>
@@ -23,7 +22,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import InfoCard from '../cards/InfoCard.vue'
+import CCard from '../primitives/card/CCard.vue'
 
 const page = ref(1)
 const { data } = useFetch<
