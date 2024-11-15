@@ -4,21 +4,21 @@
     :as="props.to ? NuxtLink : 'BUTTON'"
     class="rounded-lg inline-flex gap-x-2 outline outline-1 outline-black/0 px-3.5 py-1.5 text-sm font-semibold justify-center items-center transition-all text-white active:translate-x-0 active:translate-y-0 active:shadow-none duration-50 ease-out select-none"
     :class="{
-      'outline-black/100 -translate-x-0.5 -translate-y-0.5 dark:shadow-[3px_3px_0_0_var(--p-surface-50)] shadow-[3px_3px_0_0_var(--p-surface-900)]': props.variant !== 'text' && props.variant !== 'link',
+      'outline-surface-950 dark:outline-surface-200 -translate-x-0.5 -translate-y-0.5 dark:shadow-[3px_3px_0_0_var(--p-surface-200)] shadow-[3px_3px_0_0_var(--p-surface-900)]': props.variant !== 'text' && props.variant !== 'link',
       'bg-primary-600 hover:bg-primary-500 focus:bg-primary-400': !props.severity && !props.outlined,
       'bg-red-600 hover:bg-red-500 text-red-100': props.severity === 'danger',
       'bg-green-600 hover:bg-green-500 text-green-100': props.severity === 'success',
       'bg-yellow-600 hover:bg-yellow-500 text-yellow-100': props.severity === 'warn',
       'bg-blue-600 hover:bg-blue-500 text-blue-100': props.severity === 'info',
       'bg-zinc-600 hover:bg-zinc-500 text-zinc-100': props.severity === 'secondary',
-      'bg-transparent text-color border-surface-900 dark:border-surface-50': props.outlined,
+      'bg-transparent text-color focus:bg-surface-50/20 dark:focus:bg-surface-600/40': props.outlined,
       'flex-row-reverse': props.iconPos === 'right',
       'flex-row': props.iconPos === 'left',
       'flex-col-reverse gap-y-1': props.iconPos === 'bottom',
       'flex-col gap-y-1': props.iconPos === 'top',
       'opacity-65 pointer-events-none': props.disabled,
       'opacity-85 pointer-events-none': props.loading,
-      'hover:outline hover:outline-black bg-transparent shadow-none !text-primary !bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5': props.variant === 'text',
+      'hover:outline-surface-950 hover:dark:outline-surface-200 bg-transparent shadow-none !text-primary !bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5': props.variant === 'text',
       'hover:underline !bg-transparent shadow-none !text-primary   active:translate-x-0.5 active:translate-y-0.5': props.variant === 'link',
     }"
     unstyled

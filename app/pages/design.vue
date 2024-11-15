@@ -1,12 +1,12 @@
 <template>
-  <div class="space-y-5 px-8 py-4">
+  <div class="space-y-5 lg:px-8 lg:py-4">
     <h1 class="text-2xl font-bold">
       Componentes del <span class="italic">Design System</span> (Página
       temporal)
     </h1>
 
     <div
-      class="border border-surface-950/45 bg-surface-50 p-8 dark:bg-neutral-700"
+      class="border border-surface-950/45 bg-surface-50 lg:p-8 p-4 dark:bg-neutral-700 rounded"
     >
       <h2 class="text-2xl font-semibold">Botones</h2>
       <p class="text-primary-emphasis-alt">Botones de la aplicación</p>
@@ -148,7 +148,7 @@
     </div>
 
     <div
-      class="border border-surface-950/45 bg-surface-50 p-8 dark:bg-neutral-700"
+      class="border border-surface-950/45 bg-surface-50 lg:p-8 p-4 dark:bg-neutral-700 rounded"
     >
       <h2 class="mt-4 text-2xl font-semibold">Tarjetas</h2>
       <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -216,7 +216,7 @@
           title="Titulo"
           small="Texto pequeño"
           interactive
-          class="col-span-2"
+          class="lg:col-span-2"
         >
           <template #content>
             <div class="space-y-4">
@@ -260,7 +260,7 @@
         <CCardAlt
           title="Titulo"
           small="Texto pequeño"
-          class="col-span-2"
+          class="lg:col-span-2"
         >
           <template #content>
             <div class="space-y-4">

@@ -3,10 +3,10 @@
     :is="to ? NuxtLink : 'div'"
     :to
     unstyled
-    class="flex h-full flex-col overflow-hidden rounded-xl border border-surface-950/45 bg-surface-50 p-5 !text-primary duration-300 ease-in-out dark:border-surface-400 dark:bg-surface-800"
+    class="flex h-full flex-col overflow-hidden rounded-xl border border-surface-950/45 bg-surface-50 p-5 !text-primary duration-300 ease-in-out dark:border-surface-300 dark:bg-surface-800"
     :class="{
       'p-0': noSpacing,
-      'hover:translate-x-0 hover:translate-y-0 hover:bg-surface-100 hover:shadow-none dark:hover:bg-surface-700':
+      'hover:translate-x-0 hover:translate-y-0 hover:bg-surface-100 hover:shadow-none dark:hover:bg-surface-900':
         interactive,
       'cursor-pointer': to,
       '-translate-x-0.5 -translate-y-0.5 shadow-[2px_3px_0_0_var(--p-surface-800)] dark:shadow-[2px_3px_0_0_var(--p-surface-300)]':
