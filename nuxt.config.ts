@@ -1,8 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import { AuraBase } from './app/utils/themes/pThemes'
+import { definePreset } from '@primevue/themes'
+import Aura from '@primevue/themes/aura'
 
 export default defineNuxtConfig({
+  compatibilityDate: '2024-11-15',
   srcDir: 'app/',
   build: {
     transpile: ['vuetify']
@@ -52,9 +55,10 @@ export default defineNuxtConfig({
     components: {
       prefix: 'P'
     },
+    importTheme: { from: '@/themes/pThemes.ts' },
     options: {
       theme: {
-        preset: AuraBase,
+        // preset: AuraBase,
         options: {
           cssLayer: {
             name: 'primevue',

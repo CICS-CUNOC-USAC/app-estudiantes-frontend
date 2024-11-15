@@ -36,35 +36,28 @@
     <v-card-actions>
       <v-row>
         <v-col cols="12">
-          <v-btn
-            variant="tonal"
-            width="100%"
+          <CButton
+            class="w-full"
             :loading="loading"
-            :color="admin ? 'red' : 'accent-4'"
+            :severity="admin ? 'contrast' : ''"
             @click="login"
-          >
-            Iniciar sesión
-          </v-btn>
+            label="Iniciar sesión"
+          />
         </v-col>
         <v-col v-if="showSignup" cols="12">
           <span class="d-flex align-center">
             ¿No tienes una cuenta?
-            <v-btn to="/sign-up" class="ml-1" variant="plain" :ripple="false">
-              <strong>Regístrate</strong>
-            </v-btn>
+            <CButton to="/sign-up" variant="link" label="Regístrate" />
           </span>
         </v-col>
         <v-col cols="12">
           <span>
-            <v-btn
+            <CButton
               to="/"
-              class="px-0"
-              variant="plain"
-              :ripple="false"
-              prepend-icon="mdi-arrow-left"
-            >
-              <strong>Regresar al portal</strong>
-            </v-btn>
+              variant="text"
+              icon="lucide:arrow-left"
+              label="Regresar al portal"
+            />
           </span>
         </v-col>
       </v-row>
@@ -72,6 +65,8 @@
   </v-card>
 </template>
 <script lang="ts" setup>
+import CButton from '~/components/primitives/button/CButton.vue';
+
 const { admin } = defineProps({
   loading: {
     type: Boolean,

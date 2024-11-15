@@ -7,6 +7,8 @@
 // }
 @use 'vuetify/settings' with (
   $reset: false,
+  $color-pack: false,
+  $utilities: false,
 );
 
 :root {
