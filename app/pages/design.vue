@@ -150,58 +150,156 @@
     <div
       class="border border-surface-950/45 bg-surface-50 p-8 dark:bg-neutral-700"
     >
-    <h2 class="mt-4 text-2xl font-semibold">Tarjetas</h2>
+      <h2 class="mt-4 text-2xl font-semibold">Tarjetas</h2>
       <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
         <CCardAlt
           title="Titulo"
           description="Tarjeta por defecto"
           small="Texto pequeño"
-        />
+          ><template #footer>
+            <span
+              class="flex items-center gap-x-2 self-end text-sm font-semibold"
+              >Ver más
+              <Icon
+                name="lucide:arrow-right"
+                class="inline-block duration-300 ease-in-out"
+              />
+            </span> </template
+        ></CCardAlt>
         <CCardAlt
           title="Titulo"
           description="Tarjeta elevada no interactiva"
           small="Texto pequeño"
           elevated
-        />
+          ><template #footer>
+            <span
+              class="flex items-center gap-x-2 self-end text-sm font-semibold"
+              >Ver más
+              <Icon
+                name="lucide:arrow-right"
+                class="inline-block duration-300 ease-in-out"
+              />
+            </span> </template
+        ></CCardAlt>
         <CCardAlt
           title="Titulo"
           description="Tarjeta interactiva"
           small="Texto pequeño"
           interactive
-        />
+          ><template #footer>
+            <span
+              class="flex items-center gap-x-2 self-end text-sm font-semibold"
+              >Ver más
+              <Icon
+                name="lucide:arrow-right"
+                class="inline-block duration-300 ease-in-out"
+              />
+            </span> </template
+        ></CCardAlt>
         <CCardAlt
           title="Titulo"
           description="Tarjeta habilitada con link"
           small="Texto pequeño"
           interactive
           to="/design"
-        />
+          ><template #footer>
+            <span
+              class="flex items-center gap-x-2 self-end text-sm font-semibold"
+              >Ver más
+              <Icon
+                name="lucide:arrow-right"
+                class="inline-block duration-300 ease-in-out"
+              />
+            </span> </template
+        ></CCardAlt>
         <CCardAlt
           title="Titulo"
           small="Texto pequeño"
           interactive
-          to="/design"
+          class="col-span-2"
         >
-      <template #content>
-        <div class="space-y-4">
-          <p>
-            Tarjeta con contenido personalizado
-          </p>
-          <img
-          src="https://cataas.com/cat"
-          alt="Placeholder"
-          class="w-full h-48 object-cover rounded-lg"
-          />
-          <code class="block text-xs text-gray-500">
-            <span class="text-white bg-slate-800 py-1.5 px-2">$ npm install cat</span>
-          </code>
-          <span class="block pb-4 text-xs tracking-tight text-gray-500">
-            <Icon name="lucide:calendar-clock" class="mr-1 inline-block !text-sm" />
-            12/12/2021
-          </span>
-        </div>
-      </template>
-      </CCardAlt>
+          <template #content>
+            <div class="space-y-4">
+              <p>Tarjeta con contenido personalizado</p>
+              <img
+                src="https://cataas.com/cat"
+                alt="Placeholder"
+                class="h-48 w-full rounded-lg object-cover"
+              />
+              <code class="block text-xs text-gray-500">
+                <span class="bg-slate-800 px-2 py-1.5 text-white"
+                  >$ npm install cat</span
+                >
+              </code>
+              <span class="block pb-4 text-xs tracking-tight text-gray-500">
+                <Icon
+                  name="lucide:calendar-clock"
+                  class="mr-1 inline-block !text-sm"
+                />
+                12/12/2021
+              </span>
+            </div>
+          </template>
+          <template #footer>
+            <div class="flex items-center gap-x-2 self-end">
+              <CButton
+                label="Ver más"
+                icon="lucide:arrow-right"
+                variant="text"
+                class="flex-1 text-xs"
+              />
+              <CButton
+                label="No me interesa"
+                icon="lucide:circle-x"
+                variant="text"
+                class="flex-1 text-xs"
+              />
+            </div>
+          </template>
+        </CCardAlt>
+        <CCardAlt
+          title="Titulo"
+          small="Texto pequeño"
+          class="col-span-2"
+        >
+          <template #content>
+            <div class="space-y-4">
+              <p>Tarjeta con contenido personalizado</p>
+              <img
+                src="https://cataas.com/cat"
+                alt="Placeholder"
+                class="h-48 w-full rounded-lg object-cover"
+              />
+              <code class="block text-xs text-gray-500">
+                <span class="bg-slate-800 px-2 py-1.5 text-white"
+                  >$ npm install cat</span
+                >
+              </code>
+              <span class="block pb-4 text-xs tracking-tight text-gray-500">
+                <Icon
+                  name="lucide:calendar-clock"
+                  class="mr-1 inline-block !text-sm"
+                />
+                12/12/2021
+              </span>
+            </div>
+          </template>
+          <template #footer>
+            <div class="flex items-center gap-x-2 self-end">
+              <CButton
+              label="No me interesa"
+              outlined
+              icon="lucide:circle-x"
+              class="flex-1 text-xs"
+              />
+              <CButton
+                label="Ver más"
+                icon="lucide:arrow-right"
+                class="flex-1 text-xs h-full"
+              />
+            </div>
+          </template>
+        </CCardAlt>
       </div>
     </div>
   </div>

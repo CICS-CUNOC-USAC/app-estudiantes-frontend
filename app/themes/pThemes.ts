@@ -168,7 +168,7 @@ export const AuraBase = definePreset(Aura, {
     colorScheme: {
       light: {
         primary: {
-          color: '{zinc.950}',
+          color: '{slate.950}',
           inverseColor: '#ffffff',
           hoverColor: '{zinc.900}',
           activeColor: '{zinc.800}'
@@ -182,7 +182,7 @@ export const AuraBase = definePreset(Aura, {
       },
       dark: {
         primary: {
-          color: '{zinc.50}',
+          color: '{slate.50}',
           inverseColor: '{zinc.950}',
           hoverColor: '{zinc.100}',
           activeColor: '{zinc.200}'
