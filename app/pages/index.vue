@@ -1,6 +1,11 @@
 <template>
   <v-container>
+    <CButton />
     <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
+    <!-- <PButton
+      label="CICS Boton"
+      class="relative inline-flex items-center justify-center gap-x-2 rounded border border-black bg-blue-200 px-5 py-2.5 text-sm font-medium text-black transition-none hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-blue-300 hover:shadow-[3px_3px_0_0_#000000] focus:-translate-x-0.5 focus:-translate-y-0.5 focus:bg-blue-300 focus:shadow-[3px_3px_0_0_#000000] active:translate-x-0 active:translate-y-0 active:shadow-none"
+    /> -->
 
     <div class="greetings">
       <h1>Portal - Ingenieria CUNOC</h1>
@@ -151,10 +156,12 @@
 <script lang="ts">
 import InfoCard from '@/components/cards/InfoCard.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
+import CButton from '~/components/primitives/button/CButton.vue'
 export default {
   components: {
     InfoCard,
-    OfficialPostsView
+    OfficialPostsView,
+    CButton
   },
   props: ['theme'],
   data() {

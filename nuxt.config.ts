@@ -1,5 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import { AuraBase } from './app/utils/themes/pThemes'
 
 export default defineNuxtConfig({
   srcDir: 'app/',
@@ -26,13 +27,17 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     '@nuxt/eslint',
     '@nuxtjs/google-fonts',
+    '@nuxtjs/tailwindcss',
+    '@primevue/nuxt-module',
+    '@nuxt/fonts',
+    '@nuxt/icon',
+    '@vueuse/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error vite-plugin-vuetify
         config.plugins.push(vuetify({ autoImport: true }))
       })
-    },
-    '@vueuse/nuxt'
+    }
   ],
   vite: {
     define: {
@@ -44,7 +49,33 @@ export default defineNuxtConfig({
       }
     }
   },
+  primevue: {
+    components: {
+      prefix: 'P'
+    },
+    options: {
+      theme: {
+        preset: AuraBase,
+        options: {
+          cssLayer: {
+            name: 'primevue',
+            order: 'tailwind-base, primevue, tailwind-utilities'
+          }
+        }
+      }
+    }
+  },
   plugins: ['~/plugins/vuetify.ts'],
+  fonts: {
+    defaults: {
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    },
+    families: [
+      { name: 'Geist Sans', provider: 'fontsource' },
+      { name: 'Geist Mono', provider: 'fontsource' }
+    ]
+    // styles: ['normal', 'italic'],
+  },
   googleFonts: {
     display: 'swap',
     families: {

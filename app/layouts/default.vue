@@ -1,10 +1,8 @@
 <template>
-  <v-app :theme="theme">
-    <v-app-bar class="app-bar" :elevation="elevation">
+  <main>
+    <div class="app-bar" :elevation="elevation">
       <v-btn icon="mdi-menu" @click="drawer = !drawer" />
-      <v-app-bar-title class="mt-n1">
-        <strong>Portal </strong> - CICS APP
-      </v-app-bar-title>
+      <h1 class="mt-n1"><strong>Portal </strong> - CICS APP</h1>
       <div v-if="!user" class="app-bar__user-info">
         <!-- Dashboard action (regular and admin) -->
         <v-tooltip text="Iniciar sesión" location="bottom">
@@ -72,24 +70,24 @@
           </template>
         </v-tooltip>
       </div>
-    </v-app-bar>
+    </div>
 
-    <v-navigation-drawer v-model="drawer" disable-resize-watcher width="350">
-      <SidebarNavigator />
-    </v-navigation-drawer>
+    <div disable-resize-watcher width="350">
+      <!-- <SidebarNavigator /> -->
+    </div>
 
-    <v-main class="d-flex flex-column">
-      <v-container id="appcont" class="page-v-container" style="flex-grow: 1">
+    <div class="d-flex flex-column">
+      <div id="appcont" class="page-v-container" style="flex-grow: 1">
         <NuxtPage />
-      </v-container>
+      </div>
 
-      <v-footer style="flex-grow: 0" class="pa-4">
+      <!-- <v-footer style="flex-grow: 0" class="pa-4">
         <v-col class="text-center" cols="12">
           <strong>CICS</strong> — {{ new Date().getFullYear() }}
         </v-col>
-      </v-footer>
-    </v-main>
-  </v-app>
+      </v-footer> -->
+    </div>
+  </main>
 </template>
 
 <script lang="ts" setup>
@@ -101,7 +99,6 @@ import { type Staff } from '~/stores/staff-auth'
 
 const { user, role } = storeToRefs(useAuthStore())
 const { theme } = storeToRefs(useConfigsStore())
-const { switchTheme, changeTheme } = useConfigsStore()
 
 const drawer = ref(false)
 const currentPage = ref('')

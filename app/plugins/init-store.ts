@@ -5,5 +5,5 @@ export default defineNuxtPlugin(async (_nuxtApp) => {
   const authStore = useAuthStore()
   const configStore = useConfigsStore()
   await authStore.fetchAuth()
-  configStore.initTheme()
+  // configStore.initTheme()
 })

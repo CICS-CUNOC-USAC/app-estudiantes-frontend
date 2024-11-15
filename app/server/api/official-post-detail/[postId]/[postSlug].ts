@@ -34,7 +34,6 @@ export default defineEventHandler(async (event) => {
         // img.setAttribute('src', `${BASE_URL}/carpetas/imagenes/${src}`)
         img.setAttribute('src', `https://wsrv.nl/?url=${newSrc}`)
       }
-      console.log(img.getAttribute('src'))
     }
   })
 
