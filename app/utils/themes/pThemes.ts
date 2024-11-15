@@ -5,9 +5,6 @@ const commonOptionsDefaults = {
   // darkModeSelector: '.my-app-dark'
 }
 const commonComponentsDefaults = {
-  button: {
-    borderRadius: 'calc(0.75rem - 2px) !important'
-  },
   menu: {
     background: 'transparent !important'
   },

@@ -33,10 +33,12 @@
 //   }
 // })
 </script>
-<style lang="scss">
+<style lang="postcss">
 :root {
-  // color-scheme: light dark;
+  @apply dark:bg-neutral-800 bg-white;
 }
+</style>
+<style lang="scss">
 /*
 Styles used for page and layout transitions - Start
 *-active classes control the transition duration and timing function

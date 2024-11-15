@@ -25,7 +25,6 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
-    '@nuxt/eslint',
     '@nuxtjs/google-fonts',
     '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',

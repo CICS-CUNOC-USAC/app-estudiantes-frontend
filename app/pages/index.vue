@@ -1,11 +1,31 @@
 <template>
   <v-container>
-    <CButton />
+    <div class="flex gap-4 flex-wrap">
+      <CButton class="h-min" label="Iniciar sesión" icon="lucide:log-in" icon-pos="left"/>
+      <CButton class="h-min" severity="danger" label="Danger" icon="lucide:octagon-alert" icon-pos="left"/>
+      <CButton class="h-min" severity="warn" label="Warn" icon="lucide:triangle-alert" icon-pos="right"/>
+      <CButton class="h-min" severity="info" label="Información" icon="lucide:info" icon-pos="bottom"/>
+      <CButton class="h-min" severity="success" label="Exito" icon="lucide:check" icon-pos="top"/>
+      <CButton class="h-min" severity="secondary" label="Secondary"/>
+      <CButton class="h-min" outlined label="Outlined"/>
+
+      <CButton loading class="h-min" label="Iniciar sesión" icon="lucide:log-in" icon-pos="left"/>
+      <CButton loading class="h-min" severity="danger" label="Danger" icon="lucide:octagon-alert" icon-pos="left"/>
+      <CButton loading class="h-min" severity="warn" label="Warn" icon="lucide:triangle-alert" icon-pos="right"/>
+      <CButton loading class="h-min" severity="info" label="Información" icon="lucide:info" icon-pos="bottom"/>
+      <CButton loading class="h-min" severity="success" label="Exito" icon="lucide:check" icon-pos="top"/>
+      <CButton loading class="h-min" severity="secondary" label="Secondary"/>
+      <CButton loading class="h-min" outlined label="Outlined"/>
+
+      <CButton disabled class="h-min" label="Desactivado" icon="lucide:log-in" icon-pos="left"/>
+      <CButton disabled class="h-min" severity="danger" label="Desactivado" icon="lucide:octagon-alert" icon-pos="left"/>
+      <CButton disabled class="h-min" severity="warn" label="Desactivado" icon="lucide:triangle-alert" icon-pos="right"/>
+      <CButton disabled class="h-min" severity="info" label="Desactivado" icon="lucide:info" icon-pos="bottom"/>
+      <CButton disabled class="h-min" severity="success" label="Desactivado" icon="lucide:check" icon-pos="top"/>
+      <CButton disabled class="h-min" severity="secondary" label="Desactivado"/>
+      <CButton disabled class="h-min" outlined label="Desactivado"/>
+    </div>
     <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
-    <!-- <PButton
-      label="CICS Boton"
-      class="relative inline-flex items-center justify-center gap-x-2 rounded border border-black bg-blue-200 px-5 py-2.5 text-sm font-medium text-black transition-none hover:-translate-x-0.5 hover:-translate-y-0.5 hover:bg-blue-300 hover:shadow-[3px_3px_0_0_#000000] focus:-translate-x-0.5 focus:-translate-y-0.5 focus:bg-blue-300 focus:shadow-[3px_3px_0_0_#000000] active:translate-x-0 active:translate-y-0 active:shadow-none"
-    /> -->
 
     <div class="greetings">
       <h1>Portal - Ingenieria CUNOC</h1>
@@ -153,128 +173,102 @@
     </div>
   </v-container>
 </template>
-<script lang="ts">
+<script setup lang="ts">
 import InfoCard from '@/components/cards/InfoCard.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
-export default {
-  components: {
-    InfoCard,
-    OfficialPostsView,
-    CButton
-  },
-  props: ['theme'],
-  data() {
-    return {
-      sections: {
-        basicInfo: [
-          {
-            title: 'Horarios de Semestre',
-            subtitle: 'Para organizarte',
-            description:
-              'Horarios de clases y laboratorios del semestre en curso',
-            route: '/portal/general/horarios',
-            img: new URL('@/assets/img/horario.jpg', import.meta.url).href
-          },
-          {
-            title: 'Pensums de Estudio',
-            subtitle: 'Para planificar',
-            description:
-              ' Recopilatorio de los pensums de las diferentes carreras de la division, y herramienta para calcular diferentes datos acerca de tu pensum.',
-            route: '/portal/general/pensums',
-            img: new URL('@/assets/img/pensum.jpeg', import.meta.url).href
-          },
-          {
-            title: 'FAQ | Primer Ingreso',
-            subtitle: 'Para ayudarte al inicio',
-            description:
-              'Preguntas Frecuentes para los estudiantes de primer ingreso',
-            route: '/portal/general/faq-primer-ingreso',
-            img: new URL('@/assets/img/faq.jpg', import.meta.url).href
-          },
-          {
-            title: 'FAQ',
-            subtitle: 'Para ayudarte',
-            description: 'Preguntas Frecuentes para estudiantes de reingreso',
-            route: '/portal/general/faq',
-            img: new URL('@/assets/img/faq.jpg', import.meta.url).href
-          }
-        ],
-        associations: [
-          {
-            title: 'CICS',
-            subtitle: 'Acerca del comite',
-            description:
-              'Informacion relevante del Comite de Ingenieria en Ciencias y Sistemas',
-            route: '/portal/asociaciones/cics',
-            img: new URL('@/assets/img/cics.png', import.meta.url).href
-          },
-          {
-            title: 'AEIO',
-            subtitle: 'Acerca de la asociacion',
-            description:
-              'Informacion relevante de la Asociacion de Estudiantes de Ingenieria de Occidente',
-            route: '/portal/asociaciones/aeio',
-            img: new URL('@/assets/img/aeio.jpg', import.meta.url).href
-          }
-        ],
-        resources: [
-          {
-            title: 'Manuales',
-            subtitle: 'Para orientarte',
-            description:
-              'Manuales e infografias acerca de procesos importantes en la universidad',
-            route: '/portal/recursos/manuales',
-            img: new URL('@/assets/img/manuales.jpg', import.meta.url).href
-          },
-          {
-            title: 'Biblioteca',
-            subtitle: 'Para estudiar',
-            description:
-              'Material de estudio de los diferentes cursos de la Division',
-            route: '/portal/recursos/biblioteca',
-            img: new URL('@/assets/img/biblioteca.jpg', import.meta.url).href
-          },
-          {
-            title: 'Tesario',
-            subtitle: 'Para investigar',
-            description:
-              'Recopilacion de las tesis de estudiantes de ingenieria a lo largo del tiempo.',
-            route: '/portal/recursos/tesario',
-            img: new URL('@/assets/img/tesario.jpg', import.meta.url).href
-          }
-        ],
-        extra: [
-          {
-            title: 'Acerca de',
-            subtitle: 'Más informacion',
-            description:
-              'Conoce más acerca de esta aplicacion, su desarrollo, y cómo puedes contribuir',
-            route: '/portal/extras/about',
-            img: new URL('@/assets/img/acerca_de.jpg', import.meta.url).href
-          }
-        ]
-      }
+const sections = {
+  basicInfo: [
+    {
+      title: 'Horarios de Semestre',
+      subtitle: 'Para organizarte',
+      description: 'Horarios de clases y laboratorios del semestre en curso',
+      route: '/portal/general/horarios',
+      img: new URL('@/assets/img/horario.jpg', import.meta.url).href
+    },
+    {
+      title: 'Pensums de Estudio',
+      subtitle: 'Para planificar',
+      description:
+        ' Recopilatorio de los pensums de las diferentes carreras de la division, y herramienta para calcular diferentes datos acerca de tu pensum.',
+      route: '/portal/general/pensums',
+      img: new URL('@/assets/img/pensum.jpeg', import.meta.url).href
+    },
+    {
+      title: 'FAQ | Primer Ingreso',
+      subtitle: 'Para ayudarte al inicio',
+      description:
+        'Preguntas Frecuentes para los estudiantes de primer ingreso',
+      route: '/portal/general/faq-primer-ingreso',
+      img: new URL('@/assets/img/faq.jpg', import.meta.url).href
+    },
+    {
+      title: 'FAQ',
+      subtitle: 'Para ayudarte',
+      description: 'Preguntas Frecuentes para estudiantes de reingreso',
+      route: '/portal/general/faq',
+      img: new URL('@/assets/img/faq.jpg', import.meta.url).href
     }
-  },
-  head() {
-    return {
-      title: 'Home'
+  ],
+  associations: [
+    {
+      title: 'CICS',
+      subtitle: 'Acerca del comite',
+      description:
+        'Informacion relevante del Comite de Ingenieria en Ciencias y Sistemas',
+      route: '/portal/asociaciones/cics',
+      img: new URL('@/assets/img/cics.png', import.meta.url).href
+    },
+    {
+      title: 'AEIO',
+      subtitle: 'Acerca de la asociacion',
+      description:
+        'Informacion relevante de la Asociacion de Estudiantes de Ingenieria de Occidente',
+      route: '/portal/asociaciones/aeio',
+      img: new URL('@/assets/img/aeio.jpg', import.meta.url).href
     }
-  },
-  methods: {
-    getLogo() {
-      if (this.theme === 'light') {
-        return new URL('@/assets/img/logo-cics-light.png', import.meta.url).href
-      }
-      return new URL('@/assets/img/logo-cics-dark.png', import.meta.url).href
+  ],
+  resources: [
+    {
+      title: 'Manuales',
+      subtitle: 'Para orientarte',
+      description:
+        'Manuales e infografias acerca de procesos importantes en la universidad',
+      route: '/portal/recursos/manuales',
+      img: new URL('@/assets/img/manuales.jpg', import.meta.url).href
+    },
+    {
+      title: 'Biblioteca',
+      subtitle: 'Para estudiar',
+      description:
+        'Material de estudio de los diferentes cursos de la Division',
+      route: '/portal/recursos/biblioteca',
+      img: new URL('@/assets/img/biblioteca.jpg', import.meta.url).href
+    },
+    {
+      title: 'Tesario',
+      subtitle: 'Para investigar',
+      description:
+        'Recopilacion de las tesis de estudiantes de ingenieria a lo largo del tiempo.',
+      route: '/portal/recursos/tesario',
+      img: new URL('@/assets/img/tesario.jpg', import.meta.url).href
     }
-  }
+  ],
+  extra: [
+    {
+      title: 'Acerca de',
+      subtitle: 'Más informacion',
+      description:
+        'Conoce más acerca de esta aplicacion, su desarrollo, y cómo puedes contribuir',
+      route: '/portal/extras/about',
+      img: new URL('@/assets/img/acerca_de.jpg', import.meta.url).href
+    }
+  ]
 }
 </script>
 <style scoped>
 /*Estilo para los textos*/
-h2 {
+/* h2 {
   font-weight: 700;
   text-transform: uppercase;
 }
@@ -294,5 +288,5 @@ h1 {
 
 .greetings p {
   text-align: left;
-}
+} */
 </style>
