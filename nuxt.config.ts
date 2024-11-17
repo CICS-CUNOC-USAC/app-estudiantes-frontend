@@ -34,6 +34,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/icon',
     '@vueuse/nuxt',
+    // 'vue-sonner/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error vite-plugin-vuetify
@@ -52,6 +53,9 @@ export default defineNuxtConfig({
     }
   },
   primevue: {
+    composables: {
+      exclude: ['useToast']
+    },
     components: {
       prefix: 'P'
     },

@@ -6,7 +6,7 @@
     </h1>
 
     <div
-      class="border border-surface-950/45 bg-surface-50 lg:p-8 p-4 dark:bg-neutral-700 rounded"
+      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
     >
       <h2 class="text-2xl font-semibold">Botones</h2>
       <p class="text-primary-emphasis-alt">Botones de la aplicación</p>
@@ -90,7 +90,12 @@
           icon="lucide:check"
           icon-pos="right"
         />
-        <CButton class="h-min" variant="text" severity="secondary" label="Secondary" />
+        <CButton
+          class="h-min"
+          variant="text"
+          severity="secondary"
+          label="Secondary"
+        />
         <CButton class="h-min" outlined label="Outlined" />
       </div>
 
@@ -193,7 +198,7 @@
     </div>
 
     <div
-      class="border border-surface-950/45 bg-surface-50 lg:p-8 p-4 dark:bg-neutral-700 rounded"
+      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
     >
       <h2 class="mt-4 text-2xl font-semibold">Tarjetas</h2>
       <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -302,11 +307,7 @@
             </div>
           </template>
         </CCardAlt>
-        <CCardAlt
-          title="Titulo"
-          small="Texto pequeño"
-          class="lg:col-span-2"
-        >
+        <CCardAlt title="Titulo" small="Texto pequeño" class="lg:col-span-2">
           <template #content>
             <div class="space-y-4">
               <p>Tarjeta con contenido personalizado</p>
@@ -332,19 +333,67 @@
           <template #footer>
             <div class="flex items-center gap-x-2 self-end">
               <CButton
-              label="No me interesa"
-              outlined
-              icon="lucide:circle-x"
-              class="flex-1 text-xs"
+                label="No me interesa"
+                outlined
+                icon="lucide:circle-x"
+                class="flex-1 text-xs"
               />
               <CButton
                 label="Ver más"
                 icon="lucide:arrow-right"
-                class="flex-1 text-xs h-full"
+                class="h-full flex-1 text-xs"
               />
             </div>
           </template>
         </CCardAlt>
+      </div>
+    </div>
+
+    <div
+      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
+    >
+      <h2 class="text-2xl font-semibold">Toast</h2>
+      <p class="text-primary-emphasis-alt">Mensajes de notificación</p>
+
+      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
+        <CButton
+          class="h-min"
+          label="Iniciar sesión"
+          @click="toast('Iniciando sesión...')"
+        />
+        <CButton
+          class="h-min"
+          label="Con botón"
+          @click="toast('Iniciando sesión...', { closeButton: true })"
+        />
+        <CButton
+          class="h-min"
+          severity="danger"
+          label="Error"
+          icon="lucide:octagon-alert"
+          @click="toast.error('Error al iniciar sesión')"
+        />
+        <CButton
+          class="h-min"
+          severity="warn"
+          label="Warn"
+          icon="lucide:triangle-alert"
+          @click="toast.warning('Advertencia')"
+        />
+        <CButton
+          class="h-min"
+          severity="info"
+          label="Información"
+          icon="lucide:info"
+          @click="toast.info('Información')"
+        />
+        <CButton
+          class="h-min"
+          severity="success"
+          label="Exito"
+          icon="lucide:check"
+          @click="toast.success('Exito')"
+        />
       </div>
     </div>
   </div>
@@ -352,5 +401,6 @@
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+const {$toast: toast} = useNuxtApp()
 </script>
 <style lang="postcss" scoped></style>

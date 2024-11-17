@@ -2,6 +2,7 @@ import { jwtDecode } from 'jwt-decode'
 import { defineStore } from 'pinia'
 import { useRegularAuthStore } from './regular-auth'
 import { useStaffAuthStore } from './staff-auth'
+import { toast } from 'vue-sonner'
 
 type Profile = {
   id: number
@@ -47,6 +48,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.isAuthenticated = false
       router.push('/')
+      toast.message('Sesión cerrada')
     },
     async fetchAuth() {
       // const role = useCookie('cicsapp-roleuser')

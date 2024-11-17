@@ -11,35 +11,25 @@
     </div>
   </section>
 </template>
-<script lang="ts">
+<script lang="ts" setup>
 import { mapState, mapActions } from 'pinia'
 import { useRegularAuthStore } from '~/stores/regular-auth'
 import LoginForm from '~/components/forms/accounts/LoginForm.vue'
-export default {
-  components: {
-    LoginForm
-  },
-  setup() {
-    definePageMeta({
-      layout: 'empty'
-    })
-    useHead({
-      title: 'Iniciar sesión'
-    })
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    ...mapState(useRegularAuthStore, ['loading', 'error'])
-  },
-  methods: {
-    login(credentials: { email: string; password: string }) {
-      this.loginUser(credentials)
-    },
-    ...mapActions(useRegularAuthStore, ['loginUser'])
-  }
+
+const regularAuthStore = useRegularAuthStore()
+const {loading, error} = storeToRefs(regularAuthStore)
+const { loginUser } = regularAuthStore
+
+const login = (credentials: { email: string; password: string }) => {
+  loginUser(credentials)
 }
+
+definePageMeta({
+  layout: 'empty'
+})
+useHead({
+  title: 'Iniciar sesión'
+})
 </script>
 <style lang="postcss" scoped>
 .login-page {

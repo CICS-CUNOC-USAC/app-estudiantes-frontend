@@ -7,7 +7,11 @@ module.exports = {
     './app/components/**/*.{vue,js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {}
+    extend: {},
+    fontFamily: {
+      'sans': ['Geist Sans', 'system-ui','sans-serif'],
+      // 'mono': ['Geist Mono', 'ui-monospace'],
+    }
   },
   plugins: [
     require('tailwindcss-primeui'),

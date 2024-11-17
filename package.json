@@ -39,6 +39,7 @@
     "primevue": "^4.2.2",
     "tailwindcss-primeui": "^0.3.4",
     "vite-plugin-vuetify": "^2.0.4",
+    "vue-sonner": "^1.2.5",
     "vuetify": "^3.7.4"
   },
   "overrides": {

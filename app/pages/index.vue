@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
-
+     
     <div class="greetings">
       <h1>Portal - Ingenieria CUNOC</h1>
       <v-divider thickness="3" />
@@ -151,7 +151,6 @@
 <script setup lang="ts">
 import InfoCard from '@/components/cards/InfoCard.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
 const sections = {
   basicInfo: [
     {

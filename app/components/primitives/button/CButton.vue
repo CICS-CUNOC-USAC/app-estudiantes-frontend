@@ -2,9 +2,9 @@
   <PButton
     v-bind="props"
     :as="props.to ? NuxtLink : 'BUTTON'"
-    class="rounded-lg inline-flex gap-x-2 border border-black/0  text-sm font-semibold justify-center items-center transition-all text-white active:translate-x-0 active:translate-y-0 active:shadow-none duration-50 ease-out select-none"
+    class="rounded-lg inline-flex gap-x-2 text-sm font-semibold justify-center items-center transition-all text-white active:translate-x-0 active:translate-y-0 active:shadow-none duration-50 ease-out select-none"
     :class="{
-      'border-black -translate-x-0.5 -translate-y-0.5 shadow-[3px_3px_0_0_rgba(0,0,0,1)]': props.variant !== 'text' && props.variant !== 'link',
+      'border border-black -translate-x-0.5 -translate-y-0.5 shadow-[3px_3px_0_0_rgba(0,0,0,1)]': props.variant !== 'text' && props.variant !== 'link',
       'px-3.5 py-1.5': props.variant !== 'link',
       'bg-primary-600 hover:bg-primary-500 focus:bg-opacity-85': !props.severity && !props.outlined,
       'bg-red-600 hover:bg-red-500 text-red-100': props.severity === 'danger',
