@@ -2,10 +2,11 @@
   <PButton
     v-bind="props"
     :as="props.to ? NuxtLink : 'BUTTON'"
-    class="rounded-lg inline-flex gap-x-2 outline outline-1 outline-black/0 px-3.5 py-1.5 text-sm font-semibold justify-center items-center transition-all text-white active:translate-x-0 active:translate-y-0 active:shadow-none duration-50 ease-out select-none"
+    class="rounded-lg inline-flex gap-x-2 border border-black/0  text-sm font-semibold justify-center items-center transition-all text-white active:translate-x-0 active:translate-y-0 active:shadow-none duration-50 ease-out select-none"
     :class="{
-      'outline-surface-950 dark:outline-surface-200 -translate-x-0.5 -translate-y-0.5 dark:shadow-[3px_3px_0_0_var(--p-surface-200)] shadow-[3px_3px_0_0_var(--p-surface-900)]': props.variant !== 'text' && props.variant !== 'link',
-      'bg-primary-600 hover:bg-primary-500 focus:bg-primary-400': !props.severity && !props.outlined,
+      'border-black -translate-x-0.5 -translate-y-0.5 shadow-[3px_3px_0_0_rgba(0,0,0,1)]': props.variant !== 'text' && props.variant !== 'link',
+      'px-3.5 py-1.5': props.variant !== 'link',
+      'bg-primary-600 hover:bg-primary-500 focus:bg-opacity-85': !props.severity && !props.outlined,
       'bg-red-600 hover:bg-red-500 text-red-100': props.severity === 'danger',
       'bg-green-600 hover:bg-green-500 text-green-100': props.severity === 'success',
       'bg-yellow-600 hover:bg-yellow-500 text-yellow-100': props.severity === 'warn',
@@ -16,10 +17,10 @@
       'flex-row': props.iconPos === 'left',
       'flex-col-reverse gap-y-1': props.iconPos === 'bottom',
       'flex-col gap-y-1': props.iconPos === 'top',
-      'opacity-65 pointer-events-none': props.disabled,
-      'opacity-85 pointer-events-none': props.loading,
-      'hover:outline-surface-950 hover:dark:outline-surface-200 bg-transparent shadow-none !text-primary !bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5': props.variant === 'text',
-      'hover:underline !bg-transparent shadow-none !text-primary   active:translate-x-0.5 active:translate-y-0.5': props.variant === 'link',
+      'opacity-80 pointer-events-none': props.disabled,
+      'opacity-90 pointer-events-none': props.loading,
+      'hover:outline-black bg-opacity-0 shadow-none !text-current hover:bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5 active:border-black': props.variant === 'text',
+      'hover:underline p-0 !bg-opacity-0 shadow-none text-current active:translate-x-0.5 active:translate-y-0.5': props.variant === 'link',
     }"
     unstyled
   >

@@ -49,6 +49,51 @@
         <CButton class="h-min" severity="secondary" label="Secondary" />
         <CButton class="h-min" outlined label="Outlined" />
       </div>
+
+      <h2 class="text-2xl font-semibold">Variantes</h2>
+      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
+        <CButton
+          class="h-min"
+          label="Continuar"
+          variant="text"
+          icon="lucide:log-in"
+          icon-pos="left"
+        />
+        <CButton
+          class="h-min"
+          severity="danger"
+          label="Danger"
+          variant="text"
+          icon="lucide:octagon-alert"
+          icon-pos="left"
+        />
+        <CButton
+          class="h-min"
+          severity="warn"
+          variant="text"
+          label="Warn"
+          icon="lucide:triangle-alert"
+          icon-pos="right"
+        />
+        <CButton
+          class="h-min"
+          severity="info"
+          label="Información Link"
+          variant="link"
+          icon="lucide:info"
+        />
+        <CButton
+          class="h-min"
+          severity="success"
+          variant="link"
+          label="Exito Link"
+          icon="lucide:check"
+          icon-pos="right"
+        />
+        <CButton class="h-min" variant="text" severity="secondary" label="Secondary" />
+        <CButton class="h-min" outlined label="Outlined" />
+      </div>
+
       <h2 class="mt-4 text-2xl font-semibold">Botones cargando</h2>
 
       <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">

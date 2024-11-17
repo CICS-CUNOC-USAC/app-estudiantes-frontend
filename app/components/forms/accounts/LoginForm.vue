@@ -1,9 +1,9 @@
 <template>
-  <v-card class="login-card pa-8">
-    <v-card-title>
-      <h3 class="text-center mb-4">Iniciar sesión</h3>
-    </v-card-title>
-    <v-card-text>
+  <CCardAlt class="px-8 py-12">
+    <template #title>
+      <h2 class="pb-4 text-center text-2xl font-semibold">Iniciar sesión</h2>
+    </template>
+    <template #content>
       <v-form>
         <v-text-field
           v-model="email"
@@ -32,40 +32,36 @@
           </template>
         </v-text-field>
       </v-form>
-    </v-card-text>
-    <v-card-actions>
-      <v-row>
-        <v-col cols="12">
+    </template>
+    <template #footer>
+      <div class="flex flex-col gap-y-4">
+        <CButton
+        class="w-full"
+        :loading="loading"
+        :disabled="!email || !password"
+        :severity="admin ? 'danger' : ''"
+        @click="login"
+        label="Iniciar sesión"
+        />
+        <span class="flex align-center gap-2">
+          ¿No tienes una cuenta?
+          <CButton to="/sign-up" variant="link" label="Regístrate" />
+        </span>
+        <div class="flex align-center">
           <CButton
-            class="w-full"
-            :loading="loading"
-            :severity="admin ? 'contrast' : ''"
-            @click="login"
-            label="Iniciar sesión"
+          to="/"
+          variant="text"
+          icon="lucide:arrow-left"
+          label="Regresar al portal"
           />
-        </v-col>
-        <v-col v-if="showSignup" cols="12">
-          <span class="d-flex align-center">
-            ¿No tienes una cuenta?
-            <CButton to="/sign-up" variant="link" label="Regístrate" />
-          </span>
-        </v-col>
-        <v-col cols="12">
-          <span>
-            <CButton
-              to="/"
-              variant="text"
-              icon="lucide:arrow-left"
-              label="Regresar al portal"
-            />
-          </span>
-        </v-col>
-      </v-row>
-    </v-card-actions>
-  </v-card>
-</template>
+        </div>
+      </div>
+      </template>
+    </CCardAlt>
+  </template>
 <script lang="ts" setup>
-import CButton from '~/components/primitives/button/CButton.vue';
+import CButton from '~/components/primitives/button/CButton.vue'
+import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 
 const { admin } = defineProps({
   loading: {
@@ -101,20 +97,4 @@ const login = () => {
 }
 </script>
 <style scoped lang="scss">
-.nav-link {
-  &:hover {
-    color: #fb8c00 !important;
-  }
-  &:active {
-    color: #bf360c !important;
-  }
-  &--admin {
-    &:hover {
-      color: #ff6e40 !important;
-    }
-    &:active {
-      color: #bf360c !important;
-    }
-  }
-}
 </style>
