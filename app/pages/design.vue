@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-5 lg:px-8 lg:py-4">
+  <div class="space-y-5 lg:px-8 lg:pt-4 pb-56">
     <h1 class="text-2xl font-bold">
       Componentes del <span class="italic">Design System</span> (Página
       temporal)
@@ -396,11 +396,47 @@
         />
       </div>
     </div>
+
+    <div
+      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
+    >
+      <h2 class="text-2xl font-semibold">Input</h2>
+      <p class="text-primary-emphasis-alt">Input de texto</p>
+
+      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-4">
+        <CInputText placeholder="Normal" />
+        <CInputText placeholder="Icono inicio" prepend-icon="lucide:mail" />
+        <CInputText placeholder="Icono final" append-icon="lucide:wind" />
+        <CInputText
+          placeholder="Iconos inicio y final"
+          prepend-icon="lucide:mail"
+          append-icon="lucide:wind"
+        />
+        <CInputText
+          placeholder="Botón inicio"
+          prepend-icon="lucide:wind"
+          @click:prepend="toast('Click en el icono')"
+        />
+        <CInputText
+          placeholder="Botón final"
+          append-icon="lucide:wind"
+          @click:append="toast('Click en el icono')"
+        />
+        <CInputText
+          placeholder="Botones inicio y final"
+          prepend-icon="lucide:mail"
+          append-icon="lucide:wind"
+          @click:prepend="toast('Click en el icono')"
+          @click:append="toast('Click en el icono')"
+        />
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-const {$toast: toast} = useNuxtApp()
+import { toast } from 'vue-sonner';
+import CInputText from '~/components/primitives/form/CInputText.vue';
 </script>
 <style lang="postcss" scoped></style>

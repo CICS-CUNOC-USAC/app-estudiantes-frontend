@@ -1,10 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import { AuraBase } from './app/utils/themes/pThemes'
-import { definePreset } from '@primevue/themes'
-import Aura from '@primevue/themes/aura'
 
 export default defineNuxtConfig({
+  devtools: {
+    enabled: false
+  },
   compatibilityDate: '2024-11-15',
   srcDir: 'app/',
   build: {

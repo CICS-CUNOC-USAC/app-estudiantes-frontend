@@ -4,7 +4,27 @@
       <h2 class="pb-4 text-center text-2xl font-semibold">Iniciar sesión</h2>
     </template>
     <template #content>
-      <v-form>
+      <form class="flex flex-col gap-y-4 py-4">
+        <CInputText
+          v-model="email"
+          placeholder="Correo electrónico"
+          type="text"
+          prepend-icon="lucide:mail"
+          no-borders
+        />
+        <CInputText
+          v-model="password"
+          :class="{
+            'font-mono': showPassword
+          }"
+          placeholder="Contraseña"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
+          :append-icon="showPassword ? 'lucide:eye-closed' : 'lucide:eye'"
+          no-borders
+        />
+      </form>
+      <!-- <v-form>
         <v-text-field
           v-model="email"
           label="Correo electrónico"
@@ -31,37 +51,40 @@
             <v-icon icon="mdi-dots-horizontal" size="small" />
           </template>
         </v-text-field>
-      </v-form>
+      </v-form> -->
     </template>
     <template #footer>
       <div class="flex flex-col gap-y-4">
         <CButton
-        class="w-full"
-        :loading="loading"
-        :disabled="!email || !password"
-        :severity="admin ? 'danger' : ''"
-        @click="login"
-        label="Iniciar sesión"
+          class="w-full"
+          :loading="loading"
+          :disabled="!email || !password"
+          :severity="admin ? 'danger' : ''"
+          @click="login"
+          @keydown.enter="login"
+          rounded
+          label="Iniciar sesión"
         />
-        <span class="flex align-center gap-2">
+        <span class="align-center flex gap-2">
           ¿No tienes una cuenta?
           <CButton to="/sign-up" variant="link" label="Regístrate" />
         </span>
-        <div class="flex align-center">
+        <div class="align-center flex">
           <CButton
-          to="/"
-          variant="text"
-          icon="lucide:arrow-left"
-          label="Regresar al portal"
+            to="/"
+            variant="text"
+            icon="lucide:arrow-left"
+            label="Regresar al portal"
           />
         </div>
       </div>
-      </template>
-    </CCardAlt>
-  </template>
+    </template>
+  </CCardAlt>
+</template>
 <script lang="ts" setup>
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
 
 const { admin } = defineProps({
   loading: {
@@ -96,5 +119,4 @@ const login = () => {
   emit('login', newCredentials)
 }
 </script>
-<style scoped lang="scss">
-</style>
+<style scoped lang="scss"></style>

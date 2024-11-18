@@ -77,13 +77,14 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         }
       )
       if (error.value) {
+        toast.error(error.value.toString())
+        console.log(Object.entries(error.value))
         if (error.value.data) {
           useSnackbarStore().showSnackbar({
             title: 'Error',
             message: convertError(error.value.data.message),
             type: SnackbarType.ERROR
           })
-          toast.error(convertError(error.value.data.message))
         }
         if (error.value.cause) {
           useSnackbarStore().showSnackbar({

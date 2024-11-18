@@ -9,6 +9,8 @@ declare module 'vue' {
   export interface GlobalComponents {
     PButton: typeof import('primevue/button')['default']
     PDatePicker: typeof import('primevue/datepicker')['default']
+    PInputGroup: typeof import('primevue/inputgroup')['default']
+    PInputGroupAddon: typeof import('primevue/inputgroupaddon')['default']
     PInputText: typeof import('primevue/inputtext')['default']
     PSelect: typeof import('primevue/select')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

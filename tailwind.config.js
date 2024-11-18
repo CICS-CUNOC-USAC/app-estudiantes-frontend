@@ -10,7 +10,7 @@ module.exports = {
     extend: {},
     fontFamily: {
       'sans': ['Geist Sans', 'system-ui','sans-serif'],
-      // 'mono': ['Geist Mono', 'ui-monospace'],
+      'mono': ['Geist Mono', 'ui-monospace'],
     }
   },
   plugins: [
