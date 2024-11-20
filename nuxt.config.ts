@@ -56,6 +56,9 @@ export default defineNuxtConfig({
     composables: {
       exclude: ['useToast']
     },
+    directives: {
+      prefix: 'P',
+    },
     components: {
       prefix: 'P'
     },
@@ -72,7 +75,7 @@ export default defineNuxtConfig({
       }
     }
   },
-  plugins: ['~/plugins/vuetify.ts'],
+  // plugins: ['~/plugins/vuetify.ts'],
   fonts: {
     defaults: {
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]

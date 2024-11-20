@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h1 class="py-4 text-xl font-semibold">
-      <Icon name="lucide:search" class="mb-1 inline" />
+    <h1 class="py-4  text-xl font-semibold">
+      <Icon name="lucide:search" class="mb-1" />
       Buscando:
       <span class="font-normal text-primary-500"> {{ route.query.q }} </span>
       en Ingeniería CUNOC

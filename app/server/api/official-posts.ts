@@ -34,7 +34,6 @@ export default defineEventHandler(async (event) => {
       ?.split('/')
 
     const postLinkFinal = postLink?.[5] + '/' + postLink?.[6]
-    console.log(postLink)
 
     const postPostedSince = postContainer
       .querySelector('blockquote>footer')

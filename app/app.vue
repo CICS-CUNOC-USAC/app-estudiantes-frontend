@@ -115,9 +115,14 @@ import { Toaster } from 'vue-sonner'
   @apply translate-x-0 opacity-100;
 }
 
-.fade-slide-enter-active,
+
+
+.fade-slide-enter-active {
+  @apply transition-all duration-[400ms] delay-75 ease-in-out;
+}
+
 .fade-slide-leave-active {
-  @apply transition-all duration-300 ease-in-out;
+  @apply transition-all duration-[400ms] ease-in-out absolute right-12;
 }
 
 .fade-slide-enter-from,

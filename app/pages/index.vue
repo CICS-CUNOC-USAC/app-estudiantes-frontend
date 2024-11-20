@@ -1,10 +1,10 @@
 <template>
   <v-container>
     <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
-     
+
     <div class="greetings">
       <h1>Portal - Ingenieria CUNOC</h1>
-      <v-divider thickness="3" />
+      <PDivider />
       <div class="my-6">
         <p>
           El nuevo portal para los estudiantes de Ingenieria del Centro
@@ -16,29 +16,21 @@
         <p>Está compuesta por secciones con informacion y herramientas.</p>
       </div>
       <div class="section-divider">
-        <h2 class="d-flex align-center ga-2">
+        <h2 class="flex items-center gap-x-2 text-lg font-semibold">
           Publicaciones oficiales recientes
-          <v-tooltip text="Ver todas">
-            <template #activator="{ props }">
-              <v-btn
-                class="px-4 py-0"
-                :ripple="true"
-                density="comfortable"
-                icon="mdi-chevron-right"
-                variant="plain"
-                color="gray"
-                :to="'/portal/general/publicaciones'"
-                v-bind="props"
-              ></v-btn>
-            </template>
-          </v-tooltip>
+          <CButton
+            variant="text"
+            icon="lucide:square-arrow-out-up-right"
+            to="/portal/general/publicaciones"
+            v-Ptooltip.top="'Ver todas las publicaciones'"
+          />
         </h2>
-        <v-divider thickness="3" />
+        <PDivider />
       </div>
       <OfficialPostsView />
       <div class="section-divider">
         <h2 class="green">Informacion Básica</h2>
-        <v-divider thickness="3" />
+        <PDivider />
       </div>
       <v-row justify="center">
         <v-col
@@ -79,7 +71,7 @@
 
       <div class="section-divider">
         <h2 class="green">Asociaciones Estudiantiles</h2>
-        <v-divider thickness="3" />
+        <PDivider />
       </div>
       <v-row justify="center">
         <v-col
@@ -102,7 +94,7 @@
 
       <div class="section-divider">
         <h2 class="green">Material y Recursos</h2>
-        <v-divider thickness="3" />
+        <PDivider />
       </div>
       <v-row>
         <v-col
@@ -125,7 +117,7 @@
 
       <div class="section-divider">
         <h2 class="green">Extra</h2>
-        <v-divider thickness="3" />
+        <PDivider />
       </div>
       <v-row justify="center">
         <v-col
@@ -151,6 +143,7 @@
 <script setup lang="ts">
 import InfoCard from '@/components/cards/InfoCard.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
+import CButton from '~/components/primitives/button/CButton.vue'
 const sections = {
   basicInfo: [
     {

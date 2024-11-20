@@ -40,7 +40,12 @@ export default defineNuxtPlugin((nuxtApp) => {
       },
       global: {
         // ripple: false
+        // tooltip: false
       }
+    },
+    directives: {
+      Tooltip: undefined,
+      Ripple: undefined
     },
     icons: {
       defaultSet: 'mdi',

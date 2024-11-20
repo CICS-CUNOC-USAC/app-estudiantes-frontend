@@ -1,9 +1,9 @@
 <template>
   <div>
     <nav
-      class="fixed top-0 z-20 w-full border-surface-300 bg-white backdrop-blur-sm transition dark:border-neutral-700 dark:bg-neutral-800"
+      class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white backdrop-blur-sm transition dark:border-neutral-700 dark:bg-neutral-800"
       :class="{
-        'border-b bg-surface-50/85 shadow-md dark:bg-surface-900/85':
+        'border-b bg-surface-50/80 shadow-md dark:bg-surface-900/85':
           hasScrolled
       }"
     >
@@ -15,20 +15,20 @@
             @click="drawer = !drawer"
             data-collapse-toggle="navbar-sticky"
             type="button"
-            class="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+            class="inline-flex h-10 w-10 items-center justify-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 md:hidden dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
             aria-controls="navbar-sticky"
             aria-expanded="false"
           >
             <span class="sr-only">Open main menu</span>
             <Icon name="lucide:menu" />
           </button>
-          <a class="hidden items-center space-x-3 md:flex" href="/">
+          <NuxtLink class="hidden items-center space-x-3 md:flex" href="/">
             <CICSLogo :width="80" fill="var(--p-primary-500)" />
-          </a>
+          </NuxtLink>
           <Transition name="title-fade">
-          <a class="block md:hidden" href="/" v-if="!searchOpen">
-            <strong>CICS App</strong> ⋅ Portal
-          </a>
+            <NuxtLink class="block md:hidden" href="/" v-if="!searchOpen">
+              <strong>CICS App</strong> ⋅ Portal
+            </NuxtLink>
           </Transition>
         </div>
 
@@ -70,12 +70,14 @@
             </li>
           </ul>
         </div>
-        <div class="flex space-x-3 md:order-2 md:space-x-0">
+        <div class="relative flex space-x-3 md:order-2 md:space-x-0">
           <div class="flex grow-0 items-center">
-            <Transition name="fade-slide">
+            <Transition
+              name="fade-slide"
+            >
               <form
                 v-if="searchOpen"
-                class="z-10 mr-2 h-full w-64"
+                class="-z-10 mr-2 h-full w-64"
                 @submit.prevent="handleSearch"
               >
                 <CInputText
@@ -103,13 +105,13 @@
       pt:mask:class="bg-black/50 transition"
       :pt="{
         transition: {
-          name: 'slide',
+          name: 'slide'
         },
         mask(options) {
           return {
-            class: `bg-primary-950/40 transition-all duration-500 ${options.props.visible ? 'mask-enter' : 'mask-leave'}`,
+            class: `bg-primary-950/40 transition-all duration-500 ${options.props.visible ? 'mask-enter' : 'mask-leave'}`
           }
-        },
+        }
       }"
     >
       <!-- <SidebarNavigator /> -->
@@ -117,7 +119,7 @@
     </PDrawer>
 
     <div class="d-flex flex-column">
-      <main id="appcont" class="mx-auto max-w-screen-xl px-8 pt-16">
+      <main id="appcont" class="mx-auto max-w-screen-xl px-4 lg:px-8 pt-16">
         <NuxtPage />
       </main>
 
@@ -147,7 +149,7 @@ const router = useRouter()
 const hasScrolled = ref(false)
 onMounted(() => {
   window.addEventListener('scroll', () => {
-    hasScrolled.value = window.scrollY > 0
+    hasScrolled.value = window.scrollY > 30
   })
 })
 
@@ -157,6 +159,7 @@ const $search = ref(null)
 const toggleSearch = async () => {
   searchOpen.value = !searchOpen.value
   if (searchOpen.value) {
+    //normalize search
     search.value = ''
     await nextTick()
     $search.value.$input.$el.focus()
@@ -164,6 +167,7 @@ const toggleSearch = async () => {
 }
 const handleSearch = () => {
   if (search.value) {
+    search.value = search.value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
     router.push({ name: 'portal-general-busqueda', query: { q: search.value } })
     searchOpen.value = false
     search.value = ''
@@ -171,19 +175,21 @@ const handleSearch = () => {
 }
 </script>
 <style lang="postcss">
-.title-fade-enter-active,
+
 .title-fade-leave-active {
-  transition: all 0.1s ease;
+  @apply transition-all duration-100;
+}
+
+.title-fade-enter-active {
+  @apply transition-all duration-200 delay-200;
 }
 
 .title-fade-enter-from,
 .title-fade-leave-to {
-  opacity: 0;
-  transform: translateY(-10px);
+  @apply opacity-0;
 }
 
 .search-box {
   @apply h-full;
 }
-
 </style>
