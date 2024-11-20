@@ -1,10 +1,14 @@
 <template>
   <PInputGroup
-    class="h-12 flex"
-    :class="{
-      'rounded-lg transition focus-within:ring-2 focus-within:ring-primary-400/30':
-        prependUsed || appendUsed
-    }"
+    unstyled
+    class="flex h-12"
+    :class="[
+      {
+        'rounded-lg transition focus-within:ring-2 focus-within:ring-primary-400/30':
+          prependUsed || appendUsed
+      },
+      classAttr
+    ]"
   >
     <component
       v-if="hasPrependClick || prependIcon"
@@ -24,9 +28,10 @@
       <Icon v-if="prependIcon && !hasPrependClick" :name="prependIcon" />
     </component>
     <PInputText
-      v-bind="$attrs"
+      v-bind="restAttrs"
+      ref="$input"
       v-model="vModel"
-      class="placeholder:text-muted-color/70 dark:border-surface-7002 z-10 flex w-full rounded-lg border border-black bg-surface-50 py-5 text-sm transition text-color disabled:cursor-not-allowed disabled:opacity-50 dark:bg-surface-900"
+      class="placeholder:text-muted-color/70 dark:border-surface-7002 z-10 flex rounded-lg border border-black bg-surface-50 w-full text-sm transition text-color disabled:cursor-not-allowed disabled:opacity-50 dark:bg-surface-900"
       :class="{
         'pl-3': !prependUsed,
         'pr-3': !appendUsed,
@@ -66,11 +71,18 @@ import { Button, InputGroupAddon } from 'primevue'
 
 const vModel = defineModel({ type: String, required: true })
 
+const $input = ref<{
+  $el: HTMLInputElement | null
+}>()
+
 const props = defineProps<{
   prependIcon?: string
   appendIcon?: string
   noBorders?: boolean
 }>()
+
+const attrs = useAttrs()
+const { class: classAttr, ...restAttrs } = attrs
 
 const emit = defineEmits(['click:prepend', 'click:append'])
 
@@ -87,5 +99,7 @@ const appendUsed = computed(() => !!props.appendIcon || hasAppendClick.value)
 defineOptions({
   inheritAttrs: false
 })
+
+defineExpose({$input})
 </script>
 <style lang="postcss" scoped></style>
