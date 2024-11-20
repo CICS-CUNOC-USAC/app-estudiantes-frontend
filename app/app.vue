@@ -1,6 +1,6 @@
 <template>
   <main>
-    <!-- <NuxtLoadingIndicator :throttle="130" :height="4" :color="loadingColor" /> -->
+    <NuxtLoadingIndicator :throttle="130" :height="4" color="var(--p-primary-400)" />
     <NuxtLayout />
     <Toaster
       position="top-center"
@@ -73,9 +73,65 @@ import { Toaster } from 'vue-sonner'
   @apply bg-white dark:bg-neutral-800;
 }
 
-.global-toast {
-  @apply border border-black bg-surface-50 text-current dark:bg-surface-900;
+/* Common animations */
+.mask-enter {
+  animation: maskFade 0.2s ease-in-out forwards;
 }
+
+.mask-leave {
+  animation: maskFadeReverse 0.2s ease-in-out forwards;
+}
+
+@keyframes maskFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes maskFadeReverse {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.slide-enter-active,
+.slide-leave-active {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+.slide-enter-from,
+.slide-leave-to {
+  @apply -translate-x-32 opacity-0;
+}
+
+.slide-enter-to,
+.slide-leave-from {
+  @apply translate-x-0 opacity-100;
+}
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  @apply transition-all duration-300 ease-in-out;
+}
+
+.fade-slide-enter-from,
+.fade-slide-leave-to {
+  @apply mr-0 w-0 opacity-0;
+}
+
+.fade-slide-enter-to,
+.fade-slide-leave-from {
+  @apply mr-2 w-64 opacity-100;
+}
+/* Common animations */
+
+
 </style>
 <style lang="scss">
 /*

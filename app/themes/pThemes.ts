@@ -157,7 +157,16 @@ const StonePrimaries = {
   }
 }
 
-export const allThemesPrimaries = [OrangePrimaries, BluePrimaries, FuchsiaPrimaries, TealPrimaries, YellowPrimaries, EmeraldPrimaries, PinkPrimaries, StonePrimaries]
+export const allThemesPrimaries = [
+  OrangePrimaries,
+  BluePrimaries,
+  FuchsiaPrimaries,
+  TealPrimaries,
+  YellowPrimaries,
+  EmeraldPrimaries,
+  PinkPrimaries,
+  StonePrimaries
+]
 
 export const AuraBase = definePreset(Aura, {
   options: commonOptionsDefaults,
@@ -167,8 +176,22 @@ export const AuraBase = definePreset(Aura, {
     primary: OrangePrimaries.values,
     colorScheme: {
       light: {
+        surface: {
+          0: '#ffffff',
+          50: '{neutral.50}',
+          100: '{neutral.100}',
+          200: '{neutral.200}',
+          300: '{neutral.300}',
+          400: '{neutral.400}',
+          500: '{neutral.500}',
+          600: '{neutral.600}',
+          700: '{neutral.700}',
+          800: '{neutral.800}',
+          900: '{neutral.900}',
+          950: '{neutral.950}'
+        },
         primary: {
-          color: '{slate.950}',
+          color: '{stone.950}',
           inverseColor: '#ffffff',
           hoverColor: '{zinc.900}',
           activeColor: '{zinc.800}'
@@ -181,8 +204,22 @@ export const AuraBase = definePreset(Aura, {
         }
       },
       dark: {
+        surface: {
+          0: '#ffffff',
+          50: '{neutral.50}',
+          100: '{neutral.100}',
+          200: '{neutral.200}',
+          300: '{neutral.300}',
+          400: '{neutral.400}',
+          500: '{neutral.500}',
+          600: '{neutral.600}',
+          700: '{neutral.700}',
+          800: '{neutral.800}',
+          900: '{neutral.900}',
+          950: '{neutral.950}'
+        },
         primary: {
-          color: '{slate.50}',
+          color: '{stone.50}',
           inverseColor: '{zinc.950}',
           hoverColor: '{zinc.100}',
           activeColor: '{zinc.200}'
@@ -199,5 +236,5 @@ export const AuraBase = definePreset(Aura, {
 })
 
 export default {
-  preset: AuraBase,
+  preset: AuraBase
 }
