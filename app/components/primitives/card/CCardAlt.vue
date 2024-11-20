@@ -9,12 +9,15 @@
       'hover:translate-x-0 hover:translate-y-0 hover:bg-surface-100 hover:shadow-none dark:hover:bg-surface-900':
         interactive,
       'cursor-pointer': to,
-      '-translate-x-0.5 -translate-y-0.5 shadow-[3px_3px_0_0_rgba(0,0,0,1)]':
-        elevated || interactive
+      '-translate-x-0.5 -translate-y-0.5 shadow-[2px_2px_0_0_rgba(0,0,0,1)]':
+        elevated || interactive,
+      'hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5  active:-translate-x-0 active:-translate-y-0':
+        interactiveInverse
     }"
   >
     <slot name="title">
       <h3
+      v-if="title"
         class="mb-2 text-lg font-semibold transition-colors duration-300 ease-in-out"
       >
         {{ title }}
@@ -38,6 +41,7 @@ import { NuxtLink } from '#components'
 defineProps<{
   elevated?: boolean
   interactive?: boolean
+  interactiveInverse?: boolean
   title?: string
   description?: string
   to?: string
