@@ -21,6 +21,10 @@ export default defineNuxtConfig({
       link: [
         { rel: 'preconnect', href: 'https://rsms.me/' },
         { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
+      ],
+      meta: [
+        { name: 'theme-color', content: '#faf6ed', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#262626', media: '(prefers-color-scheme: dark)' }
       ]
     },
     pageTransition: { name: 'page', mode: 'out-in' },

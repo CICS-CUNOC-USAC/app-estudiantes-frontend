@@ -69,7 +69,7 @@ useHead({
 </script>
 <style lang="postcss">
 :root {
-  @apply bg-white dark:bg-neutral-800;
+  @apply bg-cics-white dark:bg-neutral-800;
 }
 
 /* Common animations */
@@ -101,7 +101,7 @@ useHead({
 
 .slide-enter-active,
 .slide-leave-active {
-  @apply transition-all duration-200 ease-in-out;
+  @apply transition-all duration-300 ease-in-out;
 }
 
 .slide-enter-from,
@@ -115,13 +115,13 @@ useHead({
 }
 
 
-
+/* Used for search bar */
 .fade-slide-enter-active {
   @apply transition-all duration-[400ms] delay-75 lg:delay-0 ease-in-out;
 }
 
 .fade-slide-leave-active {
-  @apply transition-all duration-[400ms] ease-in-out absolute right-12 lg:relative lg:right-0;
+  @apply transition-all duration-[400ms] ease-in-out absolute right-12 lg:relative lg:right-0 -z-10;
 }
 
 .fade-slide-enter-from,
@@ -131,7 +131,7 @@ useHead({
 
 .fade-slide-enter-to,
 .fade-slide-leave-from {
-  @apply mr-2 w-64 opacity-100;
+  @apply mr-2 w-64 md:max-xl:w-44 opacity-100;
 }
 /* Common animations */
 

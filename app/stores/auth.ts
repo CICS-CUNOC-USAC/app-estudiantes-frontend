@@ -96,6 +96,33 @@ export const useAuthStore = defineStore('auth', {
         const staffAuthStore = useStaffAuthStore()
         return staffAuthStore.user
       }
+    },
+    profile: (state) => {
+      if (state.role === 'regular') {
+        const regularAuthStore = useRegularAuthStore()
+        return regularAuthStore.user?.profile
+      } else {
+        const staffAuthStore = useStaffAuthStore()
+        return staffAuthStore.user
+      }
+    },
+    displayName: (state) => {
+      if (state.role === 'regular') {
+        const regularAuthStore = useRegularAuthStore()
+        return regularAuthStore.user?.profile.first_name
+      } else {
+        const staffAuthStore = useStaffAuthStore()
+        return staffAuthStore.user?.first_name
+      }
+    },
+    displayNameFull: (state) => {
+      if (state.role === 'regular') {
+        const regularAuthStore = useRegularAuthStore()
+        return `${regularAuthStore.user?.profile.first_name} ${regularAuthStore.user?.profile.last_name}`
+      } else {
+        const staffAuthStore = useStaffAuthStore()
+        return `${staffAuthStore.user?.first_name} ${staffAuthStore.user?.last_name}`
+      }
     }
   }
 })

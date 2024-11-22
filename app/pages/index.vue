@@ -1,10 +1,8 @@
 <template>
-  <v-container>
-    <!-- <v-img max-width="450" alt="Logo CICS" :src="getLogo()" /> -->
-
+  <div>
     <div class="greetings">
-      <h1>Portal - Ingenieria CUNOC</h1>
-      <PDivider />
+      <h1 class="text-xl font-semibold"
+      >CICS App - Portal - Ingeniería CUNOC</h1>
       <div class="my-6">
         <p>
           El nuevo portal para los estudiantes de Ingenieria del Centro
@@ -138,7 +136,7 @@
         </v-col>
       </v-row>
     </div>
-  </v-container>
+  </div>
 </template>
 <script setup lang="ts">
 import InfoCard from '@/components/cards/InfoCard.vue'
