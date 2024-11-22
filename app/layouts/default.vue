@@ -1,9 +1,10 @@
 <template>
   <div>
     <nav
-      class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white backdrop-blur-sm transition dark:border-neutral-700 dark:bg-neutral-800"
+      class="fixed top-0 z-20 h-14 w-full border-surface-300  backdrop-blur-sm transition dark:border-neutral-700 "
       :class="{
-        'border-b bg-surface-50/80 shadow-md dark:bg-surface-900/85':
+        'bg-white dark:bg-neutral-800': !hasScrolled,
+        'border-b bg-surface-50/85 shadow-md dark:bg-surface-900/85':
           hasScrolled
       }"
     >
@@ -23,7 +24,7 @@
             <Icon name="lucide:menu" />
           </button>
           <NuxtLink class="hidden items-center space-x-3 md:flex" href="/">
-            <CICSLogo :width="80" fill="var(--p-primary-500)" />
+            <CICSLogo :width="64" fill="var(--p-primary-500)" />
           </NuxtLink>
           <Transition name="title-fade">
             <NuxtLink class="block md:hidden" href="/" v-if="!searchOpen">
@@ -72,9 +73,7 @@
         </div>
         <div class="relative flex space-x-3 md:order-2 md:space-x-0">
           <div class="flex grow-0 items-center">
-            <Transition
-              name="fade-slide"
-            >
+            <Transition name="fade-slide">
               <form
                 v-if="searchOpen"
                 class="-z-10 mr-2 h-full w-64"
@@ -114,12 +113,38 @@
         }
       }"
     >
-      <!-- <SidebarNavigator /> -->
-      <p>test</p>
+      <template #container="{ closeCallback }">
+        <div class="flex items-center justify-end p-2">
+          <button
+            @click="closeCallback"
+            class="rounded bg-white p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:bg-neutral-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+          >
+            <Icon name="lucide:x" />
+          </button>
+        </div>
+        <main class="flex h-full flex-col p-4">
+          <!-- <SidebarNavigator /> -->
+          <div class="flex h-full flex-col">
+            <NuxtLink
+              to="/"
+              @click="closeCallback"
+              class="text-xl font-semibold text-primary-500"
+              >Inicio</NuxtLink
+            >
+            <NuxtLink
+              to="/portal/extras/config"
+              @click="closeCallback"
+              class="text-xl font-semibold text-primary-500"
+              >About</NuxtLink
+            >
+          </div>
+          <footer>here goes footer</footer>
+        </main>
+      </template>
     </PDrawer>
 
     <div class="d-flex flex-column">
-      <main id="appcont" class="mx-auto max-w-screen-xl px-4 lg:px-8 pt-16">
+      <main id="appcont" class="mx-auto max-w-screen-xl px-4 pt-16 lg:px-8">
         <NuxtPage />
       </main>
 
@@ -175,13 +200,12 @@ const handleSearch = () => {
 }
 </script>
 <style lang="postcss">
-
 .title-fade-leave-active {
   @apply transition-all duration-100;
 }
 
 .title-fade-enter-active {
-  @apply transition-all duration-200 delay-200;
+  @apply transition-all delay-200 duration-200;
 }
 
 .title-fade-enter-from,

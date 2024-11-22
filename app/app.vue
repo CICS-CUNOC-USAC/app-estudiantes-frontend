@@ -59,14 +59,13 @@ import { Toaster } from 'vue-sonner'
 //   return currentTheme.value.dark ? '#fff' : '#121212'
 // })
 
-// useHead({
-//   // Title template, if titleChunk is defined in a page, it will be injected into the template
-//   titleTemplate: (titleChunk) => {
-//     return titleChunk
-//       ? `${titleChunk} ∙ Ing App CUNOC`
-//       : 'CUNOC ∙ Ingenieria App'
-//   }
-// })
+useHead({
+  titleTemplate: (titleChunk) => {
+    return titleChunk
+      ? `${titleChunk} | CICS App`
+      : 'CICS App | Portal'
+  }
+})
 </script>
 <style lang="postcss">
 :root {
@@ -102,7 +101,7 @@ import { Toaster } from 'vue-sonner'
 
 .slide-enter-active,
 .slide-leave-active {
-  @apply transition-all duration-500 ease-in-out;
+  @apply transition-all duration-200 ease-in-out;
 }
 
 .slide-enter-from,
@@ -118,11 +117,11 @@ import { Toaster } from 'vue-sonner'
 
 
 .fade-slide-enter-active {
-  @apply transition-all duration-[400ms] delay-75 ease-in-out;
+  @apply transition-all duration-[400ms] delay-75 lg:delay-0 ease-in-out;
 }
 
 .fade-slide-leave-active {
-  @apply transition-all duration-[400ms] ease-in-out absolute right-12;
+  @apply transition-all duration-[400ms] ease-in-out absolute right-12 lg:relative lg:right-0;
 }
 
 .fade-slide-enter-from,
@@ -146,7 +145,7 @@ Styles used for page and layout transitions - Start
 */
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 .page-leave-to,
 .page-enter-from {
@@ -156,7 +155,7 @@ Styles used for page and layout transitions - Start
 
 .layout-enter-active,
 .layout-leave-active {
-  transition: all 0.2s ease-in-out;
+  transition: all 0.15s ease-in-out;
 }
 
 .layout-leave-to,

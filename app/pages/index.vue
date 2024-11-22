@@ -232,6 +232,10 @@ const sections = {
     }
   ]
 }
+
+useHead({
+  title: 'Inicio'
+})
 </script>
 <style scoped>
 /*Estilo para los textos*/

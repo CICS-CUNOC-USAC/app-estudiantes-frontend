@@ -1,19 +1,24 @@
 <template>
   <main>
     <template v-if="data">
+      <CButton
+        icon="mdi-arrow-left"
+        variant="link"
+        label="Regresar a publicaciones"
+        class="mb-4 text-muted-color lg:mb-2"
+        to="/portal/general/publicaciones"
+      />
       <h1
-        class="d-flex flex-column flex-md-row align-md-center align-start ga-4"
+        class="flex items-center gap-x-2 text-2xl font-semibold text-color lg:font-medium"
       >
-        <v-btn
-          icon="mdi-arrow-left"
-          density="comfortable"
-          color="accent-2"
-          :to="'/portal/general/publicaciones'"
-        />
         {{ data?.title }}
       </h1>
-      <p class="text-overline">{{ data?.meta }}</p>
-      <div class="official-post-content" v-html="data?.content" />
+      <p class="py-1.5 text-sm text-muted-color-emphasis">{{ data?.meta }}</p>
+      <PDivider class="!mt-1" />
+      <div
+        class="official-post-content"
+        v-html="data?.content"
+      />
     </template>
     <template v-else-if="pending">
       <v-skeleton-loader
@@ -22,25 +27,29 @@
     </template>
 
     <template v-else>
-      <v-btn
-        prepend-icon="mdi-arrow-left"
-        color="accent-3"
-        :to="'/'"
-        class="mb-4"
-        >Regresar al incio</v-btn
+      <PMessage
+        severity="warn"
+        pt:root:class="!outline-none !shadow-none border border-surface-950/75"
+        pt:text:class="flex flex-col  items-start gap-y-1"
       >
-      <v-alert
-        color="accent-3"
-        icon="mdi-alert-circle"
-        class="d-flex align-center"
-        variant="text"
-        >No se ha encontrado la publicación que buscas, por favor verifica la
-        URL
-      </v-alert>
+        <template #icon>
+          <Icon name="lucide:circle-help" />
+        </template>
+        Parece que la publicación que buscas no existe, por favor verifica el
+        enlace.
+        <CButton
+          label="Regresar a publicaciones"
+          variant="link"
+          icon="lucide:arrow-left"
+          to="/portal/general/publicaciones"
+        />
+      </PMessage>
     </template>
   </main>
 </template>
 <script setup lang="ts">
+import CButton from '~/components/primitives/button/CButton.vue'
+
 const route = useRoute()
 const postId = route.params.postId
 const postSlug = route.params.postSlug
@@ -49,10 +58,49 @@ const { data, pending } = useFetch(
   `/api/official-post-detail/${postId}/${postSlug}`,
   { lazy: true }
 )
+
+useHead({
+  title: data?.value?.title
+})
 </script>
-<style lang="scss">
+<style lang="postcss">
 .official-post-content {
-  padding: 1rem;
+  @apply prose prose-base prose-neutral mx-auto dark:prose-invert lg:leading-6;
+
+  @apply 
+    prose-a:bg-primary-100 prose-a:py-1 prose-a:px-2 prose-a:decoration-clone prose-a:text-primary-600 prose-a:font-semibold hover:prose-a:text-primary-700 prose-a:no-underline hover:prose-a:underline prose-a:transition
+    prose-a:rounded-xl
+    dark:prose-a:bg-primary-900 dark:prose-a:text-primary-300
+    ;
+    
+  @apply
+    hover:prose-a:text-primary-700 hover:prose-a:underline dark:hover:prose-a:text-primary-100;
+
+  img {
+    @apply w-full rounded-lg shadow-lg;
+  }
+
+  a:has(img) {
+    @apply !bg-transparent block py-0;
+  }
+
+  .alert {
+    @apply border border-black/60 dark:border-black rounded-xl px-5 py-1.5;
+    
+    &-danger {
+      @apply bg-pink-100/70 text-rose-800 dark:bg-rose-800/65 dark:text-rose-300;
+    }
+
+    &-success {
+      @apply bg-emerald-100/70 text-emerald-800 dark:bg-emerald-800/65 dark:text-emerald-300;
+    }
+
+    &-warning {
+      @apply bg-amber-100/70 text-amber-800 dark:bg-amber-800/65 dark:text-amber-300;
+    } 
+  }
+
+  /*padding: 1rem;
 
   @media (min-width: 768px) {
     padding: 1rem;
@@ -114,6 +162,6 @@ const { data, pending } = useFetch(
     padding-block: 0.5rem;
     padding-inline: 1rem;
     border-radius: 1rem;
-  }
+  }*/
 }
 </style>

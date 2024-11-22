@@ -2,15 +2,13 @@
   <PButton
     v-bind="props"
     :as="props.to ? NuxtLink : 'BUTTON'"
-    class="duration-75 inline-flex select-none items-center justify-center gap-x-2 text-sm font-semibold text-white transition ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none"
-    :pt:label:class="`${
-    props.label ? 'block' : 'hidden'
-    }`"
+    class="inline-flex select-none items-center justify-center text-sm font-semibold text-white transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none"
+    :pt:label:class="`${props.label ? 'block' : 'hidden'}`"
     :class="{
       'rounded-lg': props.rounded,
       '-translate-x-0.5 -translate-y-0.5 border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)]':
         props.variant !== 'text' && props.variant !== 'link',
-      'px-3.5 py-1.5': props.variant !== 'link',
+      'px-3.5 py-1.5 gap-x-2': props.variant !== 'link',
       'bg-primary-600 hover:bg-primary-500 focus:bg-opacity-85':
         !props.severity && !props.outlined,
       'bg-red-600 text-red-100 hover:bg-red-500': props.severity === 'danger',
@@ -31,7 +29,7 @@
       'pointer-events-none opacity-90': props.loading,
       'bg-opacity-0 !text-current shadow-none hover:bg-opacity-20 hover:outline-black active:translate-x-0.5 active:translate-y-0.5 active:border-black':
         props.variant === 'text',
-      '!bg-opacity-0 p-0 text-current shadow-none hover:underline active:translate-x-0.5 active:translate-y-0.5':
+      '!bg-opacity-0 p-0 shadow-none text-color hover:underline active:translate-x-0.5 active:translate-y-0.5 gap-x-1':
         props.variant === 'link'
     }"
     unstyled

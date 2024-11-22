@@ -15,6 +15,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-primeui'),
+    require('@tailwindcss/typography'),
     'prettier-plugin-tailwindcss'
     // plugin(({ addUtilities }) => {
     //   addUtilities({

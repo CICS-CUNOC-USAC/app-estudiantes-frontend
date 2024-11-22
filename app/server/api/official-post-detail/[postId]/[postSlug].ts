@@ -37,6 +37,16 @@ export default defineEventHandler(async (event) => {
     }
   })
 
+  //finally, delete all the <a> tags that have the attribute 'data-gallery' because they are not needed
+  // const links = postContent?.querySelectorAll('a')
+  // links?.forEach((link) => {
+  //   const dataGallery = link.getAttribute('data-gallery')
+  //   if (dataGallery) {
+  //     link.remove()
+  //   }
+  // })
+
+
   const postTitle = postHeader?.querySelector('h2')?.textContent
   const postMeta = postHeader
     ?.querySelector('blockquote>footer')

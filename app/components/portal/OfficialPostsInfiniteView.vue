@@ -1,6 +1,6 @@
 <template>
   <template v-if="data">
-    <v-infinite-scroll @load="load">
+    <v-infinite-scroll @load="load" class="!overflow-visible">
       <v-row>
         <v-col
           v-for="(item, index) in data"
@@ -10,11 +10,13 @@
           sm="12"
           lg="6"
         >
-          <CCard
+          <CCardAlt
+            class="group hover:bg-primary-100/75 dark:hover:bg-primary-950/75"
             :title="item.title"
             :description="item.description"
-            :link="`/portal/post/${item.link}`"
+            :to="`/portal/post/${item.link}`"
             :small="item.posted_since"
+            interactive-inverse
           />
         </v-col>
       </v-row>
@@ -22,7 +24,7 @@
   </template>
 </template>
 <script setup lang="ts">
-import CCard from '../primitives/card/CCard.vue'
+import CCardAlt from '../primitives/card/CCardAlt.vue'
 
 const page = ref(1)
 const { data } = useFetch<

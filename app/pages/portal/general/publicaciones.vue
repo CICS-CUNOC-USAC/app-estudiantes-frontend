@@ -1,12 +1,14 @@
 <template>
   <main>
-    <h1 class="d-flex flex-column flex-md-row align-md-center align-start ga-4">
-      <v-btn
+    <CButton
         icon="mdi-arrow-left"
-        density="comfortable"
-        color="accent-2"
-        :to="'/'"
+        variant="link"
+        label="Regresar al inicio"
+        class="mb-4 text-muted-color lg:mb-2"
+        to="/"
       />
+    <h1 class="py-4  text-xl font-semibold">
+      <Icon name="lucide:layout-dashboard" class="mb-1" />
       Todas las publicaciones oficiales
     </h1>
     <OfficialPostsInfiniteView />
@@ -14,5 +16,6 @@
 </template>
 <script setup lang="ts">
 import OfficialPostsInfiniteView from '~/components/portal/OfficialPostsInfiniteView.vue'
+import CButton from '~/components/primitives/button/CButton.vue';
 </script>
 <style lang="scss" scoped></style>

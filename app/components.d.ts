@@ -14,6 +14,7 @@ declare module 'vue' {
     PInputGroup: typeof import('primevue/inputgroup')['default']
     PInputGroupAddon: typeof import('primevue/inputgroupaddon')['default']
     PInputText: typeof import('primevue/inputtext')['default']
+    PMessage: typeof import('primevue/message')['default']
     PSelect: typeof import('primevue/select')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
