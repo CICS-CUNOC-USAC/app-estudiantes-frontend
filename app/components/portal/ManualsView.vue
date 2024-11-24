@@ -72,6 +72,7 @@ const onSearch = useDebounceFn((e) => {
 }, 1000)
 
 const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
+
 await useLazyAsyncData(
   'public-manuals',
   () =>

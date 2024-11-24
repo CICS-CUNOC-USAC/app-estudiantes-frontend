@@ -86,6 +86,8 @@ export default defineNuxtConfig({
     },
     families: [
       { name: 'Geist Sans', provider: 'fontsource' },
+      { name: 'Mona Sans', provider: 'google' },
+      { name: 'Hubot Sans', provider: 'google' },
       { name: 'Geist Mono', provider: 'fontsource' }
     ]
     // styles: ['normal', 'italic'],

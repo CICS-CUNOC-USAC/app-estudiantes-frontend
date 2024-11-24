@@ -19,14 +19,15 @@
           >
             <Icon name="lucide:menu" />
           </button>
-          <NuxtLink
+          <button
             class="hidden items-center space-x-3 transition hover:opacity-80 md:flex"
             to="/"
+            @click="drawer = true"
           >
             <CICSLogo :width="60" fill="var(--p-primary-500)" />
-          </NuxtLink>
+          </button>
           <Transition name="title-fade">
-            <NuxtLink class="block md:hidden" to="/" v-if="!searchOpen">
+            <NuxtLink class="block md:hidden text-sm" to="/" v-if="!searchOpen">
               <strong>CICS App</strong> ⋅ Portal
             </NuxtLink>
           </Transition>
@@ -71,11 +72,11 @@
           </div>
 
           <CButton
-            v-if="user && !searchOpen"
-            :icon="user ? 'lucide:layout-dashboard' : 'lucide:user'"
-            to="/login"
+            v-if="!searchOpen"
+            icon="lucide:user"
+            :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
-            class="px-1.5"
+            class="!px-2"
             pt:label:class="hidden lg:block"
           />
         </div>
@@ -104,7 +105,7 @@
           <CICSLogo :width="68" fill="var(--p-primary-500)" />
           <button
             @click="closeCallback"
-            class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 md:hidden dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
+            class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
           >
             <Icon name="lucide:x" />
           </button>
@@ -125,7 +126,7 @@
 
             <section v-for="item in DefaultLayoutItems" :key="item.sectionName">
               <h3
-                class="mb-4 flex items-center gap-x-2 text-xs font-light tracking-wider text-muted-color-emphasis md:text-lg "
+                class="mb-4 flex items-center gap-x-2 text-sm tracking-tight text-muted-color-emphasis md:text-base select-none"
               >
                 {{ item.sectionName }}
               </h3>
@@ -231,7 +232,7 @@ const handleSearch = () => {
 </script>
 <style lang="postcss">
 .menu-item {
-  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200;
+  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200 font-medium;
   &::before {
     @apply absolute left-4 top-1/2 h-[calc(100%+4px)] w-0.5 -translate-y-1/2 bg-gray-300  dark:bg-neutral-700;
     content: '';
@@ -242,7 +243,7 @@ const handleSearch = () => {
 }
 
 .active-menu {
-  @apply z-50 text-primary-700 shadow-md outline-gray-300 dark:text-primary-500 active:text-primary-500 focus:text-primary-500 dark:outline-neutral-600;
+  @apply z-50 text-primary-700 shadow-md outline-gray-600 dark:text-primary-500 active:text-primary-500 focus:text-primary-500 dark:outline-neutral-600;
   &::before {
     @apply absolute left-4 top-1/2 h-2/4 w-0.5 -translate-y-1/2 rounded bg-primary-700 dark:bg-primary-400;
     content: '';
