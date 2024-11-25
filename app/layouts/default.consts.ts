@@ -1,6 +1,7 @@
 export const DefaultLayoutItems = [
   {
     sectionName: 'Información Básica',
+    shortName: 'Básico',
     items: [
       {
         itemName: 'Publicaciones Oficiales',
@@ -37,6 +38,7 @@ export const DefaultLayoutItems = [
   },
   {
     sectionName: 'Asociaciones',
+    shortName: 'Asociaciones',
     items: [
       {
         itemName: 'CICS',
@@ -52,6 +54,7 @@ export const DefaultLayoutItems = [
   },
   {
     sectionName: 'Recursos',
+    shortName: 'Recursos',
     items: [
       {
         itemName: 'Manuales',
@@ -67,6 +70,7 @@ export const DefaultLayoutItems = [
   },
   {
     sectionName: 'Extras',
+    shortName: 'Extra',
     items: [
       {
         itemName: 'Configuración',

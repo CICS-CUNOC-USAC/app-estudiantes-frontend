@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/icon',
     '@vueuse/nuxt',
+    'radix-vue/nuxt',
     // 'vue-sonner/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {

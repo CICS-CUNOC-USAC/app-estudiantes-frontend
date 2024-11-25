@@ -1,3 +1,15 @@
+import horarioImg from '~/assets/img/horario.jpg'
+import pensumImg from '~/assets/img/pensum.jpeg'
+import faqImg from '~/assets/img/faq.jpg'
+
+import cicsImg from '~/assets/img/cics.png'
+import aeioImg from '~/assets/img/aeio.jpg'
+
+import manualesImg from '~/assets/img/manuales.jpg'
+import bibliotecaImg from '~/assets/img/biblioteca.jpg'
+import tesarioImg from '~/assets/img/tesario.jpg'
+
+import acercaDeImg from '~/assets/img/acerca_de.jpg'
 export const sections = [
   {
     name: 'basicInfo',
@@ -8,7 +20,7 @@ export const sections = [
         subtitle: 'Para organizarte',
         description: 'Horarios de clases y laboratorios del semestre en curso',
         route: '/portal/general/horarios',
-        img: '_nuxt/assets/img/horario.jpg'
+        img: horarioImg
       },
       {
         title: 'Pensums de Estudio',
@@ -16,7 +28,7 @@ export const sections = [
         description:
           ' Recopilatorio de los pensums de las diferentes carreras de la division, y herramienta para calcular diferentes datos acerca de tu pensum.',
         route: '/portal/general/pensums',
-        img: '_nuxt/assets/img/pensum.jpeg'
+        img: pensumImg
       },
       {
         title: 'FAQ | Primer Ingreso',
@@ -24,14 +36,14 @@ export const sections = [
         description:
           'Preguntas Frecuentes para los estudiantes de primer ingreso',
         route: '/portal/general/faq-primer-ingreso',
-        img: '_nuxt/assets/img/faq.jpg'
+        img: faqImg
       },
       {
         title: 'FAQ',
         subtitle: 'Para ayudarte',
         description: 'Preguntas Frecuentes para estudiantes de reingreso',
         route: '/portal/general/faq',
-        img: '_nuxt/assets/img/faq.jpg'
+        img: faqImg
       }
     ]
   },
@@ -45,7 +57,7 @@ export const sections = [
         description:
           'Informacion relevante del Comite de Ingenieria en Ciencias y Sistemas',
         route: '/portal/asociaciones/cics',
-        img: '_nuxt/assets/img/cics.png'
+        img: cicsImg
       },
       {
         title: 'AEIO',
@@ -53,44 +65,52 @@ export const sections = [
         description:
           'Informacion relevante de la Asociacion de Estudiantes de Ingenieria de Occidente',
         route: '/portal/asociaciones/aeio',
-        img: '_nuxt/assets/img/aeio.jpg'
+        img: aeioImg
       }
     ]
   },
-  { name: 'resources', title: 'Recursos', items: [
-    {
-      title: 'Manuales',
-      subtitle: 'Para orientarte',
-      description:
-        'Manuales e infografias acerca de procesos importantes en la universidad',
-      route: '/portal/recursos/manuales',
-      img: '_nuxt/assets/img/manuales.jpg'
-    },
-    {
-      title: 'Biblioteca',
-      subtitle: 'Para estudiar',
-      description:
-        'Material de estudio de los diferentes cursos de la Division',
-      route: '/portal/recursos/biblioteca',
-      img: '_nuxt/assets/img/biblioteca.jpg'
-    },
-    {
-      title: 'Tesario',
-      subtitle: 'Para investigar',
-      description:
-        'Recopilacion de las tesis de estudiantes de ingenieria a lo largo del tiempo.',
-      route: '/portal/recursos/tesario',
-      img: '_nuxt/assets/img/tesario.jpg'
-    }
-  ] },
-  { name: 'extra', title: 'Extra', items: [
-    {
-      title: 'Acerca de',
-      subtitle: 'Más informacion',
-      description:
-        'Conoce más acerca de esta aplicacion, su desarrollo, y cómo puedes contribuir',
-      route: '/portal/extras/about',
-      img: '_nuxt/assets/img/acerca_de.jpg'
-    }
-  ] }
+  {
+    name: 'resources',
+    title: 'Recursos',
+    items: [
+      {
+        title: 'Manuales',
+        subtitle: 'Para orientarte',
+        description:
+          'Manuales e infografias acerca de procesos importantes en la universidad',
+        route: '/portal/recursos/manuales',
+        img: manualesImg
+      },
+      {
+        title: 'Biblioteca',
+        subtitle: 'Para estudiar',
+        description:
+          'Material de estudio de los diferentes cursos de la Division',
+        route: '/portal/recursos/biblioteca',
+        img: bibliotecaImg
+      },
+      {
+        title: 'Tesario',
+        subtitle: 'Para investigar',
+        description:
+          'Recopilacion de las tesis de estudiantes de ingenieria a lo largo del tiempo.',
+        route: '/portal/recursos/tesario',
+        img: tesarioImg
+      }
+    ]
+  },
+  {
+    name: 'extra',
+    title: 'Extra',
+    items: [
+      {
+        title: 'Acerca de',
+        subtitle: 'Más informacion',
+        description:
+          'Conoce más acerca de esta aplicacion, su desarrollo, y cómo puedes contribuir',
+        route: '/portal/extras/about',
+        img: acercaDeImg
+      }
+    ]
+  }
 ]

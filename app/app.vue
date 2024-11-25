@@ -41,24 +41,6 @@
 <script lang="ts" setup>
 import { Toaster } from 'vue-sonner'
 
-// import { useTheme } from 'vuetify'
-// import { useConfigsStore } from '~/stores/config'
-// import GeneralSnackbar from './components/partials/GeneralSnackbar.vue'
-
-// const vTheme = useTheme()
-// const { theme } = storeToRefs(useConfigsStore())
-// const currentTheme = computed(() => {
-//   return vTheme.computedThemes.value[theme.value]
-// })
-
-// const bgColor = computed(() => {
-//   return currentTheme.value.dark ? '#121212' : '#fff'
-// })
-
-// const loadingColor = computed(() => {
-//   return currentTheme.value.dark ? '#fff' : '#121212'
-// })
-
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk
@@ -138,6 +120,11 @@ useHead({
 
 </style>
 <style lang="scss">
+@use 'vuetify/settings' with (
+  $reset: false,
+  $color-pack: false,
+  $utilities: false,
+);
 /*
 Styles used for page and layout transitions - Start
 *-active classes control the transition duration and timing function
@@ -145,26 +132,27 @@ Styles used for page and layout transitions - Start
 */
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.15s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 .page-leave-to,
 .page-enter-from {
   opacity: 0;
-  transform: translateX(0.5rem);
+  transform: translateX(0.3rem);
 }
 
 .layout-enter-active,
 .layout-leave-active {
-  transition: all 0.15s ease-in-out;
+  transition: all 0.1s ease-in-out;
 }
 
 .layout-leave-to,
 .layout-enter-from {
   opacity: 0;
-  transform: translateX(0.5rem);
+  transform: translateX(0.3rem);
 }
 /*
 Styles used for page and layout transitions - End
 */
-@import '@/assets/styles/main.scss';
+// @import '@/assets/styles/main.scss';
+
 </style>
