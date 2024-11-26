@@ -1,41 +1,45 @@
 <template>
-  <v-table class="elevation-1 rounded-lg" height="650px">
-    <tr>
-      <th class="header" rowspan="2" style="width: 200px">Hora</th>
-      <th
-        :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
-        class="header"
-      >
-        Salón
-      </th>
-    </tr>
-    <tr>
-      <th
-        v-for="classroom in filterClassrooms(classrooms, schedules)"
-        :key="classroom.id"
-        class="header"
-      >
-        {{ classroom.name }}
-      </th>
-    </tr>
-    <tr v-for="hour in hours" :key="hour.id">
-      <th class="text-center fixed-column">
-        {{ hour.start_time + '-' + hour.end_time }}
-      </th>
-      <td v-for="classroom in classrooms" :key="classroom.id">
-        <v-container
-          v-for="schedule in schedules"
-          :key="schedule.id"
-          style="padding: 0px"
+  <table class="elevation-1 rounded-lg" height="650px">
+    <thead>
+      <tr>
+        <th class="header" rowspan="2" style="width: 200px">Hora</th>
+        <th
+          :colspan="classrooms!.length === 0 ? 1 : classrooms!.length"
+          class="header"
         >
-          <CursoHorario
-            v-if="setCurseVisible(schedule, classroom.id, hour.start_time)"
-            :curso="schedule"
-          />
-        </v-container>
-      </td>
-    </tr>
-  </v-table>
+          Salón
+        </th>
+      </tr>
+      <tr>
+        <th
+          v-for="classroom in filterClassrooms(classrooms, schedules)"
+          :key="classroom.id"
+          class="header"
+        >
+          {{ classroom.name }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="hour in hours" :key="hour.id">
+        <th class="text-center fixed-column">
+          {{ hour.start_time + '-' + hour.end_time }}
+        </th>
+        <td v-for="classroom in classrooms" :key="classroom.id">
+          <div
+            v-for="schedule in schedules"
+            :key="schedule.id"
+            style="padding: 0px"
+          >
+            <CursoHorario
+              v-if="setCurseVisible(schedule, classroom.id, hour.start_time)"
+              :curso="schedule"
+            />
+        </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script setup lang="ts">

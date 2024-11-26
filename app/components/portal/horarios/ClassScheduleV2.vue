@@ -1,6 +1,6 @@
 <template>
   <h1 class="mb-4">{{ tittle }}</h1>
-  <v-table class="elevation-1 rounded-lg">
+  <table class="elevation-1 rounded-lg">
     <thead>
       <tr>
         <th style="width: 150px" class="text-center">Hora</th>
@@ -15,17 +15,17 @@
           {{ item.start_time }} - {{ item.end_time }}
         </td>
         <td class="py-2 px-1">
-          <v-select
+          <!-- <v-select
             class="h-auto course-select"
             variant="outlined"
             :item-props="itemPromp"
             :items="item.courses"
             label="Seleccione"
-          ></v-select>
+          ></v-select> -->
         </td>
       </tr>
     </tbody>
-  </v-table>
+  </table>
 </template>
 
 <script lang="ts">

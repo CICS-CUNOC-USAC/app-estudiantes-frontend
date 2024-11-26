@@ -1,6 +1,6 @@
 <template>
   <h1 class="mb-4">{{ tittle }}</h1>
-  <v-table class="elevation-1 rounded-lg">
+  <table class="elevation-1 rounded-lg">
     <thead>
       <tr>
         <th class="text-center hour_column">Hora</th>
@@ -14,17 +14,17 @@
           {{ printFormatTime(line.end_time) }}
         </th>
         <td class="py-1 px-1">
-          <v-container class="d-inline-flex py-0 px-0">
+          <div class="d-inline-flex py-0 px-0">
             <CoursePill
               v-for="course in Array.from(line.courses_map.values())"
               :key="course.id"
               :curso="course"
             />
-          </v-container>
+          </div>
         </td>
       </tr>
     </tbody>
-  </v-table>
+  </table>
 </template>
 
 <script lang="ts">

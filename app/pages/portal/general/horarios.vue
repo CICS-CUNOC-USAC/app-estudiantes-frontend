@@ -1,31 +1,13 @@
 <template>
   <main>
-    <!-- {{ schedules }} -->
     <h1 class="mb-4">Ingenieria en Sistemas</h1>
-    <!-- <v-container
-      v-if="!loadingHours && !loadingClassrooms && !loadingSchedules"
-    >
-      <ClassScheduleV1
-        :hours="hours!"
-        :classrooms="classrooms!"
-        :schedules="schedules!"
-      />
-    </v-container> -->
-    <v-container v-if="!loadingClassrooms && !loadingSchedules">
+    <div v-if="!loadingClassrooms && !loadingSchedules">
       <ClassScheduleV1
         :hours="tmp_hours!"
-        :classrooms="classrooms!"
-        :schedules="schedules!"
+        :classrooms="tmp_classrooms!"
+        :schedules="tmp_schedules!"
       />
-    </v-container>
-
-    <!-- <v-container>
-      <ClassScheduleV1
-        :hours="tmp_hours!"
-        :classrooms="classrooms!"
-        :schedules="schedules!"
-      />
-    </v-container> -->
+    </div>
   </main>
 </template>
 
