@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { SnackbarType } from './snackbar'
+import { toast } from 'vue-sonner'
 
 type UserPayload = {
   email: string
@@ -76,6 +77,8 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         }
       )
       if (error.value) {
+        toast.error(error.value.toString())
+        console.log(Object.entries(error.value))
         if (error.value.data) {
           useSnackbarStore().showSnackbar({
             title: 'Error',
@@ -89,6 +92,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
             message: convertError(error.value!.message),
             type: SnackbarType.ERROR
           })
+          // toast.error(convertError(error.value!.message))
         }
         /*
         Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
@@ -115,15 +119,12 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       // Redirect to the dashboard
       router.push('/dashboard/home')
       // Show success snackbar
-      useSnackbarStore().showSnackbar({
-        title: 'Session iniciada',
-        message: `Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`,
-        type: SnackbarType.SUCCESS
-      })
+      toast.success(`Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`)
       // Return the data and error
       this.loading = false
       return { data, error: false }
     },
+    
     async signupUser(payload: SignupPayload) {
       const { firstName, lastName, ...payloadRest } = payload
       const newPayload = {

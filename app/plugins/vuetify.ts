@@ -1,5 +1,5 @@
 import '@mdi/font/css/materialdesignicons.css'
-import 'vuetify/styles'
+// import '../assets/styles/main.scss'
 import { es } from 'vuetify/locale'
 import { createVuetify } from 'vuetify'
 import { md3 } from 'vuetify/blueprints'
@@ -40,7 +40,12 @@ export default defineNuxtPlugin((nuxtApp) => {
       },
       global: {
         // ripple: false
+        // tooltip: false
       }
+    },
+    directives: {
+      Tooltip: undefined,
+      Ripple: undefined
     },
     icons: {
       defaultSet: 'mdi',

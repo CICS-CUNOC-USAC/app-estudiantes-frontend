@@ -1,36 +1,33 @@
 <template>
-  <v-container fluid class="container">
-    <v-row justify="center">
-      <v-col cols="12" sm="6" md="6" lg="6">
-        <v-card style="text-align: center">
-          <v-card-title
-            class="headline d-flex flex-column justify-center align-center"
-          >
-            <v-icon> mdi-alert-outline </v-icon>
-            <strong>Ha ocurrido un error</strong>
-          </v-card-title>
-          <v-card-text style="font-size: 1rem">
-            Puede que esta página no exista o se haya producido un error
-            interno, puedes
-            <nuxt-link
-              to="/"
-              style="
-                color: orangered;
-                font-style: italic;
-                text-decoration: none;
-              "
-            >
-              <strong>regresar al inicio</strong>
-              <v-icon style="font-size: 1.2rem" class="ml-1 mb-1">
-                mdi-home-outline
-              </v-icon>
-            </nuxt-link>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+  <div class="max-w-4xl mx-auto h-screen flex flex-col justify-center">
+    <CCardAlt class="h-min py-8" elevated>
+      <template #title>
+        <header class="flex items-center pb-6 text-xl font-bold gap-x-2 justify-center">
+          <Icon name="lucide:badge-alert" />
+          <h1>Ha ocurrido un error</h1>
+        </header>
+      </template>
+      <template #content>
+        <p class="text-center">
+          Puede que esta página no exista o se haya producido un error interno,
+          puedes
+          <NuxtLink href="/" class="text-primary-400 border-b border-primary-400 hover:border-primary-500 hover:text-primary-500 hover:border-b-2 transition">
+            <strong>regresar al inicio</strong>
+            <Icon class="inline mb-1 ml-1" name="lucide:home" />
+          </NuxtLink>
+        </p>
+      </template>
+    </CCardAlt>
+  </div>
 </template>
+
+<script setup lang="ts">
+import CCardAlt from './components/primitives/card/CCardAlt.vue';
+
+definePageMeta({
+  layout: 'empty',
+})
+</script>
 
 <style scoped lang="scss">
 .container {
