@@ -190,17 +190,11 @@ export const AuraBase = definePreset(Aura, {
           900: '{neutral.900}',
           950: '{neutral.950}'
         },
-        primary: {
-          color: '{stone.950}',
-          inverseColor: '#ffffff',
+        text: {
+          color: '{zinc.800}',
           hoverColor: '{zinc.900}',
-          activeColor: '{zinc.800}'
-        },
-        highlight: {
-          background: '{zinc.950}',
-          focusBackground: '{zinc.700}',
-          color: '#ffffff',
-          focusColor: '#ffffff'
+          mutedColor: '{zinc.500}',
+          hoverMutedColor: '{zinc.600}'
         }
       },
       dark: {
@@ -218,17 +212,11 @@ export const AuraBase = definePreset(Aura, {
           900: '{neutral.900}',
           950: '{neutral.950}'
         },
-        primary: {
-          color: '{stone.50}',
-          inverseColor: '{zinc.950}',
-          hoverColor: '{zinc.100}',
-          activeColor: '{zinc.200}'
-        },
-        highlight: {
-          background: 'rgba(250, 250, 250, .16)',
-          focusBackground: 'rgba(250, 250, 250, .24)',
-          color: 'rgba(255,255,255,.87)',
-          focusColor: 'rgba(255,255,255,.87)'
+        text: {
+          color: '#ffffff',
+          hoverColor: '{zinc.50}',
+          mutedColor: '{zinc.400}',
+          hoverMutedColor: '{zinc.300}'
         }
       }
     }

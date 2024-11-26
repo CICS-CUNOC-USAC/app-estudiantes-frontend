@@ -19,6 +19,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       link: [
+        // favicon
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
         { rel: 'preconnect', href: 'https://rsms.me/' },
         { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
       ],
@@ -27,8 +29,8 @@ export default defineNuxtConfig({
         { name: 'theme-color', content: '#262626', media: '(prefers-color-scheme: dark)' }
       ]
     },
-    pageTransition: { name: 'page', mode: 'out-in' },
-    layoutTransition: { name: 'layout', mode: 'out-in' }
+    // pageTransition: { name: 'page', mode: 'out-in' },
+    // layoutTransition: { name: 'layout', mode: 'out-in' }
   },
   modules: [
     '@pinia/nuxt',

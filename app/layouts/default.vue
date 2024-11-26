@@ -15,9 +15,9 @@
           <button
             @click="drawer = !drawer"
             type="button"
-            class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-gray-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 md:hidden dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
+            class="inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 md:hidden dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
           >
-            <Icon name="lucide:menu" />
+            <Icon name="tabler:layout-sidebar-filled" />
           </button>
           <button
             class="hidden items-center space-x-3 transition hover:opacity-80 md:flex"
@@ -34,21 +34,6 @@
         </div>
 
         <TopNavDesktopDashboard v-model="currentTrigger" />
-
-        <!-- <div
-          class="hidden items-center justify-between lg:order-1 lg:flex lg:w-auto"
-        >
-          <ul
-            class="mt-4 flex flex-col rounded-lg border p-4 font-medium md:mt-0 md:flex-row md:space-x-8 md:border-0 md:p-0"
-          >
-            <li>
-              <NuxtLink to="/" class="" aria-current="page">Inicio</NuxtLink>
-            </li>
-            <li>
-              <NuxtLink to="/portal/extras/config" class="">Config</NuxtLink>
-            </li>
-          </ul>
-        </div> -->
 
         <div class="relative flex grow basis-0 justify-end gap-x-1 md:order-2">
           <div class="flex items-center">
@@ -90,7 +75,6 @@
       block-scroll
       unstyled
       class="h-full w-10/12 bg-cics-white shadow-lg md:w-5/12 dark:bg-neutral-800"
-      pt:mask:class="bg-black/50 transition"
       :pt="{
         transition: {
           name: 'slide'
@@ -126,7 +110,6 @@ import CICSLogo from '~/components/partials/CICSLogo.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { useAuthStore } from '~/stores/auth'
-import { DefaultLayoutItems } from './default.consts'
 import TopNavDesktopDashboard from '~/components/partials/navigation/TopNavDesktopDashboard.vue'
 import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
 

@@ -21,7 +21,7 @@
           v-Ptooltip.top="'Ver todas las publicaciones'"
         />
       </h2>
-      <PDivider />
+      <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
       <OfficialPostsView />
     </section>
     <section
@@ -32,7 +32,8 @@
       <h2>
         {{ section.title }}
       </h2>
-      <PDivider />
+      <div class="my-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
+
       <div
         class="grid w-full grid-flow-col gap-4"
         :class="{
@@ -76,7 +77,7 @@ useHead({
 </script>
 <style scoped lang="postcss">
 .portal-section {
-  @apply my-6;
+  @apply my-6;  
   h2 {
     @apply flex items-center gap-x-2 text-lg font-semibold;
   }

@@ -1,31 +1,47 @@
 <template>
   <main>
-    <template v-if="data">
-      <CButton
-        icon="mdi-arrow-left"
-        variant="link"
-        label="Regresar a publicaciones"
-        class="mb-4 text-muted-color lg:mb-2"
-        to="/portal/general/publicaciones"
-      />
-      <header class="mx-auto mt-6 max-w-3xl">
-        <small class="block py-1.5 text-sm text-muted-color-emphasis">{{
+    <CButton
+      icon="mdi-arrow-left"
+      variant="link"
+      label="Regresar a publicaciones"
+      class="mb-4 text-muted-color lg:mb-2"
+      to="/portal/general/publicaciones"
+    />
+    <header class="mx-auto mt-2 max-w-3xl">
+      <template v-if="status === 'pending'">
+        <PSkeleton class="mb-5 mt-1.5"></PSkeleton>
+        <PSkeleton height="2.3rem" class=""></PSkeleton>
+      </template>
+      <template v-else-if="status === 'success' && data">
+        <small class="block pb-5 text-sm text-muted-color-emphasis">{{
           data?.meta
         }}</small>
-        <h1 class="flex items-center gap-x-2 text-2xl font-semibold text-color">
+        <h1
+          class="flex flex-col items-start gap-3 text-2xl font-extrabold text-color"
+        >
           {{ data?.title }}
+
+          <AttachmentsPopover :attachments="data?.attachments" />
         </h1>
-        <PDivider class="!mt-3" />
-      </header>
-      <div class="official-post-content" v-html="data?.content" />
+      </template>
+
+      <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
+      
+    </header>
+    <template v-if="status === 'pending'">
+      <div class="mx-auto mt-5 max-w-3xl">
+        <PSkeleton width="100%"></PSkeleton>
+        <PSkeleton width="60%" class="mt-2"></PSkeleton>
+        <PSkeleton width="80%" class="mt-4"></PSkeleton>
+      </div>
     </template>
-    <template v-else-if="pending">
-      <v-skeleton-loader
-        type="article, subtitle,text, text, text, text, text, text, text, text, text, text"
-      />
+    <template v-else-if="status === 'success' && data">
+      <article class="mx-auto max-w-3xl">
+        <div class="official-post-content" v-html="data?.content" />
+      </article>
     </template>
 
-    <template v-else>
+    <template v-else-if="status === 'error'">
       <PMessage
         severity="warn"
         pt:root:class="!outline-none !shadow-none border border-surface-950/75"
@@ -48,12 +64,13 @@
 </template>
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
+import AttachmentsPopover from './(components)/AttachmentsPopover.vue'
 
 const route = useRoute()
 const postId = route.params.postId
 const postSlug = route.params.postSlug
 
-const { data, pending } = useFetch(
+const { data, status } = useFetch(
   `/api/official-post-detail/${postId}/${postSlug}`,
   { lazy: true }
 )
@@ -64,11 +81,11 @@ useHead({
 </script>
 <style lang="postcss">
 .official-post-content {
-  @apply prose prose-base prose-neutral mx-auto max-w-3xl dark:prose-invert;
+  @apply prose prose-base prose-neutral max-w-none dark:prose-invert;
 
-  @apply prose-a:rounded-xl prose-a:bg-primary-100 prose-a:decoration-clone prose-a:px-2 prose-a:py-0.5 prose-a:font-semibold prose-a:text-primary-600 prose-a:no-underline prose-a:transition hover:prose-a:text-primary-700 hover:prose-a:underline dark:prose-a:bg-primary-900 dark:prose-a:text-primary-300;
+  @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-semibold prose-a:no-underline prose-a:transition hover:prose-a:border-b-2;
 
-  @apply hover:prose-a:text-primary-700 hover:prose-a:underline dark:hover:prose-a:text-primary-100;
+  @apply hover:prose-a:text-color-emphasis dark:hover:prose-a:text-primary-100;
 
   img {
     @apply w-full rounded-lg shadow-lg;
@@ -80,18 +97,32 @@ useHead({
 
   .alert {
     &-danger {
-      @apply rounded-xl border border-black/60 px-5 py-2 dark:border-black;
-      @apply bg-pink-100/70 text-rose-800 dark:bg-rose-800/65 dark:text-rose-300;
+      @apply dark:border-zinc-700;
+      & * {
+        @apply text-rose-800 dark:text-red-200;
+      }
+      @apply rounded-xl border bg-surface-100/40 px-4 py-2 dark:bg-surface-900/65;
+      @apply text-rose-800 dark:text-red-200;
     }
 
     &-success {
-      @apply rounded-xl border border-black/60 px-5 py-2 dark:border-black;
-      @apply bg-emerald-100/70 text-emerald-800 dark:bg-emerald-800/65 dark:text-emerald-300;
+      @apply dark:border-zinc-700;
+      & * {
+        @apply text-emerald-800 dark:text-emerald-200;
+      }
+      @apply rounded-xl border px-4 py-2;
+      @apply bg-surface-100/40 dark:bg-surface-900/65;
+      @apply text-emerald-800 dark:text-emerald-200;
     }
 
     &-warning {
-      @apply rounded-xl border border-black/60 px-5 py-2 dark:border-black;
-      @apply bg-amber-100/70 text-amber-800 dark:bg-amber-800/65 dark:text-amber-300;
+      @apply dark:border-zinc-700;
+      & * {
+        @apply text-amber-800 dark:text-amber-200;
+      }
+      @apply rounded-xl border px-4 py-2;
+      @apply bg-surface-100/40 dark:bg-surface-900/65;
+      @apply text-amber-800 dark:text-amber-200;
     }
   }
 

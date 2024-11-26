@@ -3,7 +3,7 @@
     :is="to ? NuxtLink : 'div'"
     :to
     unstyled
-    class="flex h-full flex-col overflow-hidden rounded-xl border border-surface-950/75 bg-surface-50 !text-primary duration-300 ease-in-out dark:bg-surface-800"
+    class="flex h-full flex-col overflow-hidden rounded-xl border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-800"
     :class="{
       'p-5': !noSpacing,
       'hover:translate-x-0 hover:translate-y-0 hover:bg-surface-100 hover:shadow-none dark:hover:bg-surface-900':

@@ -57,8 +57,8 @@ module.exports = {
       },
     },
     fontFamily: {
-      // 'sans': ['Mona Sans', 'Geist Sans', 'system-ui', 'sans-serif'],
-      'sans': ['Geist Sans', 'system-ui', 'sans-serif'],
+      'sans': ['Mona Sans', 'Geist Sans', 'system-ui', 'sans-serif'],
+      // 'sans': ['Geist Sans', 'system-ui', 'sans-serif'],
       'alt': ['Hubot Sans', 'system-ui', 'sans-serif'],
       'mono': ['Geist Mono', 'ui-monospace'],
     }

@@ -1,11 +1,11 @@
 <template>
-  <header class="flex w-full items-center justify-between px-5 py-4">
+  <header class="flex w-full items-center justify-between px-5 py-2.5">
     <CICSLogo :width="68" fill="var(--p-primary-500)" />
     <button
       @click="$emit('close')"
-      class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
+      class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline focus:outline-neutral-200 focus:outline-offset-1  dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
     >
-      <Icon name="lucide:x" />
+      <Icon name="tabler:layout-sidebar-left-collapse-filled" />
     </button>
   </header>
   <main class="flex h-full flex-col overflow-visible pb-20">
@@ -69,6 +69,7 @@
 <script lang="ts" setup>
 import { DefaultLayoutItems } from '~/layouts/default.consts'
 import CICSLogo from './CICSLogo.vue'
+import CButton from '../primitives/button/CButton.vue';
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())

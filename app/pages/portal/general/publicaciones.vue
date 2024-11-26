@@ -5,14 +5,14 @@
           icon="lucide:arrow-left"
           variant="link"
           label="Regresar al inicio"
-          class="mb-4 text-muted-color lg:mb-2"
+          class="mb-4 text-muted-color-emphasis lg:mb-2"
           to="/"
         />
       <CButton
           icon="lucide:search"
           variant="link"
           label="Buscar publicaciones"
-          class="mb-4 text-muted-color lg:mb-2"
+          class="mb-4 text-muted-color-emphasis lg:mb-2"
           @click="$emit('search')"
         />
     </nav>

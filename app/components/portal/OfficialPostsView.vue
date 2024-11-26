@@ -1,5 +1,5 @@
 <template>
-  <section class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+  <section class="grid grid-cols-1 gap-6 lg:grid-cols-3 mt-4">
     <div v-for="(item, index) in data" :key="index" class="col-span-1">
       <CCardAlt
         class="hover:bg-primary-100/75 dark:hover:bg-primary-900/30 group"
