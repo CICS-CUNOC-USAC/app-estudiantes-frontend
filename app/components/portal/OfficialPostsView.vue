@@ -1,24 +1,26 @@
 <template>
-  <v-row>
-    <v-col
-      v-for="(item, index) in data"
-      :key="index"
-      cols="12"
-      xs="12"
-      sm="12"
-      lg="4"
-    >
-      <InfoCard
-        full-height
+  <section class="grid grid-cols-1 gap-6 lg:grid-cols-3 mt-4">
+    <div v-for="(item, index) in data" :key="index" class="col-span-1">
+      <CCardAlt
+        class="hover:bg-primary-100/75 dark:hover:bg-primary-900/30 group"
+        interactive-inverse
         :title="item.title"
         :description="item.description"
-        :route="`/portal/post/${item.link}`"
-      />
-    </v-col>
-  </v-row>
+        :to="`/portal/post/${item.link}`"
+        :small="item.posted_since"
+      >
+      <template #footer>
+        <span class="inline-flex items-center text-xs font-medium font-alt tracking-tight text-primary-800 dark:text-primary-300 gap-x-2">
+            Leer más
+            <Icon name="lucide:arrow-right" class="group-hover:translate-x-1 transition" />
+        </span>
+      </template>
+    </CCardAlt>
+    </div>
+  </section>
 </template>
 <script setup lang="ts">
-import InfoCard from '../cards/InfoCard.vue'
+import CCardAlt from '../primitives/card/CCardAlt.vue';
 
 const { data } = useFetch<
   {

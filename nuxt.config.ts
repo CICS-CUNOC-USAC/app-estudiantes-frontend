@@ -2,6 +2,10 @@
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 
 export default defineNuxtConfig({
+  devtools: {
+    enabled: false
+  },
+  compatibilityDate: '2024-11-15',
   srcDir: 'app/',
   build: {
     transpile: ['vuetify']
@@ -13,20 +17,37 @@ export default defineNuxtConfig({
     baseURL: process.env.BASE_URL || 'http://localhost:8000'
   },
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' },
-    layoutTransition: { name: 'layout', mode: 'out-in' }
+    head: {
+      link: [
+        // favicon
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'preconnect', href: 'https://rsms.me/' },
+        { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
+      ],
+      meta: [
+        { name: 'theme-color', content: '#faf6ed', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#262626', media: '(prefers-color-scheme: dark)' }
+      ]
+    },
+    // pageTransition: { name: 'page', mode: 'out-in' },
+    // layoutTransition: { name: 'layout', mode: 'out-in' }
   },
   modules: [
     '@pinia/nuxt',
-    '@nuxt/eslint',
     '@nuxtjs/google-fonts',
+    '@nuxtjs/tailwindcss',
+    '@primevue/nuxt-module',
+    '@nuxt/fonts',
+    '@nuxt/icon',
+    '@vueuse/nuxt',
+    'radix-vue/nuxt',
+    // 'vue-sonner/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
         // @ts-expect-error vite-plugin-vuetify
         config.plugins.push(vuetify({ autoImport: true }))
       })
-    },
-    '@vueuse/nuxt'
+    }
   ],
   vite: {
     define: {
@@ -38,13 +59,48 @@ export default defineNuxtConfig({
       }
     }
   },
-  plugins: ['~/plugins/vuetify.ts'],
+  primevue: {
+    composables: {
+      exclude: ['useToast']
+    },
+    directives: {
+      prefix: 'P',
+    },
+    components: {
+      prefix: 'P'
+    },
+    importTheme: { from: '@/themes/pThemes.ts' },
+    options: {
+      theme: {
+        // preset: AuraBase,
+        options: {
+          cssLayer: {
+            name: 'primevue',
+            order: 'tailwind-base, primevue, tailwind-utilities'
+          }
+        }
+      }
+    }
+  },
+  // plugins: ['~/plugins/vuetify.ts'],
+  fonts: {
+    defaults: {
+      weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
+    },
+    families: [
+      { name: 'Geist Sans', provider: 'fontsource' },
+      { name: 'Mona Sans', provider: 'google' },
+      { name: 'Hubot Sans', provider: 'google' },
+      { name: 'Geist Mono', provider: 'fontsource' }
+    ]
+    // styles: ['normal', 'italic'],
+  },
   googleFonts: {
     display: 'swap',
     families: {
-      'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
+      // 'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
       'DM Sans': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-      // Sarabun: [100, 200, 300, 400, 500, 600, 700, 800]
+      // Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
     }
   }
 })

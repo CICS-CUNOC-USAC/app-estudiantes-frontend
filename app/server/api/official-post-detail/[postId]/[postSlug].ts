@@ -11,6 +11,8 @@ export default defineEventHandler(async (event) => {
 
   const postHeader = doc.querySelector('div#contenido')
   const postContent = doc.querySelector('.texto')
+  const postAttachmentsEls = doc.querySelectorAll('.archivos a')
+
 
   const linksWithImages = postContent?.querySelectorAll('.imgart>a')
   linksWithImages?.forEach((link) => {
@@ -34,9 +36,18 @@ export default defineEventHandler(async (event) => {
         // img.setAttribute('src', `${BASE_URL}/carpetas/imagenes/${src}`)
         img.setAttribute('src', `https://wsrv.nl/?url=${newSrc}`)
       }
-      console.log(img.getAttribute('src'))
     }
   })
+
+  //finally, delete all the <a> tags that have the attribute 'data-gallery' because they are not needed
+  // const links = postContent?.querySelectorAll('a')
+  // links?.forEach((link) => {
+  //   const dataGallery = link.getAttribute('data-gallery')
+  //   if (dataGallery) {
+  //     link.remove()
+  //   }
+  // })
+
 
   const postTitle = postHeader?.querySelector('h2')?.textContent
   const postMeta = postHeader
@@ -45,10 +56,19 @@ export default defineEventHandler(async (event) => {
     .replace(/\n/g, '')
     .replace(/\t/g, '')
     .replace(/el/g, 'el ')
+  const attachments = Array.from(postAttachmentsEls).map((attachment) => {
+    return {
+      title: attachment.textContent?.trim()
+      .replace(/\n/g, '')
+      .replace(/\t/g, ''),
+      url: `${import.meta.env.VITE_ATTACHEMENTS_BASE_URL}${attachment.getAttribute('href')}`
+    }
+  })
 
   return {
     title: postTitle,
     meta: postMeta,
-    content: postContent?.innerHTML.trim()
+    content: postContent?.innerHTML.trim(),
+    attachments
   }
 })

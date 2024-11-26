@@ -55,41 +55,18 @@
     </v-list>
   </div>
 </template>
-<script lang="ts">
-import { mapWritableState } from 'pinia'
-import { useConfigsStore } from '~/stores/config'
+<script lang="ts" setup>
 import CICSLogo from './CICSLogo.vue'
-export default {
-  components: { CICSLogo },
-  emits: ['theme'],
-  data() {
-    return {
-      basicInfoItems: [
-        // ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
-        [
-          'mdi-card-bulleted-settings-outline',
-          'Pensums',
-          '/dashboard/pensum/progress'
-        ],
-        [
-          'mdi-book-open-page-variant-outline',
-          'Biblioteca / Libros',
-          '/dashboard/books'
-        ]
-      ],
-      theme: 'light',
-      tools: []
-    }
-  },
-  computed: {
-    ...mapWritableState(useConfigsStore, ['themeBoolean'])
-  },
-  methods: {
-    changeTheme() {
-      this.$emit('theme')
-    }
-  }
-}
+
+const basicInfoItems = [
+  ['mdi-calendar-month-outline', 'Horarios', '/portal/general/horarios'],
+  ['mdi-card-bulleted-settings-outline', 'Pensums', '/portal/general/pensums'],
+  [
+    'mdi-book-open-page-variant-outline',
+    'Biblioteca / Libros',
+    '/dashboard/books'
+  ]
+]
 </script>
 <style scoped lang="scss">
 .active-item {

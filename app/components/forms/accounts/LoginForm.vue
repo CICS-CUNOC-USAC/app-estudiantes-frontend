@@ -1,10 +1,30 @@
 <template>
-  <v-card class="login-card pa-8">
-    <v-card-title>
-      <h3 class="text-center mb-4">Iniciar sesión</h3>
-    </v-card-title>
-    <v-card-text>
-      <v-form>
+  <CCardAlt class="px-8 py-12">
+    <template #title>
+      <h2 class="pb-4 text-center text-2xl font-semibold">Iniciar sesión</h2>
+    </template>
+    <template #content>
+      <form class="flex flex-col gap-y-4 py-4">
+        <CInputText
+          v-model="email"
+          placeholder="Correo electrónico"
+          type="text"
+          prepend-icon="lucide:mail"
+          no-borders
+        />
+        <CInputText
+          v-model="password"
+          :class="{
+            'font-mono': showPassword
+          }"
+          placeholder="Contraseña"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
+          :append-icon="showPassword ? 'lucide:eye-closed' : 'lucide:eye'"
+          no-borders
+        />
+      </form>
+      <!-- <v-form>
         <v-text-field
           v-model="email"
           label="Correo electrónico"
@@ -31,116 +51,72 @@
             <v-icon icon="mdi-dots-horizontal" size="small" />
           </template>
         </v-text-field>
-      </v-form>
-    </v-card-text>
-    <v-card-actions>
-      <v-row>
-        <!-- <v-col v-if="error" cols="12">
-          <span class="text-red d-flex align-center">
-            <v-icon class="mr-3"> mdi-alert-circle-outline </v-icon>
-            <span class="font-weight-medium text-body-2">{{ error }}</span>
-          </span>
-        </v-col> -->
-        <v-col cols="12">
-          <v-btn
-            variant="tonal"
-            width="100%"
-            :loading="loading"
-            :color="admin ? 'red' : 'accent-4'"
-            @click="login"
-          >
-            Iniciar sesión
-          </v-btn>
-        </v-col>
-        <v-col v-if="showSignup" cols="12">
-          <span class="d-flex align-center">
-            ¿No tienes una cuenta?
-            <v-btn to="/sign-up" class="ml-1" variant="plain" :ripple="false">
-              <strong>Regístrate</strong>
-            </v-btn>
-          </span>
-        </v-col>
-        <v-col cols="12">
-          <span>
-            <v-btn
-              to="/"
-              class="px-0"
-              variant="plain"
-              :ripple="false"
-              prepend-icon="mdi-arrow-left"
-            >
-              <strong>Regresar al portal</strong>
-            </v-btn>
-          </span>
-        </v-col>
-      </v-row>
-    </v-card-actions>
-  </v-card>
+      </v-form> -->
+    </template>
+    <template #footer>
+      <div class="flex flex-col gap-y-4">
+        <CButton
+          class="w-full"
+          :loading="loading"
+          :disabled="!email || !password"
+          :severity="admin ? 'danger' : ''"
+          @click="login"
+          @keydown.enter="login"
+          rounded
+          label="Iniciar sesión"
+        />
+        <span class="align-center flex gap-2">
+          ¿No tienes una cuenta?
+          <CButton to="/sign-up" variant="link" label="Regístrate" />
+        </span>
+        <div class="align-center flex">
+          <CButton
+            to="/"
+            variant="text"
+            icon="lucide:arrow-left"
+            label="Regresar al portal"
+          />
+        </div>
+      </div>
+    </template>
+  </CCardAlt>
 </template>
-<script lang="ts">
-export default {
-  props: {
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    admin: {
-      type: Boolean,
-      default: false
-    },
-    showSignup: {
-      type: Boolean,
-      default: true
-    }
-    // error: {
-    //   type: String,
-    //   default: () => null
-    // }
+<script lang="ts" setup>
+import CButton from '~/components/primitives/button/CButton.vue'
+import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
+
+const { admin } = defineProps({
+  loading: {
+    type: Boolean,
+    default: false
   },
-  emits: ['login'],
-  data() {
-    return {
-      email: '',
-      password: '',
-      showPassword: false
-    }
+  admin: {
+    type: Boolean,
+    default: false
   },
-  computed: {
-    linkColor() {
-      return this.admin
-        ? 'text-deep-orange-accent-4 nav-link--admin'
-        : 'text-orange-darken-3'
-    },
-    emailIcon() {
-      return this.admin ? 'mdi-shield-crown-outline' : 'mdi-email-outline'
-    }
-  },
-  methods: {
-    login() {
-      const newCredentials = {
-        email: this.email.toLowerCase().replace(/\s/g, '').trim(),
-        password: this.password
-      }
-      this.$emit('login', newCredentials)
-    }
+  showSignup: {
+    type: Boolean,
+    default: true
   }
+})
+
+const emit = defineEmits(['login'])
+
+const email = ref('')
+const password = ref('')
+const showPassword = ref(false)
+
+const emailIcon = computed(() => {
+  return admin ? 'mdi-shield-crown-outline' : 'mdi-email-outline'
+})
+
+const login = () => {
+  const newCredentials = {
+    email: email.value.toLowerCase().replace(/\s/g, '').trim(),
+    password: password.value
+  }
+  emit('login', newCredentials)
 }
 </script>
-<style scoped lang="scss">
-.nav-link {
-  &:hover {
-    color: #fb8c00 !important;
-  }
-  &:active {
-    color: #bf360c !important;
-  }
-  &--admin {
-    &:hover {
-      color: #ff6e40 !important;
-    }
-    &:active {
-      color: #bf360c !important;
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>

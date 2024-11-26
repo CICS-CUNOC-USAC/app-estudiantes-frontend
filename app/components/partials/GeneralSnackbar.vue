@@ -1,5 +1,5 @@
 <template>
-  <v-snackbar
+  <!-- <v-snackbar
     v-model="snackbarShow"
     vertical
     location="top center"
@@ -29,38 +29,27 @@
     <template #actions>
       <v-btn color="white" @click="hideSnackbar"> Cerrar </v-btn>
     </template>
-  </v-snackbar>
+  </v-snackbar> -->
 </template>
-<script lang="ts">
-import { mapWritableState, mapActions } from 'pinia'
-import { useSnackbarStore, SnackbarType } from '~/stores/snackbar'
-export default {
-  computed: {
-    ...mapWritableState(useSnackbarStore, [
-      'snackbarShow',
-      'title',
-      'message',
-      'color',
-      'type'
-    ]),
-    colorSnackbar() {
-      switch (this.type) {
-        case SnackbarType.ERROR:
-          return 'text-red-lighten-1'
-        case SnackbarType.SUCCESS:
-          return 'text-teal'
-        case SnackbarType.WARNING:
-          return 'text-yellow'
-        case SnackbarType.MESSAGE:
-          return 'text-cyan'
-        default:
-          return 'text-white'
-      }
-    }
-  },
-  methods: {
-    ...mapActions(useSnackbarStore, ['showSnackbar', 'hideSnackbar'])
-  }
-}
+<script lang="ts" setup>
+// import { useSnackbarStore, SnackbarType } from '~/stores/snackbar'
+
+// const { snackbarShow, title, message, type } = storeToRefs(useSnackbarStore())
+// const { hideSnackbar } = useSnackbarStore()
+
+// const colorSnackbar = computed(() => {
+//   switch (type.value) {
+//     case SnackbarType.ERROR:
+//       return 'text-red-lighten-1'
+//     case SnackbarType.SUCCESS:
+//       return 'text-teal'
+//     case SnackbarType.WARNING:
+//       return 'text-yellow'
+//     case SnackbarType.MESSAGE:
+//       return 'text-cyan'
+//     default:
+//       return 'text-white'
+//   }
+// })
 </script>
 <style lang=""></style>

@@ -23,39 +23,37 @@
     </v-container>
   </v-card>
 </template>
-<script lang="ts">
-export default {
-  props: {
-    fullHeight: {
-      type: Boolean,
-      required: false,
-      default: false
-    },
-    img: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    subtitle: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String,
-      required: false,
-      default: ''
-    },
-    route: {
-      type: String,
-      required: true
-    }
+<script lang="ts" setup>
+defineProps({
+  fullHeight: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
+  img: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  subtitle: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: false,
+    default: ''
+  },
+  route: {
+    type: String,
+    required: true
   }
-}
+})
 </script>
 <style lang="scss" scoped>
 .card-title {
@@ -66,6 +64,7 @@ export default {
 }
 .card-subtitle {
   font-weight: 400;
+  font-style: italic;
   font-size: 0.9rem;
 }
 .card-description {

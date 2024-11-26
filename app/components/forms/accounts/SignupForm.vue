@@ -147,98 +147,86 @@
     </v-card-actions>
   </v-card>
 </template>
-<script lang="ts">
-export default {
-  props: {
-    loading: {
-      type: Boolean,
-      default: false
-    },
-    error: {
-      type: [String, Array],
-      default: () => null
-    }
+<script lang="ts" setup>
+defineProps({
+  loading: {
+    type: Boolean,
+    default: false
   },
-  emits: ['signup'],
-  data() {
-    return {
-      careerItems: [
-        {
-          text: 'Ingeniería Civil',
-          value: 33
-        },
-        {
-          text: 'Ingeniería Mécánica',
-          value: 34
-        },
-        {
-          text: 'Ingeniería Industrial',
-          value: 35
-        },
-        {
-          text: 'Ingeniería Mécanica Industrial',
-          value: 36
-        },
-        {
-          text: 'Ingeniería en Ciencias y Sistemas',
-          value: 58
-        }
-      ],
-      firstName: '',
-      lastName: '',
-      ra: '',
-      careerCode: null,
-      email: '',
-      password: '',
-      confirmPassword: '',
-      showPassword: false,
-      validationRules: {
-        required: (v: string) => !!v || 'Campo requerido',
-        name: [
-          (v: string) =>
-            (v && v.length <= 100) ||
-            'El nombre no debe exceder los 100 caracteres'
-        ],
-        email: [
-          (v: string) =>
-            /.+@cunoc\.edu\.gt$/.test(v) ||
-            'E-mail debe ser válido e institucional'
-        ],
-        ra: [
-          (v: string) =>
-            (v && v.length === 9) || 'El RA debe tener 9 caracteres',
-          (v: string) => /[0-9]{9}/.test(v) || 'El RA debe ser numérico'
-        ],
-        password: [
-          (v: string) =>
-            (v && v.length >= 8) ||
-            'La contraseña debe tener al menos 8 caracteres'
-        ]
-      }
-    }
+  error: {
+    type: [String, Array],
+    default: () => null
+  }
+})
+const emit = defineEmits(['signup'])
+const careerItems = [
+  {
+    text: 'Ingeniería Civil',
+    value: 33
   },
-  computed: {
-    confirmPasswordRules() {
-      return [
-        (v: string) => v === this.password || 'Las contraseñas no coinciden'
-      ]
-    }
+  {
+    text: 'Ingeniería Mécánica',
+    value: 34
   },
-  methods: {
-    async signup() {
-      const formRef = await this.$refs.form.validate()
-      if (formRef.valid) {
-        const payload = {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          ra: this.ra,
-          career_code: this.careerCode,
-          email: this.email,
-          password: this.password
-        }
-        this.$emit('signup', payload)
-      }
+  {
+    text: 'Ingeniería Industrial',
+    value: 35
+  },
+  {
+    text: 'Ingeniería Mécanica Industrial',
+    value: 36
+  },
+  {
+    text: 'Ingeniería en Ciencias y Sistemas',
+    value: 58
+  }
+]
+
+const firstName = ref('')
+const lastName = ref('')
+const ra = ref('')
+const careerCode = ref(null)
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
+const showPassword = ref(false)
+const form = ref(null)
+
+const validationRules = {
+  required: (v: string) => !!v || 'Campo requerido',
+  name: [
+    (v: string) =>
+      (v && v.length <= 100) || 'El nombre no debe exceder los 100 caracteres'
+  ],
+  email: [
+    (v: string) =>
+      /.+@cunoc\.edu\.gt$/.test(v) || 'E-mail debe ser válido e institucional'
+  ],
+  ra: [
+    (v: string) => (v && v.length === 9) || 'El RA debe tener 9 caracteres',
+    (v: string) => /[0-9]{9}/.test(v) || 'El RA debe ser numérico'
+  ],
+  password: [
+    (v: string) =>
+      (v && v.length >= 8) || 'La contraseña debe tener al menos 8 caracteres'
+  ]
+}
+const confirmPasswordRules = [
+  (v: string) => v === password.value || 'Las contraseñas no coinciden'
+]
+
+const signup = async () => {
+  const formRef = await form.value?.validate()
+  if (formRef.valid) {
+    const payload = {
+      firstName: firstName,
+      lastName: lastName,
+      ra: ra,
+      career_code: careerCode,
+      email: email,
+      password: password
     }
+    emit('signup', payload)
   }
 }
 </script>

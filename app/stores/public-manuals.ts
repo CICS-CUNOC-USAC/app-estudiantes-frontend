@@ -1,6 +1,7 @@
 import { type FetchError } from 'ofetch'
 import type { ManualsResponse } from './admin-manuals'
 import type { Metadata } from '~/utils/types/fetching'
+import { toast } from 'vue-sonner'
 
 export const usePublicManualsStore = defineStore('publicManuals', () => {
   const loading = ref<boolean>(false)
@@ -22,11 +23,12 @@ export const usePublicManualsStore = defineStore('publicManuals', () => {
       responseMeta.value = meta
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al obtener los manuales',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
+      toast.error('No se han podido obtener los manuales', {
+        description: error.name === 'FetchError' ? 'Parece que este servicio no está disponible en este momento' : ''
       })
+      return {
+        error: true
+      }
     } finally {
       loading.value = false
     }
