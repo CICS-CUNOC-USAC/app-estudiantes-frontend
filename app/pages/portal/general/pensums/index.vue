@@ -1,6 +1,18 @@
 <template>
   <main>
-    <h1 class="mb-4">Pensums</h1>
+    <nav class="space-x-4">
+      <CButton
+          icon="lucide:arrow-left"
+          variant="link"
+          label="Regresar al inicio"
+          class="mb-4 text-muted-color-emphasis lg:mb-2"
+          to="/"
+        />
+    </nav>
+    <h1 class="py-3  text-xl font-semibold">
+      <Icon name="lucide:presentation" class="mb-1 mr-1.5 inline-block" />
+      Pensas de estudios
+    </h1>
     <v-row>
       <v-col v-for="(career, index) in careers" :key="index" cols="12" sm="6">
         <InfoCard
@@ -17,6 +29,7 @@
 <script setup lang="ts">
 import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import InfoCard from '@/components/cards/InfoCard.vue'
+import CButton from '~/components/primitives/button/CButton.vue';
 const careers = [
   {
     name: 'Civil',
