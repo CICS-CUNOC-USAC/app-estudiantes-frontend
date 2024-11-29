@@ -10,8 +10,11 @@ import bibliotecaImg from '~/assets/img/biblioteca.jpg'
 import tesarioImg from '~/assets/img/tesario.jpg'
 
 import acercaDeImg from '~/assets/img/acerca_de.jpg'
+
 export const sections = [
   {
+    containerClass: 'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4',
+    icon: 'lucide:info',
     name: 'basicInfo',
     title: 'Información Básica',
     items: [
@@ -48,6 +51,8 @@ export const sections = [
     ]
   },
   {
+    containerClass: 'grid w-full grid-cols-1 gap-4 md:grid-cols-2',
+    icon: 'lucide:users',
     name: 'associations',
     title: 'Asociaciones',
     items: [
@@ -70,6 +75,8 @@ export const sections = [
     ]
   },
   {
+    containerClass: 'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3',
+    icon: 'lucide:book-open-text',
     name: 'resources',
     title: 'Recursos',
     items: [
@@ -100,6 +107,8 @@ export const sections = [
     ]
   },
   {
+    containerClass: 'grid w-full grid-cols-1 gap-4 md:px-56',
+    icon: 'lucide:plus',
     name: 'extra',
     title: 'Extra',
     items: [

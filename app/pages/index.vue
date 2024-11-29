@@ -11,8 +11,10 @@
       <br />
       <p>Está compuesta por secciones con informacion y herramientas.</p>
     </section>
+
     <section class="portal-section">
       <h2 class="">
+        <Icon name="lucide:newspaper" />
         Publicaciones oficiales recientes
         <CButton
           variant="text"
@@ -30,15 +32,17 @@
       class="portal-section"
     >
       <h2>
+        <Icon :name="section.icon" />
         {{ section.title }}
       </h2>
       <div class="my-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
 
       <div
-        class="grid w-full grid-flow-col gap-4"
-        :class="{
-          'grid-cols-1 place-content-center px-44': section.name === 'extra'
-        }"
+        :class="
+        [
+          section.containerClass || 'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4',
+        ]
+        "
       >
         <CCardAlt
           v-for="(item, index) in section.items"
@@ -50,12 +54,10 @@
           <template #content>
             <img :src="item.img" class="h-28 w-full select-none object-cover" />
             <div class="p-5">
-              <p
-                class="text-xs italic tracking-wide text-muted-color-emphasis"
-              >
+              <p class="text-xs italic tracking-wide text-muted-color-emphasis">
                 {{ item.subtitle }}
               </p>
-              <h3 class="text-lg font-semibold py-2">{{ item.title }}</h3>
+              <h3 class="py-2 text-lg font-semibold">{{ item.title }}</h3>
               <p class="text-sm">{{ item.description }}</p>
             </div>
           </template>
@@ -77,7 +79,7 @@ useHead({
 </script>
 <style scoped lang="postcss">
 .portal-section {
-  @apply my-6;  
+  @apply my-6;
   h2 {
     @apply flex items-center gap-x-2 text-lg font-semibold;
   }
