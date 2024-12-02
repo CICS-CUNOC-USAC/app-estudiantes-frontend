@@ -54,6 +54,10 @@ useHead({
   @apply bg-cics-white dark:bg-neutral-800;
 }
 
+html {
+  @apply scroll-smooth scroll-pt-16;
+}
+
 /* Common animations */
 .mask-enter {
   animation: maskFade 0.2s ease-in-out forwards;

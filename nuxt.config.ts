@@ -41,6 +41,7 @@ export default defineNuxtConfig({
     '@nuxt/icon',
     '@vueuse/nuxt',
     'radix-vue/nuxt',
+    '@nuxt/content',
     // 'vue-sonner/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {

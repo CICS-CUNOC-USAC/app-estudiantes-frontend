@@ -5,13 +5,34 @@
       En esta sección podrás encontrar todos los manuales que pueden ayudarte a
       lo largo de tu carrera.
     </p>
-    <ManualsView />
+    <!-- <ManualsView /> -->
+    <div v-if="data" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <NuxtLink v-for="manual in data" :key="manual._id" class="border p-3 mb-3" :to="`/portal/recursos/manuales/${manual._path.split('/').pop()}`">
+        <h2
+          
+        >{{ manual.title }}</h2>
+        <p>{{ manual.description }}</p>
+      </NuxtLink>
+    </div>
     <HelpDialog title="Manuales" :content="content_help"></HelpDialog>
   </main>
 </template>
 <script setup lang="ts">
 import ManualsView from '~/components/portal/ManualsView.vue'
 import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
+
+// const { data } = useAsyncData(() =>
+//   fetchContentNavigation({
+//     where: {
+//       _path: { $contains: '/manuals' }
+//     }
+//   })
+// )
+const { data } = useAsyncData(() =>
+  queryContent().where({
+    _path: { $contains: '/manuals' }
+  }).without(['body']).find()
+)
 
 const content_help = `Los Manuales es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de Manuales creados con el fin de ayudar al estudiantado
   ## Funcionamiento:

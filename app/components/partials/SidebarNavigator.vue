@@ -47,7 +47,7 @@
       <template v-if="user">
         <div class="flex items-center">
           <PAvatar class="" shape="circle" :label="displayName?.charAt(0)" />
-          <div class="ml-2 flex max-w-32 flex-col items-start overflow-hidden">
+          <div class="ml-2 flex max-w-32 flex-col items-start">
             <span class="text-sm font-medium">{{ displayNameFull }}</span>
             <span class="text-xs text-muted-color-emphasis">{{
               getRole === 'regular' ? 'Estudiante' : 'Admin'

@@ -1,11 +1,9 @@
 <template>
   <div>
     <nav
-      class="fixed top-0 z-20 h-14 w-full border-surface-300 backdrop-blur-sm transition dark:border-neutral-700"
+      class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-cics-white/80 backdrop-blur-sm transition dark:border-neutral-700 dark:bg-surface-800/80"
       :class="{
-        'bg-cics-white dark:bg-neutral-800': !hasScrolled,
-        'border-b bg-cics-white/80 shadow-md dark:bg-surface-800/80':
-          hasScrolled
+        'border-b shadow-md': hasScrolled
       }"
     >
       <div
