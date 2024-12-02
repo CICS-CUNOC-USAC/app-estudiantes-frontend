@@ -1,32 +1,48 @@
 <template>
-  <PChip
-    class="flex justify-center border border-surface-950 bg-surface-0 text-sm duration-300 ease-in-out hover:translate-x-0 hover:translate-y-0 hover:bg-surface-300"
-    :class="{
-      'rounded-full': props.rounded
-    }"
+  <PButton
+    class="inline-flex cursor-pointer items-center rounded-full border border-gray-300 bg-surface-100 dark:border-gray-700 dark:bg-gray-700 dark:text-cics-white pl-4 pr-4 text-sm text-gray-800 transition duration-300 ease-in-out hover:bg-surface-300 dark:hover:bg-gray-500"
+    :class="[{ 'chip-active': isActive }]"
+    @click="toggleFilter"
     :label="label"
+    :icon="icon"
     unstyled
-  ></PChip>
+  />
 </template>
+
 <script setup lang="ts">
-import { NuxtLink } from '#components'
-import { type ButtonProps } from 'primevue'
-const props = withDefaults(
-  defineProps<{
-    label?: string
-    icon?: string
-    severity?: ButtonProps['severity']
-    outlined?: boolean
-    iconPos?: ButtonProps['iconPos']
-    loading?: boolean
-    disabled?: boolean
-    to?: string
-    variant?: ButtonProps['variant']
-    rounded?: boolean
-  }>(),
-  {
-    rounded: true
-  }
+import { ref, defineProps, watch } from 'vue'
+import Button from 'primevue/button'
+
+const props = defineProps<{
+  label: string // Etiqueta para el chip
+  icon?: string // Ícono opcional
+  modelValue?: boolean // Estado inicial del filtro
+}>()
+
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void
+  (e: 'toggle', value: boolean): void
+}>()
+
+const isActive = ref(false)
+
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    isActive.value = newValue ?? false
+  },
+  { immediate: true }
 )
+
+const toggleFilter = () => {
+  isActive.value = !isActive.value
+  emit('update:modelValue', isActive.value)
+  emit('toggle', isActive.value)
+}
 </script>
-<style lang="postcss" scoped></style>
+
+<style scoped lang="postcss">
+.chip-active {
+  @apply border-primary-500 bg-primary-500 text-white hover:border-primary-700 hover:bg-primary-700;
+}
+</style>

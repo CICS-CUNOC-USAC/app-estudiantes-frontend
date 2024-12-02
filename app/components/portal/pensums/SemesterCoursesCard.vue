@@ -7,15 +7,16 @@
     </template>
 
     <template #content>
-      <div class="mb-2">
+      <div class="mb-4">
         <span class="text-overline"> Filtrar por: </span>
-        <v-chip-group v-model="onlyMandatory">
-          <v-chip variant="outlined" filter :value="true"
-            >Solo obligatorios</v-chip
-          >
-        </v-chip-group>
-        <CChipButton label="Solo obligatorios"></CChipButton>
+        <br>
+        <CChipButton label="Solo obligatorios" v-model="onlyMandatory"></CChipButton>
       </div>
+      <TransitionGroup
+              name="course-transition"
+              tag="div"
+              class="transition-group"
+      >
       <div
         class="mb-2"
         v-for="course in filteredCourses"
@@ -23,6 +24,7 @@
       >
         <CourseCard :course="course" />
       </div>
+      </TransitionGroup>
     </template>
   </CCardAlt>
 </template>
@@ -44,3 +46,41 @@ const filteredCourses = computed(() => {
   return props.semesterCourses.courses
 })
 </script>
+<style scoped>
+/* Transiciones para la entrada y salida */
+.course-transition-enter-active,
+.course-transition-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.course-transition-enter-from {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+.course-transition-enter-to {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.course-transition-leave-from {
+  opacity: 1;
+  transform: translateY(0px);
+}
+
+.course-transition-leave-to {
+  opacity: 0;
+  transform: translateY(-50px);
+}
+
+/* Estilo para mantener la posición al salir */
+.transition-item {
+  position: relative;
+}
+
+.course-transition-leave-active {
+  position: absolute;
+  max-width: 50%;
+  z-index: 1;
+}
+</style>
