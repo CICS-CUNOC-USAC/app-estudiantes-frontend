@@ -14,6 +14,7 @@
             >Solo obligatorios</v-chip
           >
         </v-chip-group>
+        <CChipButton label="Solo obligatorios"></CChipButton>
       </div>
       <div
         class="mb-2"
@@ -28,6 +29,7 @@
 <script setup lang="ts">
 import CourseDialog from '@/components/dialogs/courses/CourseDialog.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CourseCard from './CourseCard.vue'
 import CText from '~/components/primitives/text/CText.vue'
 import type { CareerCourses } from '~/utils/types/career-courses'
