@@ -9,14 +9,14 @@
     />
     <nav class="space-x-4">
       <CButton
-          icon="lucide:arrow-left"
-          variant="link"
-          label="Regresar"
-          class="mb-4 text-muted-color-emphasis lg:mb-2"
-          to="/portal/general/pensums"
-        />
+        icon="lucide:arrow-left"
+        variant="link"
+        label="Regresar"
+        class="mb-4 text-muted-color-emphasis lg:mb-2"
+        to="/portal/general/pensums"
+      />
     </nav>
-    <h1 v-if="careerCourses" class="py-3  text-xl font-semibold">
+    <h1 v-if="careerCourses" class="mt-4 mb-8 text-xl font-semibold">
       <span class="font-weight-light">Carrera:</span>
       {{ careerCourses?.career_name }} -
       <span>
@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import PensumPublicView from '~/components/portal/pensums/PensumPublicView.vue'
-import CButton from '~/components/primitives/button/CButton.vue';
+import CButton from '~/components/primitives/button/CButton.vue'
 import type { CareerCoursesResponse } from '~/utils/types/career-courses'
 const route = useRoute()
 const { data: careerCourses, pending: loading } =

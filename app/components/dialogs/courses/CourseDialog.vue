@@ -140,7 +140,7 @@ const openAndFetchCareerCourse = async (
 }
 .CourseName {
   cursor: pointer;
-  font-weight: bold;
+  font-weight: regular;
 }
 .CourseName:hover {
   text-decoration: underline;
