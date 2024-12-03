@@ -1,48 +1,47 @@
 <template>
   <PButton
-    class="inline-flex cursor-pointer items-center rounded-full border border-gray-300 bg-surface-100 dark:border-gray-700 dark:bg-gray-700 dark:text-cics-white pl-4 pr-4 text-sm text-gray-800 transition duration-300 ease-in-out hover:bg-surface-300 dark:hover:bg-gray-500"
-    :class="[{ 'chip-active': isActive }]"
-    @click="toggleFilter"
-    :label="label"
-    :icon="icon"
+    class="inline-flex cursor-pointer overflow-hidden items-center rounded-full border border-gray-300 bg-surface-100 py-0.5  gap-1 px-3 text-sm text-gray-800 transition duration-300 ease-in-out hover:bg-surface-300 dark:border-gray-700 dark:bg-gray-700 dark:text-cics-white dark:hover:bg-gray-500"
+    :class="{ 'chip-active': enabled }"
+    @click="toggleEnabled"
+    :label
     unstyled
-  />
+  >
+    <template #icon>
+      <Icon :name="icon" v-if="icon"
+      class="transition-all duration-200 ease-in-out"
+        :class="{
+          '-translate-x-6 opacity-0 w-0': !enabled && filter,
+        }"
+      
+      /> 
+    </template>
+  </PButton>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, watch } from 'vue'
-import Button from 'primevue/button'
-
-const props = defineProps<{
+defineProps<{
   label: string // Etiqueta para el chip
   icon?: string // Ícono opcional
-  modelValue?: boolean // Estado inicial del filtro
+  filter?: boolean // Indica si el chip actúa como filtro
 }>()
+
+const enabled = defineModel({
+  default: false,
+  type: Boolean
+})
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: boolean): void
-  (e: 'toggle', value: boolean): void
+  (e: 'change', value: boolean): void
 }>()
 
-const isActive = ref(false)
-
-watch(
-  () => props.modelValue,
-  (newValue) => {
-    isActive.value = newValue ?? false
-  },
-  { immediate: true }
-)
-
-const toggleFilter = () => {
-  isActive.value = !isActive.value
-  emit('update:modelValue', isActive.value)
-  emit('toggle', isActive.value)
+const toggleEnabled = () => {
+  enabled.value = !enabled.value
+  emit('change', enabled.value)
 }
 </script>
 
 <style scoped lang="postcss">
 .chip-active {
-  @apply border-primary-500 bg-primary-500 text-white hover:border-primary-700 hover:bg-primary-700;
+  @apply border-primary-500 bg-primary-500 text-white hover:border-primary-700 hover:bg-primary-700 font-semibold;
 }
 </style>
