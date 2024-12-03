@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-20 rounded-[10px] border border-surface-950/75 bg-surface-50 shadow-[2px_2px_0_0_rgba(0,0,0,1)] ease-in-out text-color dark:bg-gray-700"
+    class="flex min-h-16 rounded-[10px] border border-surface-950/75 bg-surface-50 shadow-[2px_2px_0_0_rgba(0,0,0,1)] ease-in-out text-color dark:bg-gray-700"
   >
     <div
       class="mr-3 w-5 shrink-0 rounded-lg border border-surface-950/75"
@@ -9,17 +9,17 @@
       }"
     ></div>
     <div class="flex flex-1 gap-4 items-center">
-      <div class="w-9 text-sm">
+      <div class="w-9 text-sm shrink-0">
         <span class="block">{{ course.course_code }}</span>
         <strong class="block"
           >{{ course.course.credits }} <span class="">Cr</span></strong
         >
       </div>
       <!--Divider-->
-      <div class="h-3/4 w-0.5 rounded-lg bg-gray-950"></div>
+      <div class="h-3/4 w-0.5 shrink-0 rounded-lg bg-gray-950"></div>
       <!--Divider-->
       <div class="w-auto" cols="8">
-        <CourseDialog
+        <CourseDialog 
           :field="course.field"
           :course-code="course.course_code"
           :mandatory="false"
@@ -36,7 +36,6 @@
 </template>
 <script setup lang="ts">
 import CourseDialog from '@/components/dialogs/courses/CourseDialog.vue'
-import { NuxtLink } from '#components'
 import type { SemesterCourses } from '~/utils/types/career-courses'
 defineProps<{
   course: SemesterCourses
