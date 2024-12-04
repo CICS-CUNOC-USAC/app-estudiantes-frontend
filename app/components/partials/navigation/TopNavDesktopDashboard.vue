@@ -18,7 +18,7 @@
         :key="item.sectionName"
       >
         <NavigationMenuTrigger
-          class="group flex select-none items-center justify-between gap-2 rounded-md px-3 py-1.5 font-medium transition hover:bg-primary-200 dark:hover:bg-primary-800/50 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary-300 active:bg-primary-300"
+          class="group flex select-none items-center justify-between gap-2 rounded-md px-3 py-1.5 font-medium transition hover:bg-primary-200 dark:hover:bg-primary-800/50 focus-visible:outline focus-visible:outline-offset-2 focus-visible:outline-primary-300 active:bg-primary-300 data-[state=open]:bg-primary-200 dark:data-[state=open]:bg-primary-800/50"
         >
           {{ item.shortName }}
           <Icon
@@ -51,7 +51,7 @@
 
     <div class="absolute top-full flex w-[30rem] justify-center">
       <NavigationMenuViewport
-        class="relative mt-4 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-xl bg-cics-white dark:bg-neutral-900 shadow-lg shadow-black/15 outline outline-black/50 transition-[height] duration-200 data-[state=closed]:animate-scaleOut data-[state=open]:animate-scaleIn"
+        class="relative mt-4 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-xl bg-cics-white dark:bg-neutral-900 shadow-lg shadow-black/15 border border-black/80 transition-[height] duration-200 data-[state=closed]:animate-scaleOut data-[state=open]:animate-scaleIn"
       />
     </div>
   </NavigationMenuRoot>
@@ -77,7 +77,7 @@ const currentTrigger = defineModel({
 }
 
 .active-menu {
-  @apply z-50 text-primary-700 shadow-md outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600;
+  @apply z-50 text-primary-700 shadow-md outline-gray-600 focus:text-primary-500 active:text-primary-500 outline-1 dark:text-primary-500 dark:outline-neutral-600;
   &::before {
     @apply absolute left-4 top-1/2 h-2/4 w-0.5 -translate-y-1/2 rounded bg-primary-700 dark:bg-primary-400;
     content: '';
