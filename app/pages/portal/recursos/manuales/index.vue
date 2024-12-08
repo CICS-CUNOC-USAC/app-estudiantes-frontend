@@ -1,25 +1,39 @@
 <template>
   <main>
-    <h1 class="mb-4">Manuales</h1>
+    <nav class="space-x-4">
+      <CButton
+          icon="lucide:arrow-left"
+          variant="link"
+          label="Regresar al inicio"
+          class="mb-4 text-muted-color-emphasis lg:mb-2"
+          to="/"
+        />
+    </nav>
+    <h1 class="py-3  text-xl font-semibold">
+      <Icon name="lucide:book" class="mb-1 mr-1.5 inline-block" />
+      Manuales disponibles
+    </h1>
     <p class="font-weight-light my-4">
       En esta sección podrás encontrar todos los manuales que pueden ayudarte a
       lo largo de tu carrera.
     </p>
-    <!-- <ManualsView /> -->
-    <div v-if="data" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-      <NuxtLink v-for="manual in data" :key="manual._id" class="border p-3 mb-3" :to="`/portal/recursos/manuales/${manual._path.split('/').pop()}`">
-        <h2
-          
-        >{{ manual.title }}</h2>
-        <p>{{ manual.description }}</p>
-      </NuxtLink>
+    <div v-if="data" class="grid grid-cols-1 gap-4 lg:grid-cols-3">
+      <CCardAlt
+        v-for="manual in data"
+        :to="`/portal/recursos/manuales/${manual._path.split('/').pop()}`"
+        interactive-inverse
+        :key="manual._id"
+        :title="manual.title"
+        :description="manual.description"
+      />
     </div>
-    <HelpDialog title="Manuales" :content="content_help"></HelpDialog>
   </main>
 </template>
 <script setup lang="ts">
 import ManualsView from '~/components/portal/ManualsView.vue'
 import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
+import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import CButton from '~/components/primitives/button/CButton.vue';
 
 // const { data } = useAsyncData(() =>
 //   fetchContentNavigation({
@@ -29,9 +43,12 @@ import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 //   })
 // )
 const { data } = useAsyncData(() =>
-  queryContent().where({
-    _path: { $contains: '/manuals' }
-  }).without(['body']).find()
+  queryContent()
+    .where({
+      _path: { $contains: '/manuals' }
+    })
+    .without(['body'])
+    .find()
 )
 
 const content_help = `Los Manuales es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de Manuales creados con el fin de ayudar al estudiantado
