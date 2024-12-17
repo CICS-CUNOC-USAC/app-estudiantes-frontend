@@ -1,66 +1,72 @@
 <template>
   <main>
-    <h1 class="mb-4">Programas de curso</h1>
-    <p class="font-weight-light my-6">
+    <nav class="space-x-4">
+      <CButton
+        icon="lucide:arrow-left"
+        variant="link"
+        label="Regresar al inicio"
+        class="mb-5 text-muted-color-emphasis lg:mb-2"
+        to="/"
+      />
+    </nav>
+    <h1 class="text-xl font-semibold">
+      <Icon name="lucide:book-open" class="mb-1 mr-1.5 inline-block" />
+      Programas de Cursos
+    </h1>
+    <p class="font-weight-light my-4">
       Escribe el nombre del curso para buscar los programas asociados.
     </p>
-    <v-row>
-      <v-col cols="12" sm="5">
-        <v-text-field
-          ref="searchRef"
-          v-model="searchDeb"
-          prepend-inner-icon="mdi-magnify"
-          label="Buscar programa de curso"
-          type="text"
-          clearable
-          placeholder="Nombre del curso"
-          variant="outlined"
-        >
-          <template #append-inner>
-            <v-fade-transition leave-absolute>
-              <v-progress-circular
-                v-if="pending"
-                color="accent-1"
-                indeterminate
-                size="26"
-              ></v-progress-circular>
-            </v-fade-transition>
-          </template>
-        </v-text-field>
-      </v-col>
-      <v-col cols="12" sm="5">
-        <v-text-field
-          v-model="teacherSearch"
-          clearable
-          prepend-inner-icon="mdi-account-tie-outline"
-          label="Buscar nombre de docente"
-          placeholder="Nombre del docente"
-          variant="outlined"
-          :disabled="pending || !search || data?.length === 0"
-        >
-        </v-text-field>
-      </v-col>
-      <v-col cols="12">
-        <ProgramsView
-          :teacher-search="teacherSearch"
-          :data="data"
-          :loading="pending"
-        />
-      </v-col>
-    </v-row>
-    <HelpDialog
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+      <CInputText
+        ref="searchRef"
+        v-model="searchDeb"
+        prepend-icon="lucide:search"
+        append-icon="lucide:x"
+        @click:append="searchDeb = ''"
+        no-borders
+        label="Buscar programa de curso"
+        type="text"
+        clearable
+        placeholder="Nombre del curso"
+        variant="outlined"
+      >
+      </CInputText>
+      <CInputText
+        v-model="teacherSearch"
+        clearable
+        no-borders
+        prepend-icon="lucide:user"
+        label="Buscar nombre de docente"
+        placeholder="Nombre del docente"
+        variant="outlined"
+        :disabled="pending || !search || data?.length === 0"
+      >
+      </CInputText>
+    </div>
+
+    <ProgramsView
+      :teacher-search="teacherSearch"
+      :data="filteredData"
+      :search-empty="!search"
+      :loading="pending"
+    />
+
+    <!-- <HelpDialog
       title="Programas de Cursos"
       :content="content_help"
-    ></HelpDialog>
+    ></HelpDialog> -->
   </main>
 </template>
 <script setup lang="ts">
-import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
+// import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import ProgramsView from '~/components/portal/ProgramsView.vue'
+import CButton from '~/components/primitives/button/CButton.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
 
 onMounted(() => {
-  searchRef.value.focus()
+  searchRef.value.$input.$el.focus()
 })
 
 const router = useRouter()
@@ -94,6 +100,22 @@ watchDebounced(
   },
   { debounce: 500 }
 )
+
+const filteredData = computed(() => {
+  if (!data.value) return []
+  return data.value.filter((item) =>
+    item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
+  )
+})
+// watch(
+//   teacherSearch,
+//   () => {
+//     data.value = data.value?.filter((item) =>
+//       item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
+//     )
+//   },
+//   { immediate: true }
+// )
 </script>
 <style lang="scss" scoped>
 HelpDialog {

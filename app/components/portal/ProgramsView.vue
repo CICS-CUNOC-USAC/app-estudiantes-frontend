@@ -1,5 +1,65 @@
 <template>
-  <v-sheet rounded="lg" border>
+  <PDataTable
+    :value="data"
+    v-model:filters="filters"
+    pt:root:class="max-w-5xl mx-auto"
+    :loading
+    pt:tableContainer:class="rounded-xl max-w-5xl mx-auto  border border-black "
+    pt:mask:class="rounded-xl max-w-5xl mx-auto"
+  >
+
+  <!-- <DataTable>
+    <template #></template>
+
+  </DataTable> -->
+    <PColumn field="" header="Acciones" class="w-min text-center">
+      <template #body="slotProps">
+        <div class="flex flex-col items-center justify-center gap-y-2">
+          <CButton
+            :to="`/portal/general/cursos/programa/${slotProps.data.id}`"
+            icon="lucide:eye"
+            fluid
+            size="small"
+            variant="tonal"
+            label="Ver"
+          />
+
+          <CButton
+            :href="slotProps.data.pdfLink"
+            icon="lucide:download"
+            fluid
+            size="small"
+            variant="tonal"
+            label="Descargar"
+          />
+        </div>
+      </template>
+    </PColumn>
+    <PColumn field="name" header="Nombre" class="text-center"></PColumn>
+    <PColumn field="teacher" header="Docente" class="text-center">
+      <!-- <template  #filter="{ filterModel, filterCallback }">
+        <PInputText v-model="filterModel.value" placeholder="Buscar docente" type="text" @input="filterCallback" />
+      </template> -->
+    </PColumn>
+    <PColumn field="semester" header="Cohorte" class="text-center"></PColumn>
+    <PColumn field="year" header="Año" class="text-center"></PColumn>
+    <PColumn field="section" header="Sección" class="text-center"></PColumn>
+
+    <template #empty>
+      <div class="text-center">
+        <span class="text-sm font-semibold text-muted-color-emphasis">
+          {{
+            data?.length === 0 && !loading
+              ? searchEmpty
+                ? 'Escribe el nombre del curso para buscar los programas asociados.'
+                : 'No hay datos disponibles, intenta con otro término de búsqueda.'
+              : 'Cargando...'
+          }}
+        </span>
+      </div>
+    </template>
+  </PDataTable>
+  <!-- <v-sheet rounded="lg" border>
     <v-data-table
       :items="data || []"
       :headers="headers"
@@ -31,112 +91,25 @@
       <template #item.name="{ item }">
         <span class="font-weight-medium">{{ item.name }}</span>
       </template>
-      <!-- <template #item="{ item }">
-        <tr class="programs-table__row--desktop">
-          <td>
-            <div class="d-flex flex-column ga-2 py-2">
-              <v-tooltip text="Ver programa">
-                <template #activator="{ props }">
-                  <v-btn
-                    class="flex-grow-1 px-6"
-                    density="comfortable"
-                    size="small"
-                    :to="`/portal/general/cursos/programa/${item.id}`"
-                    icon="mdi-eye"
-                    v-bind="props"
-                  />
-                </template>
-              </v-tooltip>
-
-              <v-tooltip text="Descargar programa">
-                <template #activator="{ props }"
-                  ><v-btn
-                    class="flex-grow-1 px-6"
-                    density="comfortable"
-                    size="small"
-                    :href="item.pdfLink"
-                    target="_blank"
-                    icon="mdi-download"
-                    v-bind="props"
-                /></template>
-              </v-tooltip>
-            </div>
-          </td>
-          <td>
-            <span class="font-weight-medium">{{ item.name }}</span>
-          </td>
-          <td>{{ item.teacher }}</td>
-          <td>{{ item.semester }}</td>
-          <td>{{ item.year }}</td>
-          <td>{{ item.section }}</td>
-        </tr>
-      </template> -->
     </v-data-table>
-  </v-sheet>
+  </v-sheet> -->
 </template>
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
+import CButton from '../primitives/button/CButton.vue'
+import { FilterMatchMode } from '@primevue/core/api'
+import { DataTable } from 'primevue';
 
-const display = useDisplay()
-
-const { smAndDown } = display
-
-defineProps<{
+const { teacherSearch } = defineProps<{
   teacherSearch: string
   data: ScrapedProgram[] | null
+  searchEmpty: boolean
   loading: boolean
 }>()
-const headers = [
-  {
-    title: 'Acciones',
-    key: 'pdfLink',
-    sortable: false,
-    filterable: false
-  },
-  {
-    title: 'Curso',
-    key: 'name',
-    sortable: true,
-    filterable: false
-  },
-  {
-    title: 'Docente',
-    key: 'teacher',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'Cohorte',
-    key: 'semester',
-    sortable: true,
-    filterable: false
-  },
-  {
-    title: 'Año',
-    key: 'year',
-    sortable: true,
-    filterable: false
-  },
-  {
-    title: 'Sección',
-    key: 'section',
-    sortable: true,
-    filterable: false
-  }
-]
+
+const filters = ref({
+  teacher: { value: null, matchMode: FilterMatchMode.CONTAINS }
+})
+
 </script>
-<style lang="scss" scoped>
-.programs-table {
-  // @media (max-width: 500px) {
-  //   // &__row--desktop {
-  //   //   display: none;
-  //   // }
-  //   :deep() {
-  //     .v-table__wrapper thead {
-  //       display: none;
-  //     }
-  //   }
-  // }
-}
-</style>
+<style lang="scss" scoped></style>

@@ -2,6 +2,11 @@
 
 @layer tailwind-base {
   @tailwind base;
+
+  /* Fix for Firefox, using underline is too thick, so we use text-decoration-thickness */
+  a {
+    text-decoration-thickness: 1px;
+  }
 }
 
 @layer tailwind-utilities {

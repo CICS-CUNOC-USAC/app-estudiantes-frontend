@@ -4,7 +4,7 @@
     class="flex h-12"
     :class="[
       {
-        'rounded-lg transition focus-within:ring-2 focus-within:ring-primary-400/30':
+        'rounded-lg transition-all duration-75 outline outline-2 outline-transparent focus-within:outline-primary-400/50':
           prependUsed || appendUsed
       },
       classAttr
@@ -17,7 +17,8 @@
       @click="emit('click:prepend')"
       class="dark:border-surface-7002 inline-flex w-12 items-center justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:bg-surface-900"
       :class="{
-        'hover:bg-surface-200/80 dark:hover:bg-surface-800': hasPrependClick
+        'hover:bg-surface-200/80 dark:hover:bg-surface-800': hasPrependClick,
+        'cursor-not-allowed opacity-50': disabled
       }"
       unstyled
       pt:label:class="hidden"
@@ -29,6 +30,7 @@
     </component>
     <PInputText
       v-bind="restAttrs"
+      :disabled
       ref="$input"
       v-model="vModel"
       class="placeholder:text-muted-color/70 dark:border-surface-7002 z-10 flex rounded-lg border border-black bg-surface-50 w-full text-sm transition text-color disabled:cursor-not-allowed disabled:opacity-50 dark:bg-surface-900"
@@ -39,7 +41,7 @@
         'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
         //remove default focus styles when prepend or append is used
         'focus:outline-none': prependUsed || appendUsed,
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/30':
+        'focus-visible:outline-none focus-visible:outline focus-visible:outline-primary-400/30':
           !prependUsed && !appendUsed,
         'border-l-0': noBorders && (hasPrependClick || prependIcon),
         'border-r-0': noBorders && (hasAppendClick || appendIcon)
@@ -54,7 +56,8 @@
       @click="emit('click:append')"
       class="dark:border-surface-7002 inline-flex w-12 items-center justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:bg-surface-900"
       :class="{
-        'hover:bg-surface-200/80 dark:hover:bg-surface-800': hasAppendClick
+        'hover:bg-surface-200/80 dark:hover:bg-surface-800 cursor-pointer': hasAppendClick,
+        'cursor-not-allowed opacity-50': disabled
       }"
       unstyled
       pt:label:class="hidden"
@@ -79,6 +82,7 @@ const props = defineProps<{
   prependIcon?: string
   appendIcon?: string
   noBorders?: boolean
+  disabled?: boolean
 }>()
 
 const attrs = useAttrs()
