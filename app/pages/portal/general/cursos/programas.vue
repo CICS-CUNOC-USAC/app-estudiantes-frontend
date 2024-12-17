@@ -47,18 +47,19 @@
 
     <ProgramsView
       :teacher-search="teacherSearch"
-      :data="data"
+      :data="filteredData"
+      :search-empty="!search"
       :loading="pending"
     />
 
-    <HelpDialog
+    <!-- <HelpDialog
       title="Programas de Cursos"
       :content="content_help"
-    ></HelpDialog>
+    ></HelpDialog> -->
   </main>
 </template>
 <script setup lang="ts">
-import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
+// import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import ProgramsView from '~/components/portal/ProgramsView.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
@@ -99,6 +100,22 @@ watchDebounced(
   },
   { debounce: 500 }
 )
+
+const filteredData = computed(() => {
+  if (!data.value) return []
+  return data.value.filter((item) =>
+    item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
+  )
+})
+// watch(
+//   teacherSearch,
+//   () => {
+//     data.value = data.value?.filter((item) =>
+//       item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
+//     )
+//   },
+//   { immediate: true }
+// )
 </script>
 <style lang="scss" scoped>
 HelpDialog {

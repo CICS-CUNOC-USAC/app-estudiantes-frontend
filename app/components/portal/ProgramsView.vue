@@ -1,19 +1,63 @@
 <template>
-  <PDataTable :value="mocks" unstyled
-    class="w-full"
+  <PDataTable
+    :value="data"
+    v-model:filters="filters"
+    pt:root:class="max-w-5xl mx-auto"
+    :loading
+    pt:tableContainer:class="rounded-xl max-w-5xl mx-auto  border border-black "
+    pt:mask:class="rounded-xl max-w-5xl mx-auto"
   >
-    <PColumn field="code" header="Code"
-    class="text-center"
-    ></PColumn>
-    <PColumn field="name" header="Name"
-    class="text-center"
-    ></PColumn>
-    <PColumn field="category" header="Category"
-    class="text-center"
-    ></PColumn>
-    <PColumn field="quantity" header="Quantity"
-    class="text-center"
-    ></PColumn>
+
+  <!-- <DataTable>
+    <template #></template>
+
+  </DataTable> -->
+    <PColumn field="" header="Acciones" class="w-min text-center">
+      <template #body="slotProps">
+        <div class="flex flex-col items-center justify-center gap-y-2">
+          <CButton
+            :to="`/portal/general/cursos/programa/${slotProps.data.id}`"
+            icon="lucide:eye"
+            fluid
+            size="small"
+            variant="tonal"
+            label="Ver"
+          />
+
+          <CButton
+            :href="slotProps.data.pdfLink"
+            icon="lucide:download"
+            fluid
+            size="small"
+            variant="tonal"
+            label="Descargar"
+          />
+        </div>
+      </template>
+    </PColumn>
+    <PColumn field="name" header="Nombre" class="text-center"></PColumn>
+    <PColumn field="teacher" header="Docente" class="text-center">
+      <!-- <template  #filter="{ filterModel, filterCallback }">
+        <PInputText v-model="filterModel.value" placeholder="Buscar docente" type="text" @input="filterCallback" />
+      </template> -->
+    </PColumn>
+    <PColumn field="semester" header="Cohorte" class="text-center"></PColumn>
+    <PColumn field="year" header="Año" class="text-center"></PColumn>
+    <PColumn field="section" header="Sección" class="text-center"></PColumn>
+
+    <template #empty>
+      <div class="text-center">
+        <span class="text-sm font-semibold text-muted-color-emphasis">
+          {{
+            data?.length === 0 && !loading
+              ? searchEmpty
+                ? 'Escribe el nombre del curso para buscar los programas asociados.'
+                : 'No hay datos disponibles, intenta con otro término de búsqueda.'
+              : 'Cargando...'
+          }}
+        </span>
+      </div>
+    </template>
   </PDataTable>
   <!-- <v-sheet rounded="lg" border>
     <v-data-table
@@ -51,76 +95,21 @@
   </v-sheet> -->
 </template>
 <script setup lang="ts">
-import { useDisplay } from 'vuetify'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
+import CButton from '../primitives/button/CButton.vue'
+import { FilterMatchMode } from '@primevue/core/api'
+import { DataTable } from 'primevue';
 
-const mocks = [
-  { code: '1', name: 'Name 1', category: 'Category 1', quantity: 1 },
-  { code: '2', name: 'Name 2', category: 'Category 2', quantity: 2 },
-  { code: '3', name: 'Name 3', category: 'Category 3', quantity: 3 },
-  { code: '4', name: 'Name 4', category: 'Category 4', quantity: 4 },
-  { code: '5', name: 'Name 5', category: 'Category 5', quantity: 5 }
-]
-
-const display = useDisplay()
-
-const { smAndDown } = display
-
-defineProps<{
+const { teacherSearch } = defineProps<{
   teacherSearch: string
   data: ScrapedProgram[] | null
+  searchEmpty: boolean
   loading: boolean
 }>()
-const headers = [
-  {
-    title: 'Acciones',
-    key: 'pdfLink',
-    sortable: false,
-    filterable: false
-  },
-  {
-    title: 'Curso',
-    key: 'name',
-    sortable: true,
-    filterable: false
-  },
-  {
-    title: 'Docente',
-    key: 'teacher',
-    sortable: true,
-    filterable: true
-  },
-  {
-    title: 'Cohorte',
-    key: 'semester',
-    sortable: true,
-    filterable: false
-  },
-  {
-    title: 'Año',
-    key: 'year',
-    sortable: true,
-    filterable: false
-  },
-  {
-    title: 'Sección',
-    key: 'section',
-    sortable: true,
-    filterable: false
-  }
-]
+
+const filters = ref({
+  teacher: { value: null, matchMode: FilterMatchMode.CONTAINS }
+})
+
 </script>
-<style lang="scss" scoped>
-.programs-table {
-  // @media (max-width: 500px) {
-  //   // &__row--desktop {
-  //   //   display: none;
-  //   // }
-  //   :deep() {
-  //     .v-table__wrapper thead {
-  //       display: none;
-  //     }
-  //   }
-  // }
-}
-</style>
+<style lang="scss" scoped></style>

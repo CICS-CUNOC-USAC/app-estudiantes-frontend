@@ -4,7 +4,7 @@
     class="flex h-12"
     :class="[
       {
-        'rounded-lg transition focus-within:ring-2 focus-within:ring-primary-400/30':
+        'rounded-lg transition-all duration-75 outline outline-2 outline-transparent focus-within:outline-primary-400/50':
           prependUsed || appendUsed
       },
       classAttr
@@ -41,7 +41,7 @@
         'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
         //remove default focus styles when prepend or append is used
         'focus:outline-none': prependUsed || appendUsed,
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-400/30':
+        'focus-visible:outline-none focus-visible:outline focus-visible:outline-primary-400/30':
           !prependUsed && !appendUsed,
         'border-l-0': noBorders && (hasPrependClick || prependIcon),
         'border-r-0': noBorders && (hasAppendClick || appendIcon)
