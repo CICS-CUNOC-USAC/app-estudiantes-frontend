@@ -17,7 +17,7 @@
           data?.meta
         }}</small>
         <h1
-          class="flex flex-col items-start gap-3 text-2xl font-extrabold text-color"
+          class="flex flex-col items-start gap-3 text-2xl font-bold text-color"
         >
           {{ data?.title }}
 

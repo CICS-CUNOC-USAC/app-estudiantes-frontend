@@ -51,7 +51,11 @@ useHead({
 </script>
 <style lang="postcss">
 :root {
-  @apply bg-cics-white dark:bg-neutral-800;
+  @apply bg-white dark:bg-neutral-800;
+}
+
+:target {
+  @apply bg-primary-50 dark:bg-primary-900/30 rounded-lg animate-pulse;
 }
 
 html {

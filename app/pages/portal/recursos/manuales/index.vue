@@ -21,12 +21,17 @@
       <CCardAlt
         v-for="manual in data"
         :to="`/portal/recursos/manuales/${manual._path.split('/').pop()}`"
+        class="hover:bg-primary-200 dark:hover:bg-primary-900/50"
         interactive-inverse
         :key="manual._id"
-        :title="manual.title"
         :description="manual.description"
-      />
-    </div>
+      >
+      <template #title>
+        <Icon name="lucide:book" class="mb-1 mr-1.5 inline-block" />
+        <h3 class="text-lg font-semibold py-2">{{ manual.title }}</h3>
+      </template>
+    </CCardAlt>
+    </div>  
   </main>
 </template>
 <script setup lang="ts">
@@ -50,7 +55,6 @@ const { data } = useAsyncData(() =>
     .without(['body'])
     .find()
 )
-
 const content_help = `Los Manuales es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de Manuales creados con el fin de ayudar al estudiantado
   ## Funcionamiento:
   ### Busqueda:
