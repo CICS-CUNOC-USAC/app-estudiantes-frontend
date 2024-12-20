@@ -47,7 +47,7 @@
       <template v-if="user">
         <div class="flex items-center">
           <PAvatar class="" shape="circle" :label="displayName?.charAt(0)" />
-          <div class="ml-2 flex max-w-32 flex-col items-start overflow-hidden">
+          <div class="ml-2 flex max-w-32 flex-col items-start">
             <span class="text-sm font-medium">{{ displayNameFull }}</span>
             <span class="text-xs text-muted-color-emphasis">{{
               getRole === 'regular' ? 'Estudiante' : 'Admin'
@@ -93,7 +93,7 @@ defineProps<{
 }
 
 .active-menu {
-  @apply z-50 text-primary-700 shadow-md outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600;
+  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600;
   &::before {
     @apply absolute left-4 top-1/2 h-2/4 w-0.5 -translate-y-1/2 rounded bg-primary-700 dark:bg-primary-400;
     content: '';

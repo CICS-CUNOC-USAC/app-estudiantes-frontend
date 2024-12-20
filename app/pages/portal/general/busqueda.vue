@@ -13,21 +13,44 @@
         variant="link"
         label="Ir a publicaciones"
         class="mb-4 text-muted-color lg:mb-2"
-        to="/"
+        to="/portal/general/publicaciones"
       />
     </nav>
     <h1 class="py-3 text-xl font-semibold">
       <Icon name="lucide:search" class="mb-1 mr-1.5 inline-block" />
       Buscando:
-      <span class="font-normal text-primary-500"> {{ route.query.q }} </span>
+      <span class="font-normal text-primary-400"> {{ route.query.q }} </span>
       en Ingeniería CUNOC
     </h1>
 
     <div
       v-if="data && status === 'success'"
-      class="grid grid-cols-1 gap-4 lg:grid-cols-3 2xl:grid-cols-4"
+      class="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-2"
     >
-      <CCardAlt
+      <NuxtLink
+        v-for="(item, index) in data"
+        :key="index"
+        class="group flex flex-col gap-2 rounded-xl border border-transparent p-6 transition hover:bg-slate-100 active:translate-x-1 active:translate-y-1 dark:hover:bg-zinc-700/60"
+        :to="`/portal/post/${item.internal_link}`"
+      >
+        <div class="flex-1 space-y-3">
+          <h1 class="text-xl font-bold">
+            <span v-html="highlightQuery(item.title)"></span>
+          </h1>
+          <p class="text-muted-color-emphasis">
+            Categoría: <span class="text-color font-medium">{{ item.category }}</span>
+          </p>
+        </div>
+        <small class="block text-muted-color">Fecha: <strong>{{ item.posted_since }}</strong></small>
+        <span class="text-primary-emphasis-alt">
+          Leer
+          <Icon
+            name="lucide:arrow-right"
+            class="mb-0.5 inline-block transition-transform group-hover:translate-x-1"
+          />
+        </span>
+      </NuxtLink>
+      <!-- <CCardAlt
         v-for="item in data"
         :key="item.internal_link"
         :to="`/portal/post/${item.internal_link}`"
@@ -44,7 +67,7 @@
             <span>Fecha publicación: </span>{{ item.posted_since }}
           </small>
         </template>
-      </CCardAlt>
+      </CCardAlt> -->
     </div>
     <div v-else-if="status === 'pending'" class="animate-pulse">
       <h1 class="text-xl font-medium">Cargando...</h1>
@@ -84,7 +107,7 @@ const highlightQuery = (title: string) => {
 
   return title.replace(
     regex,
-    '<span class="text-primary-500 font-semibold">$1</span>'
+    '<span class="text-primary-400 font-semibold">$1</span>'
   )
 }
 </script>
