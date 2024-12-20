@@ -21,20 +21,15 @@ export default defineNuxtConfig({
       link: [
         // favicon
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'preconnect', href: 'https://rsms.me/' },
-        { rel: 'stylesheet', href: 'https://rsms.me/inter/inter.css' }
       ],
       meta: [
         { name: 'theme-color', content: '#faf6ed', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#262626', media: '(prefers-color-scheme: dark)' }
       ]
     },
-    // pageTransition: { name: 'page', mode: 'out-in' },
-    // layoutTransition: { name: 'layout', mode: 'out-in' }
   },
   modules: [
     '@pinia/nuxt',
-    '@nuxtjs/google-fonts',
     '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',
     '@nuxt/fonts',
@@ -73,7 +68,6 @@ export default defineNuxtConfig({
     importTheme: { from: '@/themes/pThemes.ts' },
     options: {
       theme: {
-        // preset: AuraBase,
         options: {
           cssLayer: {
             name: 'primevue',
@@ -83,7 +77,6 @@ export default defineNuxtConfig({
       }
     }
   },
-  // plugins: ['~/plugins/vuetify.ts'],
   fonts: {
     defaults: {
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
@@ -92,16 +85,8 @@ export default defineNuxtConfig({
       { name: 'Geist Sans', provider: 'fontsource' },
       { name: 'Mona Sans', provider: 'google' },
       { name: 'Hubot Sans', provider: 'google' },
-      { name: 'Geist Mono', provider: 'fontsource' }
+      { name: 'Geist Mono', provider: 'fontsource' },
+      { name: 'Switzer', provider: 'fontshare' },
     ]
-    // styles: ['normal', 'italic'],
   },
-  googleFonts: {
-    display: 'swap',
-    families: {
-      // 'IBM+Plex+Sans': [100, 200, 300, 400, 500, 600, 700],
-      'DM Sans': [100, 200, 300, 400, 500, 600, 700, 800, 900, 1000]
-      // Inter: [100, 200, 300, 400, 500, 600, 700, 800, 900]
-    }
-  }
 })

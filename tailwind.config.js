@@ -57,6 +57,7 @@ module.exports = {
       },
     },
     fontFamily: {
+      // 'sans': ['Switzer', 'Geist Sans', 'system-ui', 'sans-serif'],
       // 'sans': ['Mona Sans', 'Geist Sans', 'system-ui', 'sans-serif'],
       'sans': ['Geist Sans', 'system-ui', 'sans-serif'],
       'alt': ['Hubot Sans', 'system-ui', 'sans-serif'],

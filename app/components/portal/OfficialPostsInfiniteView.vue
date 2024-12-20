@@ -1,30 +1,33 @@
 <template>
-  <template v-if="data">
-    <v-infinite-scroll @load="load" class="!overflow-visible">
-      <v-row>
-        <v-col
-          v-for="(item, index) in data"
-          :key="index"
-          cols="12"
-          xs="12"
-          sm="12"
-          lg="6"
-        >
-          <CCardAlt
-            class="group hover:bg-primary-100/75 dark:hover:bg-primary-950/75"
-            :title="item.title"
-            :description="item.description"
-            :to="`/portal/post/${item.link}`"
-            :small="item.posted_since"
-            interactive-inverse
+  <CInfiniteScroll @load-more="load" v-if="data">
+    <div
+      class="grid grid-cols-1 gap-3 pb-12 transition md:grid-cols-2 lg:grid-cols-2"
+      :class="{ 'opacity-50': isLoading }"
+    >
+      <NuxtLink
+        v-for="(item, index) in data"
+        :key="index"
+        class="group flex flex-col gap-2 rounded-xl border border-transparent p-5 transition hover:bg-slate-100 active:translate-x-1 active:translate-y-1 dark:hover:bg-zinc-700/60"
+        :to="`/portal/post/${item.link}`"
+      >
+        <div class="flex-1 space-y-3">
+          <h1 class="text-xl font-bold">{{ item.title }}</h1>
+          <p class="text-muted-color-emphasis">{{ item.description }}</p>
+        </div>
+        <small class="block text-muted-color">{{ item.posted_since }}</small>
+        <span class="text-primary-emphasis-alt">
+          Leer
+          <Icon
+            name="lucide:arrow-right"
+            class="mb-0.5 inline-block transition-transform group-hover:translate-x-1"
           />
-        </v-col>
-      </v-row>
-    </v-infinite-scroll>
-  </template>
+        </span>
+      </NuxtLink>
+    </div>
+  </CInfiniteScroll>
 </template>
 <script setup lang="ts">
-import CCardAlt from '../primitives/card/CCardAlt.vue'
+import CInfiniteScroll from '../primitives/data/CInfiniteScroll.vue'
 
 const page = ref(1)
 const { data } = useFetch<
@@ -39,8 +42,7 @@ const { data } = useFetch<
   params: { page: page.value }
 })
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-async function load({ done }: { done: Function }) {
+async function load() {
   const res = await $fetch<
     {
       title: string
@@ -52,10 +54,9 @@ async function load({ done }: { done: Function }) {
   >('/api/official-posts', {
     params: { page: page.value + 1 }
   })
-  //@ts-expect-error done is a function
-  data.value = [...data.value, ...res]
-  page.value++
-  done('ok')
+
+  data.value?.push(...res)
+  // page.value++
 }
 </script>
 <style lang="scss" scoped></style>

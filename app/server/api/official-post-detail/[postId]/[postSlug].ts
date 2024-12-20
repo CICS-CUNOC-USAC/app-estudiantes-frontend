@@ -55,7 +55,7 @@ export default defineEventHandler(async (event) => {
     ?.textContent?.trim()
     .replace(/\n/g, '')
     .replace(/\t/g, '')
-    .replace(/el/g, 'el ')
+    // .replace(/\sel/g, ' el ')
   const attachments = Array.from(postAttachmentsEls).map((attachment) => {
     return {
       title: attachment.textContent?.trim()
