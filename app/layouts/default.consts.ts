@@ -5,32 +5,32 @@ export const DefaultLayoutItems = [
     items: [
       {
         itemName: 'Publicaciones Oficiales',
-        itemIcon: 'lucide:scroll-text',
+        itemIcon: 'icon-park-twotone:view-grid-detail',
         itemLink: '/portal/general/publicaciones'
       },
       {
         itemName: 'Horarios',
-        itemIcon: 'lucide:calendar',
+        itemIcon: 'icon-park-twotone:calendar',
         itemLink: '/portal/general/horarios'
       },
       {
         itemName: 'Programas de curso',
-        itemIcon: 'lucide:book-open',
+        itemIcon: 'icon-park-twotone:book-open',
         itemLink: '/portal/general/cursos/programas'
       },
       {
         itemName: 'Pensas de estudio',
-        itemIcon: 'lucide:presentation',
+        itemIcon: 'icon-park-twotone:enter-the-keyboard',
         itemLink: '/portal/general/pensums'
       },
       {
         itemName: 'Preguntas Frecuentes (Primer Ingreso)',
-        itemIcon: 'lucide:life-buoy',
+        itemIcon: 'icon-park-outline:lifebuoy',
         itemLink: '/portal/general/faq-primer-ingreso'
       },
       {
         itemName: 'Preguntas Frecuentes',
-        itemIcon: 'lucide:message-circle-question',
+        itemIcon: 'icon-park-twotone:help',
         itemLink: '/portal/general/faq'
       }
 
@@ -42,12 +42,12 @@ export const DefaultLayoutItems = [
     items: [
       {
         itemName: 'CICS',
-        itemIcon: 'lucide:users',
+        itemIcon: 'icon-park-twotone:peoples',
         itemLink: '/portal/asociaciones/cics'
       },
       {
         itemName: 'AEIO',
-        itemIcon: 'lucide:users',
+        itemIcon: 'icon-park-twotone:peoples',
         itemLink: '/portal/asociaciones/aeio'
       }
     ]
@@ -58,12 +58,12 @@ export const DefaultLayoutItems = [
     items: [
       {
         itemName: 'Manuales',
-        itemIcon: 'lucide:book',
+        itemIcon: 'icon-park-twotone:book',
         itemLink: '/portal/recursos/manuales'
       },
       {
         itemName: 'Tesario',
-        itemIcon: 'lucide:book-open',
+        itemIcon: 'icon-park-twotone:book-open',
         itemLink: '/portal/recursos/tesario'
       },
     ]
@@ -74,12 +74,12 @@ export const DefaultLayoutItems = [
     items: [
       {
         itemName: 'Configuración',
-        itemIcon: 'lucide:settings-2',
+        itemIcon: 'icon-park-twotone:setting-one',
         itemLink: '/portal/extras/config'
       },
       {
         itemName: 'Acerca de',
-        itemIcon: 'lucide:badge-info',
+        itemIcon: 'icon-park-twotone:info',
         itemLink: '/portal/extras/about'
       },
     ]

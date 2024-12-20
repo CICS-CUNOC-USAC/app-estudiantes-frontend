@@ -45,20 +45,22 @@
                   v-model="search"
                   type="search"
                   ref="$search"
+                  clearable
                   placeholder="Buscar en Ingeniería CUNOC"
                   class="search-box"
                 />
               </form>
             </Transition>
             <CButton
-              :icon="searchOpen ? 'lucide:search-slash' : 'lucide:search'"
+              :icon="searchOpen ? 'icon-park-twotone:close-one'
+               : 'icon-park-twotone:search'"
               @click="toggleSearch"
             />
           </div>
 
           <CButton
             v-if="!searchOpen"
-            icon="lucide:user"
+            icon="icon-park-twotone:people"
             :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
             class="!px-2"

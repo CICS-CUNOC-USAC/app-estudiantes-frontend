@@ -9,7 +9,7 @@
           v-model="email"
           placeholder="Correo electrónico"
           type="text"
-          prepend-icon="lucide:mail"
+          prepend-icon="icon-park-twotone:mail"
           no-borders
         />
         <CInputText
@@ -20,7 +20,7 @@
           placeholder="Contraseña"
           :type="showPassword ? 'text' : 'password'"
           @click:append="showPassword = !showPassword"
-          :append-icon="showPassword ? 'lucide:eye-closed' : 'lucide:eye'"
+          :append-icon="showPassword ? 'icon-park-outline:preview-close' : 'icon-park-twotone:preview-open'"
           no-borders
         />
       </form>
@@ -73,7 +73,7 @@
           <CButton
             to="/"
             variant="text"
-            icon="lucide:arrow-left"
+            icon="icon-park-outline:arrow-left"
             label="Regresar al portal"
           />
         </div>

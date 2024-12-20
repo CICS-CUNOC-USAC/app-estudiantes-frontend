@@ -2,7 +2,7 @@
   <main>
     <nav class="space-x-4">
       <CButton
-        icon="lucide:arrow-left"
+        icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
         class="mb-5 text-muted-color-emphasis lg:mb-2"
@@ -10,7 +10,7 @@
       />
     </nav>
     <h1 class="text-xl font-semibold">
-      <Icon name="lucide:book-open" class="mb-1 mr-1.5 inline-block" />
+      <Icon name="icon-park-twotone:book-open" class="mb-1 mr-1.5 inline-block" />
       Programas de Cursos
     </h1>
     <p class="font-weight-light my-4">
@@ -21,13 +21,11 @@
       <CInputText
         ref="searchRef"
         v-model="searchDeb"
-        prepend-icon="lucide:search"
-        append-icon="lucide:x"
-        @click:append="searchDeb = ''"
+        prepend-icon="icon-park-twotone:search"
+        clearable
         no-borders
         label="Buscar programa de curso"
         type="text"
-        clearable
         placeholder="Nombre del curso"
         variant="outlined"
       >
@@ -36,7 +34,7 @@
         v-model="teacherSearch"
         clearable
         no-borders
-        prepend-icon="lucide:user"
+        prepend-icon="icon-park-twotone:user-business"
         label="Buscar nombre de docente"
         placeholder="Nombre del docente"
         variant="outlined"

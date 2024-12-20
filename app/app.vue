@@ -1,6 +1,10 @@
 <template>
   <main>
-    <NuxtLoadingIndicator :throttle="130" :height="4" color="var(--p-primary-400)" />
+    <NuxtLoadingIndicator
+      :throttle="130"
+      :height="4"
+      color="var(--p-primary-400)"
+    />
     <NuxtLayout />
     <Toaster
       position="top-center"
@@ -13,11 +17,14 @@
             'w-full py-2 text-sm px-3 border border-black/85 rounded-lg text-current font-sans flex items-center gap-3 shadow-lg',
           default: 'dark:bg-surface-800 bg-surface-50',
           description: 'text-gray-500 text-sm',
-          warning: 'dark:bg-yellow-600 dark:text-yellow-100 bg-yellow-200 text-yellow-800',
+          warning:
+            'dark:bg-yellow-600 dark:text-yellow-100 bg-yellow-200 text-yellow-800',
           error: 'dark:bg-red-600 dark:text-red-100 bg-red-200 text-red-800',
           info: 'dark:bg-sky-600 dark:text-sky-100 bg-sky-200 text-sky-800',
-          success: 'dark:bg-green-600 dark:text-green-100 bg-green-200 text-green-800',
-          closeButton: 'dark:!bg-surface-800 !text-surface-50 !border-black/85 !text-color',
+          success:
+            'dark:bg-green-600 dark:text-green-100 bg-green-200 text-green-800',
+          closeButton:
+            'dark:!bg-surface-800 !text-surface-50 !border-black/85 !text-color'
         }
       }"
     >
@@ -43,11 +50,10 @@ import { Toaster } from 'vue-sonner'
 
 useHead({
   titleTemplate: (titleChunk) => {
-    return titleChunk
-      ? `${titleChunk} | CICS App`
-      : 'CICS App | Portal'
+    return titleChunk ? `${titleChunk} | CICS App` : 'CICS App | Portal'
   }
 })
+
 </script>
 <style lang="postcss">
 :root {
@@ -55,11 +61,16 @@ useHead({
 }
 
 :target {
-  @apply bg-primary-50 dark:bg-primary-900/30 rounded-lg animate-pulse;
+  @apply animate-pulse rounded-lg bg-primary-50 dark:bg-primary-900/30;
 }
 
 html {
-  @apply scroll-smooth scroll-pt-16;
+  @apply scroll-pt-16 scroll-smooth;
+}
+
+body,
+html {
+  scrollbar-gutter: stable both-edges;
 }
 
 /* Common animations */
@@ -104,14 +115,13 @@ html {
   @apply translate-x-0 opacity-100;
 }
 
-
 /* Used for search bar */
 .fade-slide-enter-active {
-  @apply transition-all duration-[400ms] delay-75 lg:delay-0 ease-in-out;
+  @apply transition-all delay-75 duration-[400ms] ease-in-out lg:delay-0;
 }
 
 .fade-slide-leave-active {
-  @apply transition-all duration-[400ms] ease-in-out absolute right-12 lg:relative lg:right-0 -z-10;
+  @apply absolute right-12 -z-10 transition-all duration-[400ms] ease-in-out lg:relative lg:right-0;
 }
 
 .fade-slide-enter-from,
@@ -121,17 +131,15 @@ html {
 
 .fade-slide-enter-to,
 .fade-slide-leave-from {
-  @apply mr-2 w-64 md:max-xl:w-44 opacity-100;
+  @apply mr-2 w-64 opacity-100 md:max-xl:w-44;
 }
 /* Common animations */
-
-
 </style>
 <style lang="scss">
 @use 'vuetify/settings' with (
   $reset: false,
   $color-pack: false,
-  $utilities: false,
+  $utilities: false
 );
 /*
 Styles used for page and layout transitions - Start
@@ -162,5 +170,4 @@ Styles used for page and layout transitions - Start
 Styles used for page and layout transitions - End
 */
 // @import '@/assets/styles/main.scss';
-
 </style>

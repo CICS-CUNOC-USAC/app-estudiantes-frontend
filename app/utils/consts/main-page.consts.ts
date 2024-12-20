@@ -14,7 +14,7 @@ import acercaDeImg from '~/assets/img/acerca_de.jpg'
 export const sections = [
   {
     containerClass: 'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4',
-    icon: 'lucide:info',
+    icon: 'icon-park-twotone:info',
     name: 'basicInfo',
     title: 'Información Básica',
     items: [
@@ -52,7 +52,7 @@ export const sections = [
   },
   {
     containerClass: 'grid w-full grid-cols-1 gap-4 md:grid-cols-2',
-    icon: 'lucide:users',
+    icon: 'icon-park-twotone:peoples',
     name: 'associations',
     title: 'Asociaciones',
     items: [
@@ -76,7 +76,7 @@ export const sections = [
   },
   {
     containerClass: 'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3',
-    icon: 'lucide:book-open-text',
+    icon: 'icon-park-twotone:book-open',
     name: 'resources',
     title: 'Recursos',
     items: [
@@ -108,7 +108,7 @@ export const sections = [
   },
   {
     containerClass: 'grid w-full grid-cols-1 gap-4 md:px-56',
-    icon: 'lucide:plus',
+    icon: 'icon-park-twotone:add-mode',
     name: 'extra',
     title: 'Extra',
     items: [

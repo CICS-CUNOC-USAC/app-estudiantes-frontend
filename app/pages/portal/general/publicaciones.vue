@@ -2,14 +2,14 @@
   <main>
     <nav class="space-x-4">
       <CButton
-          icon="lucide:arrow-left"
+          icon="icon-park-outline:arrow-left"
           variant="link"
           label="Regresar al inicio"
           class="mb-4 text-muted-color-emphasis lg:mb-2"
           to="/"
         />
       <CButton
-          icon="lucide:search"
+          icon="icon-park-twotone:search"
           variant="link"
           label="Buscar publicaciones"
           class="mb-4 text-muted-color-emphasis lg:mb-2"
@@ -17,7 +17,7 @@
         />
     </nav>
     <h1 class="py-3  text-xl font-semibold">
-      <Icon name="lucide:layout-dashboard" class="mb-1 mr-1.5 inline-block" />
+      <Icon name="icon-park-twotone:view-grid-list" class="mb-1 mr-1.5 inline-block" />
       Todas las publicaciones oficiales
     </h1>
     <OfficialPostsInfiniteView />

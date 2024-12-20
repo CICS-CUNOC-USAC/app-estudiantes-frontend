@@ -14,13 +14,19 @@
 
     <section class="portal-section">
       <h2 class="">
-        <Icon name="lucide:newspaper" />
-        Publicaciones oficiales recientes
+        <span>
+          <Icon
+            name="icon-park-twotone:newspaper-folding"
+            class="mb-1 mr-1.5 inline"
+            size="26"
+          />
+          Publicaciones oficiales recientes
+        </span>
         <CButton
-          variant="text"
-          icon="lucide:square-arrow-out-up-right"
+          variant="link"
+          icon="lucide:square-arrow-up-right"
           to="/portal/general/publicaciones"
-          v-Ptooltip.top="'Ver todas las publicaciones'"
+          label="Ver más"
         />
       </h2>
       <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
@@ -32,17 +38,18 @@
       class="portal-section"
     >
       <h2>
-        <Icon :name="section.icon" />
-        {{ section.title }}
+        <span>
+          <Icon :name="section.icon" class="mb-1 mr-1.5 inline" size="26" />
+          {{ section.title }}
+        </span>
       </h2>
       <div class="my-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
 
       <div
-        :class="
-        [
-          section.containerClass || 'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4',
-        ]
-        "
+        :class="[
+          section.containerClass ||
+            'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'
+        ]"
       >
         <CCardAlt
           v-for="(item, index) in section.items"
@@ -81,7 +88,17 @@ useHead({
 .portal-section {
   @apply my-6;
   h2 {
-    @apply flex items-center gap-x-2 text-lg font-semibold;
+    @apply flex justify-between lg:justify-start gap-x-4 text-lg font-semibold;
+
+    svg {
+      @apply text-gray-500 dark:text-gray-200;
+    }
+
+    a {
+      @apply shrink-0;
+    }
+    /* :deep(a){
+    } */
   }
 }
 </style>

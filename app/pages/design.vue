@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-5 lg:px-8 lg:pt-4 pb-56">
+  <div class="space-y-5 pb-56 lg:px-8 lg:pt-4">
     <h1 class="text-2xl font-bold">
       Componentes del <span class="italic">Design System</span> (Página
       temporal)
@@ -403,29 +403,60 @@
       <h2 class="text-2xl font-semibold">Input</h2>
       <p class="text-primary-emphasis-alt">Input de texto</p>
 
-      <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-4">
-        <CInputText placeholder="Normal" />
-        <CInputText placeholder="Icono inicio" prepend-icon="lucide:mail" />
-        <CInputText placeholder="Icono final" append-icon="lucide:wind" />
+      <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <CInputText v-model="text" clearable placeholder="Normal" />
         <CInputText
+          v-model="text"
+          placeholder="Icono inicio"
+          prepend-icon="lucide:mail"
+        />
+        <CInputText
+          v-model="text"
+          placeholder="Icono final"
+          append-icon="lucide:wind"
+        />
+        <CInputText
+          v-model="text"
           placeholder="Iconos inicio y final"
           prepend-icon="lucide:mail"
           append-icon="lucide:wind"
         />
         <CInputText
+          v-model="text"
           placeholder="Botón inicio"
           prepend-icon="lucide:wind"
           @click:prepend="toast('Click en el icono')"
         />
         <CInputText
+          v-model="text"
           placeholder="Botón final"
           append-icon="lucide:wind"
           @click:append="toast('Click en el icono')"
         />
         <CInputText
+          v-model="text"
           placeholder="Botones inicio y final"
           prepend-icon="lucide:mail"
           append-icon="lucide:wind"
+          @click:prepend="toast('Click en el icono')"
+          @click:append="toast('Click en el icono')"
+        />
+        <CInputText
+          v-model="text"
+          placeholder="Sin bordes"
+          prepend-icon="lucide:mail"
+          append-icon="lucide:wind"
+          no-borders
+          @click:prepend="toast('Click en el icono')"
+          @click:append="toast('Click en el icono')"
+        />
+        <CInputText
+          v-model="text"
+          placeholder="Clereable"
+          prepend-icon="lucide:mail"
+          append-icon="lucide:wind"
+          no-borders
+          clearable
           @click:prepend="toast('Click en el icono')"
           @click:append="toast('Click en el icono')"
         />
@@ -436,7 +467,9 @@
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import { toast } from 'vue-sonner';
-import CInputText from '~/components/primitives/form/CInputText.vue';
+import { toast } from 'vue-sonner'
+import CInputText from '~/components/primitives/form/CInputText.vue'
+
+const text = ref('')
 </script>
 <style lang="postcss" scoped></style>

@@ -1,51 +1,52 @@
 <template>
   <main>
-    {{ theme }}
-    <header class="mb-4">
-      <h1>Configuración</h1>
-      <CButton icon="lucide:arrow-left" to="/" label="Regresar" />
-      <CButton icon="lucide:palette" to="/design" label="Ir a design" />
-    </header>
-    <section>
-      <h2 class="mb-2 inline-flex gap-2">
-        <Icon name="lucide:palette" class="" />
-        Tema
-      </h2>
-      <p>
-        Elije un tema general para la apariencia de la aplicación. Puedes
-        seleccionar entre colores y claros y oscuros.
-      </p>
-      <PButton label="Test" unstyled />
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-        <PSelect
-          v-model="theme"
-          :options
-          checkmark
-          :highlightOnSelect="false"
-          @value-change="handleThemeChange"
-        />
-      </div>
-    </section>
+    <nav class="space-x-4">
+      <CButton
+        icon="icon-park-outline:arrow-left"
+        variant="link"
+        label="Regresar al inicio"
+        class="mb-5 text-muted-color-emphasis lg:mb-2"
+        to="/"
+      />
+    </nav>
+
+    <h1 class="text-xl font-semibold">
+      <Icon
+        name="icon-park-twotone:setting-two"
+        class="mb-1 mr-1.5 inline-block"
+      />
+      Configuración de la aplicación
+    </h1>
+
+    <div class="space-y-6 my-6">
+      <section>
+        <h2 class="mb-2 inline-flex items-center gap-2 text-lg font-semibold">
+          <Icon name="icon-park-twotone:color-filter" />
+          Tema
+        </h2>
+        <p>
+          Elije un tema general para la apariencia de la aplicación. Puedes
+          seleccionar entre colores y claros y oscuros.
+        </p>
+          <PSelect
+          class="w-1/4 my-2"
+            v-model="theme"
+            :options
+            checkmark
+            @value-change="handleThemeChange"
+          />
+      </section>
+    </div>
   </main>
 </template>
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
 import { allThemesPrimaries } from '~/themes/pThemes'
-import { updatePrimaryPalette } from '@primevue/themes'
 
 const configsStore = useConfigsStore()
 const { theme } = storeToRefs(configsStore)
 const { changeTheme: handleThemeChange } = configsStore
 
-// const pv = usePrimeVue();
-// const selectedTheme = ref(pv.config.theme.preset.name)
-
 const options = allThemesPrimaries.map((theme) => theme.name)
-
-// const handleThemeChange = (newTheme: string) => {
-//   const selectedTheme = allThemesPrimaries.find((theme) => theme.name === newTheme)
-//   selectedTheme && updatePrimaryPalette(selectedTheme.values)
-//   pv.config.theme.preset.name = newTheme
-// }
 </script>
 <style lang="postcss" scoped></style>

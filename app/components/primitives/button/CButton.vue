@@ -3,13 +3,13 @@
   <PButton
     v-bind="props"
     :as="asProp"
-    class="inline-flex select-none items-center justify-center font-semibold text-white transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none"
+    class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none"
     :pt:label:class="`${props.label ? 'block' : 'hidden'}`"
     :class="{
       'w-full': props.fluid,
       'rounded-lg': props.rounded,
-      '-translate-x-0.5 -translate-y-0.5 border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)]':
-        props.variant !== 'text' && props.variant !== 'link',
+      '-translate-x-0.5 -translate-y-0.5 border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)] text-white':
+        props.variant !== 'text' && props.variant !== 'link' && props.variant !== 'tonal',
       'gap-x-2 px-3.5 py-1.5':
         props.variant !== 'link' && props.size === 'large',
       'gap-x-1 px-2.5 py-1': props.variant !== 'link' && props.size === 'small',
@@ -39,9 +39,9 @@
       'pointer-events-none opacity-90': props.loading,
 
       // Variants
-      'bg-opacity-20 !text-current shadow-none hover:bg-opacity-40 active:translate-x-[1px] active:translate-y-[1px] border-none':
+      'bg-opacity-30 text-black dark:text-white shadow-none hover:bg-opacity-40 active:translate-x-0.5 active:translate-y-0.5 border-none translate-x-0 translate-y-0':
         props.variant === 'tonal',
-      'bg-opacity-0 !text-current shadow-none hover:bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5 active:border-black':
+      'bg-opacity-0 text-current shadow-none hover:bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5 active:border-black':
         props.variant === 'text',
       'gap-x-1 !bg-opacity-0 p-0 shadow-none text-color hover:underline active:translate-x-0.5 active:translate-y-0.5':
         props.variant === 'link',

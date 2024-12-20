@@ -55,7 +55,7 @@
         <CButton
           label="Regresar a publicaciones"
           variant="link"
-          icon="lucide:arrow-left"
+          icon="icon-park-outline:arrow-left"
           to="/portal/general/publicaciones"
         />
       </PMessage>

@@ -2,7 +2,7 @@
   <main class="">
     <nav class="mb-4 space-x-4">
       <CButton
-        icon="lucide:arrow-left"
+        icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar a manuales"
         class="mb-4 text-muted-color-emphasis lg:mb-2"

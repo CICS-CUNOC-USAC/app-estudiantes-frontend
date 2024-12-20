@@ -6,9 +6,9 @@
     :loading
     pt:tableContainer:class="rounded-xl max-w-5xl mx-auto  border border-black "
     pt:mask:class="rounded-xl max-w-5xl mx-auto"
+    removableSort
   >
-
-  <!-- <DataTable>
+    <!-- <DataTable>
     <template #></template>
 
   </DataTable> -->
@@ -42,7 +42,7 @@
       </template> -->
     </PColumn>
     <PColumn field="semester" header="Cohorte" class="text-center"></PColumn>
-    <PColumn field="year" header="Año" class="text-center"></PColumn>
+    <PColumn field="year" header="Año" class="text-center" sortable></PColumn>
     <PColumn field="section" header="Sección" class="text-center"></PColumn>
 
     <template #empty>
@@ -98,7 +98,7 @@
 import type { ScrapedProgram } from '~/utils/server/types/programs'
 import CButton from '../primitives/button/CButton.vue'
 import { FilterMatchMode } from '@primevue/core/api'
-import { DataTable } from 'primevue';
+import { DataTable } from 'primevue'
 
 const { teacherSearch } = defineProps<{
   teacherSearch: string
@@ -110,6 +110,5 @@ const { teacherSearch } = defineProps<{
 const filters = ref({
   teacher: { value: null, matchMode: FilterMatchMode.CONTAINS }
 })
-
 </script>
 <style lang="scss" scoped></style>

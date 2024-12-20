@@ -22,7 +22,7 @@ const commonComponentsDefaults = {
 }
 
 const OrangePrimaries = {
-  name: 'Orange',
+  name: 'Naranja',
   values: {
     50: '{orange.50}',
     100: '{orange.100}',
@@ -39,7 +39,7 @@ const OrangePrimaries = {
 }
 
 const BluePrimaries = {
-  name: 'Blue',
+  name: 'Azul',
   values: {
     50: '{indigo.50}',
     100: '{indigo.100}',
@@ -73,7 +73,7 @@ const FuchsiaPrimaries = {
 }
 
 const TealPrimaries = {
-  name: 'Teal',
+  name: 'Aqua',
   values: {
     50: '{teal.50}',
     100: '{teal.100}',
@@ -90,7 +90,7 @@ const TealPrimaries = {
 }
 
 const YellowPrimaries = {
-  name: 'Yellow',
+  name: 'Amarillo',
   values: {
     50: '{yellow.50}',
     100: '{yellow.100}',
@@ -107,7 +107,7 @@ const YellowPrimaries = {
 }
 
 const EmeraldPrimaries = {
-  name: 'Emerald',
+  name: 'Verde',
   values: {
     50: '{emerald.50}',
     100: '{emerald.100}',
@@ -124,7 +124,7 @@ const EmeraldPrimaries = {
 }
 
 const PinkPrimaries = {
-  name: 'Pink',
+  name: 'Rosa',
   values: {
     50: '{pink.50}',
     100: '{pink.100}',
@@ -141,7 +141,7 @@ const PinkPrimaries = {
 }
 
 const StonePrimaries = {
-  name: 'Stone',
+  name: 'Piedra',
   values: {
     50: '{stone.50}',
     100: '{stone.100}',
