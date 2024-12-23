@@ -3,13 +3,7 @@
     <PInputGroup
       unstyled
       class="group flex h-12 rounded-lg outline outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
-      :class="[
-        // {
-        //   'rounded-lg transition-all duration-75 outline outline-2 outline-transparent focus-within:outline-primary-400/50':
-        //     prependUsed || appendUsed
-        // },
-        test.classAttr
-      ]"
+      :class="[inhAttrs.classAttr]"
     >
       <component
         v-if="hasPrependClick || prependIcon"
@@ -29,39 +23,45 @@
         </template>
         <Icon v-if="prependIcon && !hasPrependClick" :name="prependIcon" />
       </component>
-      <div class="relative size-full">
-        <PInputText
-          v-bind="test.restAttrs"
-          :type="props.type"
-          :disabled
-          ref="$input"
-          v-model="vModel"
-          class="placeholder:text-muted-color z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
-          :class="{
-            'pl-3': !prependUsed || !noBorders,
-            'pr-3': !appendUsed || !noBorders || !props.clearable,
-            'pr-5': props.clearable,
-            'rounded-bl-none rounded-tl-none': hasPrependClick || prependIcon,
-            'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
-            'border-l-0': noBorders && (hasPrependClick || prependIcon),
-            'border-r-0': noBorders && (hasAppendClick || appendIcon)
-          }"
-          fluid
-          unstyled
-        >
-        </PInputText>
-        <button
-          v-if="props.clearable && vModel"
-          @click="vModel = ''"
-          class="absolute top-1/2 z-10 flex size-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm opacity-0 transition duration-100 text-muted-color hover:bg-neutral-200 group-focus-within:opacity-100 group-hover:opacity-100 lg:size-4 dark:text-muted-color-emphasis dark:hover:bg-neutral-600"
-          :class="{
-            'right-0': hasAppendClick || appendIcon,
-            'right-2': !hasAppendClick || !appendIcon
-          }"
-        >
-          <Icon name="icon-park-outline:close-small" />
-        </button>
-      </div>
+      <PSelect
+        v-bind="inhAttrs.restAttrs"
+        :modelValue="modelValue"
+        class="z-10 flex size-full items-center gap-x-2 rounded-lg border border-black bg-surface-50 text-sm transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
+        :class="{
+          'pl-3': !prependUsed || !noBorders,
+          'pr-3': !appendUsed || !noBorders,
+          'rounded-bl-none rounded-tl-none': hasPrependClick || prependIcon,
+          'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
+          'border-l-0': noBorders && (hasPrependClick || prependIcon),
+          'border-r-0': noBorders && (hasAppendClick || appendIcon)
+        }"
+        unstyled
+        :option-label
+        :option-value
+        :show-clear="clearable"
+        :options="items"
+        :pt="{
+          clearIcon: 'cursor-pointer text-muted-color hover:text-color',
+          option: 'flex gap-2 items-center cursor-pointer hover:bg-surface-200/80  dark:hover:bg-surface-800 px-3 py-1.5 rounded-lg data-[p-focused=true]:bg-surface-200/80 dark:data-[p-focused=true]:bg-surface-800',
+          listContainer: 'py-2 px-1.5 overflow-y-scroll',
+          overlay: 'bg-surface-50 dark:bg-surface-900 shadow-lg rounded-xl border border-black dark:border-surface-700 ',
+          label: ({ instance, props }) => ({
+            class: [
+              'flex-1 cursor-pointer focus:outline-none',
+              instance.label === props.placeholder
+                ? 'text-muted-color'
+                : 'text-color'
+            ]
+          }),
+          dropdown: {
+            class: 'flex items-center cursor-pointer text-muted-color hover:text-color h-full',
+          }
+        }"
+        no-borders
+      />
+
+      <!-- pt:label:class="flex-1 placeholder:text-muted-color/70"
+        pt:dropdown:class="flex items-center " -->
       <component
         v-if="hasAppendClick || appendIcon"
         :is="hasAppendClick ? Button : InputGroupAddon"
@@ -81,39 +81,35 @@
         <Icon v-if="appendIcon && !hasAppendClick" :name="appendIcon" />
       </component>
     </PInputGroup>
-    <div v-if="props.message" class="text-muted-color/70 text-xs font-medium">
-      {{ props.message }}
+    <div v-if="message" class="text-muted-color/70 text-xs font-medium">
+      {{ message }}
     </div>
-    <div v-if="props.error" class="text-xs font-medium text-red-500">
-      {{ props.error }}
+    <div v-if="error" class="text-xs font-medium text-red-500">
+      {{ error }}
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { Button, InputGroupAddon } from 'primevue'
-
 const vModel = defineModel({ type: String, required: false })
-
-const $input = ref<{
-  $el: HTMLInputElement | null
-}>()
-
 const props = defineProps<{
+  items: any[]
+  message?: string
+  error?: string
+  disabled?: boolean
   prependIcon?: string
   appendIcon?: string
   noBorders?: boolean
-  disabled?: boolean
+  optionLabel?: string
+  optionValue?: string
   clearable?: boolean
-  message?: string
-  error?: string
-  type?: string
+  modelValue?: any
 }>()
 
-// const { class: classAttr, ...restAttrs } = useAttrs()
 const rawAttrs = useAttrs()
-const test = computed(() => {
-  const {class: classAttr, ...restAttrs} = rawAttrs
-  return {classAttr, restAttrs}
+const inhAttrs = computed(() => {
+  const { class: classAttr, ...restAttrs } = rawAttrs
+  return { classAttr, restAttrs }
 })
 
 const emit = defineEmits(['click:prepend', 'click:append'])
@@ -131,7 +127,5 @@ const appendUsed = computed(() => !!props.appendIcon || hasAppendClick.value)
 defineOptions({
   inheritAttrs: false
 })
-
-defineExpose({ $input })
 </script>
 <style lang="postcss" scoped></style>
