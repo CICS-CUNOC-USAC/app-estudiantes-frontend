@@ -1,14 +1,12 @@
 <template>
-  <section class="login-page">
-    <v-row justify="center" no-gutters>
-      <v-col cols="10" sm="8" md="8" lg="5" xl="5">
+  <section class="signup-page">
+    <div class="signup-page__form">
         <SignupForm
           :loading="loading"
           :error="error"
           @signup="signUp($event)"
         />
-      </v-col>
-    </v-row>
+    </div>
   </section>
 </template>
 <script lang="ts">
@@ -46,12 +44,12 @@ export default defineNuxtComponent({
   }
 })
 </script>
-<style lang="scss" scoped>
-.login-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
+<style lang="postcss" scoped>
+.signup-page {
+  @apply w-full min-h-screen flex justify-center items-center;
+  &__form {
+    @apply w-full px-3 md:max-w-lg;
+  }
 }
 </style>
+
