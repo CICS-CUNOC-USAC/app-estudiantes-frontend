@@ -126,11 +126,11 @@
   </CCardAlt>
 </template>
 <script lang="ts" setup>
+import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import CAutocomplete from '~/components/primitives/form/CSelect.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 
@@ -208,6 +208,18 @@ const resolver = zodResolver(
         path: ['confirmPassword']
       }
     )
+    .transform((values) => {
+      return {
+        first_name: values.firstName,
+        last_name: values.lastName,
+        user: {
+          email: values.email,
+          career_code: Number(values.careerCode),
+          ra: values.ra,
+          password: values.password
+        }
+      }
+    })
 )
 
 // end - refactor with primevue forms
@@ -236,18 +248,12 @@ const careerItems = [
   }
 ]
 
-const firstName = ref('')
-const lastName = ref('')
-const ra = ref('')
-const careerCode = ref(null)
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
 const showPassword = ref(false)
-const form = ref(null)
 
-const signup = (e) => {
-  console.log('signup', e)
+const signup = (e: FormSubmitEvent) => {
+  if (e.valid){
+    emit('signup', e.values)
+  }
 }
 </script>
 <style scoped lang="scss">
