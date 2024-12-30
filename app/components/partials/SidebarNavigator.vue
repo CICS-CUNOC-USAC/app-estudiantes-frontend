@@ -3,7 +3,7 @@
     <CICSLogo :width="68" fill="var(--p-primary-500)" />
     <button
       @click="$emit('close')"
-      class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline focus:outline-neutral-200 focus:outline-offset-1  dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
+      class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline focus:outline-offset-1 focus:outline-neutral-200 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
     >
       <Icon name="tabler:layout-sidebar-left-collapse-filled" />
     </button>
@@ -43,18 +43,24 @@
         </ul>
       </section>
     </nav>
-    <footer class="flex w-full items-center justify-between px-4 py-2.5">
+    <footer
+      class="flex w-full items-center justify-between px-4 gap-2 py-2.5"
+    >
       <template v-if="user">
-        <div class="flex items-center">
-          <PAvatar class="" shape="circle" :label="displayName?.charAt(0)" />
-          <div class="ml-2 flex max-w-32 flex-col items-start">
-            <span class="text-sm font-medium">{{ displayNameFull }}</span>
-            <span class="text-xs text-muted-color-emphasis">{{
-              getRole === 'regular' ? 'Estudiante' : 'Admin'
+        <div class="flex min-w-0 items-center">
+          <PAvatar class="shrink-0"  shape="circle" :label="displayName?.charAt(0)" />
+          <div class="ml-2 flex min-w-0 flex-col items-start">
+            <span class="w-full truncate text-sm font-medium"
+            :title="displayNameFull"
+            >{{
+              displayNameFull
             }}</span>
+            <span class="text-xs text-muted-color-emphasis">
+              {{ getRole === 'regular' ? 'Estudiante' : 'Admin' }}
+            </span>
           </div>
         </div>
-        <div class="space-x-2">
+        <div class="shrink-0 space-x-2">
           <CButton
             icon="lucide:layout-dashboard"
             to="/login"
@@ -69,7 +75,7 @@
 <script lang="ts" setup>
 import { DefaultLayoutItems } from '~/layouts/default.consts'
 import CICSLogo from './CICSLogo.vue'
-import CButton from '../primitives/button/CButton.vue';
+import CButton from '../primitives/button/CButton.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
