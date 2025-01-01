@@ -1,7 +1,7 @@
 <template>
   <div class="relative flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
     <div class="sticky top-20 hidden w-3/12 self-start lg:block">
-      <h4 class="mb-2 text-xl font-semibold">Tabla de contenidos</h4>
+      <h4 class="mb-2 text-xl font-semibold">Secciones</h4>
       <ul
         class="space-y-2.5 border-l-2 border-gray-200 dark:border-neutral-700"
       >
@@ -44,7 +44,7 @@
           class="ml-5 w-96 rounded-xl border border-black bg-white p-4 shadow-md dark:bg-neutral-900"
         >
           <div class="max-h-80 overflow-y-auto">
-            <h3 class="mb-4 text-xl font-semibold">Tabla de contenidos</h3>
+            <h3 class="mb-4 text-xl font-semibold">Secciones</h3>
             <ul
               class="space-y-2.5 border-l-2 border-gray-200 dark:border-neutral-700"
             >
@@ -102,5 +102,16 @@ const { data } = useAsyncData(() =>
   @apply hover:prose-a:text-color-emphasis dark:hover:prose-a:text-primary-100;
 
   @apply prose-a:prose-headings:border-b-0 prose-a:prose-headings:border-primary-500 hover:prose-a:prose-headings:border-b;
+}
+
+.toc-item {
+  @apply relative flex items-center rounded-lg py-px pl-4 pr-2 font-medium transition-all duration-200 text-muted-color hover:text-black hover:before:bg-black dark:bg-transparent dark:hover:text-white hover:before:dark:bg-white;
+  &::before {
+    @apply absolute -left-[2px] top-1/2 h-full w-0.5 -translate-y-1/2 rounded-full bg-transparent dark:bg-neutral-700;
+    content: '';
+
+    /* Comment if no animation is needed */
+    /* @apply transition-all duration-100 ease-in-out; */
+  }
 }
 </style>
