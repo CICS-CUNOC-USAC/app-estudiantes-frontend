@@ -1,13 +1,10 @@
 <template>
+  <div class="flex flex-col size-full gap-y-1.5">
   <PInputGroup
     unstyled
-    class="flex h-12 rounded-lg group outline outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
+    class="group flex h-12 rounded-lg outline outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
     :class="[
-      // {
-      //   'rounded-lg transition-all duration-75 outline outline-2 outline-transparent focus-within:outline-primary-400/50':
-      //     prependUsed || appendUsed
-      // },
-      classAttr
+      test.classAttr
     ]"
   >
     <component
@@ -30,15 +27,16 @@
     </component>
     <div class="relative size-full">
       <PInputText
-        v-bind="restAttrs"
+        v-bind="test.restAttrs"
+        :type="props.type"
         :disabled
         ref="$input"
         v-model="vModel"
-        class="placeholder:text-muted-color/70 z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
+        class="z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color placeholder:text-muted-color focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
         :class="{
           'pl-3': !prependUsed || !noBorders,
-          'pr-3': !appendUsed || !noBorders || !props.clearable,
-          'pr-5': props.clearable,
+          'pr-3': !appendUsed || !noBorders || !props.clearButton,
+          'pr-5': props.clearButton,
           'rounded-bl-none rounded-tl-none': hasPrependClick || prependIcon,
           'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
           'border-l-0': noBorders && (hasPrependClick || prependIcon),
@@ -49,15 +47,16 @@
       >
       </PInputText>
       <button
-        v-if="props.clearable && vModel"
+        v-if="props.clearButton && vModel"
         @click="vModel = ''"
-        class="text-muted-color dark:text-muted-color-emphasis hover:bg-neutral-200 dark:hover:bg-neutral-600 rounded-sm absolute z-10 top-1/2 -translate-y-1/2 size-5 lg:size-4 flex items-center justify-center cursor-pointer opacity-0 transition duration-100 group-hover:opacity-100 group-focus-within:opacity-100"
+        type="button"
+        class="absolute top-1/2 z-10 flex size-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm opacity-0 transition duration-100 text-muted-color hover:bg-neutral-200 group-focus-within:opacity-100 group-hover:opacity-100 lg:size-4 dark:text-muted-color-emphasis dark:hover:bg-neutral-600"
         :class="{
           'right-0': hasAppendClick || appendIcon,
-          'right-2': !hasAppendClick || !appendIcon,
+          'right-2': !hasAppendClick || !appendIcon
         }"
       >
-        <Icon name="icon-park-outline:close-small"/>
+        <Icon name="icon-park-outline:close-small" />
       </button>
     </div>
     <component
@@ -79,11 +78,18 @@
       <Icon v-if="appendIcon && !hasAppendClick" :name="appendIcon" />
     </component>
   </PInputGroup>
+  <div v-if="props.message" class="text-muted-color/70 text-xs font-medium">
+      {{ props.message }}
+    </div>
+    <div v-if="props.error" class="text-xs font-medium text-red-500">
+      {{ props.error }}
+    </div>
+  </div>
 </template>
 <script setup lang="ts">
 import { Button, InputGroupAddon } from 'primevue'
 
-const vModel = defineModel({ type: String, required: true })
+const vModel = defineModel({ type: String, required: false })
 
 const $input = ref<{
   $el: HTMLInputElement | null
@@ -92,13 +98,20 @@ const $input = ref<{
 const props = defineProps<{
   prependIcon?: string
   appendIcon?: string
+  clearButton?: boolean
   noBorders?: boolean
   disabled?: boolean
-  clearable?: boolean
+  message?: string
+  error?: string
+  type?: string
 }>()
-
-const attrs = useAttrs()
-const { class: classAttr, ...restAttrs } = attrs
+console.log('props', props.clearButton)
+const rawAttrs = useAttrs()
+const test = computed(() => {
+  const { class: classAttr,...restAttrs } = rawAttrs
+  console.log('classAttr', { classAttr, restAttrs })
+  return { classAttr, restAttrs }
+})
 
 const emit = defineEmits(['click:prepend', 'click:append'])
 

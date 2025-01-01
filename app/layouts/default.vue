@@ -42,18 +42,21 @@
                 @submit.prevent="handleSearch"
               >
                 <CInputText
+                  :clear-button="true"
                   v-model="search"
                   type="search"
                   ref="$search"
-                  clearable
                   placeholder="Buscar en Ingeniería CUNOC"
                   class="search-box"
                 />
               </form>
             </Transition>
             <CButton
-              :icon="searchOpen ? 'icon-park-twotone:close-one'
-               : 'icon-park-twotone:search'"
+              :icon="
+                searchOpen
+                  ? 'icon-park-twotone:close-one'
+                  : 'icon-park-twotone:search'
+              "
               @click="toggleSearch"
             />
           </div>
@@ -63,8 +66,8 @@
             icon="icon-park-twotone:people"
             :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
-            class="!px-2"
-            pt:label:class="hidden lg:block"
+            class="!px-2 max-w-[11ch] min-w-0"
+            pt:label:class="hidden lg:block truncate"
           />
         </div>
       </div>

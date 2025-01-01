@@ -5,15 +5,15 @@ import { allThemesPrimaries } from '~/themes/pThemes'
 // change to composition api
 
 export const useConfigsStore = defineStore('config', () => {
-  const theme = ref('Orange')
+  const theme = ref('Naranja')
   const pv = usePrimeVue();
 
   // todo: try to make the change of the theme at app.vue level to see if it works and can eliminate the visible shift of the theme on page load/reload
   function initTheme() {
     const themeCookie = useCookie('cicsapp-theme')
     if (!themeCookie.value) {
-      theme.value = 'Orange'
-      themeCookie.value = 'Orange'
+      theme.value = 'Naranja'
+      themeCookie.value = 'Naranja'
     } else {
       theme.value = themeCookie.value
       const selectedTheme = allThemesPrimaries.find(

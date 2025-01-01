@@ -1,57 +1,34 @@
 <template>
-  <section class="login-page">
-    <v-row justify="center" no-gutters>
-      <v-col cols="10" sm="8" md="8" lg="5" xl="5">
-        <SignupForm
-          :loading="loading"
-          :error="error"
-          @signup="signUp($event)"
-        />
-      </v-col>
-    </v-row>
+  <section class="signup-page">
+    <div class="signup-page__form">
+      <SignupForm
+        :loading="loading"
+        :error="error"
+        @signup="signupUser($event)"
+      />
+    </div>
   </section>
 </template>
-<script lang="ts">
-import { mapState, mapActions, type Pinia } from 'pinia'
-import { useRegularAuthStore, type SignupPayload } from '~/stores/regular-auth'
+<script setup lang="ts">
+import { useRegularAuthStore } from '~/stores/regular-auth'
 import SignupForm from '@/components/forms/accounts/SignupForm.vue'
-export default defineNuxtComponent({
-  asyncData({ $pinia }: { $pinia: Pinia }) {
-    const store = useRegularAuthStore($pinia)
-    store.clearError()
-    return {}
-  },
-  components: {
-    SignupForm
-  },
-  setup() {
-    definePageMeta({
-      layout: 'empty'
-    })
-    useHead({
-      title: 'Registro'
-    })
-  },
-  data() {
-    return {}
-  },
-  computed: {
-    ...mapState(useRegularAuthStore, ['loading', 'error'])
-  },
-  methods: {
-    signUp(payload: SignupPayload) {
-      this.signupUser(payload)
-    },
-    ...mapActions(useRegularAuthStore, ['signupUser'])
-  }
+
+definePageMeta({
+  layout: 'empty'
 })
+useHead({
+  title: 'Registro'
+})
+
+const { loading, error } = storeToRefs(useRegularAuthStore())
+
+const { signupUser } = useRegularAuthStore()
 </script>
-<style lang="scss" scoped>
-.login-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width: 100%;
+<style lang="postcss" scoped>
+.signup-page {
+  @apply flex min-h-screen w-full items-center justify-center;
+  &__form {
+    @apply w-full px-3 md:max-w-lg;
+  }
 }
 </style>

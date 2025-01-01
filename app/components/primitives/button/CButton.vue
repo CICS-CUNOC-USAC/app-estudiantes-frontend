@@ -53,10 +53,10 @@
     unstyled
   >
     <template #icon v-if="icon">
-      <Icon :name="icon" />
+      <Icon :name="icon" class="shrink-0" />
     </template>
     <template #loadingicon>
-      <Icon name="svg-spinners:bars-rotate-fade" />
+      <Icon name="svg-spinners:bars-rotate-fade" class="shrink-0" />
     </template>
   </PButton>
 </template>

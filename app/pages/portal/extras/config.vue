@@ -9,7 +9,7 @@
         to="/"
       />
     </nav>
-
+{{ theme }}
     <h1 class="text-xl font-semibold">
       <Icon
         name="icon-park-twotone:setting-two"
@@ -28,10 +28,10 @@
           Elije un tema general para la apariencia de la aplicación. Puedes
           seleccionar entre colores y claros y oscuros.
         </p>
-          <PSelect
-          class="w-1/4 my-2"
-            v-model="theme"
-            :options
+          <CSelect
+            class="w-1/4 my-2"
+            :model-value="theme"
+            :items="options"
             checkmark
             @value-change="handleThemeChange"
           />
@@ -41,6 +41,7 @@
 </template>
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
+import CSelect from '~/components/primitives/form/CSelect.vue';
 import { allThemesPrimaries } from '~/themes/pThemes'
 
 const configsStore = useConfigsStore()
