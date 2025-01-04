@@ -60,10 +60,6 @@ useHead({
   @apply bg-white dark:bg-neutral-800;
 }
 
-:target {
-  @apply animate-pulse rounded-lg bg-primary-50 dark:bg-primary-900/30;
-}
-
 html {
   @apply scroll-pt-16 scroll-smooth;
 }
