@@ -62,7 +62,6 @@ export const useAdminManualsStore = defineStore('admin-manuals', () => {
   }
 
   const createManual = async (payload: ManualPayload) => {
-    console.log(payload)
     loading.value = true
     try {
       // First, upload the pdf file using media store to get the media item id

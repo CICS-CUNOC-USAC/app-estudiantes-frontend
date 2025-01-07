@@ -81,7 +81,6 @@ export const useAuthStore = defineStore('auth', {
           await regularAuthStore.myProfile()
         }
       } catch (error) {
-        console.log(error)
       }
     }
   },

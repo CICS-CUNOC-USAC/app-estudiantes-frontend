@@ -78,7 +78,6 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       )
       if (error.value) {
         toast.error(error.value.toString())
-        console.log(Object.entries(error.value))
         if (error.value.data) {
           useSnackbarStore().showSnackbar({
             title: 'Error',
@@ -155,7 +154,6 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         toast.success(`Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`)
       } catch (error) {
         // example of error message: {statusCode: 400, message: [{email: "Email already exists"}, {ra: "RA already exists"}], error: "Bad Request"}, we want to get all the messages and show them in the toast as description so let's map the error.data.message
-        console.log(error.data)
         toast.error('Error al registrar usuario', {
           description: error.data?.message.map((m: any) => Object.values(m)).join(', ')
         })
@@ -188,7 +186,6 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         body: payload
       })
       if (error.value) {
-        console.log(error.value)
         this.loading = false
         return
       }

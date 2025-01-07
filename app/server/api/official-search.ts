@@ -8,7 +8,6 @@ export default defineEventHandler(async (event) => {
   const html = await fetch(BASE_URL + `/Buscar?ensitio=${siteSearch}`)
     .then((res) => res.text())
     .catch((err) => {
-      console.log('Error: ', err)
       return {}
     })
   // console.log('html: ', html)
