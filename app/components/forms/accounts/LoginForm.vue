@@ -7,19 +7,23 @@
       <form class="flex flex-col gap-y-4 py-4">
         <CInputText
           v-model="email"
-          placeholder="Correo electrónico"
+          label="Correo electrónico"
+          placeholder="nombre@ejemplo.com"
           type="text"
           prepend-icon="icon-park-twotone:mail"
           no-borders
+          clear-button
         />
         <CInputText
-          v-model="password"
-          :class="{
-            'font-mono': showPassword
-          }"
-          placeholder="Contraseña"
+        v-model="password"
+        :class="{
+          'font-mono': showPassword
+        }"
+          label="Contraseña"
+          placeholder="********"
           :type="showPassword ? 'text' : 'password'"
           @click:append="showPassword = !showPassword"
+          prepend-icon="icon-park-twotone:lock"
           :append-icon="showPassword ? 'icon-park-outline:preview-close' : 'icon-park-twotone:preview-open'"
           no-borders
         />

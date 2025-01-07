@@ -23,43 +23,59 @@
         </template>
         <Icon v-if="prependIcon && !hasPrependClick" :name="prependIcon" />
       </component>
-      <PSelect
-        v-bind="inhAttrs.restAttrs"
-        :modelValue="modelValue"
-        class="z-10 flex size-full items-center gap-x-2 rounded-lg border border-black bg-surface-50 text-sm transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
-        :class="{
-          'pl-3': !prependUsed || !noBorders,
-          'pr-3': !appendUsed || !noBorders,
-          'rounded-bl-none rounded-tl-none': hasPrependClick || prependIcon,
-          'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
-          'border-l-0': noBorders && (hasPrependClick || prependIcon),
-          'border-r-0': noBorders && (hasAppendClick || appendIcon)
-        }"
-        unstyled
-        :option-label
-        :option-value
-        :show-clear="clearable"
-        :options="items"
-        :pt="{
-          clearIcon: 'cursor-pointer text-muted-color hover:text-color',
-          option: 'flex gap-2 items-center cursor-pointer hover:bg-surface-200/80  dark:hover:bg-surface-800 px-3 py-1.5 rounded-lg data-[p-focused=true]:bg-surface-200/80 dark:data-[p-focused=true]:bg-surface-800',
-          listContainer: 'py-2 px-1.5 overflow-y-scroll',
-          overlay: 'bg-surface-50 dark:bg-surface-900 shadow-lg rounded-xl border border-black dark:border-surface-700 ',
-          label: ({ instance, props }) => ({
-            class: [
-              'flex-1 cursor-pointer focus:outline-none',
-              instance.label === props.placeholder
-                ? 'text-muted-color'
-                : 'text-color'
-            ]
-          }),
-          dropdown: {
-            class: 'flex items-center cursor-pointer text-muted-color hover:text-color h-full',
-          }
-        }"
-        no-borders
-      />
+      <PIftaLabel class="relative size-full" unstyled>
+        <label
+          v-if="props.label"
+          :for="inhAttrs.restAttrs.id as string"
+          class="absolute top-1.5 text-xs text-muted-color"
+        >
+          {{ props.label }}
+        </label>
 
+        <PSelect
+          v-bind="inhAttrs.restAttrs"
+          :modelValue="modelValue"
+          class="z-10 flex size-full items-center gap-x-2 rounded-lg border border-black bg-surface-50 text-sm transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
+          :class="{
+            'pt-4': props.label,
+            'pl-3': !prependUsed || !noBorders,
+            'pr-3': !appendUsed || !noBorders,
+            'rounded-bl-none rounded-tl-none': hasPrependClick || prependIcon,
+            'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
+            'border-l-0': noBorders && (hasPrependClick || prependIcon),
+            'border-r-0': noBorders && (hasAppendClick || appendIcon)
+          }"
+          unstyled
+          :option-label
+          :option-value
+          :show-clear="clearable"
+          :options="items"
+          :pt="{
+            clearIcon: `cursor-pointer text-muted-color hover:text-color ${
+              props.label ? '-mt-4' : ''
+            }`,
+            option:
+              'flex gap-2 items-center cursor-pointer hover:bg-surface-200/80  dark:hover:bg-surface-800 px-3 py-1.5 rounded-lg data-[p-focused=true]:bg-surface-200/80 dark:data-[p-focused=true]:bg-surface-800',
+            listContainer: 'py-2 px-1.5 overflow-y-scroll',
+            overlay:
+              'bg-surface-50 dark:bg-surface-900 shadow-lg rounded-xl border border-black dark:border-surface-700 ',
+            label: ({ instance, props }) => ({
+              class: [
+                'flex-1 cursor-pointer focus:outline-none',
+                instance.label === props.placeholder
+                  ? 'text-muted-color'
+                  : 'text-color'
+              ]
+            }),
+            dropdown: {
+              class: `flex items-center cursor-pointer text-muted-color hover:text-color h-full ${
+                props.label ? '-mt-4' : ''
+              }`
+            }
+          }"
+          no-borders
+        />
+      </PIftaLabel>
       <!-- pt:label:class="flex-1 placeholder:text-muted-color/70"
         pt:dropdown:class="flex items-center " -->
       <component
@@ -104,6 +120,7 @@ const props = defineProps<{
   optionValue?: string
   clearable?: boolean
   modelValue?: any
+  label?: string
 }>()
 
 const rawAttrs = useAttrs()

@@ -1,5 +1,5 @@
 <template>
-  <CCardAlt class="px-8 py-8">
+  <CCardAlt class="min-w-96 px-8 py-8">
     <template #title>
       <h2 class="pb-4 text-center text-2xl font-semibold">Regístrate</h2>
     </template>
@@ -9,95 +9,106 @@
         :resolver
         v-slot="$form"
         @submit="signup"
-        class="flex flex-col gap-y-3 py-4"
+        class="mb-4 bg-transparent"
       >
         <!-- {{ $form }} -->
-        <CInputText
-          class="h-9"
-          name="firstName"
-          placeholder="Nombre(s)"
-          type="text"
-          prepend-icon="icon-park-twotone:people"
-          no-borders
-          :error="$form.firstName?.error?.message"
-        />
-        <CInputText
-          class="h-9"
-          name="lastName"
-          placeholder="Apellido(s)"
-          type="text"
-          prepend-icon="icon-park-twotone:people"
-          no-borders
-          :error="$form.lastName?.error?.message"
-        />
-        <CInputText
-          class="h-9"
-          name="ra"
-          placeholder="Registro Académico"
-          type="text"
-          prepend-icon="icon-park-twotone:id-card-h"
-          no-borders
-          :error="$form.ra?.error?.message"
-        />
-        <CSelect
-          name="careerCode"
-          :items="careerItems"
-          placeholder="Carrera"
-          checkmark
-          clearable
-          prepend-icon="icon-park-twotone:bachelor-cap-one"
-          no-borders
-          option-label="text"
-          option-value="value"
-          class="h-9"
-          :error="$form.careerCode?.error?.message"
-        />
+        <fieldset
+          class="my-4 grid max-h-80 p-1.5 lg:p-0 grid-cols-1 gap-x-4 gap-y-3 lg:gap-y-4 overflow-y-auto lg:max-h-none lg:grid-cols-2 "
+        >
+          <CInputText
+            name="firstName"
+            id="firstName"
+            label="Nombre(s)"
+            placeholder="Juan"
+            type="text"
+            prepend-icon="icon-park-twotone:people"
+            no-borders
+            :error="$form.firstName?.error?.message"
+          />
+          <CInputText
+            name="lastName"
+            id="lastName"
+            label="Apellido(s)"
+            placeholder="Pérez"
+            type="text"
+            prepend-icon="icon-park-twotone:people"
+            no-borders
+            :error="$form.lastName?.error?.message"
+          />
+          <CInputText
+            name="ra"
+            id="ra"
+            label="Registro Académico"
+            placeholder="201900000"
+            type="text"
+            prepend-icon="icon-park-twotone:id-card-h"
+            no-borders
+            :error="$form.ra?.error?.message"
+          />
+          <CSelect
+            name="careerCode"
+            id="careerCode"
+            :items="careerItems"
+            checkmark
+            placeholder="Selecciona una carrera"
+            clearable
+            label="Carrera"
+            prepend-icon="icon-park-twotone:bachelor-cap-one"
+            no-borders
+            option-label="text"
+            option-value="value"
+            :error="$form.careerCode?.error?.message"
+          />
 
-        <CInputText
-          class="h-9"
-          name="email"
-          placeholder="Correo electrónico"
-          type="text"
-          prepend-icon="icon-park-twotone:mail"
-          no-borders
-          :error="$form.email?.error?.message"
-        />
-        <CInputText
-          class="h-9"
-          name="password"
-          :class="{
-            'font-mono': showPassword
-          }"
-          placeholder="Contraseña"
-          prepend-icon="icon-park-twotone:lock"
-          :type="showPassword ? 'text' : 'password'"
-          @click:append="showPassword = !showPassword"
-          :append-icon="
-            showPassword
-              ? 'icon-park-outline:preview-close'
-              : 'icon-park-twotone:preview-open'
-          "
-          no-borders
-          :error="$form.password?.error?.message"
-        />
-        <CInputText
-          class="h-9"
-          name="confirmPassword"
-          prepend-icon="icon-park-twotone:lock"
-          :class="{
-            'font-mono': showPassword
-          }"
-          placeholder="Confirmar contraseña"
-          :type="showPassword ? 'text' : 'password'"
-          @click:append="showPassword = !showPassword"
-          :append-icon="
-            showPassword
-              ? 'icon-park-outline:preview-close'
-              : 'icon-park-twotone:preview-open'
-          "
-          no-borders
-          :error="$form.confirmPassword?.error?.message"
-        />
+          <CInputText
+            name="email"
+            id="email"
+            label="Correo electrónico"
+            placeholder="nombre@cunoc.edu.gt"
+            type="text"
+            prepend-icon="icon-park-twotone:mail"
+            no-borders
+            :error="$form.email?.error?.message"
+          />
+          <CInputText
+            name="password"
+            id="password"
+            :class="{
+              'font-mono': showPassword
+            }"
+            label="Contraseña"
+            placeholder="********"
+            prepend-icon="icon-park-twotone:lock"
+            :type="showPassword ? 'text' : 'password'"
+            @click:append="showPassword = !showPassword"
+            :append-icon="
+              showPassword
+                ? 'icon-park-outline:preview-close'
+                : 'icon-park-twotone:preview-open'
+            "
+            no-borders
+            :error="$form.password?.error?.message"
+          />
+          <CInputText
+            name="confirmPassword"
+            id="confirmPassword"
+            prepend-icon="icon-park-twotone:lock"
+            :class="{
+              'font-mono': showPassword
+            }"
+            label="Confirmar contraseña"
+            placeholder="********"
+            :type="showPassword ? 'text' : 'password'"
+            @click:append="showPassword = !showPassword"
+            :append-icon="
+              showPassword
+                ? 'icon-park-outline:preview-close'
+                : 'icon-park-twotone:preview-open'
+            "
+            no-borders
+            :error="$form.confirmPassword?.error?.message"
+          />
+        </fieldset>
         <CButton
           class="w-full"
           :loading="loading"
@@ -157,7 +168,6 @@ const initialValues = reactive({
   confirmPassword: ''
 })
 
-
 const resolver = zodResolver(
   z
     .object({
@@ -176,7 +186,9 @@ const resolver = zodResolver(
       ra: z
         .string({ message: 'Registro Académico requerido' })
         .length(9, { message: 'Registro Académico debe tener 9 dígitos' })
-        .regex(/[0-9]{9}/),
+        .regex(/[0-9]{9}/, {
+          message: 'Registro Académico debe contener solo dígitos'
+        }),
       careerCode: z.number({
         message: 'Carrera requerida'
       }),
@@ -251,18 +263,10 @@ const careerItems = [
 const showPassword = ref(false)
 
 const signup = (e: FormSubmitEvent) => {
-  if (e.valid){
+  if (e.valid) {
     emit('signup', e.values)
   }
 }
 </script>
-<style scoped lang="scss">
-.nav-link {
-  &:hover {
-    color: #fb8c00 !important;
-  }
-  &:active {
-    color: #bf360c !important;
-  }
-}
+<style scoped lang="postcss">
 </style>

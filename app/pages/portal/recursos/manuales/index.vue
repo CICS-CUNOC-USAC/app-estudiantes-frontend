@@ -24,11 +24,15 @@
         class="hover:bg-primary-200 dark:hover:bg-primary-900/50"
         interactive-inverse
         :key="manual._id"
-        :description="manual.description"
       >
       <template #title>
         <Icon name="lucide:book" class="mb-1 mr-1.5 inline-block" />
         <h3 class="text-lg font-semibold py-2">{{ manual.title }}</h3>
+      </template>
+      <template #content>
+        <p 
+        class="text-sm truncate"
+        >{{ manual.description }}</p>
       </template>
     </CCardAlt>
     </div>  

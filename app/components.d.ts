@@ -14,6 +14,7 @@ declare module 'vue' {
     PDataTable: typeof import('primevue/datatable')['default']
     PDrawer: typeof import('primevue/drawer')['default']
     PForm: typeof import('@primevue/forms/form')['default']
+    PIftaLabel: typeof import('primevue/iftalabel')['default']
     PInputGroup: typeof import('primevue/inputgroup')['default']
     PInputText: typeof import('primevue/inputtext')['default']
     PMessage: typeof import('primevue/message')['default']

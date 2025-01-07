@@ -1,12 +1,10 @@
 <template>
   <section class="signup-page">
-    <div class="signup-page__form">
       <SignupForm
         :loading="loading"
         :error="error"
         @signup="signupUser($event)"
       />
-    </div>
   </section>
 </template>
 <script setup lang="ts">
