@@ -1,5 +1,5 @@
 <template>
-  <CCardAlt class="min-w-96 px-8 py-8">
+  <CCardAlt class="min-w-max px-8 py-8">
     <template #title>
       <h2 class="pb-4 text-center text-2xl font-semibold">Regístrate</h2>
     </template>
@@ -13,7 +13,7 @@
       >
         <!-- {{ $form }} -->
         <fieldset
-          class="my-4 grid max-h-80 p-1.5 lg:p-0 grid-cols-1 gap-x-4 gap-y-3 lg:gap-y-4 overflow-y-auto lg:max-h-none lg:grid-cols-2 "
+          class="my-4 grid max-h-80 p-1.5  grid-cols-1 gap-x-4 gap-y-3 overflow-y-auto lg:max-h-none lg:grid-cols-2 "
         >
           <CInputText
             name="firstName"

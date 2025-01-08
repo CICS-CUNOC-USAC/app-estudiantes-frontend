@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col gap-y-1.5">
+  <div class="flex flex-col gap-y-1.5 h-full">
     <PInputGroup
       unstyled
       class="group flex h-12 rounded-lg outline outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
@@ -28,7 +28,7 @@
           <label
           v-if="props.label"
             :for="(test.restAttrs.id as string)"
-            class="absolute top-1.5 text-xs text-muted-color"
+            class="absolute pt-1.5 left-0 z-30 w-max text-xs text-muted-color"
           >
             {{ props.label }}
           </label>
