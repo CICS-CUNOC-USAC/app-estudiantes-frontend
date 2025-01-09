@@ -1,6 +1,38 @@
 <template>
-  <section>
-    <h2 class="font-weight-light">Perfil</h2>
+  <div>
+    <h3 class="my-2 text-lg font-semibold">Información personal</h3>
+    <section class="mb-6 mt-2 grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2">
+      <CInputText
+        v-model="profile.first_name"
+        label="Nombre(s)"
+        
+        no-borders
+        prepend-icon="icon-park-twotone:people"
+      />
+      <CInputText
+        v-model="profile.last_name"
+        label="Apellido(s)"
+        
+        no-borders
+        prepend-icon="icon-park-twotone:people"
+      />
+
+      <CInputText
+        v-model="user.email"
+        label="Correo electrónico"
+        disabled
+        no-borders
+        prepend-icon="icon-park-twotone:mail"
+      />
+      <CInputText
+        v-model="user.ra"
+        label="Registro académico"
+        disabled
+        no-borders
+        prepend-icon="icon-park-twotone:id-card-h"
+      />
+    </section>
+    <!-- <h2 class="font-weight-light">Perfil</h2>
     <h3 class="mb-4 text-overline">Información personal</h3>
     <v-form ref="profileForm" :disabled="loading">
       <v-row>
@@ -63,12 +95,13 @@
       <v-col cols="12" class="d-flex justify-center">
         <v-btn min-width="50%" :loading="loading" @click="save">Guardar</v-btn>
       </v-col>
-    </v-row>
-  </section>
+    </v-row> -->
+  </div>
 </template>
 <script lang="ts" setup>
 import type { VForm } from 'vuetify/components'
 import { type User } from '~/stores/regular-auth'
+import CInputText from '../primitives/form/CInputText.vue';
 
 const props = defineProps<{
   src: User | null

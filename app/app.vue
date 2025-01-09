@@ -66,7 +66,7 @@ html {
 
 body,
 html {
-  scrollbar-gutter: stable both-edges;
+  scrollbar-gutter: stable;
 }
 
 /* Common animations */

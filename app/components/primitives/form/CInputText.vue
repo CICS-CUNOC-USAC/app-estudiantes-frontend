@@ -97,7 +97,7 @@
 <script setup lang="ts">
 import { Button, InputGroupAddon } from 'primevue'
 
-const vModel = defineModel({ type: String, required: false })
+const vModel = defineModel({ type: [String, Number], required: false })
 
 const $input = ref<{
   $el: HTMLInputElement | null

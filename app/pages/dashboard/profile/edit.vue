@@ -1,10 +1,20 @@
 <template>
   <main>
-    <header class="mb-4">
-      <h1>Editar perfil</h1>
-      <v-btn prepend-icon="mdi-arrow-left" to="/dashboard/profile" class="mt-3">
-        Regresar
-      </v-btn>
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">
+        <Icon
+          name="icon-park-twotone:people"
+          class="mb-1 mr-1.5 inline-block"
+        />
+        Editar perfil
+      </h1>
+      <CButton
+        icon="icon-park-outline:arrow-left"
+        variant="link"
+        label="Regresar"
+        class="mb-4 text-muted-color-emphasis lg:my-3"
+        to="/dashboard/profile"
+      />
     </header>
     <section class="profile-edit-section">
       <PersonalInfoForm
@@ -26,6 +36,7 @@
 import { mapState, mapActions, type Pinia } from 'pinia'
 import PersonalInfoForm from '~/components/profile/PersonalInfoForm.vue'
 import PasswordProfileForm from '~/components/profile/PasswordProfileForm.vue'
+import CButton from '~/components/primitives/button/CButton.vue';
 
 export default defineNuxtComponent({
   asyncData({ $pinia }: { $pinia: Pinia }) {
@@ -35,7 +46,8 @@ export default defineNuxtComponent({
   },
   components: {
     PersonalInfoForm,
-    PasswordProfileForm
+    PasswordProfileForm,
+    CButton
   },
   setup() {
     definePageMeta({

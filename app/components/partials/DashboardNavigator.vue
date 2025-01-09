@@ -1,8 +1,8 @@
 <template>
   <div>
-    <v-container align="center">
+    <!-- <v-container align="center">
       <CICSLogo />
-    </v-container>
+    </v-container> -->
     <v-list density="compact">
       <v-list-item
         prepend-icon="mdi-home-outline"
