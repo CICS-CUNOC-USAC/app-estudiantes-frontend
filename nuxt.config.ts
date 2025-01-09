@@ -23,7 +23,7 @@ export default defineNuxtConfig({
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
       ],
       meta: [
-        { name: 'theme-color', content: '#faf6ed', media: '(prefers-color-scheme: light)' },
+        { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
         { name: 'theme-color', content: '#262626', media: '(prefers-color-scheme: dark)' }
       ]
     },
