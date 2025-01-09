@@ -10,6 +10,7 @@ declare module 'vue' {
     PAutocomplete: typeof import('primevue/autocomplete')['default']
     PAvatar: typeof import('primevue/avatar')['default']
     PButton: typeof import('primevue/button')['default']
+    PCheckbox: typeof import('primevue/checkbox')['default']
     PChip: typeof import('primevue/chip')['default']
     PColumn: typeof import('primevue/column')['default']
     PDataTable: typeof import('primevue/datatable')['default']

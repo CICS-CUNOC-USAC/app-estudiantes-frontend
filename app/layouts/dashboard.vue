@@ -2,7 +2,7 @@
   <div class="min-h-screen dark:bg-neutral-900">
     <div class="flex gap-x-7  ">
       <div
-        class="hidden w-96 shrink-0 lg:flex flex-col self-start border-r dark:border-r-neutral-700 bg-cics-white dark:bg-neutral-800 py-5 lg:sticky lg:top-4  lg:h-screen"
+        class="hidden w-[22rem] shrink-0 lg:flex flex-col self-start border-r dark:border-r-neutral-700 bg-cics-white dark:bg-neutral-800 py-5 lg:sticky lg:top-0  lg:h-screen"
       >
         <h4 class="flex select-none items-center px-8 gap-x-4 text-lg font-medium">
           <CICSLogo
@@ -135,7 +135,7 @@
           </template>
         </footer>
       </div>
-      <div class="w-full pt-6 pr-6 dark:bg-neutral-900">
+      <div class="w-full pt-6 pr-6 max-w-screen-xl mx-auto dark:bg-neutral-900">
         <NuxtPage />
       </div>
     </div>

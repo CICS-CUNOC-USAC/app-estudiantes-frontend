@@ -1,6 +1,10 @@
 <template>
-  <main style="position: relative">
-    <header class="mb-4">
+  <main>
+    <h1 class="pb-3 text-xl font-semibold">
+      <Icon name="icon-park-twotone:up-and-down" class="mb-1 mr-1.5 inline-block" />
+      Progreso de carrera
+    </h1>
+    <!-- <header class="mb-4">
       <h1>Progreso de carrera</h1>
     </header>
     <v-btn
@@ -11,11 +15,11 @@
       class="ma-10"
       style="z-index: 10"
     >
-    </v-btn>
-    <PensumProgressDetails
+    </v-btn> -->
+    <!-- <PensumProgressDetails
       :career-progress="coursesProgress"
       :loading="loading"
-    />
+    /> -->
     <PensumProgressView
       :career-progress="coursesProgress"
       :loading="loading"

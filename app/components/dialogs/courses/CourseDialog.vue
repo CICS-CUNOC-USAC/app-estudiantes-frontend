@@ -1,7 +1,7 @@
 <template>
   <CDialog v-model:open="dialog">
     <CDialogTrigger
-      class="text-left text-sm hover:underline hover:underline-offset-2 focus:underline focus:outline-none lg:text-base"
+      class="text-left text-sm hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
     >
       {{ courseName }}
     </CDialogTrigger>
