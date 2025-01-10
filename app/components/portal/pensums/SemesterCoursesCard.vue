@@ -8,7 +8,7 @@
 
     <template #content>
       <div class="mb-2">
-        <span class="block"> Filtrar por: </span>
+        <span class="block text-lg"> Filtrar por: </span>
         <CChipButton
           label="Solo obligatorios"
           filter

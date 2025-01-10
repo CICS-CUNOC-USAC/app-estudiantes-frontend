@@ -33,12 +33,12 @@
         @update:modelValue="updateItem($event)"
         binary
         size="small"
-        class="mr-3"
+        class="mr-4"
       />
     </div>
     <div
       v-if="course.career_course.mandatory"
-      class="absolute size-3.5 rounded-md bg-surface-950/75 dark:bg-cics-white top-1 right-1"
+      class="absolute size-3 rounded bg-surface-950/75 dark:bg-cics-white top-1 right-1"
     ></div>
   </div>
 </template>

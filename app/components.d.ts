@@ -7,14 +7,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    PAutocomplete: typeof import('primevue/autocomplete')['default']
     PAvatar: typeof import('primevue/avatar')['default']
     PButton: typeof import('primevue/button')['default']
     PCheckbox: typeof import('primevue/checkbox')['default']
-    PChip: typeof import('primevue/chip')['default']
     PColumn: typeof import('primevue/column')['default']
     PDataTable: typeof import('primevue/datatable')['default']
-    PDivider: typeof import('primevue/divider')['default']
     PDrawer: typeof import('primevue/drawer')['default']
     PForm: typeof import('@primevue/forms/form')['default']
     PIftaLabel: typeof import('primevue/iftalabel')['default']
@@ -23,6 +20,7 @@ declare module 'vue' {
     PMessage: typeof import('primevue/message')['default']
     PSelect: typeof import('primevue/select')['default']
     PSkeleton: typeof import('primevue/skeleton')['default']
+    PToggleButton: typeof import('primevue/togglebutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

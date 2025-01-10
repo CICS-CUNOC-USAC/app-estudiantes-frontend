@@ -28,7 +28,7 @@
           <label
           v-if="props.label"
             :for="(test.restAttrs.id as string)"
-            class="absolute pt-1.5 left-0 z-30 w-max text-xs text-muted-color"
+            class="absolute pt-1.5 left-0 z-10 w-max text-xs text-muted-color"
           >
             {{ props.label }}
           </label>
@@ -97,8 +97,8 @@
 <script setup lang="ts">
 import { Button, InputGroupAddon } from 'primevue'
 
-const vModel = defineModel({ type: [String, Number], required: false })
-
+// const vModel = defineModel({ type: [String, Number], required: false })
+const vModel = defineModel<any>()
 const $input = ref<{
   $el: HTMLInputElement | null
 }>()

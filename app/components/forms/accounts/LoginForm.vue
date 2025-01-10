@@ -4,71 +4,46 @@
       <h2 class="pb-4 text-center text-2xl font-semibold">Iniciar sesión</h2>
     </template>
     <template #content>
-      <form class="flex flex-col gap-y-4 py-4">
+      <form class="flex flex-col gap-y-4 py-4" @submit.prevent="login">
         <CInputText
           v-model="email"
           label="Correo electrónico"
           placeholder="nombre@ejemplo.com"
           type="text"
-          prepend-icon="icon-park-twotone:mail"
+          :prepend-icon="emailIcon"
           no-borders
           clear-button
         />
         <CInputText
-        v-model="password"
-        :class="{
-          'font-mono': showPassword
-        }"
+          v-model="password"
+          :class="{
+            'font-mono': showPassword
+          }"
           label="Contraseña"
           placeholder="********"
           :type="showPassword ? 'text' : 'password'"
           @click:append="showPassword = !showPassword"
           prepend-icon="icon-park-twotone:lock"
-          :append-icon="showPassword ? 'icon-park-outline:preview-close' : 'icon-park-twotone:preview-open'"
+          :append-icon="
+            showPassword
+              ? 'icon-park-outline:preview-close'
+              : 'icon-park-twotone:preview-open'
+          "
           no-borders
         />
-      </form>
-      <!-- <v-form>
-        <v-text-field
-          v-model="email"
-          label="Correo electrónico"
-          type="email"
-          required
-          :disabled="loading"
-        >
-          <template #prepend>
-            <v-icon :icon="emailIcon" size="small" />
-          </template>
-        </v-text-field>
-        <v-text-field
-          v-model="password"
-          :append-icon="
-            showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
-          "
-          label="Contraseña"
-          :type="showPassword ? 'text' : 'password'"
-          required
-          :disabled="loading"
-          @click:append="showPassword = !showPassword"
-        >
-          <template #prepend>
-            <v-icon icon="mdi-dots-horizontal" size="small" />
-          </template>
-        </v-text-field>
-      </v-form> -->
-    </template>
-    <template #footer>
-      <div class="flex flex-col gap-y-4">
         <CButton
           class="w-full"
           :loading="loading"
           :disabled="!email || !password"
           :severity="admin ? 'danger' : ''"
-          @click="login"
-          @keydown.enter="login"
+          type="submit"
           rounded
           label="Iniciar sesión"
         />
+      </form>
+    </template>
+    <template #footer>
+      <div class="flex flex-col gap-y-4">
         <span class="align-center flex gap-2">
           ¿No tienes una cuenta?
           <CButton to="/sign-up" variant="link" label="Regístrate" />
@@ -112,7 +87,7 @@ const password = ref('')
 const showPassword = ref(false)
 
 const emailIcon = computed(() => {
-  return admin ? 'mdi-shield-crown-outline' : 'mdi-email-outline'
+  return admin ? 'icon-park-twotone:people-safe' : 'icon-park-twotone:mail'
 })
 
 const login = () => {

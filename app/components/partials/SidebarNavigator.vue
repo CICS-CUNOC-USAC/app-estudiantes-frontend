@@ -24,7 +24,7 @@
 
       <section v-for="item in DefaultLayoutItems" :key="item.sectionName">
         <h3
-          class="mb-4 flex select-none items-center gap-x-2 text-sm  text-muted-color-emphasis md:text-sm"
+          class="mb-4 flex select-none items-center gap-x-2 text-sm text-muted-color-emphasis md:text-sm"
         >
           {{ item.sectionName }}
         </h3>
@@ -43,18 +43,20 @@
         </ul>
       </section>
     </nav>
-    <footer
-      class="flex w-full items-center justify-between px-4 gap-2 py-2.5"
-    >
+    <footer class="flex w-full items-center justify-between gap-2 px-4 py-2.5">
       <template v-if="user">
         <div class="flex min-w-0 items-center">
-          <PAvatar class="shrink-0"  shape="circle" :label="displayName?.charAt(0)" />
+          <PAvatar
+            class="shrink-0"
+            shape="circle"
+            :label="displayName?.charAt(0)"
+          />
           <div class="ml-2 flex min-w-0 flex-col items-start">
-            <span class="w-full truncate text-sm font-medium"
-            :title="displayNameFull"
-            >{{
-              displayNameFull
-            }}</span>
+            <span
+              class="w-full truncate text-sm font-medium"
+              :title="displayNameFull"
+              >{{ displayNameFull }}</span
+            >
             <span class="text-xs text-muted-color-emphasis">
               {{ getRole === 'regular' ? 'Estudiante' : 'Admin' }}
             </span>
@@ -66,7 +68,11 @@
             to="/login"
             v-Ptooltip.top="'Dashboard'"
           />
-          <CButton icon="lucide:log-out" v-Ptooltip.top="'Cerrar sesión'" />
+          <CButton
+            icon="lucide:log-out"
+            v-Ptooltip.top="'Cerrar sesión'"
+            @click="logout"
+          />
         </div>
       </template>
     </footer>
@@ -79,6 +85,8 @@ import CButton from '../primitives/button/CButton.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
+
+const { logout } = useAuthStore()
 
 defineEmits(['close'])
 
