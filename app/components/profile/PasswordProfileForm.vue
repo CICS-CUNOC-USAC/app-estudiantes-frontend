@@ -1,57 +1,58 @@
 <template>
-  <section>
-    <h2 class="font-weight-light">Seguridad</h2>
-    <h3 class="mb-2 text-overline">Contraseña</h3>
-    <v-form ref="passForm" :disabled="loading" class="mb-6">
-      <v-row>
-        <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-          <v-text-field
-            v-model="password"
-            label="Nueva contraseña"
-            :type="showPassword ? 'text' : 'password'"
-            :rules="[...validationRules.password]"
-            required
+  <div>
+    <h3 class="my-2 text-lg font-semibold">Contraseña</h3>
+    <form class="mb-6 mt-2" @submit.prevent="savePassword">
+      <fieldset class="grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2">
+        <CInputText
+          v-model="password"
+          :class="{
+            'font-mono': showPassword
+          }"
+          label="Contraseña"
+          placeholder="********"
+          :type="showPassword ? 'text' : 'password'"
+          @click:append="showPassword = !showPassword"
+          prepend-icon="icon-park-twotone:lock"
+          :append-icon="
+            showPassword
+              ? 'icon-park-outline:preview-close'
+              : 'icon-park-twotone:preview-open'
+          "
+          no-borders
+        />
+        <CInputText
+          v-model="confirmPassword"
+            id="confirmPassword"
+            prepend-icon="icon-park-twotone:lock"
+            :class="{
+              'font-mono': showPassword
+            }"
+            label="Confirmar contraseña"
             placeholder="********"
-            :append-icon="
-              showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
-            "
-            @click:append="showPassword = !showPassword"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-dots-horizontal" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="12" md="6" lg="6" xl="6">
-          <v-text-field
-            v-model="confirmPassword"
-            label="Confirmar nueva contraseña"
             :type="showPassword ? 'text' : 'password'"
-            :rules="[...validationRules.confirmPassword]"
-            required
-            placeholder="********"
-            :append-icon="
-              showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
-            "
             @click:append="showPassword = !showPassword"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-dots-horizontal" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-      </v-row>
-    </v-form>
-    <v-row>
-      <v-col cols="12" class="d-flex justify-center">
-        <v-btn min-width="50%" :loading="loading" @click="savePassword"
-          >Cambiar</v-btn
-        >
-      </v-col>
-    </v-row>
-  </section>
+            :append-icon="
+              showPassword
+                ? 'icon-park-outline:preview-close'
+                : 'icon-park-twotone:preview-open'
+            "
+            no-borders
+          />
+      </fieldset>
+      <CButton
+        type="submit"
+        label="Cambiar"
+        :disabled="loading"
+        class="mt-4"
+        icon="lucide:check"
+      />
+    </form>
+  </div>
 </template>
 <script setup lang="ts">
+import CButton from '../primitives/button/CButton.vue'
+import CInputText from '../primitives/form/CInputText.vue'
+
 defineProps({
   loading: {
     type: Boolean,
@@ -64,21 +65,10 @@ const emit = defineEmits(['savePassword'])
 const password = ref('')
 const confirmPassword = ref('')
 const showPassword = ref(false)
-const passForm = ref(null)
-
-const validationRules = computed(() => ({
-  password: [
-    (v: string) =>
-      (v && v.length >= 8) || 'La contraseña debe tener al menos 8 caracteres'
-  ],
-  confirmPassword: [
-    (v: string) => (v && v === password.value) || 'Las contraseñas no coinciden'
-  ]
-}))
 
 const savePassword = async () => {
-  const form = await passForm.value?.validate()
-  if (!form.valid) return
+  // const form = await passForm.value?.validate()
+  // if (!form.valid) return
   emit('savePassword', { user: { password: password.value } })
 }
 </script>

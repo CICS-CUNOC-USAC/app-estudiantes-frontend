@@ -3,8 +3,9 @@
     :is="to ? NuxtLink : 'div'"
     :to
     unstyled
-    class="flex h-full flex-col overflow-hidden rounded-xl border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-800"
+    class="overflow-hidden rounded-xl border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-800"
     :class="{
+      'flex flex-col h-full': !unstyled,
       'p-5': !noSpacing,
       'hover:translate-x-0 hover:translate-y-0 hover:bg-surface-100 hover:shadow-none dark:hover:bg-surface-900':
         interactive,
@@ -48,6 +49,7 @@ defineProps<{
   small?: string
   smallIcon?: string
   noSpacing?: boolean
+  unstyled?: boolean
 }>()
 </script>
 <style lang="postcss" scoped></style>

@@ -27,48 +27,59 @@
       <PasswordProfileForm
         :src="user"
         :loading="loading"
-        @save-password="updateUserPassword($event)"
+        @save-password="updateProfile($event)"
       />
     </section>
   </main>
 </template>
-<script lang="ts">
-import { mapState, mapActions, type Pinia } from 'pinia'
+<script lang="ts" setup>
 import PersonalInfoForm from '~/components/profile/PersonalInfoForm.vue'
 import PasswordProfileForm from '~/components/profile/PasswordProfileForm.vue'
-import CButton from '~/components/primitives/button/CButton.vue';
+import CButton from '~/components/primitives/button/CButton.vue'
+import { mapActions, mapState, type Pinia } from 'pinia';
 
-export default defineNuxtComponent({
-  asyncData({ $pinia }: { $pinia: Pinia }) {
-    const store = useAuthStore($pinia)
-    store.fetchUser()
-    return {}
-  },
-  components: {
-    PersonalInfoForm,
-    PasswordProfileForm,
-    CButton
-  },
-  setup() {
-    definePageMeta({
-      layout: 'dashboard'
-    })
-  },
-  computed: {
-    ...mapState(useRegularAuthStore, ['user', 'authenticated']),
-    ...mapState(useRegularAuthStore, ['loading'])
-  },
-  methods: {
-    updateUserProfile(user: UserUpdatePayload) {
-      this.updateProfile(user)
-    },
-    updateUserPassword(userWithPassword: UserUpdatePayload) {
-      this.updateProfile(userWithPassword)
-    },
-    ...mapActions(useRegularAuthStore, ['myProfile', 'updateProfile']),
-    ...mapActions(useAuthStore, ['logout'])
-  }
+const authStore = useAuthStore()
+await authStore.fetchUser()
+
+const { user, loading } = storeToRefs(useRegularAuthStore())
+
+const { updateProfile } = useRegularAuthStore()
+
+definePageMeta({
+  layout: 'dashboard'
 })
+
+// export default defineNuxtComponent({
+//   asyncData({ $pinia }: { $pinia: Pinia }) {
+//     const store = useAuthStore($pinia)
+//     store.fetchUser()
+//     return {}
+//   },
+//   components: {
+//     PersonalInfoForm,
+//     PasswordProfileForm,
+//     CButton
+//   },
+//   setup() {
+//     definePageMeta({
+//       layout: 'dashboard'
+//     })
+//   },
+//   computed: {
+//     ...mapState(useRegularAuthStore, ['user', 'authenticated']),
+//     ...mapState(useRegularAuthStore, ['loading'])
+//   },
+//   methods: {
+//     updateUserProfile(user: UserUpdatePayload) {
+//       this.updateProfile(user)
+//     },
+//     updateUserPassword(userWithPassword: UserUpdatePayload) {
+//       this.updateProfile(userWithPassword)
+//     },
+//     ...mapActions(useRegularAuthStore, ['myProfile', 'updateProfile']),
+//     ...mapActions(useAuthStore, ['logout'])
+//   }
+// })
 </script>
 <style lang="scss" scoped>
 .profile-edit-section {
