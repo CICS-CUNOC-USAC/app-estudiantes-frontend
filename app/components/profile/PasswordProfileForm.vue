@@ -51,44 +51,35 @@
     </v-row>
   </section>
 </template>
-<script lang="ts">
-export default {
-  props: {
-    loading: {
-      type: Boolean,
-      default: false
-    }
-  },
-  emits: ['savePassword'],
-  data() {
-    return {
-      password: '',
-      confirmPassword: '',
-      showPassword: false
-    }
-  },
-  computed: {
-    validationRules() {
-      return {
-        password: [
-          (v: string) =>
-            (v && v.length >= 8) ||
-            'La contraseña debe tener al menos 8 caracteres'
-        ],
-        confirmPassword: [
-          (v: string) =>
-            (v && v === this.password) || 'Las contraseñas no coinciden'
-        ]
-      }
-    }
-  },
-  methods: {
-    async savePassword() {
-      const form = await this.$refs.passForm.validate()
-      if (!form.valid) return
-      this.$emit('savePassword', { user: { password: this.password } })
-    }
+<script setup lang="ts">
+defineProps({
+  loading: {
+    type: Boolean,
+    default: false
   }
+})
+
+const emit = defineEmits(['savePassword'])
+
+const password = ref('')
+const confirmPassword = ref('')
+const showPassword = ref(false)
+const passForm = ref(null)
+
+const validationRules = computed(() => ({
+  password: [
+    (v: string) =>
+      (v && v.length >= 8) || 'La contraseña debe tener al menos 8 caracteres'
+  ],
+  confirmPassword: [
+    (v: string) => (v && v === password.value) || 'Las contraseñas no coinciden'
+  ]
+}))
+
+const savePassword = async () => {
+  const form = await passForm.value?.validate()
+  if (!form.valid) return
+  emit('savePassword', { user: { password: password.value } })
 }
 </script>
 <style lang="scss" scoped></style>

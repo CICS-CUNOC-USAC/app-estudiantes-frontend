@@ -2,6 +2,7 @@ import { jwtDecode } from 'jwt-decode'
 import { defineStore } from 'pinia'
 import { useRegularAuthStore } from './regular-auth'
 import { useStaffAuthStore } from './staff-auth'
+import { toast } from 'vue-sonner'
 
 type Profile = {
   id: number
@@ -47,6 +48,7 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.isAuthenticated = false
       router.push('/')
+      toast.message('Sesión cerrada')
     },
     async fetchAuth() {
       // const role = useCookie('cicsapp-roleuser')
@@ -79,7 +81,6 @@ export const useAuthStore = defineStore('auth', {
           await regularAuthStore.myProfile()
         }
       } catch (error) {
-        console.log(error)
       }
     }
   },
@@ -93,6 +94,33 @@ export const useAuthStore = defineStore('auth', {
       } else {
         const staffAuthStore = useStaffAuthStore()
         return staffAuthStore.user
+      }
+    },
+    profile: (state) => {
+      if (state.role === 'regular') {
+        const regularAuthStore = useRegularAuthStore()
+        return regularAuthStore.user?.profile
+      } else {
+        const staffAuthStore = useStaffAuthStore()
+        return staffAuthStore.user
+      }
+    },
+    displayName: (state) => {
+      if (state.role === 'regular') {
+        const regularAuthStore = useRegularAuthStore()
+        return regularAuthStore.user?.profile.first_name
+      } else {
+        const staffAuthStore = useStaffAuthStore()
+        return staffAuthStore.user?.first_name
+      }
+    },
+    displayNameFull: (state) => {
+      if (state.role === 'regular') {
+        const regularAuthStore = useRegularAuthStore()
+        return `${regularAuthStore.user?.profile.first_name} ${regularAuthStore.user?.profile.last_name}`
+      } else {
+        const staffAuthStore = useStaffAuthStore()
+        return `${staffAuthStore.user?.first_name} ${staffAuthStore.user?.last_name}`
       }
     }
   }

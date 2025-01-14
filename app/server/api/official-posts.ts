@@ -4,11 +4,12 @@ export default defineEventHandler(async (event) => {
   const BASE_URL = 'http://ingenieria.cunoc.usac.edu.gt/portal/index.php'
   const query = getQuery(event)
   const page = query.page || 1
-  const html = (await $fetch(BASE_URL, {
-    params: {
-      page
-    }
-  })) as string
+
+  const html = await fetch(BASE_URL + `?page=${page}`)
+    .then((res) => res.text())
+    .catch((err) => {
+      return ''
+    })
   const doc = new JSDOM(html).window.document
   const mainPostsContainer = doc.querySelector('#contenido')
   if (!mainPostsContainer) return {}
@@ -33,8 +34,7 @@ export default defineEventHandler(async (event) => {
       ?.textContent?.trim()
       .replace(/\n/g, '')
       .replace(/\t/g, '')
-      .replace(/el/g, 'el ')
-
+      .replace(/\sel/g, ' el ')
     return {
       title: postTitle,
       description: postDescription,

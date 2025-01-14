@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { CareerCourse } from './regular-career-progress'
+import { type CareerCourse } from './regular-career-progress'
 
 export const useCoursesStore = defineStore('courses', () => {
   const loading = ref<boolean>(false)
@@ -20,17 +20,22 @@ export const useCoursesStore = defineStore('courses', () => {
 
   const fetchCareerCourse = async (code: string, careerCode: number) => {
     loading.value = true
-    const { data, error } = await useCustomFetch<CareerCourse>(
-      `/courses/${code}/${careerCode}`,
-      {
-        method: 'GET'
+    try {
+      const response = await $api<CareerCourse>(
+        `/courses/${code}/${careerCode}`
+      )
+      careerCourse.value = response
+      return {
+        response,
+        error: null
       }
-    )
-    if (data.value) {
-      careerCourse.value = data.value
+    } catch (error) {
+      return {
+        error
+      }
+    } finally {
+      loading.value = false
     }
-    // console.error(error)
-    loading.value = false
   }
 
   return {
