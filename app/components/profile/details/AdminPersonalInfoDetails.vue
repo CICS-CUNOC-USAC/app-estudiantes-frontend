@@ -1,50 +1,38 @@
 <template>
-  <section>
-    <div>
-      <h2 class="font-weight-light">Perfil</h2>
-      <h3 class="mb-4 text-overline">Información personal</h3>
-      <v-row>
-        <v-col cols="6">
-          <v-text-field
-            :model-value="user.first_name"
-            readonly
-            variant="solo"
-            label="Nombre(s)"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-account-outline" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field
-            :model-value="user.last_name"
-            readonly
-            variant="solo"
-            label="Apellido(s)"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-account-outline" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-          <v-text-field
-            :model-value="user.email"
-            readonly
-            variant="solo"
-            label="Correo electrónico"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-email-outline" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-      </v-row>
-    </div>
-  </section>
+  <div v-if="user">
+    <h3 class="my-2 text-lg font-semibold">Información personal</h3>
+    <section class="mb-6 mt-2 grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2">
+      <CInputText
+        id="first_name"
+        v-model="user.first_name"
+        label="Nombre(s)"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:people"
+      />
+      <CInputText
+        id="last_name"
+        v-model="user.last_name"
+        label="Apellido(s)"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:people"
+      />
+
+      <CInputText
+        id="email"
+        v-model="user.email"
+        label="Correo electrónico"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:mail"
+      />
+    </section>
+  </div>
 </template>
 <script setup lang="ts">
+import CInputText from '~/components/primitives/form/CInputText.vue';
+
 defineProps<{
   user: Staff | null
 }>()

@@ -5,17 +5,17 @@
       @click="$emit('close')"
       class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline focus:outline-offset-1 focus:outline-neutral-200 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
     >
-      <Icon name="tabler:layout-sidebar-left-collapse-filled" />
+      <Icon name="lucide:x" />
     </button>
   </header>
-  <main class="flex h-full flex-col overflow-visible pb-20">
+  <main class="flex h-full flex-col overflow-visible pb-16">
     <nav
       class="flex max-h-full w-full flex-1 flex-col gap-y-4 overflow-y-auto px-5 pb-6 pt-4"
     >
       <NuxtLink
         to="/"
         class="flex items-center gap-x-2 rounded-lg p-2 transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
-        active-class="  text-primary-700 shadow-lg outline outline-gray-300 dark:text-primary-300 dark:outline-neutral-700"
+        active-class="  text-primary-700 shadow-lg outline outline-1 outline-black dark:text-primary-300 dark:outline-neutral-700"
         @click="$emit('close')"
       >
         <Icon name="lucide:house" />
@@ -24,7 +24,7 @@
 
       <section v-for="item in DefaultLayoutItems" :key="item.sectionName">
         <h3
-          class="mb-4 flex select-none items-center gap-x-2 text-sm tracking-tight text-muted-color-emphasis md:text-base"
+          class="mb-4 flex select-none items-center gap-x-2 text-sm text-muted-color-emphasis md:text-sm"
         >
           {{ item.sectionName }}
         </h3>
@@ -43,18 +43,20 @@
         </ul>
       </section>
     </nav>
-    <footer
-      class="flex w-full items-center justify-between px-4 gap-2 py-2.5"
-    >
+    <footer class="flex w-full items-center justify-between gap-2 px-4 py-2.5">
       <template v-if="user">
         <div class="flex min-w-0 items-center">
-          <PAvatar class="shrink-0"  shape="circle" :label="displayName?.charAt(0)" />
+          <PAvatar
+            class="shrink-0"
+            shape="circle"
+            :label="displayName?.charAt(0)"
+          />
           <div class="ml-2 flex min-w-0 flex-col items-start">
-            <span class="w-full truncate text-sm font-medium"
-            :title="displayNameFull"
-            >{{
-              displayNameFull
-            }}</span>
+            <span
+              class="w-full truncate text-sm font-medium"
+              :title="displayNameFull"
+              >{{ displayNameFull }}</span
+            >
             <span class="text-xs text-muted-color-emphasis">
               {{ getRole === 'regular' ? 'Estudiante' : 'Admin' }}
             </span>
@@ -66,7 +68,11 @@
             to="/login"
             v-Ptooltip.top="'Dashboard'"
           />
-          <CButton icon="lucide:log-out" v-Ptooltip.top="'Cerrar sesión'" />
+          <CButton
+            icon="lucide:log-out"
+            v-Ptooltip.top="'Cerrar sesión'"
+            @click="logout"
+          />
         </div>
       </template>
     </footer>
@@ -79,6 +85,8 @@ import CButton from '../primitives/button/CButton.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
+
+const { logout } = useAuthStore()
 
 defineEmits(['close'])
 

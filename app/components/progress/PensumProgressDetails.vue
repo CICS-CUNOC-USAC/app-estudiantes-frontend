@@ -1,81 +1,73 @@
 <template>
-  <div style="position: sticky !important; top: 4rem; z-index: 1">
-    <v-sheet
-      v-if="$vuetify.display.smAndUp"
-      class="pa-4"
-      rounded="xl"
-      border
-      elevation="1"
-    >
-      <v-progress-linear
-        :active="loading"
-        class="w-50"
-        absolute
-        location="bottom"
-        indeterminate
-      ></v-progress-linear>
-      <v-row justify="center" class="text-center">
-        <!-- <v-col cols="12">
-          <h2>Progreso de carrera:</h2>
-        </v-col> -->
-        <v-col cols="12" sm="4" md="4" lg="4" xl="4">
-          <h6 class="text-overline">Créditos acumulados:</h6>
-          <strong>{{ careerProgress?.current_credits.total_credits }}</strong>
-        </v-col>
-        <v-col cols="12" sm="4" md="4" lg="4" xl="4">
-          <h6 class="text-overline">Créditos obligatorios:</h6>
-          <strong
-            >{{ careerProgress?.current_credits.mandatory_credits }} /
-            {{ careerProgress?.mandatory_credits }}</strong
+  <CCardAlt
+    unstyled
+    no-spacing
+    class="sticky top-16 z-20 mb-4 text-center lg:top-4"
+    :class="{
+      'shadow-lg dark:shadow-xl': hasScrolled
+    }"
+  >
+    <template #content>
+      <div
+        class="absolute bottom-0 left-0 right-0 text-sm top-0 z-10 flex items-center justify-center bg-black/50 text-white"
+        v-if="loading"
+      >
+        Guardando...
+      </div>
+      <section class="relative flex justify-center gap-x-3 py-4 lg:gap-x-10">
+        <div>
+          <h6 class="text-sm font-normal lg:text-base">Créditos acumulados:</h6>
+          <strong class="text-muted-color-emphasis">{{
+            careerProgress?.current_credits.total_credits
+          }}</strong>
+        </div>
+        <div>
+          <h6 class="text-sm font-normal lg:text-base">
+            Créditos obligatorios:
+          </h6>
+          <strong class="text-muted-color-emphasis">{{
+            careerProgress?.current_credits.mandatory_credits
+          }}</strong>
+          /
+          <span class="text-muted-color-emphasis">
+            {{ careerProgress?.mandatory_credits }}</span
           >
-        </v-col>
-        <v-col cols="12" sm="4" md="4" lg="4" xl="4">
-          <h6 class="text-overline">Créditos disponibles:</h6>
-          <strong
-            >{{ careerProgress?.current_credits.total_credits }} /
-            {{ careerProgress?.available_credits }}</strong
-          >
-        </v-col>
-      </v-row>
-    </v-sheet>
-    <v-sheet v-else class="pa-4" rounded="xl" border elevation="2">
-      <v-progress-linear
-        :active="loading"
-        class="w-50"
-        absolute
-        location="bottom"
-        indeterminate
-      ></v-progress-linear>
-      <v-row justify="center" class="text-center" no-gutters>
-        <!-- <v-col cols="12" class="mb-2">
-          <h2>Progreso de carrera:</h2>
-        </v-col> -->
-        <v-col cols="12" sm="4" md="4" lg="4" xl="4">
-          <span class="text-overline">Créditos acumulados:</span>
-          <strong>{{ careerProgress?.current_credits.total_credits }}</strong>
-        </v-col>
-        <v-col cols="12" sm="4" md="4" lg="4" xl="4">
-          <span class="text-overline">Créditos obligatorios:</span>
-          <strong
-            >{{ careerProgress?.current_credits.mandatory_credits }} /
-            {{ careerProgress?.mandatory_credits }}</strong
-          >
-        </v-col>
-        <v-col cols="12" sm="4" md="4" lg="4" xl="4">
-          <span class="text-overline">Créditos disponibles:</span>
-          <strong
-            >{{ careerProgress?.current_credits.total_credits }} /
-            {{ careerProgress?.available_credits }}</strong
-          >
-        </v-col>
-      </v-row>
-    </v-sheet>
-  </div>
+        </div>
+        <div>
+          <h6 class="text-sm font-normal lg:text-base">
+            Créditos disponibles:
+          </h6>
+          <strong class="text-muted-color-emphasis">{{
+            careerProgress?.current_credits.total_credits
+          }}</strong>
+          /
+          <span class="text-muted-color-emphasis">
+            {{ careerProgress?.available_credits }}
+          </span>
+        </div>
+      </section>
+    </template>
+  </CCardAlt>
 </template>
 <script setup lang="ts">
+import CCardAlt from '../primitives/card/CCardAlt.vue'
+
 defineProps<{
   careerProgress: ProgressResponse | null
   loading: boolean
 }>()
+
+const hasScrolled = ref(false)
+onMounted(() => {
+  window.addEventListener('scroll', () => {
+    hasScrolled.value = window.scrollY > 50
+  })
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', () => {
+    hasScrolled.value = window.scrollY > 50
+  })
+})
 </script>
-<style lang="scss" scoped></style>
+<style lang="postcss" scoped></style>

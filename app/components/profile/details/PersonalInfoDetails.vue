@@ -1,95 +1,70 @@
 <template>
-  <section>
-    <div>
-      <h2 class="font-weight-light">Perfil</h2>
-      <h3 class="mb-4 text-overline">Información personal</h3>
-      <v-row>
-        <v-col cols="6">
-          <v-text-field
-            v-model="profile.first_name"
-            readonly
-            variant="solo"
-            label="Nombre(s)"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-account-outline" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field
-            v-model="profile.last_name"
-            readonly
-            variant="solo"
-            label="Apellido(s)"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-account-outline" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-          <v-text-field
-            v-model="user.email"
-            readonly
-            variant="solo"
-            label="Correo electrónico"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-email-outline" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="12" sm="6" md="6" lg="6" xl="6">
-          <v-text-field
-            v-model="user.ra"
-            label="Registro académico"
-            readonly
-            variant="solo"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-numeric" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-      </v-row>
-    </div>
-    <div class="mt-2">
-      <h2 class="font-weight-light">Académico</h2>
-      <h3 class="mb-4 text-overline">Información de carrera</h3>
-      <v-row>
-        <v-col cols="6">
-          <v-text-field
-            v-model="user.career.name"
-            readonly
-            variant="solo"
-            label="Carrera"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-school-outline" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-        <v-col cols="6">
-          <v-text-field
-            v-model="user.career.code"
-            readonly
-            variant="solo"
-            label="Código de carrera"
-          >
-            <template #prepend>
-              <v-icon icon="mdi-pound" size="small" />
-            </template>
-          </v-text-field>
-        </v-col>
-      </v-row>
-    </div>
-  </section>
+  <div>
+    <h3 class="my-2 text-lg font-semibold">Información personal</h3>
+    <section class="mb-6 mt-2 grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2">
+      <CInputText
+        id="first_name"
+        v-model="profile.first_name"
+        label="Nombre(s)"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:people"
+      />
+      <CInputText
+        id="last_name"
+        v-model="profile.last_name"
+        label="Apellido(s)"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:people"
+      />
+
+      <CInputText
+        id="email"
+        v-model="user.email"
+        label="Correo electrónico"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:mail"
+      />
+      <CInputText
+        id="ra"
+        v-model="user.ra"
+        label="Registro académico"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:id-card-h"
+      />
+    </section>
+
+    <h3 class="my-2 text-lg font-semibold">Académico</h3>
+    <section class="mb-6 mt-2 grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <CInputText
+        v-model="user.career.name"
+        label="Carrera"
+        readonly
+        no-borders
+        prepend-icon="icon-park-twotone:bachelor-cap-one"
+      />
+
+      <CInputText
+        v-model="user.career.code"
+        label="Código de carrera"
+        readonly
+        no-borders
+        prepend-icon="icon-park-outline:pound-sign"
+      />
+    </section>
+  </div>
 </template>
 <script lang="ts">
+import CInputText from '~/components/primitives/form/CInputText.vue'
 import { type User } from '~/stores/regular-auth'
 
 export default {
+  components: {
+    CInputText
+  },
   props: {
     src: {
       type: Object as PropType<User | null>,

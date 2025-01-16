@@ -1,32 +1,61 @@
 <template>
-  <div class="max-w-4xl mx-auto h-screen flex flex-col justify-center">
-    <CCardAlt class="h-min py-8" elevated>
+  <div class="mx-6 lg:mx-auto flex h-screen max-w-2xl flex-col justify-center">
+    <CCardAlt class="py-8" unstyled>
       <template #title>
-        <header class="flex items-center pb-6 text-xl font-bold gap-x-2 justify-center">
-          <Icon name="lucide:badge-alert" />
-          <h1>Ha ocurrido un error</h1>
+        <header
+          class="flex items-center flex-col justify-center gap-y-4 pb-6 text-xl font-bold"
+        >
+          <Icon :name="icon" class="text-primary-400" size="32" />
+          <h1>
+            <span class="font-mono">{{ error.statusCode }}</span> -
+            {{ title }}
+          </h1>
         </header>
       </template>
       <template #content>
-        <p class="text-center">
-          Puede que esta página no exista o se haya producido un error interno,
-          puedes
-          <NuxtLink href="/" class="text-primary-400 border-b border-primary-400 hover:border-primary-500 hover:text-primary-500 hover:border-b-2 transition">
-            <strong>regresar al inicio</strong>
-            <Icon class="inline mb-1 ml-1" name="lucide:home" />
-          </NuxtLink>
-        </p>
+        <div class="text-center">
+
+          <p class="mb-4">
+            {{ message }}
+          </p>
+          <NuxtLink
+          href="/"
+          class=" inline text-primary-400 transition border-b hover:border-b-2 border-primary-400 hover:border-primary-500 hover:text-primary-500"
+          >
+          <Icon class="mb-1 mr-1 inline" name="icon-park-outline:arrow-left" />
+          <strong>Regresar al inicio</strong>
+        </NuxtLink>
+      </div>
       </template>
     </CCardAlt>
   </div>
 </template>
 
 <script setup lang="ts">
-import CCardAlt from './components/primitives/card/CCardAlt.vue';
+import type { NuxtError } from '#app'
+import CCardAlt from './components/primitives/card/CCardAlt.vue'
+
+const { error } = defineProps<{
+  error: NuxtError
+}>()
 
 definePageMeta({
-  layout: 'empty',
+  layout: 'empty'
 })
+
+const title = computed(() =>
+  error.statusCode === 404 ? 'Página no encontrada' : 'Ha ocurrido un error'
+)
+const icon = computed(() =>
+  error.statusCode === 404
+    ? 'icon-park-twotone:help'
+    : 'icon-park-twotone:attention'
+)
+const message = computed(() =>
+  error.statusCode === 404
+    ? 'Parece que la página que buscas no existe o ha sido movida.'
+    : 'Lo sentimos, se Ha ocurrido un error inesperado.'
+)
 </script>
 
 <style scoped lang="scss">

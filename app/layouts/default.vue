@@ -128,6 +128,12 @@ onMounted(() => {
   })
 })
 
+onUnmounted(() => {
+  window.removeEventListener('scroll', () => {
+    hasScrolled.value = window.scrollY > 30
+  })
+})
+
 const currentTrigger = ref('')
 
 const searchOpen = ref(false)

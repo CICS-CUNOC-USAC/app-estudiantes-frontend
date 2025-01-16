@@ -1,23 +1,30 @@
 <template>
   <main>
-    <header class="mb-4">
-      <h1>Mi perfil</h1>
-      <v-btn
-        prepend-icon="mdi-pencil-outline"
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">
+        <Icon
+          name="icon-park-twotone:people"
+          class="mb-1 mr-1.5 inline-block"
+        />
+        Mi perfil
+      </h1>
+      <CButton
+        icon="icon-park-twotone:write"
+        variant="link"
+        label="Editar"
+        class="mb-4 text-muted-color-emphasis lg:my-3"
         to="/dashboard/profile/edit"
-        class="mt-3"
-      >
-        Editar
-      </v-btn>
+      />
     </header>
-    <section class="profile-edit-section">
-      <PersonalInfoDetails :src="user" />
-    </section>
+    <PersonalInfoDetails :src="user" />
+    <!-- <section class="profile-edit-section">
+    </section> -->
   </main>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
+import CButton from '~/components/primitives/button/CButton.vue'
 import PersonalInfoDetails from '~/components/profile/details/PersonalInfoDetails.vue'
 
 const authStore = useAuthStore()
@@ -30,7 +37,7 @@ definePageMeta({
 </script>
 
 <style lang="scss" scoped>
-.profile-edit-section {
-  margin-bottom: 1.5rem;
-}
+// .profile-edit-section {
+//   margin-bottom: 1.5rem;
+// }
 </style>
