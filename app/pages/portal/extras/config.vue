@@ -9,7 +9,6 @@
         to="/"
       />
     </nav>
-{{ theme }}
     <h1 class="text-xl font-semibold">
       <Icon
         name="icon-park-twotone:setting-two"

@@ -3,6 +3,7 @@
     <h3 class="my-2 text-lg font-semibold">Información personal</h3>
     <section class="mb-6 mt-2 grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2">
       <CInputText
+        id="first_name"
         v-model="profile.first_name"
         label="Nombre(s)"
         readonly
@@ -10,6 +11,7 @@
         prepend-icon="icon-park-twotone:people"
       />
       <CInputText
+        id="last_name"
         v-model="profile.last_name"
         label="Apellido(s)"
         readonly
@@ -18,6 +20,7 @@
       />
 
       <CInputText
+        id="email"
         v-model="user.email"
         label="Correo electrónico"
         readonly
@@ -25,6 +28,7 @@
         prepend-icon="icon-park-twotone:mail"
       />
       <CInputText
+        id="ra"
         v-model="user.ra"
         label="Registro académico"
         readonly

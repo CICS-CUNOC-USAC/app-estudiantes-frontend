@@ -1,13 +1,13 @@
 <template>
   <CInfiniteScroll @load-more="load" v-if="data">
     <div
-      class="grid grid-cols-1 gap-3 pb-12 transition md:grid-cols-2 lg:grid-cols-2"
-      :class="{ 'opacity-50': isLoading }"
+      class="grid grid-cols-1 gap-6 pb-12 transition md:grid-cols-2 lg:grid-cols-2"
+      :class="{ 'opacity-50': status === 'pending' }"
     >
       <NuxtLink
         v-for="(item, index) in data"
         :key="index"
-        class="group flex flex-col gap-2 rounded-xl border border-transparent p-5 transition hover:bg-slate-100 active:translate-x-1 active:translate-y-1 dark:hover:bg-zinc-700/60"
+        class="group  flex flex-col gap-2 rounded-xl border border-black p-5 transition bg-surface-50 hover:bg-primary-50 active:translate-x-1 active:translate-y-1 dark:hover:bg-zinc-700/60"
         :to="`/portal/post/${item.link}`"
       >
         <div class="flex-1 space-y-3">
@@ -30,7 +30,7 @@
 import CInfiniteScroll from '../primitives/data/CInfiniteScroll.vue'
 
 const page = ref(1)
-const { data } = useFetch<
+const { data, status } = useFetch<
   {
     title: string
     description: string

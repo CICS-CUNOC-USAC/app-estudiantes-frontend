@@ -20,6 +20,8 @@ declare module 'vue' {
     PMessage: typeof import('primevue/message')['default']
     PSelect: typeof import('primevue/select')['default']
     PSkeleton: typeof import('primevue/skeleton')['default']
+    PSplitter: typeof import('primevue/splitter')['default']
+    PSplitterPanel: typeof import('primevue/splitterpanel')['default']
     PToggleButton: typeof import('primevue/togglebutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

@@ -10,7 +10,7 @@
       'hover:translate-x-0 hover:translate-y-0 hover:bg-surface-100 hover:shadow-none dark:hover:bg-surface-900':
         interactive,
       'cursor-pointer': to,
-      '-translate-x-0.5 -translate-y-0.5 shadow-[2px_2px_0_0_rgba(0,0,0,1)]':
+      'shadow-[2px_2px_0_0_rgba(0,0,0,1)]':
         elevated || interactive,
       'hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5  active:-translate-x-0 active:-translate-y-0':
         interactiveInverse
