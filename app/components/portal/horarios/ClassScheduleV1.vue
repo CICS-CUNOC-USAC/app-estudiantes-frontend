@@ -1,10 +1,11 @@
 <template>
-    <v-table class="elevation-1 rounded-lg" height="650px">
-        <tr>
+    <table class="elevation-1 rounded-lg" height="650px">
+        <!-- <tr>
             <th class="sticky top-0 z-2 bg-surface-100" rowspan="2"></th>
-        </tr>
-        <tr>
-            <th v-for="classroom in classrooms" :key="classroom.id" class="sticky top-0 z-10 alternating-inv min-w-24">
+        </tr> -->
+        <tr class="sticky top-0 z-10 ">
+          <th class=""></th>
+            <th v-for="classroom in classrooms" :key="classroom.id" class="alternating-inv min-w-32">
                 <div class="grid grid-cols-1 text-left">
                     <div class="font-normal">
                         Salón
@@ -16,7 +17,7 @@
                 </col>
             </th>
         </tr>
-        <tr class="border-b-[1px] border-b-surface-75" v-for="hour in hours" :key="hour.id">
+        <tr class="border-b border-b-surface-75" v-for="hour in hours" :key="hour.id">
             <th class="text-center fixed-column">
                 {{ hour.start_time + '-' + hour.end_time }}
             </th>
@@ -29,7 +30,7 @@
                 </v-container>
             </td>
         </tr>
-    </v-table>
+    </table>
 </template>
 
 <script setup lang="ts">
