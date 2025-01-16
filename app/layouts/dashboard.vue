@@ -1,10 +1,9 @@
 <template>
   <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-800">
     <div class="flex gap-x-1">
-      
       <!-- Desktop -->
       <nav
-        class="hidden w-[22rem] shrink-0 flex-col self-start  bg-cics-white py-5 lg:sticky lg:top-0 lg:flex lg:h-screen dark:bg-neutral-800"
+        class="hidden w-[22rem] shrink-0 flex-col self-start bg-cics-white py-5 lg:sticky lg:top-0 lg:flex lg:h-screen dark:bg-neutral-800"
       >
         <h4
           class="flex select-none items-center gap-x-4 px-8 text-lg font-medium"
@@ -21,7 +20,7 @@
         <div class="navigation-menu flex-1 space-y-4 pl-8 pr-6">
           <NuxtLink
             to="/dashboard/home"
-            class="flex items-center gap-x-2 rounded-lg font-medium p-2 transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
+            class="flex items-center gap-x-2 rounded-lg p-2 font-medium transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
             active-class="  text-primary-700 shadow-md outline outline-1 outline-black dark:text-primary-300 dark:outline-neutral-700"
             @click="$emit('close')"
           >
@@ -115,34 +114,36 @@
         </div>
       </nav>
       <div
-        class="mx-auto lg:my-2.5 lg:mr-2.5 w-full max-w-screen-xl rounded-xl bg-white px-6 pt-16 lg:pr-6 lg:pt-6 dark:bg-neutral-900"
+        class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-neutral-900"
       >
-        <NuxtPage />
+        <div class="mx-auto max-w-screen-xl">
+          <NuxtPage />
+        </div>
       </div>
-    </div>
 
-    <PDrawer
-      v-model:visible="drawer"
-      block-scroll
-      unstyled
-      class="h-full w-10/12 bg-cics-white shadow-lg md:w-5/12 dark:bg-neutral-800"
-      :pt="{
-        transition: {
-          name: 'slide'
-        },
-        mask(options) {
-          return {
-            class: `bg-primary-950/40 transition-all duration-500 ${options.props.visible ? 'mask-enter' : 'mask-leave'}`
+      <PDrawer
+        v-model:visible="drawer"
+        block-scroll
+        unstyled
+        class="h-full w-10/12 bg-cics-white shadow-lg md:w-5/12 dark:bg-neutral-800"
+        :pt="{
+          transition: {
+            name: 'slide'
+          },
+          mask(options) {
+            return {
+              class: `bg-primary-950/40 transition-all duration-500 ${options.props.visible ? 'mask-enter' : 'mask-leave'}`
+            }
           }
-        }
-      }"
-    >
-      <template #container="{ closeCallback }">
-        <!-- <SidebarNavigator @close="closeCallback" /> -->
-        <!-- mobile menu -->
-        <DashboardNavigator @close="closeCallback" />
-      </template>
-    </PDrawer>
+        }"
+      >
+        <template #container="{ closeCallback }">
+          <!-- <SidebarNavigator @close="closeCallback" /> -->
+          <!-- mobile menu -->
+          <DashboardNavigator @close="closeCallback" />
+        </template>
+      </PDrawer>
+    </div>
   </div>
 </template>
 

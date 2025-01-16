@@ -12,7 +12,7 @@
             :width="56"
             class="inline-block"
             fill="var(--p-primary-500)"
-          /> 
+          />
           Administación
         </h4>
 
@@ -20,7 +20,7 @@
         <div class="navigation-menu flex-1 space-y-4 pl-8 pr-6">
           <NuxtLink
             to="/admin/home"
-            class="mt-4 flex items-center gap-x-2 rounded-lg font-medium p-2 transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
+            class="mt-4 flex items-center gap-x-2 rounded-lg p-2 font-medium transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
             active-class="  text-primary-700 shadow-md outline outline-1 outline-black dark:text-primary-300 dark:outline-neutral-700"
             @click="$emit('close')"
           >
@@ -114,9 +114,11 @@
         </div>
       </nav>
       <div
-        class="mx-auto lg:my-2.5 lg:mr-2.5 w-full max-w-screen-xl rounded-xl bg-white px-6 pt-16 lg:pr-6 lg:pt-6 dark:bg-neutral-900"
+        class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-neutral-900"
       >
-        <NuxtPage />
+        <div class="mx-auto max-w-screen-xl">
+          <NuxtPage />
+        </div>
       </div>
     </div>
 
@@ -180,5 +182,4 @@ const currentPage = ref('')
     content: '';
   }
 }
-
 </style>
