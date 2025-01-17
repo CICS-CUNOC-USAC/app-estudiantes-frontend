@@ -3,11 +3,11 @@
     :is="to ? NuxtLink : 'div'"
     :to
     unstyled
-    class="flex h-full flex-col overflow-hidden rounded-xl border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-800
+    class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-800
       -translate-x-0.5 -translate-y-0.5 shadow-[2px_2px_0_0_rgba(0,0,0,1)]
     "
     :class="{
-      'p-5': !noSpacing,
+      'p-2': !noSpacing,
       'cursor-pointer': to,
     }"
   >
@@ -23,7 +23,7 @@
       <p class="mb-4 flex-1 leading-tight">
         {{ curso }}
       </p>
-      <span class="block pb-4 text-xs tracking-tight">
+      <span class="block text-xs tracking-tight">
         <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
         Seccion: {{ seccion }}
       </span>
