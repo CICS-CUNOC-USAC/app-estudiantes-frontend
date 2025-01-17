@@ -1,7 +1,7 @@
 <template>
-  <v-container style="padding: 4px">
+  <div>
     <v-card
-      class="mx-auto rounded-sm"
+      class="rounded-sm"
       :class="getSemesterColor(curso.career_course.semester)"
       max-width="350"
       min-width="180"
@@ -35,7 +35,7 @@
         </v-container>
       </template>
     </v-card>
-  </v-container>
+</div>
 </template>
 
 <script lang="ts">
