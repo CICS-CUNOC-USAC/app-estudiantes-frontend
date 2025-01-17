@@ -11,21 +11,21 @@
       'cursor-pointer': to,
     }"
   >
-    <slot name="title">
+    <slot name="career">
       <h3
-      v-if="title"
-        class="mb-2 text-base font-semibold transition-colors duration-300 ease-in-out"
+      v-if="career"
+        class="mb-2 text-sm font-semibold transition-colors duration-300 ease-in-out"
       >
-        {{ title }}
+        {{ career }}
       </h3>
     </slot>
     <slot name="content">
-      <p class="mb-4 flex-1">
-        {{ description }}
+      <p class="mb-4 flex-1 leading-tight">
+        {{ curso }}
       </p>
       <span class="block pb-4 text-xs tracking-tight">
         <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
-        {{ small }}
+        Seccion: {{ seccion }}
       </span>
     </slot>
     <slot name="footer">
@@ -35,10 +35,10 @@
 <script setup lang="ts">
 import { NuxtLink } from '#components'
 defineProps<{
-  title?: string
-  description?: string
+  career?: string
+  curso?: string
   to?: string
-  small?: string
+  seccion?: string
   smallIcon?: string
   noSpacing?: boolean
 }>()
