@@ -49,6 +49,9 @@ export type Course = {
   career_course: {
     semester: number
     field: number
+    career: {
+      name: string
+    }
     course: {
       name: string
     }

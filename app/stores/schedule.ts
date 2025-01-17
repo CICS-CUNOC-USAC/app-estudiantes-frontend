@@ -14,6 +14,9 @@ export const useScheduleStore = defineStore('schedule-courses', () => {
       career_course: {
         semester: 0,
         field: 0,
+        career: {
+          name: ''
+        },
         course: {
           name: ''
         }
