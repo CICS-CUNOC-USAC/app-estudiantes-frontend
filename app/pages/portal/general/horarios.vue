@@ -1,15 +1,20 @@
 <template>
   <main>
-    <h1 class="mb-4">Horario de Clases V1</h1>
-    <v-container
+      <div class="grid grid-cols-5">
+          <div class="col-span-1">
+              Hola mundo
+          </div>
+    <div
       v-if="!loadingHours && !loadingClassrooms && !loadingSchedules"
     >
+
       <ClassScheduleV1
         :hours="hours!"
         :classrooms="classrooms!"
         :schedules="schedules!"
       />
-    </v-container>
+        </div>
+      </div>
   </main>
 </template>
 
