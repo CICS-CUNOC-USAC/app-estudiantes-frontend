@@ -29,7 +29,10 @@
                     <ScheduleCourseCard v-if="
                         schedule.periods[0].hour.start_time == hour.start_time &&
                         schedule.classroom_id == classroom.id
-                    " :title="schedule.career_course.course.name"
+                    "
+                    career="Ciencias y Sistemas"
+                    :curso="schedule.career_course.course.name"
+                    :seccion="schedule.section.name"
                     />
                 </div>
             </td>
