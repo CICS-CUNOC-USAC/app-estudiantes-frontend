@@ -23,9 +23,9 @@
                     {{ hour.start_time }} - {{ hour.end_time }}
                 </th>
                 <td class="alternating border-b border-b-surface-75" v-for="classroom in classrooms"
-                    :key="classroom.id">
-                    <div class="ml-[1px]" v-for="schedule in schedules" :key="schedule.id">
-                        <ScheduleCourseCard v-if="
+                    :key="classroom.id" :rowspan="classroom.id == 2 ? 2 : 1" :class="{'h-32' : classroom.id == 2}">
+                    <div class="ml-[1px] h-full" v-for="schedule in schedules" :key="schedule.id">
+                        <ScheduleCourseCard class="h-full" v-if="
                             schedule.periods[0].hour.start_time == hour.start_time &&
                             schedule.classroom_id == classroom.id
                         " :career="schedule.career_course.career.name" :curso="schedule.career_course.course.name"
