@@ -6,7 +6,7 @@
                 {{ hour.start_time }} - {{ hour.end_time }}
             </div>
         </div>
-        <div class="w-52" v-for="classroom in classrooms" :key="classroom.id">
+        <div class="grid grid-cols-1 w-52 max-h-32" :class="`grid-rows-${hours.length + 1}`" v-for="classroom in classrooms" :key="classroom.id">
             <div class="text-left border-r">
                 <div class="font-normal">
                     Salón
@@ -15,16 +15,20 @@
                     {{ classroom.name }}
                 </div>
             </div>
-            <div class="min-h-36 border-b border-r" v-for="hour in hours" :key="hour.id">
-                <template v-for="schedule in schedules" :key="schedule.id">
-                    <ScheduleCourseCard v-if="
-                        schedule.periods[0].hour.start_time == hour.start_time &&
-                        schedule.classroom_id == classroom.id
-                    " :career="schedule.career_course.career.name" :curso="schedule.career_course.course.name"
-                        :seccion="schedule.section.name" :semester="schedule.career_course.semester"
-                        :days="schedule.periods.map(period => period.weekday_id)" />
+            <template v-for="hour in hours" :key="hour.id">
+                <template v-if="hasSchedule(classroom.id, hour, schedules)">
+                    <div class="min-h-32 border-b border-r" :class="{'row-span-2' : getPeriodsSchedule(lastSchedule.value.periods) > 1}" v-if="typeof lastSchedule.value !== 'undefined'">
+                        <ScheduleCourseCard :career="lastSchedule.value.career_course.career.name"
+                            :curso="lastSchedule.value.career_course.course.name" :seccion="lastSchedule.value.section.name"
+                            :semester="lastSchedule.value.career_course.semester"
+                            :days="lastSchedule.value.periods.map(period => period.weekday_id)" />
+                    </div>
                 </template>
-            </div>
+                <div class="min-h-32 border-b border-r" v-else>
+                </div>
+                <template v-for="schedule in schedules" :key="schedule.id">
+                </template>
+            </template>
         </div>
     </div>
     <!--
@@ -71,13 +75,49 @@
 <script setup lang="ts">
 import CursoHorario from '~/components/portal/horarios/CursoHorario.vue'
 import ScheduleCourseCard from '~/components/cards/ScheduleCourseCard.vue';
-import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
+import type { Classroom, Course, Hour, Period, ScheduleCourse } from '~/utils/types/schedule-courses'
 
 defineProps<{
     hours: Array<Hour>
     classrooms: Array<Classroom>
     schedules: Array<Course>
 }>()
+
+function hasSchedule(classroom_id: number, hour: Hour, schedules: Array<Course>) {
+    const schedule = getSchedule(classroom_id, hour, schedules)
+    if (schedule) {
+        return true;
+    }
+    return false;
+}
+
+const currentSchedule: Ref<Course | undefined> = ref()
+const lastSchedule = computed({
+    get() {
+        return currentSchedule
+    },
+    set(newSchedule: Course) {
+        currentSchedule.value = newSchedule
+    }
+})
+
+function getSchedule(classroom_id: number, hour: Hour, schedules: Array<Course>) {
+    for (const schedule of schedules) {
+        if (
+            schedule.periods[0].hours[0].start_time == hour.start_time &&
+            schedule.classroom_id == classroom_id
+        ) {
+            lastSchedule.value = schedule
+            return schedule as Course;
+        }
+    };
+    return null;
+}
+
+function getPeriodsSchedule(periods: Array<Period>) {
+    const hours = periods[0].hours
+    return hours.length
+}
 </script>
 
 <style scoped lang="postcss">

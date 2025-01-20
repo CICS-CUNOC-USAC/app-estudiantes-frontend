@@ -18,14 +18,15 @@ export type ScheduleLine = {
 
 export type Period = {
   weekday_id: number
-  hour_id: number
-  hour: {
-    start_time: string
-    end_time: string
-  }
+  hours: Array<ScheduleHour>
   weekday: {
     name: string
   }
+}
+
+export type ScheduleHour = {
+  start_time: string
+  end_time: string
 }
 
 export type Hour = {
