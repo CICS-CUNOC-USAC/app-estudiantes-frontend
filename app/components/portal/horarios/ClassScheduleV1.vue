@@ -1,12 +1,40 @@
 <template>
-    <div class="grid grid-flow-col auto-cols-max">
-        <div class="grid grid-flow-row auto-rows-max">
+    <div class="grid grid-cols-schedule grid-rows-hours">
+        <div class="bg-black-200 col-span-1 col-start-1 row-start-1">
+        </div>
+        <div class="bg-surface-300 row-start-1 col-span-1" v-for="classroom in classrooms" :key="classroom.id">
+            Salon
+            {{ classroom.name }}
+        </div>
+        <div class="bg-surface-100 col-start-1 col-end-23 row-start-2 row-end-11 grid grid-cols-subgrid">
+            <div class="bg-surface-700 border-b row-span-1 col-start-1" v-for="hour in hours" :key="hour.id" >
+                <div class="bg-surface-600 border-b col-end-1">
+                    {{ hour.start_time }} - {{ hour.end_time }}
+                </div>
+                <div class="bg-surface-700 border-b col-span-1" v-for="classroom in classrooms" :key="classroom.id">
+                    OO
+                </div>
+            </div>
+        </div>
+        <!--
+        <div class="bg-surface-500 col-start-2 col-end-23 row-start-2 row-end-11 grid grid-cols-subgrid gap-4">
+            <div class="bg-surface-400 col-span-1 row-start-1 gap-2" v-for="classroom in classrooms" :key="classroom.id">
+                <div class="bg-black border-b" v-for="hour in hours" :key="hour.id">
+                    O
+                </div>
+            </div>
+        </div>
+        -->
+    </div>
+    <!--
+    <div :class="`grid grid-flow-col grid-rows-${hours.length + 1}`">
+        <div>
             <div class="min-h-12"></div>
             <div class="min-h-36 max-w-12 mr-2 text-center" v-for="hour in hours" :key="hour.id">
                 {{ hour.start_time }} - {{ hour.end_time }}
             </div>
         </div>
-        <div class="grid grid-cols-1 w-52 max-h-32" :class="`grid-rows-${hours.length + 1}`" v-for="classroom in classrooms" :key="classroom.id">
+        <div class="grid grid-cols-subgrid w-52 max-h-32" :class="`grid-en`" v-for="classroom in classrooms" :key="classroom.id">
             <div class="text-left border-r">
                 <div class="font-normal">
                     Salón
@@ -17,20 +45,19 @@
             </div>
             <template v-for="hour in hours" :key="hour.id">
                 <template v-if="hasSchedule(classroom.id, hour, schedules)">
-                    <div class="min-h-32 border-b border-r" :class="{'row-span-2' : getPeriodsSchedule(lastSchedule.value.periods) > 1}" v-if="typeof lastSchedule.value !== 'undefined'">
+                    <div class="h-32 border-b border-r" :class="{'row-span-1' : getPeriodsSchedule(lastSchedule.value.periods) > 1}" v-if="typeof lastSchedule.value !== 'undefined'">
                         <ScheduleCourseCard :career="lastSchedule.value.career_course.career.name"
                             :curso="lastSchedule.value.career_course.course.name" :seccion="lastSchedule.value.section.name"
                             :semester="lastSchedule.value.career_course.semester"
                             :days="lastSchedule.value.periods.map(period => period.weekday_id)" />
                     </div>
                 </template>
-                <div class="min-h-32 border-b border-r" v-else>
+                <div class="h-32 border-b border-r" v-else>
                 </div>
-                <template v-for="schedule in schedules" :key="schedule.id">
-                </template>
             </template>
         </div>
     </div>
+    -->
     <!--
     <table class="">
         <thead class=" sticky top-14 z-10">

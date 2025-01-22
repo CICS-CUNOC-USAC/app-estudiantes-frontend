@@ -9,6 +9,17 @@ module.exports = {
   ],
   theme: {
     extend: {
+      gridTemplateColumns: {
+          'schedule': 'repeat(22, minmax(0, 1fr))',
+          'classrooms': 'repeat(21, minmax(0, 1fr))',
+      },
+      gridTemplateRows: {
+          'schedule': 'repeat(12, minmax(0, 1fr))',
+          'hours': 'repeat(11, minmax(0, 1fr))',
+      },
+      gridColumnEnd: {
+          '23': '23',
+      },
       colors: {
         'cics-white': '#faf6ed'
       },
