@@ -37,7 +37,7 @@
         v-for="(item, index) in data"
         :key="index"
         class="group flex flex-col gap-2 rounded-xl border border-black bg-surface-50 p-5 transition hover:bg-primary-50 active:translate-x-1 active:translate-y-1 dark:bg-neutral-900 dark:hover:bg-zinc-700/60"
-        :to="`/portal/post/${item.internal_link}`"
+        :to="`/portal/post/${item.internal_link}?fromSearch=${route.query.q}`"
       >
         <div class="flex-1 space-y-3">
           <h1 class="text-xl font-bold">
@@ -119,6 +119,10 @@ const highlightQuery = (title: string) => {
     '<span class="text-primary-400 font-semibold">$1</span>'
   )
 }
+
+useHead({
+  title: route.query.q ? `"${route.query.q}" en Ingeniería CUNOC` : 'Busqueda de publicaciones',
+})
 </script>
 
 <style lang="postcss" scoped></style>

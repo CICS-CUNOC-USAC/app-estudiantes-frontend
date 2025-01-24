@@ -7,7 +7,7 @@
       }"
     >
       <div
-        class="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-2.5 "
+        class="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-2.5"
       >
         <div class="flex grow basis-0 items-center gap-x-3">
           <button
@@ -33,7 +33,7 @@
 
         <TopNavDesktopDashboard v-model="currentTrigger" />
 
-        <div class="relative flex grow basis-0 justify-end gap-x-1 ">
+        <div class="relative flex grow basis-0 justify-end gap-x-1">
           <div class="flex items-center">
             <Transition name="fade-slide">
               <form
@@ -52,6 +52,7 @@
               </form>
             </Transition>
             <CButton
+              v-Ptooltip.bottom="'(Ctrl/Cmd + K) Buscar en Ingeniería CUNOC'"
               :icon="
                 searchOpen
                   ? 'icon-park-twotone:close-one'
@@ -66,7 +67,7 @@
             icon="icon-park-twotone:people"
             :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
-            class="!px-2 max-w-[11ch] min-w-0"
+            class="min-w-0 max-w-[11ch] !px-2"
             pt:label:class="hidden lg:block truncate"
           />
         </div>
@@ -95,7 +96,10 @@
     </PDrawer>
 
     <div class="d-flex flex-column">
-      <main id="appcont" class="mx-auto max-w-screen-xl px-5 pt-20 print:pt-14 lg:px-8">
+      <main
+        id="appcont"
+        class="mx-auto max-w-screen-xl px-5 pt-20 lg:px-8 print:pt-14"
+      >
         <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
       </main>
 
@@ -132,6 +136,14 @@ onUnmounted(() => {
   window.removeEventListener('scroll', () => {
     hasScrolled.value = window.scrollY > 30
   })
+})
+
+const { meta, k, control } = useMagicKeys()
+
+watchEffect(() => {
+  if ((meta.value || control.value) && k.value) {
+    toggleSearch({ leaveOpen: false })
+  }
 })
 
 const currentTrigger = ref('')
