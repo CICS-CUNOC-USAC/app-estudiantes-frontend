@@ -55,6 +55,12 @@ export type Course = {
     }
     course: {
       name: string
+    },
+    career_field: {
+      career_code: number,
+      field_number: number,
+      name: string,
+      common_field: boolean
     }
   }
   section: {

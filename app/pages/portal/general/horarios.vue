@@ -102,11 +102,15 @@ definePageMeta({
 })
 const search = ref('')
 
-const scheduleType = ref('calendar')
+const scheduleType = ref('classroom')
 const coursesMode = ref('lectures')
 
-function printThis() {
-  console.log(scheduleType)
-}
+watch(
+    () => scheduleType,
+    (type, prevType) => {
+        console.log('cambio')
+    }
+)
+
 </script>
 <style scoped lang="scss"></style>
