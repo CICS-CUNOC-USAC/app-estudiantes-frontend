@@ -1,6 +1,6 @@
 <template>
   <main class="">
-    <nav class="mb-4 space-x-4">
+    <nav class="mb-4 flex flex-wrap gap-x-3 print:hidden">
       <CButton
         icon="icon-park-outline:arrow-left"
         variant="link"
@@ -9,15 +9,15 @@
         to="/portal/recursos/manuales"
       />
       <CButton
-        icon="lucide:house"
+        icon="icon-park-twotone:printer"
         variant="link"
-        label="Ir al inicio"
+        label="Imprimir/Guardar este manual"
         class="mb-4 text-muted-color-emphasis lg:mb-2"
-        to="/"
+        @click="handlePrint"
       />
     </nav>
     <div class="relative flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
-      <div class="sticky top-20 hidden w-3/12 self-start lg:block">
+      <div class="sticky top-20 hidden w-3/12 self-start lg:block print:hidden">
         <h4 class="mb-2 text-xl font-semibold">Secciones</h4>
         <ul
           class="space-y-2.5 border-l-2 border-gray-200 dark:border-neutral-700"
@@ -45,7 +45,7 @@
       </div>
       <PopoverRoot>
         <PopoverTrigger
-          class="hover:text-primary-600 lg:hidden dark:hover:text-primary-300"
+          class="hover:text-primary-600 lg:hidden dark:hover:text-primary-300 print:hidden"
           aria-label="Navegación"
         >
           <Icon
@@ -93,6 +93,7 @@
           </PopoverContent>
         </PopoverPortal>
       </PopoverRoot>
+      <h1 class="hidden text-muted-color-emphasis italic print:block"> Manual - <span class="font-bold">Portal CICS App</span> </h1>
       <div class="content-renderer" v-if="data">
         <ContentRenderer :value="data" />
       </div>
@@ -111,6 +112,14 @@ const { data } = await useAsyncData(() =>
     })
     .findOne()
 )
+
+const handlePrint = () => {
+  window.print()
+}
+
+useHead({
+  title: `Manual - ${data.value?.title}` || 'Manual',
+})
 </script>
 <style lang="postcss">
 .toc-item {

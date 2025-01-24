@@ -21,10 +21,7 @@
   </v-container>
 </template>
 
-<script lang="ts">
-export default {
-  name: 'Horarios'
-}
+<script lang="ts" setup>
 </script>
 
 <style scoped lang="scss">

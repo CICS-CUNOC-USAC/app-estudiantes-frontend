@@ -19,6 +19,7 @@ declare module 'vue' {
     PInputText: typeof import('primevue/inputtext')['default']
     PMessage: typeof import('primevue/message')['default']
     PSelect: typeof import('primevue/select')['default']
+    PSelectButton: typeof import('primevue/selectbutton')['default']
     PSkeleton: typeof import('primevue/skeleton')['default']
     PSplitter: typeof import('primevue/splitter')['default']
     PSplitterPanel: typeof import('primevue/splitterpanel')['default']

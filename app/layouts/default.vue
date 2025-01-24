@@ -1,13 +1,13 @@
 <template>
   <div>
     <nav
-      class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 backdrop-blur-sm transition dark:border-neutral-700 dark:bg-surface-800/80"
+      class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 backdrop-blur-sm transition dark:border-neutral-700 dark:bg-surface-800/80 print:hidden"
       :class="{
         'border-b shadow-md': hasScrolled
       }"
     >
       <div
-        class="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-2.5"
+        class="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-2.5 "
       >
         <div class="flex grow basis-0 items-center gap-x-3">
           <button
@@ -33,7 +33,7 @@
 
         <TopNavDesktopDashboard v-model="currentTrigger" />
 
-        <div class="relative flex grow basis-0 justify-end gap-x-1 md:order-2">
+        <div class="relative flex grow basis-0 justify-end gap-x-1 ">
           <div class="flex items-center">
             <Transition name="fade-slide">
               <form
@@ -95,7 +95,7 @@
     </PDrawer>
 
     <div class="d-flex flex-column">
-      <main id="appcont" class="mx-auto max-w-screen-xl px-5 pt-20 lg:px-8">
+      <main id="appcont" class="mx-auto max-w-screen-xl px-5 pt-20 print:pt-14 lg:px-8">
         <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
       </main>
 

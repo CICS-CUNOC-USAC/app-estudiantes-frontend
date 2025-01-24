@@ -7,7 +7,7 @@
       <NuxtLink
         v-for="(item, index) in data"
         :key="index"
-        class="group  flex flex-col gap-2 rounded-xl border border-black p-5 transition bg-surface-50 hover:bg-primary-50 active:translate-x-1 active:translate-y-1 dark:hover:bg-zinc-700/60"
+        class="group dark:bg-neutral-900 flex flex-col gap-2 rounded-xl border border-black p-5 transition bg-surface-50 hover:bg-primary-50 active:translate-x-1 active:translate-y-1 dark:hover:bg-zinc-700/60"
         :to="`/portal/post/${item.link}`"
       >
         <div class="flex-1 space-y-3">
@@ -43,6 +43,7 @@ const { data, status } = useFetch<
 })
 
 async function load() {
+  status.value = 'pending'
   const res = await $fetch<
     {
       title: string
@@ -56,6 +57,7 @@ async function load() {
   })
 
   data.value?.push(...res)
+  status.value = 'success'
   // page.value++
 }
 </script>

@@ -16,21 +16,27 @@
         to="/portal/general/publicaciones"
       />
     </nav>
-    <h1 class="py-3 text-xl font-semibold">
+    <h1 class="py-3 text-xl font-semibold" v-if="route.query.q">
       <Icon name="lucide:search" class="mb-1 mr-1.5 inline-block" />
       Buscando:
       <span class="font-normal text-primary-400"> {{ route.query.q }} </span>
       en Ingeniería CUNOC
     </h1>
+    <h1 class="py-3 text-center font-semibold mt-4" v-else>
+      <Icon name="lucide:info" class="mb-1 mr-1.5 inline-block" />
+      Utiliza el botón de búsqueda en la parte superior o haz clic
+      <button @click="$emit('search')" class="text-primary-400">aquí</button>
+      para encontrar publicaciones oficiales
+    </h1>
 
     <div
-      v-if="data && status === 'success'"
+      v-if="data && status === 'success' && route.query.q"
       class="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-2"
     >
       <NuxtLink
         v-for="(item, index) in data"
         :key="index"
-        class="group flex flex-col gap-2 rounded-xl border border-transparent p-6 transition hover:bg-slate-100 active:translate-x-1 active:translate-y-1 dark:hover:bg-zinc-700/60"
+        class="group flex flex-col gap-2 rounded-xl border border-black bg-surface-50 p-5 transition hover:bg-primary-50 active:translate-x-1 active:translate-y-1 dark:bg-neutral-900 dark:hover:bg-zinc-700/60"
         :to="`/portal/post/${item.internal_link}`"
       >
         <div class="flex-1 space-y-3">
@@ -38,10 +44,13 @@
             <span v-html="highlightQuery(item.title)"></span>
           </h1>
           <p class="text-muted-color-emphasis">
-            Categoría: <span class="text-color font-medium">{{ item.category }}</span>
+            Categoría:
+            <span class="font-medium text-color">{{ item.category }}</span>
           </p>
         </div>
-        <small class="block text-muted-color">Fecha: <strong>{{ item.posted_since }}</strong></small>
+        <small class="block text-muted-color"
+          >Fecha: <strong>{{ item.posted_since }}</strong></small
+        >
         <span class="text-primary-emphasis-alt">
           Leer
           <Icon
