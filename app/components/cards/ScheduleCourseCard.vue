@@ -3,12 +3,13 @@
     :is="to ? NuxtLink : 'div'"
     :to
     unstyled
-    class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-800
+    class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-950/75 text-color duration-300 ease-in-out dark:bg-surface-800
       -translate-x-0.5 -translate-y-0.5 shadow-[2px_2px_0_0_rgba(0,0,0,1)]
     "
     :class="{
       'p-2': !noSpacing,
       'cursor-pointer': to,
+      [colorCareer[career_id]]: true
     }"
   >
     <slot name="career">
@@ -20,7 +21,7 @@
       </h3>
     </slot>
     <slot name="content">
-      <p class="mb-2 flex-1 leading-tight">
+      <p class="mb-2 text-sm font-medium flex-1 leading-tight">
         {{ curso }}
       </p>
       <div class="grid grid-cols-2">
@@ -42,6 +43,7 @@
 import { NuxtLink } from '#components'
 defineProps<{
   career?: string
+  career_id: number
   curso?: string
   to?: string
   seccion?: string
@@ -77,6 +79,15 @@ function transformToWeekdays(numbers: number[]): string {
     }
     return weekdays[num];
   }).join(' ');
+}
+
+const colorCareer: Record<number, string> = {
+    0: 'bg-sky-300',
+    58: 'bg-orange-300', //sistemas
+    33: 'bg-red-300', //civil
+    34: 'bg-lime-300', //mecanica
+    35: 'bg-teal-300', //industrial
+    36: 'bg-green-300', //mec-industrial
 }
 </script>
 <style lang="postcss" scoped></style>
