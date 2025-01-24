@@ -6,7 +6,7 @@
           :model-value="scheduleType"
           @update:model-value="
             (val) => {
-              if (val) scheduleType = val as string
+            console.log('cambio')
             }
           "
           type="single"
@@ -97,6 +97,16 @@ const { data: classrooms, pending: loadingClassrooms } =
 const { data: schedules, pending: loadingSchedules } =
   useCustomLazyFetch<Array<Course>>(`schedules/courses`)
 
+function fetchCourses() {
+    const { data: schedules, pending: loadingSchedules } =
+      useCustomLazyFetch<Array<Course>>(`schedules/courses`)
+}
+
+function fetchLaboratories() {
+    const { data: schedules, pending: loadingSchedules } =
+      useCustomLazyFetch<Array<Course>>(`schedules/laboratories`)
+}
+
 definePageMeta({
   layout: 'schedule'
 })
@@ -104,13 +114,6 @@ const search = ref('')
 
 const scheduleType = ref('classroom')
 const coursesMode = ref('lectures')
-
-watch(
-    () => scheduleType,
-    (type, prevType) => {
-        console.log('cambio')
-    }
-)
 
 </script>
 <style scoped lang="scss"></style>
