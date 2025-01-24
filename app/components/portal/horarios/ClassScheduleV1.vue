@@ -2,7 +2,7 @@
     <!--VERSION GRID PLUGIN-->
     <ClientOnly>
         <GridLayout class="w-[300vw]" v-model:layout="gridState.layout" :col-num="classrooms.length + 2"
-            :row-height="100" :margin="[2,2]">
+            :row-height="100" :margin="[2, 2]">
             <template class="border" v-for="(item, index) in gridState.layout" :key="index">
                 <template v-if="item.i === '0'">
                     <GridItem class="" :static="item.static" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
@@ -10,8 +10,8 @@
                     </GridItem>
                 </template>
                 <template v-else-if="item.type === 'classroom'">
-                    <GridItem class="text-left border-r pl-2" :static="item.static" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
-                        :i="item.i">
+                    <GridItem class="text-left border-r pl-2" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                        :h="item.h" :i="item.i">
                         <div class="font-normal">
                             Salón
                         </div>
@@ -21,25 +21,25 @@
                     </GridItem>
                 </template>
                 <template v-else-if="item.type === 'hour'">
-                    <GridItem class="text-center justify-end flex pr-12 pl-12" :static="item.static"
-                        :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
-                            {{ item.content.start_time }} - {{ item.content.end_time }}
+                    <GridItem class="text-center justify-end flex pr-12 pl-12" :static="item.static" :x="item.x"
+                        :y="item.y" :w="item.w" :h="item.h" :i="item.i">
+                        {{ item.content.start_time }} - {{ item.content.end_time }}
                     </GridItem>
                 </template>
                 <template v-else-if="item.type === 'schedule'">
                     <template v-if="item.content !== undefined">
-                        <GridItem class="border-b border-r"
-                        :static="item.static" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
-                            <ScheduleCourseCard :career="item.content.career_course.career.name"
-                                :career_id="item.content.career_code as number"
+                        <GridItem class="border-b border-r" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                            :h="item.h" :i="item.i">
+                            <ScheduleCourseCard :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
+                                :career_id="isCommonField(item.content) ? 0 : item.content.career_code as number"
                                 :curso="item.content.career_course.course.name" :seccion="item.content.section.name"
                                 :semester="item.content.career_course.semester"
                                 :days="(item.content as Course).periods.map(period => period.weekday_id)" />
                         </GridItem>
                     </template>
                     <template v-else>
-                        <GridItem class="border-b border-r"
-                         :static="item.static" :x="item.x" :y="item.y" :w="item.w" :h="item.h" :i="item.i">
+                        <GridItem class="border-b border-r" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                            :h="item.h" :i="item.i">
                         </GridItem>
                     </template>
                 </template>
@@ -207,7 +207,7 @@ function createLayout() {
     let layout: Array<Cell> = []
 
     layout.push(
-        { x: 0.5, y: 0, w: width/2, h: height, i: '0', static: true, content: undefined, type: 'undefined' }
+        { x: 0.5, y: 0, w: width / 2, h: height, i: '0', static: true, content: undefined, type: 'undefined' }
     )
 
     //Se llenan los headers de classrooms
@@ -229,7 +229,7 @@ function createLayout() {
         props.hours.map((hour, index) => ({
             x: 0.5,
             y: index + 1,
-            w: width/2,
+            w: width / 2,
             h: height,
             i: hour.id.toString() + 'HH',
             static: true,
@@ -241,22 +241,49 @@ function createLayout() {
     //Se llenan las casillas
     layout = layout.concat(
         props.hours.flatMap((hour, rowIndex) =>
-            props.classrooms.map((classroom, colIndex) => (
+            props.classrooms.map((classroom, colIndex) => {
+                const prevRow = rowIndex - 1;
+                const prevCell =
+                    prevRow >= 0
+                        ? layout.find(
+                            (cell) =>
+                                cell.x === colIndex + 1 &&
+                                cell.y === prevRow + 1 &&
+                                cell.type === 'schedule'
+                        )
+                        : undefined;
 
-            {
-                x: colIndex + 1,
-                y: rowIndex + 1,
-                w: width,
-                h: height,
-                i: `${hour.id}-${classroom.id}`,
-                static: true,
-                content: getSchedule(classroom.id, hour, props.schedules),
-                type: 'schedule'
+                const canInsert =
+                    !prevCell ||
+                    !prevCell.content ||
+                    (prevCell.content.periods &&
+                        prevCell.content.periods.length === 1);
+
+                const currentSchedule = getSchedule(classroom.id, hour, props.schedules)
+                return canInsert
+                    ? {
+                        x: colIndex + 1,
+                        y: rowIndex + 1,
+                        w: width,
+                        h: currentSchedule ? height * getPeriodsSchedule(currentSchedule.periods) : height,
+                        i: `${hour.id}-${classroom.id}`,
+                        static: true,
+                        content: currentSchedule,
+                        type: 'schedule',
+                    }
+                    : {
+                        x: 0,
+                        y: 0,
+                        w: 0,
+                        h: 0,
+                        i: `0`,
+                        static: true,
+                        content: undefined,
+                        type: 'delete',
+                    }; // Skip creating this cell
             })
-        ))
-    ).filter(Boolean)
-
-    console.log(layout)
+        ).filter(cell => cell.type !== 'delete') // Remove null cells from the layout
+    )
     return layout
 }
 
@@ -275,6 +302,10 @@ function getSchedule(classroom_id: number, hour: Hour, schedules: Array<Course>)
         }
     };
     return undefined;
+}
+
+function isCommonField(course: Course) {
+    return course.career_course.career_field.common_field
 }
 
 function getPeriodsSchedule(periods: Array<Period>) {

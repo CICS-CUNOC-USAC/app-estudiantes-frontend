@@ -19,7 +19,13 @@ export const useScheduleStore = defineStore('schedule-courses', () => {
         },
         course: {
           name: ''
-        }
+        },
+        career_field: {
+          career_code: 36,
+          field_number: 3,
+          name: "",
+          common_field: false
+        },
       },
       section: {
         name: ''
