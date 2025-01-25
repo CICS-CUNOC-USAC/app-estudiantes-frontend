@@ -6,10 +6,9 @@
           :model-value="scheduleType"
           @update:model-value="
             (val) => {
-            console.log('cambio')
+                if (val) scheduleType = val as string
             }
           "
-          type="single"
           class="flex gap-1"
         >
           <ToggleGroupItem
@@ -42,9 +41,9 @@
                 @update:model-value="
                   (val) => {
                     if (val) coursesMode = val as string
+                    changeSchedule()
                   }
                 "
-                type="single"
                 class="flex gap-1"
               >
                 <ToggleGroupItem
@@ -53,7 +52,7 @@
                   >Clases</ToggleGroupItem
                 >
                 <ToggleGroupItem
-                  value="labs"
+                  value="laboratories"
                   class="rounded-lg transition active:translate-x-0.5 active:translate-y-0.5 border-2 border-transparent px-2.5 py-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
                   >Laboratorios</ToggleGroupItem
                 >
@@ -88,24 +87,49 @@ import CInputText from '~/components/primitives/form/CInputText.vue'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 import { ToggleGroupItem, ToggleGroupRoot } from 'radix-vue'
 
+const schedules = ref<Array<Course>>([])
+const loadingSchedules = ref(false)
+
 const { data: hours, pending: loadingHours } =
   useCustomLazyFetch<Array<Hour>>(`hours`)
 
 const { data: classrooms, pending: loadingClassrooms } =
   useCustomLazyFetch<Array<Classroom>>(`classrooms`)
 
-const { data: schedules, pending: loadingSchedules } =
-  useCustomLazyFetch<Array<Course>>(`schedules/courses`)
-
-function fetchCourses() {
-    const { data: schedules, pending: loadingSchedules } =
-      useCustomLazyFetch<Array<Course>>(`schedules/courses`)
+async function fetchCourses() {
+  loadingSchedules.value = true
+  try {
+    const { data } = await useCustomLazyFetch<Array<Course>>(`schedules/courses`)
+    schedules.value = data.value || []
+  } catch (error) {
+    console.error('Error fetching courses:', error)
+  } finally {
+    loadingSchedules.value = false
+  }
 }
 
-function fetchLaboratories() {
-    const { data: schedules, pending: loadingSchedules } =
-      useCustomLazyFetch<Array<Course>>(`schedules/laboratories`)
+async function fetchLaboratories() {
+  loadingSchedules.value = true
+  try {
+    const { data } = await useCustomLazyFetch<Array<Course>>(`schedules/laboratories`)
+    schedules.value = data.value || []
+  } catch (error) {
+    console.error('Error fetching laboratories:', error)
+  } finally {
+    loadingSchedules.value = false
+  }
 }
+
+// Change Schedule Type
+function changeSchedule() {
+    console.log('cambio', coursesMode.value)
+  if (coursesMode.value === 'lectures') {
+    fetchCourses()
+  } else if (coursesMode.value === 'laboratories') {
+    fetchLaboratories()
+  }
+}
+
 
 definePageMeta({
   layout: 'schedule'
@@ -114,6 +138,7 @@ const search = ref('')
 
 const scheduleType = ref('classroom')
 const coursesMode = ref('lectures')
+changeSchedule()
 
 </script>
 <style scoped lang="scss"></style>
