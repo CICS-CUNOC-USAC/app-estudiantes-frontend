@@ -8,8 +8,9 @@
     :class="{
       'w-full': props.fluid,
       'rounded-lg': props.rounded,
-      '-translate-x-0.5 -translate-y-0.5 border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)] text-white':
+      ' border-2 border-black  text-white':
         props.variant !== 'text' && props.variant !== 'link' && props.variant !== 'tonal',
+        'shadow-[3px_3px_0_0_rgba(0,0,0,1)]': !props.outlined,
       'gap-x-2 px-3.5 py-1.5':
         props.variant !== 'link' && props.size === 'large',
       'gap-x-1 px-2.5 py-1': props.variant !== 'link' && props.size === 'small',
@@ -25,7 +26,7 @@
       'bg-blue-600 text-blue-100 hover:bg-blue-500': props.severity === 'info',
       'bg-zinc-600 text-zinc-100 hover:bg-zinc-500':
         props.severity === 'secondary',
-      'bg-transparent text-color focus:bg-surface-50/20 dark:focus:bg-surface-600/40':
+      'bg-transparent text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 active:translate-x-0.5 active:translate-y-0.5':
         props.outlined,
 
       // Icon position
@@ -39,7 +40,7 @@
       'pointer-events-none opacity-90': props.loading,
 
       // Variants
-      'bg-opacity-30 text-black dark:text-white shadow-none hover:bg-opacity-40 active:translate-x-0.5 active:translate-y-0.5 border-none translate-x-0 translate-y-0':
+      'bg-opacity-30 text-black dark:text-white shadow-none hover:bg-opacity-40 active:translate-x-0.5 active:translate-y-0.5 border-none focus:text-white':
         props.variant === 'tonal',
       'bg-opacity-0 text-current shadow-none hover:bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5 active:border-black':
         props.variant === 'text',

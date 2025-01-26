@@ -1,13 +1,28 @@
 <template>
-  <div>
-    <v-container v-for="carrera, index in carreras" :key="index">
+  <main>
+    <nav class="space-x-4">
+      <CButton
+          icon="lucide:arrow-left"
+          variant="link"
+          label="Regresar al inicio"
+          class="mb-4 text-muted-color-emphasis lg:mb-2"
+          to="/"
+        />
+    </nav>
+    <h1 class="py-3 text-xl font-semibold">
+      <Icon name="icon-park-twotone:book-open" class="mb-1 mr-1.5 inline-block" />
+      Tesarios de carreras
+    </h1>
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
       <InfoCard
-        :img="carrera.img"
-        :title="carrera.carrera"
-        :route="carrera.link"
+      v-for="(carrera, index) in carreras"
+      :key="index"
+      :img="carrera.img"
+      :title="carrera.carrera"
+      :route="carrera.link"
       />
-    </v-container>
-  </div>
+    </div>
+  </main>
 </template>
 <script lang="ts">
 import InfoCard from '@/components/cards/InfoCard.vue'
@@ -16,7 +31,7 @@ export default {
     InfoCard
   },
   emits: ['tesarioActual'],
-  data () {
+  data() {
     return {
       carreras: [
         {
@@ -36,19 +51,23 @@ export default {
         },
         {
           carrera: 'Industrial',
-          img: new URL('@/assets/img/logo_industrial.jpg', import.meta.url).href,
+          img: new URL('@/assets/img/logo_industrial.jpg', import.meta.url)
+            .href,
           link: 'tesarios/industrial'
         },
         {
           carrera: 'Mecanica Industrial',
-          img: new URL('@/assets/img/logo_mecanica_industrial.jpg', import.meta.url).href,
+          img: new URL(
+            '@/assets/img/logo_mecanica_industrial.jpg',
+            import.meta.url
+          ).href,
           link: 'tesarios/mecanica-industrial'
         }
       ]
     }
   },
   methods: {
-    emitCarrera (nombreCarrera: string) {
+    emitCarrera(nombreCarrera: string) {
       this.$emit('tesarioActual', nombreCarrera)
     }
   }
