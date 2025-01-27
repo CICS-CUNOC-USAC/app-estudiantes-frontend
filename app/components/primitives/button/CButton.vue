@@ -3,7 +3,7 @@
   <PButton
     v-bind="props"
     :as="asProp"
-    class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none"
+    class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
     :pt:label:class="`${props.label ? 'block' : 'hidden'}`"
     :class="{
       'w-full': props.fluid,

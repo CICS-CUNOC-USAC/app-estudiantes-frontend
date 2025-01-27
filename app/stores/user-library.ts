@@ -7,6 +7,7 @@ export const useUserLibraryStore = defineStore('user-library', () => {
   const responseMeta = ref<Metadata | null>(null)
 
   const fetchAllBooks = async (params?: {}) => {
+    console.log('fetchAllBooks', params)
     loading.value = true
     try {
       const response = await $api<BooksResponse>('/library', {
@@ -22,6 +23,9 @@ export const useUserLibraryStore = defineStore('user-library', () => {
         message: (error as any).data.message ?? (error as any).data.error,
         type: SnackbarType.ERROR
       })
+      return {
+        error
+      }
     } finally {
       loading.value = false
     }
