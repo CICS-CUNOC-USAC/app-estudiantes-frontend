@@ -7,13 +7,11 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    PAutocomplete: typeof import('primevue/autocomplete')['default']
     PAvatar: typeof import('primevue/avatar')['default']
     PButton: typeof import('primevue/button')['default']
-    PChip: typeof import('primevue/chip')['default']
+    PCheckbox: typeof import('primevue/checkbox')['default']
     PColumn: typeof import('primevue/column')['default']
     PDataTable: typeof import('primevue/datatable')['default']
-    PDivider: typeof import('primevue/divider')['default']
     PDrawer: typeof import('primevue/drawer')['default']
     PForm: typeof import('@primevue/forms/form')['default']
     PIftaLabel: typeof import('primevue/iftalabel')['default']
@@ -21,7 +19,11 @@ declare module 'vue' {
     PInputText: typeof import('primevue/inputtext')['default']
     PMessage: typeof import('primevue/message')['default']
     PSelect: typeof import('primevue/select')['default']
+    PSelectButton: typeof import('primevue/selectbutton')['default']
     PSkeleton: typeof import('primevue/skeleton')['default']
+    PSplitter: typeof import('primevue/splitter')['default']
+    PSplitterPanel: typeof import('primevue/splitterpanel')['default']
+    PToggleButton: typeof import('primevue/togglebutton')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

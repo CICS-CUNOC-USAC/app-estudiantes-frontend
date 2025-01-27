@@ -3,7 +3,7 @@ import Aura from '@primevue/themes/aura'
 import Lara from '@primevue/themes/lara'
 
 const commonOptionsDefaults = {
-  // darkModeSelector: '.my-app-dark'
+  darkModeSelector: '.dark'
 }
 const commonComponentsDefaults = {
   menu: {
@@ -169,7 +169,6 @@ export const allThemesPrimaries = [
 ]
 
 export const AuraBase = definePreset(Aura, {
-  options: commonOptionsDefaults,
   name: OrangePrimaries.name,
   components: commonComponentsDefaults,
   semantic: {
@@ -224,5 +223,6 @@ export const AuraBase = definePreset(Aura, {
 })
 
 export default {
-  preset: AuraBase
+  preset: AuraBase,
+  options: {...commonOptionsDefaults}
 }

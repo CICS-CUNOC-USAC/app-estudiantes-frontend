@@ -1,89 +1,118 @@
 <template>
-  <div>
-    <v-container align="center">
-      <CICSLogo />
-    </v-container>
-    <v-list density="compact">
-      <v-list-item
-        prepend-icon="mdi-home-outline"
-        class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
+  <header class="flex w-full items-center justify-between px-5 py-2.5">
+    <CICSLogo :width="68" fill="var(--p-primary-500)" />
+    <button
+      @click="$emit('close')"
+      class="inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 hover:bg-primary-100 focus:outline focus:outline-offset-1 focus:outline-neutral-200 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
+    >
+      <Icon name="lucide:x" />
+    </button>
+  </header>
+  <main class="flex h-full flex-col overflow-visible pb-16">
+    <nav
+      class="flex max-h-full w-full flex-1 flex-col gap-y-4 overflow-y-auto px-5 pb-6 pt-4"
+    >
+      <NuxtLink
         to="/admin/home"
+        class="flex items-center gap-x-2 rounded-lg p-2 transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
+        active-class="  text-primary-700 shadow-lg outline outline-1 outline-black dark:text-primary-300 dark:outline-neutral-700"
+        @click="$emit('close')"
       >
-        <v-list-item-title> Tablero </v-list-item-title>
-      </v-list-item>
-      <v-list-item
-        prepend-icon="mdi-account-outline"
-        class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
-        to="/admin/me"
+        <Icon name="lucide:house" />
+        Inicio</NuxtLink
       >
-        <v-list-item-title> Perfil </v-list-item-title>
-      </v-list-item>
-      <v-divider thickness="2" />
-      <span class="text-overline"> Recursos </span>
-      <v-list-item
-        v-for="([icon, title, route], i) in basicInfoItems"
-        :key="i"
-        :prepend-icon="icon"
-        :to="route"
-        class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
-      >
-        <v-list-item-title>
-          {{ title }}
-        </v-list-item-title>
-      </v-list-item>
 
-      <v-divider thickness="2" />
-      <v-list-item
-        prepend-icon="mdi-keyboard-backspace"
-        class="rounded-lg"
-        active-class="bg-orange-accent-4 rounded-pill"
-        to="/"
-      >
-        <v-list-item-title> Regresar al portal </v-list-item-title>
-      </v-list-item>
-    </v-list>
-  </div>
+      <section v-for="item in ADMIN_LAYOUT_ITEMS" :key="item.sectionName">
+        <h3
+          class="mb-4 flex select-none items-center gap-x-2 text-sm font-medium text-muted-color-emphasis md:text-sm"
+        >
+          {{ item.sectionName }}
+        </h3>
+        <ul class="flex flex-col gap-1">
+          <li v-for="subItem in item.items" :key="subItem.itemName">
+            <NuxtLink
+              @click="$emit('close')"
+              :to="subItem.itemLink"
+              active-class="active-menu"
+              class="menu-item"
+            >
+              <Icon :name="subItem.itemIcon" />
+              {{ subItem.itemName }}</NuxtLink
+            >
+          </li>
+        </ul>
+      </section>
+    </nav>
+    <footer class="flex w-full items-center justify-between gap-2 px-4 py-2.5">
+      <template v-if="user">
+        <div class="flex min-w-0 items-center">
+          <PAvatar
+            class="shrink-0"
+            shape="circle"
+            :label="displayName?.charAt(0)"
+          />
+          <div class="ml-2 flex min-w-0 flex-col items-start">
+            <span
+              class="w-full truncate text-sm font-medium"
+              :title="displayNameFull"
+              >{{ displayNameFull }}</span
+            >
+            <span class="text-xs text-muted-color-emphasis">
+              {{ getRole === 'regular' ? 'Estudiante' : 'Admin' }}
+            </span>
+          </div>
+        </div>
+        <div class="shrink-0 space-x-2">
+          <CButton
+            icon="lucide:layout-dashboard"
+            to="/"
+            v-Ptooltip.top="'Portal'"
+          />
+          <CButton
+            icon="lucide:log-out"
+            v-Ptooltip.top="'Cerrar sesión'"
+            @click="logout"
+          />
+        </div>
+      </template>
+    </footer>
+  </main>
 </template>
 <script lang="ts" setup>
-import { mapWritableState } from 'pinia'
-import { useConfigsStore } from '~/stores/config'
+import { DefaultLayoutItems } from '~/layouts/default.consts'
 import CICSLogo from './CICSLogo.vue'
+import CButton from '../primitives/button/CButton.vue'
+import { DashboardLayoutItems } from '~/layouts/dashboard.consts'
+import { ADMIN_LAYOUT_ITEMS } from '~/layouts/admin.consts'
 
-const emit = defineEmits(['theme'])
+const { user, displayName, displayNameFull, getRole } =
+  storeToRefs(useAuthStore())
 
-const basicInfoItems = [
-  // ['mdi-newspaper', 'Artículos', '/admin/articles'],
-  ['mdi-book-open-page-variant', 'Manuales', '/admin/manuals'],
-  ['mdi-account-group-outline', 'Usuarios Administrativos', '/admin/users'],
-  ['mdi-book-open-page-variant', 'Libreria', '/admin/books']
-  // ['mdi-bookshelf', 'Biblioteca', '/admin/library'],
-  // ['mdi-book-open-page-variant', 'Tesario', '/admin/thesis']
-]
+const { logout } = useAuthStore()
 
-const theme = ref('light')
-const tools = ref([])
+defineEmits(['close'])
+
+defineProps<{
+  items?: typeof DefaultLayoutItems
+}>()
 </script>
-<style scoped>
-.v-list-item {
-  margin-left: 7%;
-  margin-right: 7%;
-  margin-bottom: 1.5%;
-  font-size: 1rem;
-  height: 45px !important;
-}
-.v-list-item-title {
-  font-size: 1rem !important;
+<style scoped lang="postcss">
+.menu-item {
+  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200;
+  &::before {
+    @apply absolute left-4 top-1/2 h-[calc(100%+4px)] w-0.5 -translate-y-1/2 bg-gray-300 dark:bg-neutral-700;
+    content: '';
+
+    /* Comment if no animation is needed */
+    /* @apply transition-all duration-200 ease-in-out; */
+  }
 }
 
-span {
-  margin-left: 8.5%;
-  font-weight: bold;
-}
-.v-divider {
-  margin: 5%;
-  width: 90%;
+.active-menu {
+  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600;
+  &::before {
+    @apply absolute left-4 top-1/2 h-2/4 w-0.5 -translate-y-1/2 rounded bg-primary-700 dark:bg-primary-400;
+    content: '';
+  }
 }
 </style>

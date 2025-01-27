@@ -1,9 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+import Aura from '@primevue/themes/aura'
+
 
 export default defineNuxtConfig({
   devtools: {
-    enabled: true
+    enabled: false
   },
   compatibilityDate: '2024-11-15',
   srcDir: 'app/',
@@ -37,6 +39,7 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     'radix-vue/nuxt',
     '@nuxt/content',
+    '@nuxtjs/color-mode',
     // 'vue-sonner/nuxt',
     (_options, nuxt) => {
       nuxt.hooks.hook('vite:extendConfig', (config) => {
@@ -55,6 +58,11 @@ export default defineNuxtConfig({
       }
     }
   },
+  colorMode: {
+    classPrefix: "",
+    classSuffix: "",
+    preference: "system",
+  },
   primevue: {
     composables: {
       exclude: ['useToast']
@@ -69,6 +77,8 @@ export default defineNuxtConfig({
     options: {
       theme: {
         options: {
+          // darkModeSelector: '.app-darkmode',
+          // preset: Aura,
           cssLayer: {
             name: 'primevue',
             order: 'tailwind-base, primevue, tailwind-utilities'
@@ -87,6 +97,8 @@ export default defineNuxtConfig({
       { name: 'Hubot Sans', provider: 'google' },
       { name: 'Geist Mono', provider: 'fontsource' },
       { name: 'Switzer', provider: 'fontshare' },
+      { name: 'DM Sans', provider: 'google' },
+      { name: 'Instrument Sans', provider: 'google' },
     ]
   },
 })

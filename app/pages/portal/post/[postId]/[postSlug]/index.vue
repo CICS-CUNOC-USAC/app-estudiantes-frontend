@@ -1,12 +1,22 @@
 <template>
   <main>
-    <CButton
-      icon="mdi-arrow-left"
+    <nav class="flex flex-wrap gap-x-3">
+      <CButton
+      v-if="fromSearch"
+      icon="icon-park-outline:arrow-left"
       variant="link"
-      label="Regresar a publicaciones"
+      label="Regresar a búsqueda"
       class="mb-4 text-muted-color lg:mb-2"
-      to="/portal/general/publicaciones"
-    />
+      :to="`/portal/general/busqueda?q=${fromSearch}`"
+      />
+      <CButton
+        icon="lucide:layout-dashboard"
+        variant="link"
+        label="Ver todas las publicaciones"
+        class="mb-4 text-muted-color lg:mb-2"
+        to="/portal/general/publicaciones"
+      />
+    </nav>
     <header class="mx-auto mt-2 max-w-3xl">
       <template v-if="status === 'pending'">
         <PSkeleton class="mb-5 mt-1.5"></PSkeleton>
@@ -26,7 +36,6 @@
       </template>
 
       <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
-      
     </header>
     <template v-if="status === 'pending'">
       <div class="mx-auto mt-5 max-w-3xl">
@@ -69,6 +78,7 @@ import AttachmentsPopover from './(components)/AttachmentsPopover.vue'
 const route = useRoute()
 const postId = route.params.postId
 const postSlug = route.params.postSlug
+const fromSearch = route.query.fromSearch
 
 const { data, status } = useFetch(
   `/api/official-post-detail/${postId}/${postSlug}`,
@@ -76,7 +86,7 @@ const { data, status } = useFetch(
 )
 
 useHead({
-  title: () => `${data?.value?.title} - Publicación` || 'Publicación oficial'
+  title: () => data?.value?.title ? `${data.value.title} | Publicación` : 'Publicación oficial',
 })
 </script>
 <style lang="postcss">

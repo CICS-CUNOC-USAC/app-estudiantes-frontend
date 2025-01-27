@@ -12,10 +12,10 @@
                 <template v-else-if="item.type === 'classroom'">
                     <GridItem class="text-left border-r pl-2" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                         :h="item.h" :i="item.i">
-                        <div class="font-normal">
+                        <div class="text-sm">
                             Salón
                         </div>
-                        <div class="text-2xl font-medium">
+                        <div class="text-lg font-bold">
                             {{ item.content.name }}
                         </div>
                     </GridItem>
@@ -28,7 +28,7 @@
                 </template>
                 <template v-else-if="item.type === 'schedule'">
                     <template v-if="item.content !== undefined">
-                        <GridItem class="border-b border-r" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                        <GridItem class="border-b border-r p-0.5" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                             :h="item.h" :i="item.i">
                             <ScheduleCourseCard :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
                                 :career_id="isCommonField(item.content) ? 0 : item.content.career_code as number"

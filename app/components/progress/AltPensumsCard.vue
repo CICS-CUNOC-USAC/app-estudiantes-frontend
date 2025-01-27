@@ -1,14 +1,14 @@
 <template>
   <CCardAlt>
     <template #title>
-      <h1 class="mb-2 text-2xl font-bold lg:text-3xl">
-        Semestre {{ semesterCourses.semester }}
+      <h1 class="mb-2 text-2xl font-bold">
+        Semestre {{ semesterProgress.semester }}
       </h1>
     </template>
 
     <template #content>
       <div class="mb-2">
-        <span class="block text-lg"> Filtrar por: </span>
+        <span class="block text-sm"> Filtrar por: </span>
         <CChipButton
           label="Solo obligatorios"
           filter
@@ -22,11 +22,17 @@
         tag="div"
         class="relative space-y-2"
       >
-        <CourseCard
+        <CourseCardProgress
+          v-for="course in filteredCourses"
+          :key="course.course_code"
+          :course="course"
+          @update-item="($event) => updateItem(course.id, $event)"
+        />
+        <!-- <CourseCard
           :course="course"
           v-for="course in filteredCourses"
           :key="course.course_code"
-        />
+        /> -->
       </TransitionGroup>
     </template>
   </CCardAlt>
@@ -34,18 +40,28 @@
 <script setup lang="ts">
 import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import type { CareerCourses } from '~/utils/types/career-courses'
-import CourseCard from './CourseCard.vue'
+import CourseCardProgress from './CourseCardProgress.vue'
 const onlyMandatory = ref()
 const props = defineProps<{
-  semesterCourses: CareerCourses
+  semesterProgress: SemesterProgress
 }>()
 const filteredCourses = computed(() => {
   if (onlyMandatory.value) {
-    return props.semesterCourses.courses.filter((course) => course.mandatory)
+    return props.semesterProgress.courses_semester_progress.filter(
+      (course) => course.career_course.mandatory
+    )
   }
-  return props.semesterCourses.courses
+  return props.semesterProgress.courses_semester_progress
 })
+
+const emits = defineEmits(['updateItem'])
+const updateItem = (courseProgressId: number, approved: boolean) => {
+  emits('updateItem', {
+    courseProgressId,
+    careerProgressId: props.semesterProgress.career_progress_id,
+    approved
+  })
+}
 </script>
 <style scoped lang="postcss">
 /* Transiciones para la entrada y salida */

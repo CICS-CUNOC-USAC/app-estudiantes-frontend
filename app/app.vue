@@ -57,7 +57,7 @@ useHead({
 </script>
 <style lang="postcss">
 :root {
-  @apply bg-white dark:bg-neutral-800;
+  @apply bg-white dark:bg-neutral-800 transition-colors;
 }
 
 html {
@@ -66,7 +66,7 @@ html {
 
 body,
 html {
-  scrollbar-gutter: stable both-edges;
+  scrollbar-gutter: stable;
 }
 
 /* Common animations */
