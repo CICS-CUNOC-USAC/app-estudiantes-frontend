@@ -1,119 +1,143 @@
 <template>
   <main>
-    <template v-if="data">
-      <h1
-        class="d-flex flex-column flex-md-row align-md-center align-start ga-4"
-      >
-        <v-btn
-          icon="mdi-arrow-left"
-          density="comfortable"
-          color="accent-2"
-          :to="'/portal/general/publicaciones'"
-        />
-        {{ data?.title }}
-      </h1>
-      <p class="text-overline">{{ data?.meta }}</p>
-      <div class="official-post-content" v-html="data?.content" />
-    </template>
-    <template v-else-if="pending">
-      <v-skeleton-loader
-        type="article, subtitle,text, text, text, text, text, text, text, text, text, text"
+    <nav class="flex flex-wrap gap-x-3">
+      <CButton
+      v-if="fromSearch"
+      icon="icon-park-outline:arrow-left"
+      variant="link"
+      label="Regresar a búsqueda"
+      class="mb-4 text-muted-color lg:mb-2"
+      :to="`/portal/general/busqueda?q=${fromSearch}`"
       />
+      <CButton
+        icon="lucide:layout-dashboard"
+        variant="link"
+        label="Ver todas las publicaciones"
+        class="mb-4 text-muted-color lg:mb-2"
+        to="/portal/general/publicaciones"
+      />
+    </nav>
+    <header class="mx-auto mt-2 max-w-3xl">
+      <template v-if="status === 'pending'">
+        <PSkeleton class="mb-5 mt-1.5"></PSkeleton>
+        <PSkeleton height="2.3rem" class=""></PSkeleton>
+      </template>
+      <template v-else-if="status === 'success' && data">
+        <small class="block pb-5 text-sm text-muted-color-emphasis">{{
+          data?.meta
+        }}</small>
+        <h1
+          class="flex flex-col items-start gap-3 text-2xl font-bold text-color"
+        >
+          {{ data?.title }}
+
+          <AttachmentsPopover :attachments="data?.attachments" />
+        </h1>
+      </template>
+
+      <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
+    </header>
+    <template v-if="status === 'pending'">
+      <div class="mx-auto mt-5 max-w-3xl">
+        <PSkeleton width="100%"></PSkeleton>
+        <PSkeleton width="60%" class="mt-2"></PSkeleton>
+        <PSkeleton width="80%" class="mt-4"></PSkeleton>
+      </div>
+    </template>
+    <template v-else-if="status === 'success' && data">
+      <article class="mx-auto max-w-3xl">
+        <div class="official-post-content" v-html="data?.content" />
+      </article>
     </template>
 
-    <template v-else>
-      <v-btn
-        prepend-icon="mdi-arrow-left"
-        color="accent-3"
-        :to="'/'"
-        class="mb-4"
-        >Regresar al incio</v-btn
+    <template v-else-if="status === 'error'">
+      <PMessage
+        severity="warn"
+        pt:root:class="!outline-none !shadow-none border border-surface-950/75"
+        pt:text:class="flex flex-col  items-start gap-y-1"
       >
-      <v-alert
-        color="accent-3"
-        icon="mdi-alert-circle"
-        class="d-flex align-center"
-        variant="text"
-        >No se ha encontrado la publicación que buscas, por favor verifica la
-        URL
-      </v-alert>
+        <template #icon>
+          <Icon name="lucide:circle-help" />
+        </template>
+        Parece que la publicación que buscas no existe, por favor verifica el
+        enlace.
+        <CButton
+          label="Regresar a publicaciones"
+          variant="link"
+          icon="icon-park-outline:arrow-left"
+          to="/portal/general/publicaciones"
+        />
+      </PMessage>
     </template>
   </main>
 </template>
 <script setup lang="ts">
+import CButton from '~/components/primitives/button/CButton.vue'
+import AttachmentsPopover from './(components)/AttachmentsPopover.vue'
+
 const route = useRoute()
 const postId = route.params.postId
 const postSlug = route.params.postSlug
+const fromSearch = route.query.fromSearch
 
-const { data, pending } = useFetch(
+const { data, status } = useFetch(
   `/api/official-post-detail/${postId}/${postSlug}`,
   { lazy: true }
 )
+
+useHead({
+  title: () => data?.value?.title ? `${data.value.title} | Publicación` : 'Publicación oficial',
+})
 </script>
-<style lang="scss">
+<style lang="postcss">
 .official-post-content {
-  padding: 1rem;
+  @apply prose prose-base prose-neutral max-w-none dark:prose-invert;
 
-  @media (min-width: 768px) {
-    padding: 1rem;
+  @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-semibold prose-a:no-underline prose-a:transition hover:prose-a:border-b-2;
+
+  @apply hover:prose-a:text-color-emphasis dark:hover:prose-a:text-primary-100;
+
+  img {
+    @apply w-full rounded-lg shadow-lg;
   }
 
-  line-height: 1.7;
-
-  p > img,
-  .imgart > a > img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 1rem;
-    margin-block: 0.8rem;
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  a:has(img) {
+    @apply block !bg-transparent py-0;
   }
 
-  p > iframe {
-    width: 100%;
-    height: 80vh;
-    border-radius: 0.5rem;
-    border: 2px solid gray;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  }
+  .alert {
+    &-danger {
+      @apply dark:border-zinc-700;
+      & * {
+        @apply text-rose-800 dark:text-red-200;
+      }
+      @apply rounded-xl border bg-surface-100/40 px-4 py-2 dark:bg-surface-900/65;
+      @apply text-rose-800 dark:text-red-200;
+    }
 
-  p > a,
-  strong > a {
-    color: rgb(var(--v-theme-accent-3));
-    text-decoration: none;
-    transition: all 0.3s;
-    font-weight: bold;
-    border-bottom: 2px solid transparent;
-    &:hover {
-      // border-color: #0056b3;
-      border-color: rgb(var(--v-theme-accent-2));
-      color: rgb(var(--v-theme-accent-2));
-      text-shadow: 0 0 5px rgba(var(--v-theme-accent-2), 0.4);
+    &-success {
+      @apply dark:border-zinc-700;
+      & * {
+        @apply text-emerald-800 dark:text-emerald-200;
+      }
+      @apply rounded-xl border px-4 py-2;
+      @apply bg-surface-100/40 dark:bg-surface-900/65;
+      @apply text-emerald-800 dark:text-emerald-200;
+    }
+
+    &-warning {
+      @apply dark:border-zinc-700;
+      & * {
+        @apply text-amber-800 dark:text-amber-200;
+      }
+      @apply rounded-xl border px-4 py-2;
+      @apply bg-surface-100/40 dark:bg-surface-900/65;
+      @apply text-amber-800 dark:text-amber-200;
     }
   }
 
-  ul {
-    padding-inline-start: 2rem;
-  }
-
-  .alert-danger {
-    background-color: #f8d7da;
-    color: #721c24;
-    border-color: #f5c6cb;
-    padding-block: 0.5rem;
-    padding-inline: 1rem;
-    border-radius: 1rem;
-    margin-block: 0.5rem;
-  }
-
-  .alert-success {
-    margin-block: 0.5rem;
-    background-color: #d4edda;
-    color: #155724;
-    border-color: #c3e6cb;
-    padding-block: 0.5rem;
-    padding-inline: 1rem;
-    border-radius: 1rem;
+  iframe {
+    @apply min-h-96 min-w-full rounded-lg shadow-md;
   }
 }
 </style>

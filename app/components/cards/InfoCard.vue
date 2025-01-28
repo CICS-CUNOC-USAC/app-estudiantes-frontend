@@ -1,29 +1,26 @@
 <template>
-  <v-card :to="route" rounded="lg" :height="fullHeight ? '100%' : ''">
-    <v-img v-if="img" height="150" :src="img" cover />
-    <v-container class="pa-2">
-      <v-card-item>
-        <v-card-subtitle v-if="subtitle" align="left" class="mb-2">
-          <p class="card-subtitle">
+    <CCardAlt
+    class="hover:bg-primary-100/75 dark:hover:bg-primary-900/30 group"
+    interactive-inverse
+      no-spacing
+      :to="route"
+    >
+      <template #content>
+        <img :src="img" class="h-28 w-full select-none object-cover" />
+        <div class="p-5">
+          <p
+            class="text-xs italic tracking-wide text-muted-color-emphasis"
+          >
             {{ subtitle }}
           </p>
-        </v-card-subtitle>
-        <v-card-title class="text-heading" align="left">
-          <span class="card-title">
-            {{ title }}
-          </span>
-        </v-card-title>
-      </v-card-item>
-
-      <v-card-text align="left">
-        <p class="card-description">
-          {{ description }}
-        </p>
-      </v-card-text>
-    </v-container>
-  </v-card>
+          <h3 class="text-lg font-semibold py-2">{{ title }}</h3>
+          <p class="text-sm">{{ description }}</p>
+        </div>
+      </template>
+    </CCardAlt>
 </template>
 <script lang="ts" setup>
+import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 defineProps({
   fullHeight: {
     type: Boolean,

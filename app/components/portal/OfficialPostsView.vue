@@ -1,26 +1,42 @@
 <template>
-  <v-row>
-    <v-col
-      v-for="(item, index) in data"
-      :key="index"
-      cols="12"
-      xs="12"
-      sm="12"
-      lg="4"
-    >
-      <InfoCard
-        full-height
-        :title="item.title"
-        :description="item.description"
-        :route="`/portal/post/${item.link}`"
-      />
-    </v-col>
-  </v-row>
+  <!-- v-if="status === 'pending'" -->
+  <template v-if="status === 'pending'">
+    <div class="flex items-center justify-center h-32 gap-4">
+      <Icon name="svg-spinners:bars-rotate-fade" />
+      Obteniendo publicaciones oficiales...
+    </div>
+  </template>
+  <template v-if="data && status === 'success'">
+    <section class="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div v-for="(item, index) in data" :key="index" class="col-span-1">
+        <CCardAlt
+          class="group hover:bg-primary-100/75 dark:hover:bg-primary-900/30"
+          interactive-inverse
+          :title="item.title"
+          :description="item.description"
+          :to="`/portal/post/${item.link}`"
+          :small="item.posted_since"
+        >
+          <template #footer>
+            <span
+              class="inline-flex items-center gap-x-2 font-alt text-xs font-medium tracking-tight text-primary-800 dark:text-primary-300"
+            >
+              Leer más
+              <Icon
+                name="lucide:arrow-right"
+                class="transition group-hover:translate-x-1"
+              />
+            </span>
+          </template>
+        </CCardAlt>
+      </div>
+    </section>
+  </template>
 </template>
 <script setup lang="ts">
-import InfoCard from '../cards/InfoCard.vue'
+import CCardAlt from '../primitives/card/CCardAlt.vue'
 
-const { data } = useFetch<
+const { data, status } = useFetch<
   {
     title: string
     description: string

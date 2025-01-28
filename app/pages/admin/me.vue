@@ -1,19 +1,33 @@
 <template>
   <main>
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">
+        <Icon
+          name="icon-park-twotone:people"
+          class="mb-1 mr-1.5 inline-block"
+        />
+        Mi perfil
+      </h1>
+    </header>
+    <AdminPersonalInfoDetails :user="user" />
+    <!-- <section class="profile-edit-section">
+    </section> -->
+  </main>
+  <!-- <main>
     <header class="mb-4">
       <h1>Mi perfil</h1>
-      <!-- <v-btn
+      <v-btn
         prepend-icon="mdi-pencil-outline"
         to="/admin/profile/edit"
         class="mt-3"
       >
         Editar
-      </v-btn> -->
+      </v-btn>
     </header>
     <section class="profile-edit-section">
       <AdminPersonalInfoDetails :user="user" />
     </section>
-  </main>
+  </main> -->
 </template>
 <script lang="ts" setup>
 import AdminPersonalInfoDetails from '~/components/profile/details/AdminPersonalInfoDetails.vue'

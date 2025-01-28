@@ -1,158 +1,107 @@
 <template>
-  <div>
-    <span
-      class="text-wrap text-body-2 CourseName"
-      @click="openAndFetchCareerCourse(courseCode, careerCode)"
+  <CDialog v-model:open="dialog">
+    <CDialogTrigger
+      class="text-left text-sm hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
     >
-      {{ courseName }}<v-icon v-if="mandatory"> mdi-circle-medium </v-icon>
-    </span>
-
-    <v-dialog v-model="dialog" class="CourseDialog">
-      <v-skeleton-loader
-        v-if="loading"
-        type="heading, heading, text"
-      ></v-skeleton-loader>
-      <v-card v-else class="CourseCard">
-        <v-card-text>
-          <v-row class="text-center">
-            <v-col cols="6" sm="4">
-              <v-sheet
-                rounded="lg"
-                class="pa-1 h-100 d-flex align-center flex-column justify-center"
-              >
-                <span class="font-weight-bold text-subtitle-1"
-                  >{{ careerCourse.course.name }}
-                  <v-icon v-if="mandatory"> mdi-circle-medium </v-icon></span
-                >
-              </v-sheet>
-            </v-col>
-            <v-col cols="6" sm="4"
-              ><v-sheet
-                rounded="lg"
-                class="pa-1 h-100 d-flex align-center flex-column justify-center"
-              >
-                <span>{{ careerCourse.field_name }}</span>
-              </v-sheet>
-            </v-col>
-            <v-col cols="6" sm="2"
-              ><v-sheet border rounded="lg" class="CourseCard__numeric">
-                <span class="text-subtitle-2"> Código </span>
-                <span class="text-overline font-weight-bold"
-                  >#{{ courseCode }}</span
-                >
-              </v-sheet>
-            </v-col>
-            <v-col cols="6" sm="2"
-              ><v-sheet border rounded="lg" class="CourseCard__numeric">
-                <span class="text-subtitle-2"> Créditos </span>
-                <span class="text-overline font-weight-bold">{{
-                  careerCourse.course.credits
-                }}</span>
-              </v-sheet>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12" md="8">
-              <v-sheet
-                border
-                rounded="lg"
-                class="pa-2 h-100 d-flex align-center"
-              >
-                <span>
-                  {{
-                    careerCourse.course.description === ''
-                      ? 'No hay descripción para este curso'
-                      : careerCourse.course.description
-                  }}
-                </span>
-              </v-sheet>
-            </v-col>
-            <v-col cols="12" md="4">
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    border
-                    rounded="lg"
-                    class="pa-2 w-100 d-flex flex-column"
-                  >
-                    <span class="text-subtitle-2 text-center">
-                      Prerequisitos
-                    </span>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-              <v-row>
-                <v-col>
-                  <v-sheet
-                    border
-                    rounded="lg"
-                    class="pa-2 w-100 d-flex flex-column"
-                  >
-                    <span class="text-subtitle-2 text-center">
-                      Postrequisitos
-                    </span>
-                  </v-sheet>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions class="px-5 mb-1">
-          <v-spacer />
-          <v-btn color="red" variant="plain" @click="dialog = false"
-            >CERRAR</v-btn
-          >
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+      {{ courseName }}
+    </CDialogTrigger>
+    <CDialogContent title="Detalles del curso">
+      <div class="course-details" v-if="data?.response">
+        <header class="course-header">
+          <h2 class="text-lg font-bold">{{ courseName }}</h2>
+          <p class="">{{ courseCode }}</p>
+        </header>
+        <div class="course-career">
+          <p class="">{{ data.response.career_code }}</p>
+        </div>
+        <div class="course-description">
+          <p class="">
+            {{
+              data.response?.course.description ||
+              'No hay descripción para este curso'
+            }}
+          </p>
+        </div>
+        <div class="course-hours">
+          <p class="">Horas: 4</p>
+        </div>
+        <div class="course-room">
+          <p class="">Salón: 123</p>
+        </div>
+        <CButton label="Ver penusm" variant="text" class="course-button" />
+        <CButton
+          label="Ver en biblioteca"
+          variant="text"
+          class="course-button-s"
+        />
+      </div>
+    </CDialogContent>
+  </CDialog>
 </template>
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-defineProps<{
+import CButton from '~/components/primitives/button/CButton.vue'
+import {
+  CDialog,
+  CDialogContent,
+  CDialogTrigger
+} from '~/components/primitives/dialog'
+
+const { courseCode, careerCode } = defineProps<{
   field: number
   courseCode: string
   courseName: string
   mandatory: boolean
   careerCode: number
 }>()
+
 const { fetchCareerCourse } = useCoursesStore()
-const { loading, careerCourse } = storeToRefs(useCoursesStore())
 const dialog = ref(false)
-const openAndFetchCareerCourse = async (
-  courseCode: string,
-  careerCode: number
-) => {
-  dialog.value = true
-  await fetchCareerCourse(courseCode, careerCode)
-}
-</script>
-<style lang="scss" scoped>
-.CourseCard {
-  &__numeric {
-    padding: 8px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+
+const { data } = await useLazyAsyncData(
+  () => fetchCareerCourse(courseCode, careerCode),
+  {
+    immediate: false,
+    watch: [dialog]
   }
-}
-.CourseName {
-  cursor: pointer;
-  font-weight: bold;
-}
-.CourseName:hover {
-  text-decoration: underline;
+)
+</script>
+<style lang="postcss" scoped>
+.course-details {
+  grid-template-areas:
+    'name name career'
+    'desc desc hours'
+    'desc desc hours'
+    'desc desc room'
+    'btn btn-s room';
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
+  @apply grid h-52 w-full gap-4;
 }
 
-.CourseDialog {
-  max-width: 100%;
-  @media (min-width: 900px) {
-    max-width: 70%;
-  }
-  @media (min-width: 1200px) {
-    max-width: 50%;
-  }
+.course-header {
+  grid-area: name;
+}
+
+.course-career {
+  grid-area: career;
+}
+
+.course-description {
+  grid-area: desc;
+}
+
+.course-hours {
+  grid-area: hours;
+}
+
+.course-room {
+  grid-area: room;
+}
+
+.course-button {
+  grid-area: btn;
+}
+.course-button-s {
+  grid-area: btn-s;
 }
 </style>

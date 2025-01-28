@@ -1,15 +1,8 @@
-# Nuxt 3 Minimal Starter
+## Configuración
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Asegúrate de instalar las dependencias:
 
-## Setup
-
-Make sure to install the dependencies:
-
-```bash
-# yarn
-yarn install
-
+```
 # npm
 npm install
 
@@ -17,26 +10,27 @@ npm install
 pnpm install
 ```
 
-## Development Server
+## Servidor de Desarrollo
 
-Start the development server on `http://localhost:3000`
+Inicia el servidor de desarrollo en `http://localhost:3000`
 
 ```bash
 npm run dev
+
+# o con pnpm
+pnpm run dev
 ```
 
-## Production
+## Producción
 
-Build the application for production:
+Construye la aplicación para producción:
 
 ```bash
 npm run build
 ```
 
-Locally preview production build:
+Previsualiza localmente la construcción de producción:
 
 ```bash
 npm run preview
 ```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.

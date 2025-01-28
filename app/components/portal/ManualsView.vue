@@ -29,13 +29,14 @@
         <v-row justify="space-between">
           <v-col cols="12" md="6">
             <v-text-field
-              v-model="searchDeb"
+              :model-value="route.query.name"
               label="Buscar por nombre"
               variant="outlined"
               placeholder="Nombre del manual"
               prepend-inner-icon="mdi-magnify"
               type="search"
               clearable
+              @input="onSearch"
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="6">
@@ -63,38 +64,25 @@ const { fetchAllManuals } = usePublicManualsStore()
 const { loading, manuals, responseMeta } = storeToRefs(usePublicManualsStore())
 const route = useRoute()
 const router = useRouter()
+
+const onSearch = useDebounceFn((e) => {
+  const s = e.target.value
+  if (s) router.push({ query: { name: s } })
+  else router.push({ query: { name: undefined } })
+}, 1000)
+
 const currentPage = ref(route.query.page ? Number(route.query.page) : 1)
-const searchDeb = ref(route.query.name ? String(route.query.name) : '')
-const search = ref('')
-await useLazyAsyncData('public-manuals', () =>
-  fetchAllManuals({
-    page: route.query.page ? Number(route.query.page) : 1,
-    name: route.query.name ? String(route.query.name) : ''
-  })
-)
 
-watch(
-  [currentPage, search],
-  async ([newPage, newSearch], [_oldPage, oldSearch]) => {
-    if (newSearch !== oldSearch) {
-      currentPage.value = 1
-    }
-    router.push({
-      query: {
-        page: newPage,
-        name: newSearch || null
-      }
-    })
-    await fetchAllManuals({ page: currentPage.value, name: search.value })
+await useLazyAsyncData(
+  'public-manuals',
+  () =>
+    fetchAllManuals({
+      page: route.query.page ? Number(route.query.page) : 1,
+      name: route.query.name as string
+    }),
+  {
+    watch: [() => route.query.name, () => route.query.page]
   }
-)
-
-watchDebounced(
-  searchDeb,
-  (value) => {
-    search.value = value
-  },
-  { debounce: 500 }
 )
 </script>
 <style lang="scss" scoped></style>

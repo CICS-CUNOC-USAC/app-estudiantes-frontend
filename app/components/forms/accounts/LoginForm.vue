@@ -1,77 +1,70 @@
 <template>
-  <v-card class="login-card pa-8">
-    <v-card-title>
-      <h3 class="text-center mb-4">Iniciar sesión</h3>
-    </v-card-title>
-    <v-card-text>
-      <v-form>
-        <v-text-field
+  <CCardAlt class="px-8 py-12">
+    <template #title>
+      <h2 class="pb-4 text-center text-2xl font-semibold">Iniciar sesión</h2>
+    </template>
+    <template #content>
+      <form class="flex flex-col gap-y-4 py-4" @submit.prevent="login">
+        <CInputText
           v-model="email"
           label="Correo electrónico"
-          type="email"
-          required
-          :disabled="loading"
-        >
-          <template #prepend>
-            <v-icon :icon="emailIcon" size="small" />
-          </template>
-        </v-text-field>
-        <v-text-field
+          placeholder="nombre@ejemplo.com"
+          type="text"
+          :prepend-icon="emailIcon"
+          no-borders
+          clear-button
+        />
+        <CInputText
           v-model="password"
-          :append-icon="
-            showPassword ? 'mdi-eye-outline' : 'mdi-eye-off-outline'
-          "
+          :class="{
+            'font-mono': showPassword
+          }"
           label="Contraseña"
+          placeholder="********"
           :type="showPassword ? 'text' : 'password'"
-          required
-          :disabled="loading"
           @click:append="showPassword = !showPassword"
-        >
-          <template #prepend>
-            <v-icon icon="mdi-dots-horizontal" size="small" />
-          </template>
-        </v-text-field>
-      </v-form>
-    </v-card-text>
-    <v-card-actions>
-      <v-row>
-        <v-col cols="12">
-          <v-btn
-            variant="tonal"
-            width="100%"
-            :loading="loading"
-            :color="admin ? 'red' : 'accent-4'"
-            @click="login"
-          >
-            Iniciar sesión
-          </v-btn>
-        </v-col>
-        <v-col v-if="showSignup" cols="12">
-          <span class="d-flex align-center">
-            ¿No tienes una cuenta?
-            <v-btn to="/sign-up" class="ml-1" variant="plain" :ripple="false">
-              <strong>Regístrate</strong>
-            </v-btn>
-          </span>
-        </v-col>
-        <v-col cols="12">
-          <span>
-            <v-btn
-              to="/"
-              class="px-0"
-              variant="plain"
-              :ripple="false"
-              prepend-icon="mdi-arrow-left"
-            >
-              <strong>Regresar al portal</strong>
-            </v-btn>
-          </span>
-        </v-col>
-      </v-row>
-    </v-card-actions>
-  </v-card>
+          prepend-icon="icon-park-twotone:lock"
+          :append-icon="
+            showPassword
+              ? 'icon-park-outline:preview-close'
+              : 'icon-park-twotone:preview-open'
+          "
+          no-borders
+        />
+        <CButton
+          class="w-full"
+          :loading="loading"
+          :disabled="!email || !password"
+          :severity="admin ? 'danger' : ''"
+          type="submit"
+          rounded
+          label="Iniciar sesión"
+        />
+      </form>
+    </template>
+    <template #footer>
+      <div class="flex flex-col gap-y-4">
+        <span class="align-center flex gap-2">
+          ¿No tienes una cuenta?
+          <CButton to="/sign-up" variant="link" label="Regístrate" />
+        </span>
+        <div class="align-center flex">
+          <CButton
+            to="/"
+            variant="text"
+            icon="icon-park-outline:arrow-left"
+            label="Regresar al portal"
+          />
+        </div>
+      </div>
+    </template>
+  </CCardAlt>
 </template>
 <script lang="ts" setup>
+import CButton from '~/components/primitives/button/CButton.vue'
+import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
+
 const { admin } = defineProps({
   loading: {
     type: Boolean,
@@ -94,7 +87,7 @@ const password = ref('')
 const showPassword = ref(false)
 
 const emailIcon = computed(() => {
-  return admin ? 'mdi-shield-crown-outline' : 'mdi-email-outline'
+  return admin ? 'icon-park-twotone:people-safe' : 'icon-park-twotone:mail'
 })
 
 const login = () => {
@@ -105,21 +98,4 @@ const login = () => {
   emit('login', newCredentials)
 }
 </script>
-<style scoped lang="scss">
-.nav-link {
-  &:hover {
-    color: #fb8c00 !important;
-  }
-  &:active {
-    color: #bf360c !important;
-  }
-  &--admin {
-    &:hover {
-      color: #ff6e40 !important;
-    }
-    &:active {
-      color: #bf360c !important;
-    }
-  }
-}
-</style>
+<style scoped lang="scss"></style>

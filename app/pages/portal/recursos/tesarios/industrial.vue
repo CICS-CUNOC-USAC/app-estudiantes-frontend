@@ -1,10 +1,7 @@
 <template>
-  <in-construction section="Industrial - Civil" />
+  <InConstruction section="Industrial - Civil" />
 </template>
-<script>
-import InConstruction from '@/components/extras/in-construction.vue'
-export default {
-  name: 'TesarioCivil',
-  components: { InConstruction }
-}
+<script setup>
+import InConstruction from '~/components/extras/InConstruction.vue'
+
 </script>

@@ -1,30 +1,10 @@
 <template>
-  <v-container fluid class="h-75 w-auto" style="display: flex; align-items: center;">
-    <v-row justify="center">
-      <v-col cols="12" sm="6" md="6" lg="6">
-        <v-card style="text-align: center">
-          <v-card-title class="headline d-flex flex-column justify-center align-center">
-            <v-icon>
-              mdi-wrench
-            </v-icon>
-            <h6 style="color: darkcyan; font-style: italic">
-              Horarios
-            </h6>
-            <strong>En construcción...</strong>
-          </v-card-title>
-          <v-card-text>
-            Esta sección está en construcción. Por favor, regresa más tarde.
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
-  </v-container>
+    <InConstruction section="Horarios" />
 </template>
 
-<script lang="ts">
-export default {
-  name: 'Horarios'
-}
+<script lang="ts" setup>
+import InConstruction from '~/components/extras/InConstruction.vue';
+
 </script>
 
 <style scoped lang="scss">

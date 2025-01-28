@@ -1,78 +1,104 @@
 <template>
   <main>
-    <header class="mb-4">
-      <h1>Configuración</h1>
-      <v-btn prepend-icon="mdi-arrow-left" class="mt-3" @click="router.back">
-        Regresar al inicio
-      </v-btn>
-    </header>
-    <section>
-      <h2 class="font-weight-light mb-2">
-        <v-icon class="mr-1 text-accent-3">mdi-palette-outline</v-icon>
-        Tema
-      </h2>
-      <p>
-        Elije un tema general para la apariencia de la aplicación. Puedes
-        seleccionar entre colores y claros y oscuros.
-      </p>
-      <v-row>
-        <v-col cols="12" sm="8" lg="4">
-          <v-select
-            :model-value="theme"
-            class="my-6"
-            variant="outlined"
-            :items="themeItems"
-            @update:model-value="handleThemeChange"
+    <nav class="space-x-4">
+      <CButton
+        icon="icon-park-outline:arrow-left"
+        variant="link"
+        label="Regresar al inicio"
+        class="mb-5 text-muted-color-emphasis lg:mb-2"
+        to="/"
+      />
+    </nav>
+    <h1 class="text-xl font-semibold">
+      <Icon
+        name="icon-park-twotone:setting-two"
+        class="mb-1 mr-1.5 inline-block"
+      />
+      Configuración de la aplicación
+    </h1>
+
+    <div class="my-6 space-y-6">
+      <section>
+        <h2 class="mb-2 inline-flex items-center gap-2 text-lg font-semibold">
+          <Icon name="icon-park-twotone:color-filter" />
+          Tema
+        </h2>
+        <p>
+          Elije un tema general para la apariencia de la aplicación. Puedes
+          seleccionar entre colores y claros y oscuros.
+        </p>
+
+        <h3 class="mt-4 inline-flex items-center gap-2 text-sm font-medium">
+          Esquema de color
+        </h3>
+
+        <ColorScheme placeholder="..." tag="div">
+          <ToggleGroupRoot
+            class="flex items-center gap-2.5 py-2.5"
+            :model-value="$colorMode.preference"
+            @update:model-value="
+              (val) => {
+                if (val) $colorMode.preference = val as string
+              }
+            "
           >
-            <template #item="{ props, item }">
-              <v-list-item v-bind="props" :color="item.raw.previewFg">
-                <template #prepend>
-                  <v-avatar
-                    variant="flat"
-                    :color="item.raw.previewBg"
-                    class="mr-2"
-                    density="compact"
-                  >
-                    <v-icon :color="item.raw.previewFg">mdi-circle</v-icon>
-                  </v-avatar>
-                </template>
-              </v-list-item>
-            </template>
-          </v-select>
-        </v-col>
-      </v-row>
-    </section>
+            <ToggleGroupItem
+              v-for="(option, index) in schemeOptions"
+              class="group flex items-center gap-2 rounded-lg border-2 border-transparent px-2 py-1 transition duration-[50ms] hover:bg-primary/10 active:bg-primary/15 data-[state=on]:border-black data-[state=on]:bg-primary-600 data-[state=on]:text-white dark:data-[state=on]:border-gray-300"
+              :value="option.value"
+            >
+              <Icon :name="option.icon" :class="option.iconClass" />
+              <span class="text-sm">{{ option.name }}</span>
+            </ToggleGroupItem>
+          </ToggleGroupRoot>
+        </ColorScheme>
+        <h3 class="inline-flex items-center gap-2 text-sm font-medium">
+          Color de acento
+        </h3>
+        <CSelect
+          class="my-2 lg:w-1/4"
+          :model-value="theme"
+          :items="options"
+          checkmark
+          @value-change="handleThemeChange"
+        />
+      </section>
+    </div>
   </main>
 </template>
 <script setup lang="ts">
-import { useTheme } from 'vuetify/lib/framework.mjs'
+import CButton from '~/components/primitives/button/CButton.vue'
+import CSelect from '~/components/primitives/form/CSelect.vue'
+import { allThemesPrimaries } from '~/themes/pThemes'
 
-const { changeTheme } = useConfigsStore()
-const { theme } = storeToRefs(useConfigsStore())
+const schemeOptions = [
+  {
+    name: 'Sistema',
+    value: 'system',
+    icon: 'icon-park-twotone:computer',
+    iconClass:
+      'scale-[80%] group-data-[state=on]:scale-100 transition-transform duration-500'
+  },
+  {
+    name: 'Claro',
+    value: 'light',
+    icon: 'icon-park-twotone:sun',
+    iconClass:
+      'scale-[80%] translate-y-0.5 group-data-[state=on]:rotate-45 group-data-[state=on]:translate-y-0 group-data-[state=on]:scale-100  transition-transform duration-500'
+  },
+  {
+    name: 'Oscuro',
+    value: 'dark',
+    icon: 'icon-park-twotone:moon',
+    iconClass:
+      'scale-[80%] -rotate-12 translate-y-0.5 group-data-[state=on]:rotate-0 group-data-[state=on]:translate-y-0 group-data-[state=on]:scale-100  transition-transform duration-500'
+  }
+]
 
-const router = useRouter()
-const vTheme = useTheme()
-const themes = vTheme.computedThemes.value
-const themeNames = computed(() => Object.keys(themes))
+const configsStore = useConfigsStore()
+const { theme } = storeToRefs(configsStore)
+const { changeTheme: handleThemeChange } = configsStore
 
-themeNames.value.splice(themeNames.value.indexOf('light'), 1)
-themeNames.value.splice(themeNames.value.indexOf('dark'), 1)
-
-const themeItems = themeNames.value.map((name) => {
-  const previewBg = themes[name].dark ? '#424242' : '#E0E0E0'
-  const previewFg = themes[name].colors['preview-foreground']
-  const words = name.split(/(?=[A-Z])/)
-  words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1)
-  const label = words.join(' ')
-  return { title: label, value: name, previewBg, previewFg }
-})
-
-const handleThemeChange = (newTheme: string) => {
-  const globalScheme = vTheme.computedThemes.value[newTheme].dark
-    ? 'dark'
-    : 'light'
-  vTheme.global.name.value = globalScheme
-  changeTheme(newTheme)
-}
+const options = allThemesPrimaries.map((theme) => theme.name)
 </script>
-<style lang="scss" scoped></style>
+<style lang="postcss" scoped></style>

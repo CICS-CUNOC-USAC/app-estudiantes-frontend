@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { SnackbarType } from './snackbar'
+import { toast } from 'vue-sonner'
 
 type UserPayload = {
   email: string
@@ -76,6 +77,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         }
       )
       if (error.value) {
+        toast.error(error.value.toString())
         if (error.value.data) {
           useSnackbarStore().showSnackbar({
             title: 'Error',
@@ -89,6 +91,7 @@ export const useRegularAuthStore = defineStore('regular-auth', {
             message: convertError(error.value!.message),
             type: SnackbarType.ERROR
           })
+          // toast.error(convertError(error.value!.message))
         }
         /*
         Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
@@ -115,84 +118,48 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       // Redirect to the dashboard
       router.push('/dashboard/home')
       // Show success snackbar
-      useSnackbarStore().showSnackbar({
-        title: 'Session iniciada',
-        message: `Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`,
-        type: SnackbarType.SUCCESS
-      })
+      toast.success(`Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`)
       // Return the data and error
       this.loading = false
       return { data, error: false }
     },
+    
     async signupUser(payload: SignupPayload) {
-      const { firstName, lastName, ...payloadRest } = payload
-      const newPayload = {
-        first_name: firstName,
-        last_name: lastName,
-        user: payloadRest
-      }
       this.loading = true
       this.error = null
       const router = useRouter()
-      // Fetch the data from the API
-      const { data, error } = await useCustomFetch<LoginResponse>(
-        '/auth/sign-up',
-        {
-          method: 'POST',
-          body: newPayload
-        }
-      )
-      // Error handling
-      // if (error.value?.data) {
-      //   // Check if the error message is an array or just a string
-      //   if (Array.isArray(error.value.data.message)) {
-      //     this.error = convertArrayErrors(error.value.data.message)
-      //   } else {
-      //     this.error = convertError(error.value.data.message)
-      //   }
-      //   this.loading = false
-      //   return
-      // } else if (error.value?.cause) {
-      //   this.loading = false
-      //   this.error = convertError(error.value.message)
-      //   return
-      // }
+      try {
+        const response = await $api<LoginResponse>(
+          '/auth/sign-up',
+          {
+            method: 'POST',
+            body: payload
+          }
+        )
 
-      if (error.value && error.value.data) {
-        useSnackbarStore().showSnackbar({
-          title: 'Error',
-          message: convertError(error.value.data.message),
-          type: SnackbarType.ERROR
+        const tokenCookie = useCookie('cicsapp-user-token')
+        const roleCookie = useCookie('cicsapp-roleuser')
+        tokenCookie.value = response.token
+        roleCookie.value = 'regular'
+        // Set the user in the store
+        this.user = response.user ?? null
+        this.authenticated = true
+        // Set the token and role in the auth store
+        const authStore = useAuthStore()
+        authStore.role = 'regular'
+        authStore.token = response.token ?? ''
+        authStore.isAuthenticated = true
+
+        router.push('/dashboard/home')
+        toast.success(`Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`)
+      } catch (error) {
+        // example of error message: {statusCode: 400, message: [{email: "Email already exists"}, {ra: "RA already exists"}], error: "Bad Request"}, we want to get all the messages and show them in the toast as description so let's map the error.data.message
+        toast.error('Error al registrar usuario', {
+          description: error.data?.message.map((m: any) => Object.values(m)).join(', ')
         })
+      } finally {
         this.loading = false
-        return
-      } else if (error.value && error.value.cause) {
-        useSnackbarStore().showSnackbar({
-          title: 'Error',
-          message: convertError(error.value!.message),
-          type: SnackbarType.ERROR
-        })
-        this.loading = false
-        return
       }
-      // Success
-      // Set cookies, user and role
-      const tokenCookie = useCookie('cicsapp-user-token')
-      const roleCookie = useCookie('cicsapp-roleuser')
-      tokenCookie.value = data?.value?.token
-      roleCookie.value = 'regular'
-      // Set the user in the store
-      this.user = data?.value?.user ?? null
-      this.authenticated = true
-      // Set the token and role in the auth store
-      const authStore = useAuthStore()
-      authStore.role = 'regular'
-      authStore.token = data?.value?.token ?? ''
-      authStore.isAuthenticated = true
-      // Redirect to the dashboard
-      router.push('/dashboard/home')
-      // Return the data and error
-      this.loading = false
     },
     async myProfile() {
       this.loading = true
@@ -219,7 +186,6 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         body: payload
       })
       if (error.value) {
-        console.log(error.value)
         this.loading = false
         return
       }
