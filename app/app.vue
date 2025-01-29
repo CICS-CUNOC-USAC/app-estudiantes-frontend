@@ -54,6 +54,19 @@ useHead({
   }
 })
 
+const route = useRoute()
+useSeoMeta({
+  title: () =>
+    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App',
+  description:
+    'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
+  ogImage: 'https://cics-app.vercel.app/og.png',
+  ogTitle: () =>
+    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App',
+  ogDescription:
+    'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente'
+})
+
 </script>
 <style lang="postcss">
 :root {
