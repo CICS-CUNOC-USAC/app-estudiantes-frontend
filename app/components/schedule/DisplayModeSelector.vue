@@ -8,6 +8,7 @@
       class="flex gap-1 mb-3"
     >
       <ToggleGroupItem
+        disabled
         value="calendar"
         class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
         >Calendario</ToggleGroupItem
@@ -20,12 +21,16 @@
     </ToggleGroupRoot>
     <Transition name="slide-view" mode="out-in">
       <ListboxRoot
-        v-if="modelValue === 'calendar'"
+        v-if="modelValue === 'classroom'"
         class="flex flex-col rounded-lg bg-white"
-        :model-value="testSelectedPeriod"
+        :model-value="selectedPeriods"
+        multiple
         @update:model-value="
           ($event) => {
-            if ($event) testSelectedPeriod = $event
+            if ($event) {
+                selectedPeriods = $event
+                $emit('update:selectedPeriods', $event)
+            }
           }
         "
       >
@@ -36,18 +41,18 @@
           </p>
           <div class="max-h-96 overflow-auto rounded-xl border p-1.5">
             <ListboxItem
-              v-for="period in testHours"
-              :key="period.startHour"
+              v-for="period in hours"
+              :key="period.start_time"
               :value="period"
               class="group relative flex w-full cursor-pointer select-none items-center rounded-lg py-2.5 leading-none outline-none transition data-[state=checked]:bg-primary-300 data-[disabled]:opacity-50"
             >
               <div class="mx-auto">
                 <span class="group-data-[state=checked]:font-semibold">{{
-                  period.startHour
+                  period.start_time
                 }}</span>
                 -
                 <span class="group-data-[state=checked]:font-semibold">{{
-                  period.endHour
+                  period.end_time
                 }}</span>
               </div>
             </ListboxItem>
@@ -56,7 +61,7 @@
       </ListboxRoot>
       <div v-else>
         <ListboxRoot
-          v-if="modelValue === 'classroom'"
+          v-if="modelValue === 'calendar'"
           class="flex flex-col rounded-lg bg-white px-2.5"
         >
         <Icon name="icon-park-twotone:pull-door" class="mx-auto mb-1.5" />
@@ -93,56 +98,14 @@
   </nav>
 </template>
 <script setup lang="ts">
-import type { Classroom } from '~/utils/types/schedule-courses'
+import type { Classroom, Hour } from '~/utils/types/schedule-courses'
 import CInputText from '../primitives/form/CInputText.vue'
 
 const { classrooms } = defineProps<{
   modelValue: 'calendar' | 'classroom'
   classrooms?: Classroom[] | null
+  hours: Hour[]
 }>()
-
-const testHours = [
-  {
-    startHour: '14:00',
-    endHour: '15:00'
-  },
-  {
-    startHour: '15:00',
-    endHour: '16:00'
-  },
-  {
-    startHour: '16:00',
-    endHour: '17:00'
-  },
-  {
-    startHour: '17:00',
-    endHour: '18:00'
-  },
-  {
-    startHour: '18:00',
-    endHour: '19:00'
-  },
-  {
-    startHour: '19:00',
-    endHour: '20:00'
-  },
-  {
-    startHour: '20:00',
-    endHour: '21:00'
-  },
-  {
-    startHour: '21:00',
-    endHour: '22:00'
-  },
-  {
-    startHour: '22:00',
-    endHour: '23:00'
-  },
-  {
-    startHour: '23:00',
-    endHour: '00:00'
-  }
-]
 
 const classroomSearch = ref('')
 const filteredClassrooms = computed(() =>
@@ -151,9 +114,10 @@ const filteredClassrooms = computed(() =>
   )
 )
 
-const testSelectedPeriod = ref(testHours[0])
+const selectedPeriods = ref<any>([])
 const emit = defineEmits<{
   'update:modelValue': [value: string]
+  'update:selectedPeriods': [value: any]
 }>()
 </script>
 <style lang="postcss" scoped>

@@ -5,6 +5,13 @@
         <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
+        :hours="selectionHours || []"
+        @update:selected-periods="
+            (val: number[]) => {
+                if (val) selectedSchedules = val as number[]
+                changePeriods(val)
+            }
+        "
         @update:model-value="
             (val) => {
               if (val) scheduleType = val as 'calendar' | 'classroom'
@@ -23,7 +30,7 @@
                 :model-value="coursesMode"
                 @update:model-value="
                   (val) => {
-                    if (val) coursesMode = val as string
+                    if (val) coursesMode = val as 'lectures' | 'laboratories'
                     changeSchedule()
                   }
                 "
@@ -72,48 +79,51 @@ import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
 
 const schedules = ref<Array<Course>>([])
 const loadingSchedules = ref(false)
-
-const { data: hours, pending: loadingHours } =
-  useCustomLazyFetch<Array<Hour>>(`hours`)
+const selectedSchedules = ref<number[]>([])
+const selectionHours = ref<Hour[]>([])
+const hours = ref<Hour[]>([])
+const loadingHours = ref<boolean>(true)
 
 const { data: classrooms, pending: loadingClassrooms } =
   useCustomLazyFetch<Array<Classroom>>(`classrooms`)
 
-async function fetchCourses() {
+async function fetchSchedules(type: 'lectures'|'laboratories', periods?: number[]) {
   loadingSchedules.value = true
   try {
-    const { data } =
-      await useCustomLazyFetch<Array<Course>>(`schedules/courses`)
+    const { data } = !periods
+      ? await useCustomLazyFetch<Array<Course>>(`schedules/${type}`)
+      : await useCustomLazyFetch<Array<Course>>(`schedules/${type}?selection=${JSON.stringify(periods)}`)
     schedules.value = data.value || []
   } catch (error) {
-    console.error('Error fetching courses:', error)
+    console.error(`Error fetching ${type}:`, error)
   } finally {
     loadingSchedules.value = false
   }
 }
 
-async function fetchLaboratories() {
-  loadingSchedules.value = true
+
+async function fetchHours(periods?: number[]) {
+  loadingHours.value = true
   try {
-    const { data } = await useCustomLazyFetch<Array<Course>>(
-      `schedules/laboratories`
+    const { data } = !periods
+    ? await useCustomLazyFetch<Array<Hour>>(
+      `hours`
     )
-    schedules.value = data.value || []
+    : await useCustomLazyFetch<Array<Hour>>(
+      `hours?selection=${JSON.stringify(periods)}`
+    )
+    hours.value = data.value || []
   } catch (error) {
-    console.error('Error fetching laboratories:', error)
+    console.error('Error fetching hours:', error)
   } finally {
-    loadingSchedules.value = false
+    loadingHours.value = false
   }
 }
+
 
 // Change Schedule Type
 function changeSchedule() {
-  console.log('cambio', coursesMode.value)
-  if (coursesMode.value === 'lectures') {
-    fetchCourses()
-  } else if (coursesMode.value === 'laboratories') {
-    fetchLaboratories()
-  }
+    fetchSchedules(coursesMode.value)
 }
 
 definePageMeta({
@@ -121,8 +131,28 @@ definePageMeta({
 })
 const search = ref('')
 
-const scheduleType = ref<'calendar' | 'classroom'>('calendar')
-const coursesMode = ref('lectures')
+const scheduleType = ref<'calendar' | 'classroom'>('classroom')
+const coursesMode = ref<'lectures' | 'laboratories'>('lectures')
+
+function changePeriods(periods: any[]) {
+    const scheduleSelectedPeriods = periods
+        .map(period => JSON.parse(JSON.stringify(period)))
+        .map(object => object.id)
+
+    if (scheduleSelectedPeriods.length > 0) {
+        fetchHours(scheduleSelectedPeriods).finally(() =>
+        fetchSchedules(coursesMode.value, scheduleSelectedPeriods)
+        )
+    } else {
+        fetchHours().finally(() =>
+        fetchSchedules(coursesMode.value)
+    )
+    }
+}
+
 changeSchedule()
+fetchHours().finally(() =>
+    selectionHours.value = hours.value
+)
 </script>
 <style scoped lang="scss"></style>
