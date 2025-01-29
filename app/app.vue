@@ -64,7 +64,10 @@ useSeoMeta({
   ogTitle: () =>
     route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App',
   ogDescription:
-    'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente'
+    'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
+  ogType: 'website',
+  ogUrl: 'https://cics-app.vercel.app/',
+  ogSiteName: 'CICS App',
 })
 
 </script>
