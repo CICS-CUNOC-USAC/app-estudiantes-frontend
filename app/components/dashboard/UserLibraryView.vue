@@ -69,7 +69,7 @@
       :rows="limit"
       :first="currentPage"
       :total-records="data?.meta?.total"
-      :rows-per-page-options="rowOptions"
+      :rows-per-page-options="[5, 10, 25, 50]"
       row-hover
       lazy
       paginator
@@ -111,8 +111,7 @@ import CInputText from '../primitives/form/CInputText.vue'
 
 const route = useRoute()
 
-const rowOptions = [5, 10, 25, 50]
-const limit = ref(rowOptions[0])
+const limit = ref(5)
 const currentPage = computed(() => {
   return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
 })
