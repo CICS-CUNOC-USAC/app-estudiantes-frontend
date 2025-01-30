@@ -30,7 +30,8 @@
                     <template v-if="item.content !== undefined">
                         <GridItem class="border-b border-r p-0.5 z-10" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                             :h="item.h" :i="item.i">
-                            <ScheduleCourseCard class="z-20" :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
+                            <ScheduleCourseCard :id="`S${item.content.course_code}${item.content.section.name}`"
+                                class="z-20" :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
                                 :career_id="isCommonField(item.content) ? 0 : item.content.career_code as number"
                                 :curso="item.content.career_course.course.name" :seccion="item.content.section.name"
                                 :semester="item.content.career_course.semester"

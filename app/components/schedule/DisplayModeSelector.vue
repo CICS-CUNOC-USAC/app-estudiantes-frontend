@@ -5,12 +5,12 @@
       @update:model-value="
         ($event) => emit('update:modelValue', $event as string)
       "
-      class="flex gap-1 mb-3"
+      class="flex gap-1 mb-3 justify-center"
     >
       <ToggleGroupItem
         disabled
         value="calendar"
-        class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+        class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black bg-zinc-300 data-[state=on]:font-medium text-zinc-100 data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
         >Calendario</ToggleGroupItem
       >
       <ToggleGroupItem

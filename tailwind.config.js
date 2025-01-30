@@ -21,7 +21,8 @@ module.exports = {
           '23': '23',
       },
       colors: {
-        'cics-white': '#faf6ed'
+        'cics-white': '#faf6ed',
+        'cics-silver-pale': '#f8f5f3'
       },
       keyframes: {
         // Dialog animations
