@@ -22,7 +22,7 @@
     <Transition name="slide-view" mode="out-in">
       <ListboxRoot
         v-if="modelValue === 'classroom'"
-        class="flex flex-col rounded-lg bg-white"
+        class="flex flex-col rounded-lg"
         :model-value="selectedPeriods"
         multiple
         @update:model-value="
@@ -35,16 +35,16 @@
         "
       >
         <ListboxContent class="w-full overflow-auto px-2.5 py-4">
-          <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
-          <p class="pb-4 text-center text-sm">
-            Selecciona el periodo de tiempo que deseas visualizar en el horario
-          </p>
-          <div class="max-h-96 overflow-auto rounded-xl border p-1.5">
+          <div class="max-h-96 overflow-auto rounded-xl border p-4 bg-white">
+              <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
+              <p class="pb-4 text-center text-sm">
+                Selecciona el periodo de tiempo que deseas visualizar en el horario
+              </p>
             <ListboxItem
               v-for="period in hours"
               :key="period.start_time"
               :value="period"
-              class="group relative flex w-full cursor-pointer select-none items-center rounded-lg py-2.5 leading-none outline-none transition data-[state=checked]:bg-primary-300 data-[disabled]:opacity-50"
+              class="mt-1 group relative flex w-full cursor-pointer select-none items-center rounded-lg py-2.5 leading-none outline-none transition data-[state=checked]:bg-primary-300 data-[disabled]:opacity-50 hover:bg-surface-100"
             >
               <div class="mx-auto">
                 <span class="group-data-[state=checked]:font-semibold">{{

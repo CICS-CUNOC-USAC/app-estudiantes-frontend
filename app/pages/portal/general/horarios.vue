@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="">
+    <div class="bg-cics-silver-pale">
       <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
@@ -23,8 +23,13 @@
         class="grid grid-cols-1"
         v-if="!loadingHours && !loadingClassrooms && !loadingSchedules"
       >
-        <div class="grid grid-cols-5">
-          <div class="col-span-3 justify-self-center">
+        <div class="grid grid-cols-6 mb-4">
+            <div class="col-start-2">
+                <ArrowedCombobox
+                        :options="['Todas las Carreras', 'Sistemas']"
+                ></ArrowedCombobox>
+            </div>
+          <div class="col-span-2 col-start-3">
             <ToggleGroupRoot
               :model-value="coursesMode"
               @update:model-value="
@@ -33,7 +38,7 @@
                   changeSchedule()
                 }
               "
-              class="flex gap-1"
+              class="flex gap-1 justify-center"
             >
               <ToggleGroupItem
                 value="lectures"
@@ -47,7 +52,7 @@
               >
             </ToggleGroupRoot>
           </div>
-          <div class="col-span-1">
+          <div class="col-span-2 col-start-5">
             <CInputText
               v-model="search"
               placeholder="Buscar"
@@ -75,6 +80,7 @@ import CInputText from '~/components/primitives/form/CInputText.vue'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 import { ToggleGroupItem, ToggleGroupRoot } from 'radix-vue'
 import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
+import ArrowedCombobox from '~/components/schedule/ArrowedSelector.vue'
 
 const schedules = ref<Array<Course>>([])
 const loadingSchedules = ref(false)
