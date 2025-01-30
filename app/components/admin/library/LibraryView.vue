@@ -11,6 +11,7 @@
       <CInputText
         label="Nombre del libro"
         id="name"
+        class="h-12"
         prepend-icon="icon-park-twotone:doc-search-two"
         clear-button
         no-borders
@@ -44,6 +45,7 @@
         prepend-icon="icon-park-twotone:people-search"
         clear-button
         no-borders
+        class="h-12"
         :default-value="$route.query.author"
         @input="
           ($event: Event) => {

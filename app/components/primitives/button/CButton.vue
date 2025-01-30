@@ -3,19 +3,21 @@
   <PButton
     v-bind="props"
     :as="asProp"
-    class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+    class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none cursor-pointer"
     :pt:label:class="`${props.label ? 'block' : 'hidden'}`"
     :class="{
       'w-full': props.fluid,
       'rounded-lg': props.rounded,
-      ' border-2 border-black  text-white':
+      ' border-2 border-black ':
         props.variant !== 'text' && props.variant !== 'link' && props.variant !== 'tonal',
+      '  text-white':
+        props.variant !== 'text' && props.variant !== 'link' && props.variant !== 'tonal' && !props.outlined,
         'shadow-[3px_3px_0_0_rgba(0,0,0,1)]': !props.outlined,
       'gap-x-2 px-3.5 py-1.5':
         props.variant !== 'link' && props.size === 'large',
       'gap-x-1 px-2.5 py-1': props.variant !== 'link' && props.size === 'small',
       'bg-primary-600 hover:bg-primary-500 focus:bg-opacity-85':
-        !props.severity && !props.outlined,
+        !props.severity && !props.outlined && props.variant !== 'link' && props.variant !== 'tonal' && props.variant !== 'text',
 
       // Colors
       'bg-red-600 text-red-100 hover:bg-red-500': props.severity === 'danger',
@@ -40,7 +42,7 @@
       'pointer-events-none opacity-90': props.loading,
 
       // Variants
-      'bg-opacity-30 text-black dark:text-white shadow-none hover:bg-opacity-40 active:translate-x-0.5 active:translate-y-0.5 border-none focus:text-white':
+      'bg-primary/30 text-black dark:text-white shadow-none hover:bg-primary/40 active:translate-x-0.5 active:translate-y-0.5 border-none focus:text-white focus:bg-primary/90':
         props.variant === 'tonal',
       'bg-opacity-0 text-current shadow-none hover:bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5 active:border-black':
         props.variant === 'text',

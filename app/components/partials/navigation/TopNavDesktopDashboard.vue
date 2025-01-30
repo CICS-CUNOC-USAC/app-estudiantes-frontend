@@ -51,7 +51,7 @@
 
     <div class="absolute top-full flex w-[30rem] justify-center">
       <NavigationMenuViewport
-        class="relative mt-4 h-[var(--radix-navigation-menu-viewport-height)] w-full overflow-hidden rounded-xl bg-cics-white dark:bg-neutral-900 shadow-lg shadow-black/15 border border-black/80 transition-[height] duration-200 data-[state=closed]:animate-scaleOut data-[state=open]:animate-scaleIn"
+        class="relative mt-4 h-(--radix-navigation-menu-viewport-height) w-full overflow-hidden rounded-xl bg-cics-white dark:bg-neutral-900 shadow-lg shadow-black/15 border border-black/80 transition-[height] duration-200 data-[state=closed]:animate-scaleOut data-[state=open]:animate-scaleIn"
       />
     </div>
   </NavigationMenuRoot>

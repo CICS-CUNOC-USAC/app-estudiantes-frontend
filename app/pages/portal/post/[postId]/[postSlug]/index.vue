@@ -89,7 +89,9 @@ useHead({
   title: () => data?.value?.title ? `${data.value.title} | Publicación` : 'Publicación oficial',
 })
 </script>
-<style lang="postcss">
+<style>
+@reference '~/assets/css/main.css';
+
 .official-post-content {
   @apply prose prose-base prose-neutral max-w-none dark:prose-invert;
 

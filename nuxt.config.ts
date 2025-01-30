@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import Aura from '@primevue/themes/aura'
+import tailwindcss from "@tailwindcss/vite";
+
 
 
 export default defineNuxtConfig({
@@ -32,7 +34,7 @@ export default defineNuxtConfig({
   },
   modules: [
     '@pinia/nuxt',
-    '@nuxtjs/tailwindcss',
+    // '@nuxtjs/tailwindcss',
     '@primevue/nuxt-module',
     '@nuxt/fonts',
     '@nuxt/icon',
@@ -49,6 +51,9 @@ export default defineNuxtConfig({
     }
   ],
   vite: {
+    plugins: [
+      tailwindcss(),
+    ],
     define: {
       'process.env.DEBUG': false
     },
@@ -58,6 +63,7 @@ export default defineNuxtConfig({
       }
     }
   },
+  css: ['~/assets/css/main.css'],
   colorMode: {
     classPrefix: "",
     classSuffix: "",
@@ -99,6 +105,9 @@ export default defineNuxtConfig({
       { name: 'Switzer', provider: 'fontshare' },
       { name: 'DM Sans', provider: 'google' },
       { name: 'Instrument Sans', provider: 'google' },
-    ]
+    ],
+    experimental: {
+      processCSSVariables: true
+    }
   },
 })

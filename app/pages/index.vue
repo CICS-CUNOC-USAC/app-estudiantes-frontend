@@ -84,7 +84,8 @@ useHead({
   title: 'Inicio'
 })
 </script>
-<style scoped lang="postcss">
+<style scoped>
+@reference '~/assets/css/main.css';
 .portal-section {
   @apply my-6;
   h2 {

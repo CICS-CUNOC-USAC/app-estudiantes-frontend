@@ -9,6 +9,24 @@ const commonComponentsDefaults = {
   menu: {
     background: 'transparent !important'
   },
+  fileupload: {
+    contentPadding: '0px',
+    filePadding: '0px',
+    headerPadding: '0px',
+  },
+  toggleswitch: {
+    border: {
+      color: '#000'
+    },
+    checked: {
+      hoverBorderColor: '#000',
+      borderColor: '#000',
+    },
+
+    hover: {
+      borderColor: '#000'
+    },
+  },
   breadcrumb: {
     colorScheme: {
       light: {
