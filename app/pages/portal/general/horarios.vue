@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="bg-cics-silver-pale dark:bg-neutral-900">
+    <div class="bg-cics-silver-pale dark:bg-neutral-900 min-h-screen">
       <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
@@ -19,7 +19,7 @@
         "
       />
     </div>
-    <div class="">
+    <div class="mt-6">
       <div class="grid grid-cols-1">
         <div class="mb-4 grid grid-cols-6">
           <div class="col-start-2">
