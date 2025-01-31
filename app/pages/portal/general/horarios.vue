@@ -88,7 +88,7 @@ import type { Career } from '~/utils/types/career-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 
 const schedulesKey = computed(() => {
-    return `${JSON.stringify(schedules.value)}`
+    return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
 })
 
 const selectedSchedules = ref<Hour[]>([])
