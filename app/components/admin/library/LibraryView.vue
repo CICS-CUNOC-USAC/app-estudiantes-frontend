@@ -1,12 +1,13 @@
 <template>
   <section>
     <div
-      class="grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr] sticky top-0 z-10 bg-white"
+      class="grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr] sticky top-0 z-10"
     >
       <CButton
         label="Nuevo libro"
         icon="icon-park-outline:plus"
         class="w-fit"
+        to="/admin/books/create"
       />
       <CInputText
         label="Nombre del libro"
@@ -106,13 +107,15 @@
               variant="tonal"
               label="Editar"
             />
-            <CButton
-              icon="icon-park-twotone:delete"
-              fluid
-              size="small"
-              variant="tonal"
-              label="Eliminar"
-            />
+            <DeleteItemDialog @confirm="() => handleDelete(slotProps.data.id)">
+              <CButton
+                icon="icon-park-twotone:delete"
+                fluid
+                size="small"
+                variant="tonal"
+                label="Eliminar"
+              />
+            </DeleteItemDialog>
           </div>
         </template>
       </PColumn>
@@ -124,7 +127,7 @@ import DeleteItemDialog from '@/components/dialogs/DeleteItemDialog.vue'
 import NewLibraryItemDialog from '~/components/dialogs/admin/library/NewLibraryItemDialog.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import { fetchAllBooks } from '~/lib/api/books'
+import { fetchAllBooks, deleteBook } from '~/lib/api/books'
 
 const route = useRoute()
 
@@ -133,7 +136,7 @@ const currentPage = computed(() => {
   return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
 })
 
-const { data, status } = await useAsyncData(
+const { data, status, refresh } = await useAsyncData(
   'admin-books',
   () =>
     fetchAllBooks({
@@ -147,9 +150,9 @@ const { data, status } = await useAsyncData(
   }
 )
 
-// const saveBookItem = async (item: BookPayload) => {
-//   await createBookItem(item)
-//   await fetchAllBooks()
-// }
+const handleDelete = async (id: number) => {
+  await deleteBook(id)
+  refresh()
+}
 </script>
 <style lang="scss" scoped></style>

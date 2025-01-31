@@ -3,16 +3,10 @@
     <header class="space-y-2">
       <h1 class="text-xl font-semibold">
         <Icon name="icon-park-twotone:book" class="mr-1.5 mb-1 inline-block" />
-        Editar item de biblioteca
+        Crear item de biblioteca
       </h1>
     </header>
-    <section
-      class="mt-4 grid grid-cols-1 gap-10 md:grid-cols-[300px_1fr]"
-      v-if="book"
-      :class="{
-        'opacity-60': book && status === 'pending'
-      }"
-    >
+    <section class="mt-4">
       <PForm
         :initial-values
         :resolver
@@ -54,26 +48,14 @@
           prepend-icon="icon-park-outline:link-one"
           :error="$form.source_url?.error?.message"
         />
-        <div class="flex items-center gap-2">
-          <PToggleSwitch
-            v-model="enableBookEdit"
-            :pt="{
-              input: {
-                id: 'enableBookEdit'
-              }
-            }"
-          />
-          <label for="enableBookEdit" class="text-sm select-none">
-            Actualizar archivo
-          </label>
-        </div>
+
+        <h5 class="font-medium">Archivo del libro</h5>
         <PFileUpload
-          v-if="enableBookEdit"
           mode="advanced"
           accept="application/pdf"
           :multiple="false"
           pt:root:class="border-none!"
-          @select="e => (file = e.files[0])"
+          @select="(e) => (file = e.files[0])"
         >
           <template #header="{ chooseCallback }">
             <CButton
@@ -88,10 +70,7 @@
             </p>
           </template>
           <template #content="{ files, removeFileCallback }">
-            <div
-              v-if="files.length > 0"
-              class=" py-2 text-sm"
-            >
+            <div v-if="files.length > 0" class="py-2 text-sm">
               <div class="flex items-center gap-2">
                 <Icon name="lucide:file" />
                 <span>{{ files[0].name }}</span>
@@ -105,29 +84,17 @@
             label="Cancelar"
             icon="icon-park-outline:arrow-left"
             to="/admin/books"
-            class="flex-1"
+            class=""
           />
           <CButton
             label="Guardar"
             icon="icon-park-outline:check"
             type="submit"
-            :loading="status === 'pending'"
-            class="flex-1"
+            class=""
           />
         </div>
       </PForm>
-      <div>
-        <h2 class="mb-4 font-medium">Previsualización del libro</h2>
-        <PdfPreview :pdf-url="book.media.url" :key="book.media.url" />
-      </div>
     </section>
-    <ElementNotFound
-      v-if="!book && !loading"
-      class="mt-4"
-      element-type="manual"
-      back-to-route="/admin/manuals"
-      back-to-label="Volver a la lista de manuales"
-    />
   </main>
 </template>
 <script setup lang="ts">
@@ -139,30 +106,18 @@ import PdfPreview from '~/components/content/PdfPreview.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
+import { createBookItem } from '~/lib/api/admin/books'
 definePageMeta({
   layout: 'admin'
 })
-const { requiredFile, pdfFormat } = useFormValidators()
-const route = useRoute()
-const enableBookEdit = ref(true)
-const { fetchBookById, updateBookItem } = useAdminLibraryStore()
-const { updateMedia } = useMediaStore()
-const {
-  data: book,
-  pending: loading,
-  status,
-  refresh
-} = await useLazyAsyncData('edit-book', () =>
-  fetchBookById(+route.params.bookId)
-)
-const file = ref(undefined)
-const bookFileForm = ref()
+
+const file = ref()
 
 const initialValues = reactive({
-  name: book.value?.name,
-  description: book.value?.description,
-  author: book.value?.author,
-  source_url: book.value?.source_url
+  name: '',
+  description: '',
+  author: '',
+  source_url: ''
 })
 
 const resolver = zodResolver(
@@ -170,26 +125,17 @@ const resolver = zodResolver(
     name: z.string().nonempty('El nombre del libro es requerido'),
     description: z.string().nonempty('La descripción del libro es requerida'),
     author: z.string().nonempty('El autor del libro es requerido'),
-    source_url: z.string().url('La URL de la fuente no es válida')
+    source_url: z.string().url('La URL de la fuente no es válida'),
   })
 )
 
 const saveBook = async (e: FormSubmitEvent) => {
-  if (e.valid) {
-    status.value = 'pending'
-    await updateBookItem(+route.params.bookId, e.values)
-    if (enableBookEdit.value && file.value) {
-      await updateBookFile()
-    }
-    status.value = 'success'
-    await refresh()
-  }
-}
-
-const updateBookFile = async () => {
-  if (file.value && book.value?.media?.id) {
-    await updateMedia(file.value, book.value.media.id)
-    enableBookEdit.value = false
+  if (e.valid && file.value) {
+    await createBookItem({
+      ...e.values as Omit<BookPayload, 'file'>,
+      file: file.value
+    })
+    navigateTo('/admin/books')
   }
 }
 </script>
