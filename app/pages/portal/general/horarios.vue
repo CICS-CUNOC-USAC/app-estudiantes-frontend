@@ -6,8 +6,8 @@
         :classrooms="classrooms"
         :hours="availableHours || []"
         @update:selected-periods="
-          (val: number[]) => {
-            if (val) selectedSchedules = val as number[]
+          (val: Hour[]) => {
+            if (val) selectedSchedules = val as Hour[]
             // changePeriods(val)
           }
         "
@@ -80,7 +80,7 @@ import ArrowedCombobox from '~/components/schedule/ArrowedSelector.vue'
 import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 
-const selectedSchedules = ref<number[]>([])
+const selectedSchedules = ref<Hour[]>([])
 const selectionSchedules = computed(() => {
   return selectedSchedules.value.length > 0
     ? JSON.stringify(selectedSchedules.value.map((schedule) => schedule.id))
