@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav
-      class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-cics-silver-pale backdrop-blur-sm transition dark:border-neutral-700 dark:bg-surface-800/80"
+      class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-cics-silver-pale backdrop-blur-sm transition dark:border-neutral-700 dark:bg-neutral-900"
       :class="{
         'border-b shadow-md': hasScrolled
       }"
@@ -95,7 +95,7 @@
     </PDrawer>
 
     <div class="d-flex flex-column">
-      <main id="appcont" class="px-5 pt-20 lg:px-8">
+      <main id="appcont" class="pr-5 pt-14">
         <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
       </main>
 

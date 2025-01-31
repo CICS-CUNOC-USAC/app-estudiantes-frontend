@@ -1,25 +1,31 @@
 <template>
-  <SelectRoot v-model="v">
-    <div class="flex items-center">
-    <PButton
-      class="arrow-button"
-      unstyled
-    >
-      <Icon icon="lucide:chevron-left" class="shrink-0" />
-    </PButton>
-    <SelectTrigger
-      class="inline-flex h-[35px] min-w-[160px] items-center justify-between gap-[5px] rounded border border-surface-950/45 px-[15px] text-[13px] leading-none shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-      aria-label="Customise options"
-    >
-      <SelectValue placeholder="Elige una carrera..." />
-      <Icon icon="radix-icons:chevron-down" class="h-3.5 w-3.5" />
-    </SelectTrigger>
-    <PButton
-      class="arrow-button"
-      unstyled
-    >
-      <Icon icon="lucide:chevron-right" class="shrink-0" />
-    </PButton>
+  <SelectRoot v-model="v" class="">
+    <div class="flex items-center h-9">
+      <PButton
+        class="arrow-button rounded-s-lg"
+        unstyled
+        pt:label:class="hidden"
+      >
+        <template #icon>
+          <Icon icon="icon-park-outline:left" class="shrink-0" />
+        </template>
+      </PButton>
+      <SelectTrigger
+        class="flex h-full min-w-44 items-center justify-between bg-zinc-100 px-2.5 text-xs"
+        aria-label="Customise options"
+      >
+        <SelectValue placeholder="Elige una carrera..." />
+        <Icon icon="icon-park-outline:down" class="h-3.5 w-3.5" />
+      </SelectTrigger>
+      <PButton
+        class="arrow-button rounded-e-lg"
+        unstyled
+        pt:label:class="hidden"
+      >
+        <template #icon>
+          <Icon icon="icon-park-outline:right" class="shrink-0" />
+        </template>
+      </PButton>
     </div>
 
     <SelectPortal>
@@ -74,6 +80,6 @@ const props = defineProps<{
 </script>
 <style lang="postcss" scoped>
 .arrow-button {
-    @apply inline-flex select-none items-center justify-center gap-x-2 rounded-lg border border-surface-950/45 bg-transparent px-1.5 py-2 font-semibold shadow-[1px_1px_0_0_rgba(0,0,0,1)] transition duration-75 ease-out text-color focus:bg-surface-50/20 focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none dark:focus:bg-surface-600/40 mr-1 ml-1
+  @apply ml-1 mr-1 inline-flex select-none h-full items-center justify-center gap-x-2  border-surface-950/45 bg-zinc-100 px-1.5 py-2 font-semibold transition duration-75 ease-out text-color focus:bg-surface-50/20 focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none dark:focus:bg-surface-600/40;
 }
 </style>

@@ -1,16 +1,16 @@
 <template>
-  <nav class="flex w-64 flex-col gap-2 self-start justify-self-start">
+  <nav class="flex w-80 flex-col gap-0 self-start justify-self-start px-4 pt-4">
     <ToggleGroupRoot
       :model-value="modelValue"
       @update:model-value="
         ($event) => emit('update:modelValue', $event as string)
       "
-      class="flex gap-1 mb-3 justify-center"
+      class="flex justify-center gap-2"
     >
       <ToggleGroupItem
-        disabled
+      disabled
         value="calendar"
-        class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black bg-zinc-300 data-[state=on]:font-medium text-zinc-100 data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+        class="cursor-not-allowed rounded-lg border-2 border-transparent px-2.5 py-0.5  transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[disabled]:bg-zinc-300/60 data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)] data-[disabled]:active:translate-x-0 data-[disabled]:active:translate-y-0 data-[state=on]:text-white data-[disabled]:opacity-50"
         >Calendario</ToggleGroupItem
       >
       <ToggleGroupItem
@@ -28,23 +28,24 @@
         @update:model-value="
           ($event) => {
             if ($event) {
-                selectedPeriods = $event
-                $emit('update:selectedPeriods', $event)
+              selectedPeriods = $event
+              $emit('update:selectedPeriods', $event)
             }
           }
         "
       >
         <ListboxContent class="w-full overflow-auto px-2.5 py-4">
-          <div class="max-h-96 overflow-auto rounded-xl border p-4 bg-white">
-              <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
-              <p class="pb-4 text-center text-sm">
-                Selecciona el periodo de tiempo que deseas visualizar en el horario
-              </p>
+          <div class="max-h-96 overflow-auto rounded-xl border bg-white p-4">
+            <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
+            <p class="pb-4 text-center text-sm">
+              Selecciona el periodo de tiempo que deseas visualizar en el
+              horario
+            </p>
             <ListboxItem
               v-for="period in hours"
               :key="period.start_time"
               :value="period"
-              class="mt-1 group relative flex w-full cursor-pointer select-none items-center rounded-lg py-2.5 leading-none outline-none transition data-[state=checked]:bg-primary-300 data-[disabled]:opacity-50 hover:bg-surface-100"
+              class="group relative mt-1 flex w-full cursor-pointer select-none items-center rounded-lg py-2.5 leading-none outline-none transition hover:bg-surface-100 data-[state=checked]:bg-primary-300 data-[disabled]:opacity-50"
             >
               <div class="mx-auto">
                 <span class="group-data-[state=checked]:font-semibold">{{
@@ -64,18 +65,18 @@
           v-if="modelValue === 'calendar'"
           class="flex flex-col rounded-lg bg-white px-2.5"
         >
-        <Icon name="icon-park-twotone:pull-door" class="mx-auto mb-1.5" />
-        <p class="pb-4 text-center text-sm">
-          Selecciona el salón de clases que deseas visualizar en el horario
-        </p>
-        <CInputText
-          v-model="classroomSearch"
-          label="Buscar salón"
-          clear-button
-          type="text"
-          prepend-icon="lucide:search"
-          no-borders
-        />
+          <Icon name="icon-park-twotone:pull-door" class="mx-auto mb-1.5" />
+          <p class="pb-4 text-center text-sm">
+            Selecciona el salón de clases que deseas visualizar en el horario
+          </p>
+          <CInputText
+            v-model="classroomSearch"
+            label="Buscar salón"
+            clear-button
+            type="text"
+            prepend-icon="lucide:search"
+            no-borders
+          />
           <ListboxContent class="w-full py-4">
             <div class="h-96 overflow-auto rounded-xl border p-1.5">
               <ListboxItem
