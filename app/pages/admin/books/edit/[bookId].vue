@@ -127,6 +127,7 @@
     </section>
     <ElementNotFound
       v-if="!book && !loading"
+      class="mt-4"
       element-type="manual"
       back-to-route="/admin/manuals"
       back-to-label="Volver a la lista de manuales"
