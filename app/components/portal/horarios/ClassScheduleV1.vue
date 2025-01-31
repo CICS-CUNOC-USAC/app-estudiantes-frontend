@@ -205,16 +205,17 @@ type Cell = {
 function createLayout() {
     const width = 1
     const height = 1
+    const offset = 0.5
     let layout: Array<Cell> = []
 
     layout.push(
-        { x: 0.5, y: 0, w: width / 2, h: height, i: '0', static: true, content: undefined, type: 'undefined' }
+        { x: 0.5 - offset, y: 0, w: width / 2, h: height, i: '0', static: true, content: undefined, type: 'undefined' }
     )
 
     //Se llenan los headers de classrooms
     layout = layout.concat(
         props.classrooms.map((classroom, index) => ({
-            x: index + 1,
+            x: (index + 1) - offset,
             y: 0,
             w: width,
             h: height,
@@ -228,7 +229,7 @@ function createLayout() {
     //Se llenan los headers laterales de hora
     layout = layout.concat(
         props.hours.map((hour, index) => ({
-            x: 0.5,
+            x: 0.5 - offset,
             y: index + 1,
             w: width / 2,
             h: height,
@@ -263,7 +264,7 @@ function createLayout() {
                 const currentSchedule = getSchedule(classroom.id, hour, props.schedules)
                 return canInsert
                     ? {
-                        x: colIndex + 1,
+                        x: (colIndex + 1) - offset,
                         y: rowIndex + 1,
                         w: width,
                         h: currentSchedule ? height * getPeriodsSchedule(currentSchedule.periods) : height,

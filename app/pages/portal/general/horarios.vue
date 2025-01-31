@@ -19,12 +19,18 @@
         "
       />
     </div>
-    <div class="mt-6">
+    <div class="mt-6 ml-6">
       <div class="grid grid-cols-1">
         <div class="mb-4 grid grid-cols-6">
-          <div class="col-start-2">
+          <div class="col-start-1">
             <ArrowedCombobox
-              :options="['Todas las Carreras', 'Sistemas']"
+              :options="['Todas las Carreras', 'Area Comun', ...availableCareers.map((value: Career) => value.name)]"
+              :default-value="'Todas las Carreras'"
+                @update:selected-option="
+                 (val: string) => {
+                    selectedCareer = val
+                 }
+                "
             ></ArrowedCombobox>
           </div>
           <div class="col-span-2 col-start-3">
@@ -62,7 +68,7 @@
 
         <ClassScheduleV1
           v-if="classrooms && schedules && hours"
-          :key="`${schedules}-${hours}`"
+          :key="schedulesKey"
           :hours="hours"
           :classrooms="classrooms"
           :schedules="schedules"
@@ -78,7 +84,12 @@ import ClassScheduleV1 from '~/components/portal/horarios/ClassScheduleV1.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import ArrowedCombobox from '~/components/schedule/ArrowedSelector.vue'
 import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
+import type { Career } from '~/utils/types/career-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
+
+const schedulesKey = computed(() => {
+    return `${JSON.stringify(schedules.value)}`
+})
 
 const selectedSchedules = ref<Hour[]>([])
 const selectionSchedules = computed(() => {
@@ -86,7 +97,19 @@ const selectionSchedules = computed(() => {
     ? JSON.stringify(selectedSchedules.value.map((schedule) => schedule.id))
     : undefined
 })
+const selectedCareer = ref<string>('Todas las Carreras')
+const selectionCareer = computed(() => {
+    if (selectedCareer.value === 'Todas las Carreras') {
+        return undefined
+    } else if (selectedCareer.value === 'Area Comun') {
+        return 0
+    } else {
+        const career = availableCareers.value.find(c => c.name === selectedCareer.value);
+        return career ? career.code : undefined;
+    }
+})
 const availableHours = ref<Hour[]>([])
+const availableCareers = ref<Career[]>([])
 
 const scheduleType = ref<'calendar' | 'classroom'>('classroom')
 const coursesMode = ref<'lectures' | 'laboratories'>('lectures')
@@ -98,7 +121,8 @@ const { data: schedules, status: scheduleStatus } = useCustomLazyFetch<
   Array<Course>
 >(() => `/schedules/${coursesMode.value}`, {
   query: {
-    selection: selectionSchedules
+    selection: selectionSchedules,
+    career: selectionCareer
   }
 })
 
@@ -117,6 +141,9 @@ definePageMeta({
 const search = ref('')
 await $api<Hour[]>('/hours').then((response) => {
   availableHours.value = response
+})
+await $api<Career[]>('/careers').then((response) => {
+  availableCareers.value = response
 })
 </script>
 <style scoped lang="scss"></style>
