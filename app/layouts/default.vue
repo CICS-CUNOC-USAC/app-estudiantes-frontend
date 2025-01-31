@@ -1,10 +1,12 @@
 <template>
   <div>
     <nav
-      class="fixed top-0 z-20 h-14 w-full  border-b-2 bg-white/80 backdrop-blur-sm transition  dark:bg-surface-800/80 print:hidden"
+      class=" fixed top-0 z-20 h-14 w-full border-b  backdrop-blur-sm transition print:hidden"
       :class="{
         'border-transparent': !hasScrolled,
-        'dark:border-neutral-600 border-neutral-300 shadow-md': hasScrolled
+        'border-neutral-200 shadow-md dark:border-black/80': hasScrolled,
+        'dark:bg-surface-800/80 bg-white/80': !$route.meta.menuClass,
+        [$route.meta.menuClass as string]: $route.meta.menuClass
       }"
     >
       <div
@@ -14,7 +16,7 @@
           <button
             @click="drawer = !drawer"
             type="button"
-            class="inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 md:hidden dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
+            class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 focus:ring-2 focus:ring-neutral-200 focus:outline-none md:hidden dark:text-neutral-400 dark:focus:ring-neutral-600"
           >
             <Icon name="tabler:layout-sidebar-filled" />
           </button>
@@ -68,7 +70,7 @@
             icon="icon-park-twotone:people"
             :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
-            class="min-w-0 max-w-[11ch] !px-2"
+            class="max-w-[11ch] min-w-0 !px-2"
             pt:label:class="hidden lg:block truncate"
           />
         </div>
@@ -79,7 +81,7 @@
       v-model:visible="drawer"
       block-scroll
       unstyled
-      class="h-full w-10/12 bg-cics-white shadow-lg md:w-5/12 dark:bg-neutral-800"
+      class="bg-cics-white h-full w-10/12 shadow-lg md:w-5/12 dark:bg-neutral-800"
       :pt="{
         transition: {
           name: 'slide'
@@ -99,7 +101,10 @@
     <div class="d-flex flex-column">
       <main
         id="appcont"
-        class="mx-auto max-w-screen-xl px-5 pt-20 lg:px-8 print:pt-14"
+        class="mx-auto  print:pt-14"
+        :class="{
+          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen,
+        }"
       >
         <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
       </main>
@@ -123,6 +128,8 @@ import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
+
+// const { meta } = useRoute()
 
 const drawer = ref(false)
 

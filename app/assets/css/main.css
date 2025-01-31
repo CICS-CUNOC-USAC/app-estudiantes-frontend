@@ -11,6 +11,7 @@
 
 @theme {
   --color-cics-white: #faf6ed;
+  --color-cics-blue: #272933;
 
   --font-sans: 'Geist Sans', system-ui, sans-serif;
   --font-alt: 'Hubot Sans', system-ui, sans-serif;
