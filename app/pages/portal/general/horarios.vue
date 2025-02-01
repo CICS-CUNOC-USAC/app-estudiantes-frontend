@@ -313,7 +313,9 @@ function highlightFoundCourses() {
 }
 
 definePageMeta({
-  layout: 'schedule'
+  layout: 'default',
+  extendScreen: true,
+  menuClass: 'bg-cics-silver-pale dark:bg-neutral-900',
 })
 const search = ref('')
 await $api<Hour[]>('/hours').then((response) => {
@@ -323,10 +325,5 @@ await $api<Career[]>('/careers').then((response) => {
   availableCareers.value = response
 })
 </script>
-<style scoped>
-@reference '~/assets/css/main.css';
-
-.highlighted-course {
-  @apply ring-primary-400 ring-4;
-}
+<style>
 </style>
