@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="bg-cics-silver-pale dark:bg-neutral-900 min-h-screen">
+    <div class="min-h-screen bg-cics-silver-pale dark:bg-neutral-900">
       <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
@@ -8,7 +8,6 @@
         @update:selected-periods="
           (val: Hour[]) => {
             if (val) selectedSchedules = val as Hour[]
-            // changePeriods(val)
           }
         "
         @update:model-value="
@@ -27,44 +26,48 @@
               :options="['Todas las Carreras', 'Area Comun', ...availableCareers.map((value: Career) => value.name)]"
               :default-value="'Todas las Carreras'"
                 @update:selected-option="
-                 (val: string) => {
+                  (val: string) => {
                     selectedCareer = val
-                 }
+                  }
                 "
-            ></ArrowedCombobox>
-          </div>
-          <div class="col-span-2 col-start-3">
-            <ToggleGroupRoot
-              :model-value="coursesMode"
-              @update:model-value="
-                (val) => {
-                  if (val) coursesMode = val as 'lectures' | 'laboratories'
-                  // changeSchedule()
-                }
-              "
-              class="flex justify-center gap-1"
-            >
-              <ToggleGroupItem
-                value="lectures"
-                class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-                >Clases</ToggleGroupItem
+              ></ArrowedCombobox>
+            </div>
+            <div class="col-span-2 col-start-3">
+              <ToggleGroupRoot
+                :model-value="coursesMode"
+                @update:model-value="
+                  (val) => {
+                    if (val) coursesMode = val as 'lectures' | 'laboratories'
+                  }
+                "
+                class="flex justify-center gap-1"
               >
-              <ToggleGroupItem
-                value="laboratories"
-                class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-                >Laboratorios</ToggleGroupItem
-              >
-            </ToggleGroupRoot>
+                <ToggleGroupItem
+                  value="lectures"
+                  class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+                  >Clases</ToggleGroupItem
+                >
+                <ToggleGroupItem
+                  value="laboratories"
+                  class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+                  >Laboratorios</ToggleGroupItem
+                >
+              </ToggleGroupRoot>
+            </div>
+            <div class="col-span-2 col-start-5">
+              <CInputText
+                v-model="search"
+                placeholder="Buscar un curso"
+                prepend-icon="lucide:search"
+                @update:model-value="
+                  (val: string) => {
+                    searchScheduleCourse(val)
+                  }
+                "
+                no-borders
+              />
+            </div>
           </div>
-          <div class="col-span-2 col-start-5">
-            <CInputText
-              v-model="search"
-              placeholder="Buscar"
-              prepend-icon="lucide:search"
-              no-borders
-            />
-          </div>
-        </div>
 
         <ClassScheduleV1
           v-if="classrooms && schedules && hours"
@@ -88,7 +91,7 @@ import type { Career } from '~/utils/types/career-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 
 const schedulesKey = computed(() => {
-    return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
+  return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
 })
 
 const selectedSchedules = ref<Hour[]>([])
@@ -99,14 +102,16 @@ const selectionSchedules = computed(() => {
 })
 const selectedCareer = ref<string>('Todas las Carreras')
 const selectionCareer = computed(() => {
-    if (selectedCareer.value === 'Todas las Carreras') {
-        return undefined
-    } else if (selectedCareer.value === 'Area Comun') {
-        return 0
-    } else {
-        const career = availableCareers.value.find(c => c.name === selectedCareer.value);
-        return career ? career.code : undefined;
-    }
+  if (selectedCareer.value === 'Todas las Carreras') {
+    return undefined
+  } else if (selectedCareer.value === 'Area Comun') {
+    return 0
+  } else {
+    const career = availableCareers.value.find(
+      (c) => c.name === selectedCareer.value
+    )
+    return career ? career.code : undefined
+  }
 })
 const availableHours = ref<Hour[]>([])
 const availableCareers = ref<Career[]>([])
@@ -134,6 +139,37 @@ const { data: hours, status: hourStatus } = useCustomLazyFetch<Array<Hour>>(
     }
   }
 )
+
+function searchScheduleCourse(courseName: string) {
+  const lowerCaseName = courseName.toLowerCase().trim()
+
+  if (!schedules.value) {
+    window.scrollTo(0, 0)
+    return
+  }
+
+  const matchingCourses = schedules.value.filter((schedule) =>
+    schedule.career_course.course.name.toLowerCase().includes(lowerCaseName)
+  )
+
+  if (!matchingCourses.length) {
+    return
+  }
+  const firstMatch = matchingCourses[0]
+  const courseTagId = `S${firstMatch.course_code}${firstMatch.section.name}`
+  const element = document.getElementById(courseTagId)
+  if (element) {
+    console.log('scrolling')
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'center'
+    })
+    return
+  } else {
+    return
+  }
+}
 
 definePageMeta({
   layout: 'schedule'
