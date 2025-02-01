@@ -116,8 +116,9 @@ function nextOption() {
   emit('update:selectedOption', selection.value)
 }
 </script>
-<style lang="postcss" scoped>
+<style scoped>
+@reference '~/assets/css/main.css';
 .arrow-button {
-  @apply ml-1 mr-1 inline-flex h-full select-none items-center justify-center gap-x-2 border-surface-950/45 bg-zinc-100 px-1.5 py-2 font-semibold transition duration-75 ease-out text-color focus:bg-surface-50/20 focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none dark:focus:bg-surface-600/40;
+  @apply ml-1 mr-1 inline-flex h-full select-none items-center justify-center gap-x-2 border-surface-950/45 bg-zinc-100 px-1.5 py-2 font-semibold transition duration-75 ease-out text-color focus:bg-surface-50/20 focus-visible:ring-1 focus-visible:ring-primary-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none dark:focus:bg-surface-600/40;
 }
 </style>
