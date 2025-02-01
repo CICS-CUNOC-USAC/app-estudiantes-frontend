@@ -1,7 +1,7 @@
 <template>
     <!--VERSION GRID PLUGIN-->
     <ClientOnly>
-        <GridLayout class="w-[300vw]" v-model:layout="gridState.layout" :col-num="classrooms.length + 2"
+        <GridLayout id="ScheduleLayoutMain" class="w-[300vw]" v-model:layout="gridState.layout" :col-num="classrooms.length + 2"
             :row-height="120" :margin="[2, 2]">
             <template class="border" v-for="(item, index) in gridState.layout" :key="index">
                 <template v-if="item.i === '0'">
@@ -31,7 +31,7 @@
                         <GridItem class="border-b border-r border-gray-200 p-0.5 z-10" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                             :h="item.h" :i="item.i">
                             <ScheduleCourseCard :id="`S${item.content.course_code}${item.content.section.name}`"
-                                class="z-20" :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
+                                class="z-20 ScheduleCourseCard" :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
                                 :career_id="isCommonField(item.content) ? 0 : item.content.career_code as number"
                                 :curso="item.content.career_course.course.name" :seccion="item.content.section.name"
                                 :semester="item.content.career_course.semester"
