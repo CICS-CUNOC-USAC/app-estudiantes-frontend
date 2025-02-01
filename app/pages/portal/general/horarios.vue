@@ -73,7 +73,7 @@
           </div>
         </div>
 
-        <ScrollAreaRoot>
+        <ScrollAreaRoot ref="scrollerSchedules" >
           <ScrollAreaViewport class="max-h-[80vh]">
             <ClassScheduleV1
               v-if="classrooms && schedules && hours"
@@ -108,6 +108,8 @@ import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 const schedulesKey = computed(() => {
   return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
 })
+
+const scrollerSchedules = ref()
 
 const selectedSchedules = ref<Hour[]>([])
 const selectionSchedules = computed(() => {
@@ -159,7 +161,7 @@ function searchScheduleCourse(courseName: string) {
   const lowerCaseName = courseName.toLowerCase().trim()
 
   if (!schedules.value) {
-    window.scrollTo(0, 0)
+    scrollerSchedules.value.scrollTop()
     return
   }
 
@@ -168,13 +170,14 @@ function searchScheduleCourse(courseName: string) {
   )
 
   if (!matchingCourses.length) {
+    scrollerSchedules.value.scrollTopLeft()
     return
   }
+
   const firstMatch = matchingCourses[0]
   const courseTagId = `S${firstMatch.course_code}${firstMatch.section.name}`
   const element = document.getElementById(courseTagId)
   if (element) {
-    console.log('scrolling')
     element.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
