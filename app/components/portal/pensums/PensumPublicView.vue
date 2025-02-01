@@ -1,15 +1,19 @@
 <template>
-  <v-row class="mt-6">
-    <v-col
-      v-for="item in careerCourses"
-      :key="item.semester"
-      cols="12"
-      sm="6"
-      lg="4"
-    >
-      <SemesterCoursesCard :semester-courses="item" />
-    </v-col>
-  </v-row>
+  <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <template v-if="loading">
+      <PSkeleton height="500px" width="100%"></PSkeleton>
+      <PSkeleton height="500px" width="100%"></PSkeleton>
+      <PSkeleton height="500px" width="100%"></PSkeleton>
+      <PSkeleton height="500px" width="100%"></PSkeleton>
+    </template>
+    <template v-if="careerCourses && !loading">
+      <SemesterCoursesCard
+        v-for="item in careerCourses"
+        :key="item.semester"
+        :semester-courses="item"
+      />
+    </template>
+  </div>
 </template>
 <script setup lang="ts">
 import SemesterCoursesCard from './SemesterCoursesCard.vue'

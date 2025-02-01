@@ -1,35 +1,40 @@
 <template>
-  <div>
-    <slot :open="() => (dialog = true)">
-      <v-btn color="primary" @click="dialog = true"> Open Dialog </v-btn>
-    </slot>
-    <v-dialog v-model="dialog" max-width="300px">
-      <v-card class="pa-3">
-        <v-card-title> ¿Eliminar este elemento? </v-card-title>
-        <v-card-text> Esta acción no se puede deshacer. </v-card-text>
-        <v-card-actions>
-          <v-btn
-            color="primary"
-            prepend-icon="mdi-cancel"
-            @click="dialog = false"
-          >
-            Cancelar
-          </v-btn>
-          <v-spacer />
-          <v-btn
-            color="red"
-            prepend-icon="mdi-delete-outline"
-            @click="confirmAction"
-          >
-            Eliminar
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-  </div>
+  <CDialog v-model:open="dialog">
+    <CDialogTrigger as-child>
+      <slot />
+    </CDialogTrigger>
+    <CDialogContent title="¿Eliminar este elemento?">
+      <p>Esta acción no es reversible</p>
+      <div class="flex gap-x-4 mt-4">
+
+        <DialogClose as-child>
+
+          <CButton
+          label="Cancelar"
+          severity="secondary"
+          @click="dialog = false"
+          icon="icon-park-outline:close"
+          class="w-full"
+          />
+        </DialogClose>
+        <CButton
+        label="Eliminar"
+        severity="danger"
+        @click="confirmAction"
+        
+        icon="icon-park-twotone:delete"
+        class="w-full"
+        />
+      </div>
+
+    </CDialogContent>
+  </CDialog>
 </template>
 
 <script setup lang="ts">
+import CButton from '../primitives/button/CButton.vue';
+import { CDialog, CDialogContent, CDialogTrigger } from '../primitives/dialog'
+
 const emit = defineEmits(['confirm'])
 const dialog = ref(false)
 const confirmAction = () => {

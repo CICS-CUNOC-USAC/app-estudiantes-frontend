@@ -1,10 +1,15 @@
 <template>
   <main>
-    <h1 class="mb-4">
-      <v-icon size="32" class="mr-2"> mdi-book-open-page-variant </v-icon>
-      Libreria
-    </h1>
-    <p class="font-weight-light my-4">
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">
+        <Icon
+          name="icon-park-twotone:bookshelf"
+          class="mb-1 mr-1.5 inline-block"
+        />
+        Libros/Biblioteca
+      </h1>
+    </header>
+    <p class="font-weight-light mt-2">
       En esta sección se podrán administrar todos los recursos de libros
       disponibles en el portal de estudiantes (Solo usuarios registrados).
     </p>

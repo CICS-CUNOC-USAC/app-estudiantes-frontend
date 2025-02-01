@@ -71,7 +71,8 @@ useSeoMeta({
 })
 
 </script>
-<style lang="postcss">
+<style>
+@reference '~/assets/css/main.css';
 :root {
   @apply bg-white dark:bg-neutral-800 transition-colors;
 }
@@ -82,7 +83,7 @@ html {
 
 body,
 html {
-  scrollbar-gutter: stable;
+  /* scrollbar-gutter: stable; */
 }
 
 /* Common animations */

@@ -1,24 +1,22 @@
 <template>
-  <div class="flex  flex-col gap-y-1.5"
+  <div class="flex flex-col gap-y-1.5"
     :class="{
       'h-full': props.fillHeight
-    }">
+    }"
+  >
     <PInputGroup
       unstyled
-      class="group flex  rounded-lg outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
-      :class="[test.classAttr, {
-        'h-12': !props.fillHeight,
-        'h-full': props.fillHeight
-      }]"
+      class="group flex rounded-lg outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
+      :class="[test.classAttr]"
     >
       <component
         v-if="hasPrependClick || prependIcon"
         :is="hasPrependClick ? Button : InputGroupAddon"
         icon
         @click="emit('click:prepend')"
-        class="inline-flex w-12 items-center justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
+        class="inline-flex w-12 items-start pt-4 justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
         :class="{
-          'hover:bg-surface-200/80 dark:hover:bg-surface-800': hasPrependClick,
+          'hover:bg-surface-200/80 dark:hover:bg-surface-800 cursor-pointer': hasPrependClick,
           'cursor-not-allowed opacity-50': disabled
         }"
         unstyled
@@ -30,23 +28,30 @@
         <Icon v-if="prependIcon && !hasPrependClick" :name="prependIcon" />
       </component>
       <div class="relative size-full">
-        <PIftaLabel class="relative size-full" unstyled>
+        <PIftaLabel class="relative size-full flex flex-col border-t border-b border-r border-black bg-surface-50 dark:bg-surface-900"
+        :class="{
+          'border-l-0': noBorders && (hasPrependClick || prependIcon),
+          'border-r-0': noBorders && (hasAppendClick || appendIcon),
+          'rounded-br-lg rounded-tr-lg': !hasAppendClick && !appendIcon,
+          'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon
+        }"
+        unstyled>
           <label
             v-if="props.label"
             :for="test.restAttrs.id as string"
-            class="absolute left-0 z-10 w-max pt-1.5 text-xs text-muted-color"
+            class="left-0 z-10 w-full mt-px pt-1 text-xs text-muted-color "
           >
             {{ props.label }}
           </label>
-          <PInputText
+          <PTextarea
             v-bind="test.restAttrs"
+            :rows="props.rows"
             :type="props.type"
             :disabled
             ref="$input"
             v-model="vModel"
-            class="z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color placeholder:text-muted-color focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
+            class="z-10 flex size-full rounded-lg  bg-surface-50 text-sm transition text-color placeholder:text-muted-color focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900 resize-none "
             :class="{
-              'pt-4': props.label,
               'pl-3': !prependUsed || !noBorders,
               'pr-3': !appendUsed || !noBorders || !props.clearButton,
               'pr-5': props.clearButton,
@@ -58,7 +63,7 @@
             fluid
             unstyled
           >
-          </PInputText>
+          </PTextarea>
         </PIftaLabel>
         <!-- () => {
           vModel = '';
@@ -84,7 +89,7 @@
         v-if="hasAppendClick || appendIcon"
         :is="hasAppendClick ? Button : InputGroupAddon"
         @click="emit('click:append')"
-        class="inline-flex w-12 items-center justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
+        class="inline-flex w-12 items-start pt-4 justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
         :class="{
           'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800':
             hasAppendClick,
@@ -126,6 +131,7 @@ const props = defineProps<{
   error?: string
   type?: string
   label?: string
+  rows?: number
   fillHeight?: boolean
 }>()
 const rawAttrs = useAttrs()
@@ -137,10 +143,10 @@ const test = computed(() => {
 const emit = defineEmits(['click:prepend', 'click:append', 'clear'])
 
 const hasPrependClick = computed(
-  () => !!getCurrentInstance()?.vnode?.props['onClick:prepend']
+  () => !!getCurrentInstance()?.vnode?.props?.['onClick:prepend']
 )
 const hasAppendClick = computed(
-  () => !!getCurrentInstance()?.vnode?.props['onClick:append']
+  () => !!getCurrentInstance()?.vnode?.props?.['onClick:append']
 )
 
 const prependUsed = computed(() => !!props.prependIcon || hasPrependClick.value)
@@ -153,4 +159,3 @@ defineOptions({
 defineExpose({ $input })
 </script>
 <style lang="postcss" scoped></style>
-

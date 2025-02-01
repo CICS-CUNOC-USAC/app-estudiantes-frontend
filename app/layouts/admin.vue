@@ -13,7 +13,7 @@
             class="inline-block"
             fill="var(--p-primary-500)"
           />
-          Administación
+          Administración
         </h4>
 
         <!-- new menu -->
