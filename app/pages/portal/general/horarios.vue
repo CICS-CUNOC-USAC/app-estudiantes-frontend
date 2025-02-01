@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="min-h-screen bg-cics-silver-pale dark:bg-neutral-900">
+    <div class="h-[93vh] bg-cics-silver-pale dark:bg-neutral-900">
       <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
@@ -23,59 +23,74 @@
         <div class="mb-4 grid grid-cols-6">
           <div class="col-start-1">
             <ArrowedCombobox
-              :options="['Todas las Carreras', 'Area Comun', ...availableCareers.map((value: Career) => value.name)]"
+              :options="[
+                'Todas las Carreras',
+                'Area Comun',
+                ...availableCareers.map((value: Career) => value.name)
+              ]"
               :default-value="'Todas las Carreras'"
-                @update:selected-option="
-                  (val: string) => {
-                    selectedCareer = val
-                  }
-                "
-              ></ArrowedCombobox>
-            </div>
-            <div class="col-span-2 col-start-3">
-              <ToggleGroupRoot
-                :model-value="coursesMode"
-                @update:model-value="
-                  (val) => {
-                    if (val) coursesMode = val as 'lectures' | 'laboratories'
-                  }
-                "
-                class="flex justify-center gap-1"
-              >
-                <ToggleGroupItem
-                  value="lectures"
-                  class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-                  >Clases</ToggleGroupItem
-                >
-                <ToggleGroupItem
-                  value="laboratories"
-                  class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-                  >Laboratorios</ToggleGroupItem
-                >
-              </ToggleGroupRoot>
-            </div>
-            <div class="col-span-2 col-start-5">
-              <CInputText
-                v-model="search"
-                placeholder="Buscar un curso"
-                prepend-icon="lucide:search"
-                @update:model-value="
-                  (val: string) => {
-                    searchScheduleCourse(val)
-                  }
-                "
-                no-borders
-              />
-            </div>
+              @update:selected-option="
+                (val: string) => {
+                  selectedCareer = val
+                }
+              "
+            ></ArrowedCombobox>
           </div>
+          <div class="col-span-2 col-start-3">
+            <ToggleGroupRoot
+              :model-value="coursesMode"
+              @update:model-value="
+                (val) => {
+                  if (val) coursesMode = val as 'lectures' | 'laboratories'
+                }
+              "
+              class="flex justify-center gap-1"
+            >
+              <ToggleGroupItem
+                value="lectures"
+                class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+                >Clases</ToggleGroupItem
+              >
+              <ToggleGroupItem
+                value="laboratories"
+                class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+                >Laboratorios</ToggleGroupItem
+              >
+            </ToggleGroupRoot>
+          </div>
+          <div class="col-span-2 col-start-5">
+            <CInputText
+              v-model="search"
+              placeholder="Buscar un curso"
+              prepend-icon="lucide:search"
+              @update:model-value="
+                (val: string) => {
+                  searchScheduleCourse(val)
+                }
+              "
+              no-borders
+            />
+          </div>
+        </div>
 
-        <ClassScheduleV1
-          v-if="classrooms && schedules && hours"
-          :key="schedulesKey"
-          :hours="hours"
-          :classrooms="classrooms"
-          :schedules="schedules"
-        />
+        <ScrollAreaRoot>
+          <ScrollAreaViewport class="max-h-[80vh]">
+            <ClassScheduleV1
+              v-if="classrooms && schedules && hours"
+              :key="schedulesKey"
+              :hours="hours"
+              :classrooms="classrooms"
+              :schedules="schedules"
+            />
+          </ScrollAreaViewport>
+          <ScrollAreaScrollbar orientation="horizontal">
+            <ScrollAreaThumb />
+          </ScrollAreaScrollbar>
+          <ScrollAreaScrollbar orientation="vertical">
+            <ScrollAreaThumb />
+          </ScrollAreaScrollbar>
+          <ScrollAreaCorner />
+        </ScrollAreaRoot>
       </div>
     </div>
   </div>
