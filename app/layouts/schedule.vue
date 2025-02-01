@@ -158,7 +158,9 @@ const handleSearch = () => {
   }
 }
 </script>
-<style lang="postcss">
+<style>
+@reference '~/assets/css/main.css';
+
 .title-fade-leave-active {
   @apply transition-all duration-100;
 }

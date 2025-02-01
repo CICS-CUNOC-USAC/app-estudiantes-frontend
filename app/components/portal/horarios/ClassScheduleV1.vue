@@ -10,7 +10,7 @@
                     </GridItem>
                 </template>
                 <template v-else-if="item.type === 'classroom'">
-                    <GridItem class="text-left border-r pl-2" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                    <GridItem class="text-left border-r border-gray-200 pl-2" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                         :h="item.h" :i="item.i">
                         <div class="text-sm">
                             Salón
@@ -28,7 +28,7 @@
                 </template>
                 <template v-else-if="item.type === 'schedule'">
                     <template v-if="item.content !== undefined">
-                        <GridItem class="border-b border-r p-0.5 z-10" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                        <GridItem class="border-b border-r border-gray-200 p-0.5 z-10" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                             :h="item.h" :i="item.i">
                             <ScheduleCourseCard :id="`S${item.content.course_code}${item.content.section.name}`"
                                 class="z-20" :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
@@ -39,7 +39,7 @@
                         </GridItem>
                     </template>
                     <template v-else>
-                        <GridItem class="border-b border-r" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                        <GridItem class="border-b border-r border-gray-200" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                             :h="item.h" :i="item.i">
                         </GridItem>
                     </template>
@@ -316,7 +316,9 @@ function getPeriodsSchedule(periods: Array<Period>) {
 }
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '~/assets/css/main.css';
+
 .alternating {
     @apply even:bg-surface-100;
 }
