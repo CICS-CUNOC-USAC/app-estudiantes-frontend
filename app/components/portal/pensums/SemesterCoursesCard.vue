@@ -1,14 +1,14 @@
 <template>
   <CCardAlt>
     <template #title>
-      <h1 class="mb-2 text-2xl font-bold lg:text-3xl">
+      <h1 class="mb-2 text-2xl font-bold">
         Semestre {{ semesterCourses.semester }}
       </h1>
     </template>
 
     <template #content>
       <div class="mb-2">
-        <span class="block text-lg"> Filtrar por: </span>
+        <span class="block"> Filtrar por: </span>
         <CChipButton
           label="Solo obligatorios"
           filter

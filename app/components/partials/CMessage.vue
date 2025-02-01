@@ -2,12 +2,12 @@
   <div class="flex items-center gap-2 rounded-md border bg-amber-50 px-3 py-2">
     <Icon name="icon-park-twotone:help" class="text-amber-600"/>
     <div class="">
-      <h2 class="font-semibold">Elemento no encontrado</h2>
-      <p class="text-amber-600">
-        Parece que el recurso de {{ elementType }} que buscas no existe o fue
-        eliminado.
+      <h2 class="font-semibold" v-if="title">{{ title }}</h2>
+      <p class="text-amber-600" v-if="subtitle">
+        {{ subtitle }}
       </p>
       <CButton
+        class="mt-2"
         :label="backToLabel"
         variant="link"
         icon="icon-park-outline:arrow-left"
@@ -17,12 +17,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import CButton from '../primitives/button/CButton.vue'
+import CButton from '../primitives/button/CButton.vue';
 
 defineProps<{
-  elementType: string
-  backToRoute: string
+  title: string
+  subtitle: string
   backToLabel: string
+  backToRoute: string
 }>()
 </script>
-<style lang="scss" scoped></style>
+<style scoped>
+</style>

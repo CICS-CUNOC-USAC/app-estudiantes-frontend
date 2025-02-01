@@ -2,32 +2,32 @@
   <main>
     <nav class="flex flex-wrap gap-x-3">
       <CButton
-      v-if="fromSearch"
-      icon="icon-park-outline:arrow-left"
-      variant="link"
-      label="Regresar a búsqueda"
-      class="mb-4 text-muted-color lg:mb-2"
-      :to="`/portal/general/busqueda?q=${fromSearch}`"
+        v-if="fromSearch"
+        icon="icon-park-outline:arrow-left"
+        variant="link"
+        label="Regresar a búsqueda"
+        class="text-muted-color mb-4 lg:mb-2"
+        :to="`/portal/general/busqueda?q=${fromSearch}`"
       />
       <CButton
         icon="lucide:layout-dashboard"
         variant="link"
         label="Ver todas las publicaciones"
-        class="mb-4 text-muted-color lg:mb-2"
+        class="text-muted-color mb-4 lg:mb-2"
         to="/portal/general/publicaciones"
       />
     </nav>
     <header class="mx-auto mt-2 max-w-3xl">
       <template v-if="status === 'pending'">
-        <PSkeleton class="mb-5 mt-1.5"></PSkeleton>
+        <PSkeleton class="mt-1.5 mb-5"></PSkeleton>
         <PSkeleton height="2.3rem" class=""></PSkeleton>
       </template>
       <template v-else-if="status === 'success' && data">
-        <small class="block pb-5 text-sm text-muted-color-emphasis">{{
+        <small class="text-muted-color-emphasis block pb-5 text-sm">{{
           data?.meta
         }}</small>
         <h1
-          class="flex flex-col items-start gap-3 text-2xl font-bold text-color"
+          class="text-color flex flex-col items-start gap-3 text-2xl font-bold"
         >
           {{ data?.title }}
 
@@ -51,7 +51,7 @@
     </template>
 
     <template v-else-if="status === 'error'">
-      <PMessage
+      <!-- <PMessage
         severity="warn"
         pt:root:class="!outline-none !shadow-none border border-surface-950/75"
         pt:text:class="flex flex-col  items-start gap-y-1"
@@ -67,13 +67,21 @@
           icon="icon-park-outline:arrow-left"
           to="/portal/general/publicaciones"
         />
-      </PMessage>
+      </PMessage> -->
+      <CMessage
+        title="Publicación no encontrada"
+        subtitle="Parece que la publicación que buscas no existe, por favor verifica el enlace."
+        backToLabel="Regresar a publicaciones"
+        backToRoute="/portal/general/publicaciones"
+      />
     </template>
   </main>
 </template>
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
 import AttachmentsPopover from './(components)/AttachmentsPopover.vue'
+import ElementNotFound from '~/components/partials/ElementNotFound.vue'
+import CMessage from '~/components/partials/CMessage.vue'
 
 const route = useRoute()
 const postId = route.params.postId
@@ -86,12 +94,17 @@ const { data, status } = useFetch(
 )
 
 useHead({
-  title: () => data?.value?.title ? `${data.value.title} | Publicación` : 'Publicación oficial',
+  title: () =>
+    data?.value?.title
+      ? `${data.value.title} | Publicación`
+      : 'Publicación oficial'
 })
 </script>
-<style lang="postcss">
+<style>
+@reference '~/assets/css/main.css';
+
 .official-post-content {
-  @apply prose prose-base prose-neutral max-w-none dark:prose-invert;
+  @apply prose prose-base prose-neutral dark:prose-invert max-w-none;
 
   @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-semibold prose-a:no-underline prose-a:transition hover:prose-a:border-b-2;
 
@@ -111,7 +124,7 @@ useHead({
       & * {
         @apply text-rose-800 dark:text-red-200;
       }
-      @apply rounded-xl border bg-surface-100/40 px-4 py-2 dark:bg-surface-900/65;
+      @apply bg-surface-100/40 dark:bg-surface-900/65 rounded-xl border px-4 py-2;
       @apply text-rose-800 dark:text-red-200;
     }
 

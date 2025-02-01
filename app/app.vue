@@ -54,8 +54,25 @@ useHead({
   }
 })
 
+const route = useRoute()
+useSeoMeta({
+  title: () =>
+    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App',
+  description:
+    'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
+  ogImage: 'https://cics-app.vercel.app/og.png',
+  ogTitle: () =>
+    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App',
+  ogDescription:
+    'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
+  ogType: 'website',
+  ogUrl: 'https://cics-app.vercel.app/',
+  ogSiteName: 'CICS App',
+})
+
 </script>
-<style lang="postcss">
+<style>
+@reference '~/assets/css/main.css';
 :root {
   @apply bg-white dark:bg-neutral-800 transition-colors;
 }
@@ -66,7 +83,7 @@ html {
 
 body,
 html {
-  scrollbar-gutter: stable;
+  /* scrollbar-gutter: stable; */
 }
 
 /* Common animations */

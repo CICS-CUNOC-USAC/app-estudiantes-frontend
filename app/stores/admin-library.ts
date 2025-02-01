@@ -44,7 +44,10 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
       const { results, ...meta } = response
       books.value = results
       responseMeta.value = meta
-      return response
+      return {
+        results,
+        meta
+      }
     } catch (error) {
       useSnackbarStore().showSnackbar({
         title: 'Error al obtener los libros',
