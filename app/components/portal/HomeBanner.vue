@@ -15,7 +15,7 @@
         su carrera.
       </p>
     </header>
-    <picture class="lg:w-4/12 w-6/12">
+    <picture class="lg:w-4/12 w-3/4">
       <img
         src="~/assets/img/landing-logo-sparks.svg"
         alt="Logo de Ingeniería CUNOC"
