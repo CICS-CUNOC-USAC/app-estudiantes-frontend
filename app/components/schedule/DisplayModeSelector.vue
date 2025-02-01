@@ -35,7 +35,7 @@
         "
       >
         <ListboxContent class="w-full overflow-auto px-2.5 py-4">
-          <div class="max-h-96 overflow-auto rounded-xl border bg-white p-4">
+          <div class="max-h-96 overflow-auto rounded-xl border border-gray-200 bg-white p-4">
             <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
             <p class="pb-4 text-center text-sm">
               Selecciona el periodo de tiempo que deseas visualizar en el
@@ -121,7 +121,9 @@ const emit = defineEmits<{
   'update:selectedPeriods': [value: any]
 }>()
 </script>
-<style lang="postcss" scoped>
+<style scoped>
+@reference '~/assets/css/main.css';
+
 .slide-view-enter-active,
 .slide-view-leave-active {
   @apply transition-all duration-200;

@@ -160,8 +160,13 @@ const { data: hours, status: hourStatus } = useCustomLazyFetch<Array<Hour>>(
 function searchScheduleCourse(courseName: string) {
   const lowerCaseName = courseName.toLowerCase().trim()
 
+  if (courseName === '') {
+    scrollerSchedules.value.scrollTopLeft()
+    return
+  }
+
   if (!schedules.value) {
-    scrollerSchedules.value.scrollTop()
+    scrollerSchedules.value.scrollTopLeft()
     return
   }
 
