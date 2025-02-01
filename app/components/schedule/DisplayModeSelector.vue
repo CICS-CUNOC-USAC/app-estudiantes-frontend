@@ -8,15 +8,17 @@
       class="flex justify-center gap-2"
     >
       <ToggleGroupItem
-      disabled
+        disabled
         value="calendar"
-        class="cursor-not-allowed rounded-lg border-2 border-transparent px-2.5 py-0.5  transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[disabled]:bg-zinc-300/60 data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)] data-[disabled]:active:translate-x-0 data-[disabled]:active:translate-y-0 data-[state=on]:text-white data-[disabled]:opacity-50"
-        >Calendario</ToggleGroupItem
+        class="data-[state=on]:bg-primary-500 cursor-not-allowed rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[disabled]:bg-zinc-300/60 data-[disabled]:opacity-50 data-[disabled]:active:translate-x-0 data-[disabled]:active:translate-y-0 data-[state=on]:border-black data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+      >
+        Calendario</ToggleGroupItem
       >
       <ToggleGroupItem
         value="classroom"
-        class="rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:bg-primary-500 data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-        >Salón</ToggleGroupItem
+        class="data-[state=on]:bg-primary-500 rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
+      >
+        Salón</ToggleGroupItem
       >
     </ToggleGroupRoot>
     <Transition name="slide-view" mode="out-in">
@@ -35,7 +37,9 @@
         "
       >
         <ListboxContent class="w-full overflow-auto px-2.5 py-4">
-          <div class="max-h-96 overflow-auto rounded-xl border border-gray-200 bg-white p-4">
+          <div
+            class="max-h-96 overflow-auto rounded-xl border border-gray-200 bg-white p-4"
+          >
             <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
             <p class="pb-4 text-center text-sm">
               Selecciona el periodo de tiempo que deseas visualizar en el
@@ -45,7 +49,7 @@
               v-for="period in hours"
               :key="period.start_time"
               :value="period"
-              class="group relative mt-1 flex w-full cursor-pointer select-none items-center rounded-lg py-2.5 leading-none outline-none transition hover:bg-surface-100 data-[state=checked]:bg-primary-300 data-[disabled]:opacity-50"
+              class="group hover:bg-surface-100 data-[state=checked]:bg-primary-300 relative mt-1 flex w-full cursor-pointer items-center rounded-lg py-2.5 leading-none transition outline-none select-none data-[disabled]:opacity-50"
             >
               <div class="mx-auto">
                 <span class="group-data-[state=checked]:font-semibold">{{
@@ -59,6 +63,7 @@
             </ListboxItem>
           </div>
         </ListboxContent>
+        <CButton icon="lucide:eraser" size="small" label="Limpiar" @click="cleanScheduleSelection"/>
       </ListboxRoot>
       <div v-else>
         <ListboxRoot
@@ -83,7 +88,7 @@
                 v-for="classroom in filteredClassrooms"
                 :key="classroom.id"
                 :value="classroom"
-                class="group relative flex w-full cursor-pointer select-none items-center rounded-xl px-3.5 py-2.5 leading-none outline-none transition data-[state=checked]:bg-primary-300 data-[disabled]:opacity-50"
+                class="group data-[state=checked]:bg-primary-300 relative flex w-full cursor-pointer items-center rounded-xl px-3.5 py-2.5 leading-none transition outline-none select-none data-[disabled]:opacity-50"
               >
                 <div class="mx-auto">
                   <span class="group-data-[state=checked]:font-semibold">{{
@@ -101,8 +106,9 @@
 <script setup lang="ts">
 import type { Classroom, Hour } from '~/utils/types/schedule-courses'
 import CInputText from '../primitives/form/CInputText.vue'
+import CButton from '~/components/primitives/button/CButton.vue'
 
-const { classrooms } = defineProps<{
+let { classrooms } = defineProps<{
   modelValue: 'calendar' | 'classroom'
   classrooms?: Classroom[] | null
   hours: Hour[]
@@ -114,6 +120,11 @@ const filteredClassrooms = computed(() =>
     classroom.name.toLowerCase().includes(classroomSearch.value.toLowerCase())
   )
 )
+
+function cleanScheduleSelection() {
+    selectedPeriods.value = []
+    emit('update:selectedPeriods', selectedPeriods.value)
+}
 
 const selectedPeriods = ref<any>([])
 const emit = defineEmits<{
