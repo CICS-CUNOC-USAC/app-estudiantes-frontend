@@ -38,7 +38,7 @@
       >
         <ListboxContent class="w-full overflow-auto px-2.5 py-4">
           <div
-            class="max-h-96 overflow-auto rounded-xl border border-gray-200 bg-white p-4"
+            class="max-h-96 overflow-auto rounded-xl border border-gray-200 bg-white p-4 dark:bg-surface-800"
           >
             <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
             <p class="pb-4 text-center text-sm">
@@ -49,7 +49,7 @@
               v-for="period in hours"
               :key="period.start_time"
               :value="period"
-              class="group hover:bg-surface-100 data-[state=checked]:bg-primary-300 relative mt-1 flex w-full cursor-pointer items-center rounded-lg py-2.5 leading-none transition outline-none select-none data-[disabled]:opacity-50"
+              class="group hover:bg-surface-100 dark:hover:bg-surface-900 data-[state=checked]:bg-primary-300 relative mt-1 flex w-full cursor-pointer items-center rounded-lg py-2.5 leading-none transition outline-none select-none data-[disabled]:opacity-50"
             >
               <div class="mx-auto">
                 <span class="group-data-[state=checked]:font-semibold">{{

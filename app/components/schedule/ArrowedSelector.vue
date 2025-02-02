@@ -23,7 +23,7 @@
         </template>
       </PButton>
       <SelectTrigger
-        class="flex h-full min-w-44 items-center justify-between bg-zinc-100 px-2.5 text-xs"
+        class="flex h-full min-w-44 items-center justify-between bg-zinc-100 dark:bg-surface-700 px-2.5 text-xs"
         aria-label="Customise options"
       >
         <SelectValue placeholder="Elige una carrera..." />
@@ -52,12 +52,26 @@
           <Icon icon="radix-icons:chevron-up" />
         </SelectScrollUpButton>
 
-        <SelectViewport class="p-[5px]">
+        <SelectViewport class="p-[5px] dark:bg-surface-600">
           <SelectGroup>
             <SelectItem
               v-for="(option, index) in options"
               :key="index"
-              class="data-[disabled]:text-mauve8 data-[highlighted]:bg-green9 data-[highlighted]:text-green1 relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px] leading-none data-[disabled]:pointer-events-none data-[highlighted]:outline-none"
+              class="
+              dark:bg-surface-600
+              data-[disabled]:text-mauve8
+              data-[highlighted]:bg-surface-100
+              data-[highlighted]:text-green1
+              data-[highlighted]:outline-none
+              data-[disabled]:pointer-events-none
+
+              dark:data-[disabled]:text-mauve8
+              dark:data-[highlighted]:bg-surface-700
+              dark:data-[highlighted]:text-green1
+              dark:data-[highlighted]:outline-none
+              relative flex h-[25px] select-none items-center rounded-[3px] pl-[25px] pr-[35px] text-[13px]
+              leading-none
+              "
               :value="option"
             >
               <SelectItemIndicator
@@ -119,6 +133,6 @@ function nextOption() {
 <style scoped>
 @reference '~/assets/css/main.css';
 .arrow-button {
-  @apply ml-1 mr-1 inline-flex h-full select-none items-center justify-center gap-x-2 border-surface-950/45 bg-zinc-100 px-1.5 py-2 font-semibold transition duration-75 ease-out text-color focus:bg-surface-50/20 focus-visible:ring-1 focus-visible:ring-primary-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none dark:focus:bg-surface-600/40;
+  @apply ml-1 mr-1 inline-flex h-full select-none items-center justify-center gap-x-2 border-surface-950/45 bg-zinc-100 dark:bg-surface-700 px-1.5 py-2 font-semibold transition duration-75 ease-out text-color focus:bg-surface-50/20 focus-visible:ring-1 focus-visible:ring-primary-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none dark:focus:bg-surface-600/40;
 }
 </style>

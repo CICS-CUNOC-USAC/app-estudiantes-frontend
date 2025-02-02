@@ -60,8 +60,9 @@
               >
             </ToggleGroupRoot>
           </div>
-          <div class="col-span-2 col-start-5 flex max-h-8">
+          <div class="col-span-2 col-start-5 flex max-h-10">
             <CInputText
+              class="mr-2"
               v-model="search"
               placeholder="Buscar un curso"
               prepend-icon="lucide:search"
@@ -75,14 +76,14 @@
             />
 
             <PButton
-              class="focus-visible:ring-primary-500 focus-visible:ring-opacity-50 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 inline-flex cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+              class="search-button"
               @click="focusPrevCourse"
               unstyled
             >
               <Icon class="shrink-0" icon="radix-icons:chevron-left" />
             </PButton>
             <PButton
-              class="focus-visible:ring-primary-500 focus-visible:ring-opacity-50 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 inline-flex cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none"
+              class="search-button"
               @click="focusNextCourse"
               unstyled
             >
@@ -328,5 +329,9 @@ await $api<Career[]>('/careers').then((response) => {
 
 .highlighted-course {
   @apply ring-primary-400 ring-4;
+}
+
+.search-button {
+    @apply mr-2 min-w-6 focus-visible:ring-primary-500 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 inline-flex cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
 }
 </style>
