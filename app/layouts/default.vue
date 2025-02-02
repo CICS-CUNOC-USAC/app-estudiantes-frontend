@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav
-      class=" fixed top-0 z-20 h-14 w-full border-b  backdrop-blur-sm transition print:hidden"
+      class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
       :class="{
         'border-transparent': !hasScrolled,
         'border-neutral-200 shadow-md dark:border-black/80': hasScrolled,
@@ -98,23 +98,15 @@
       </template>
     </PDrawer>
 
-    <div class="d-flex flex-column">
-      <main
-        id="appcont"
-        class="mx-auto  print:pt-14"
-        :class="{
-          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen,
-        }"
-      >
-        <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
-      </main>
-
-      <!-- <v-footer style="flex-grow: 0" class="pa-4">
-    <v-col class="text-center" cols="12">
-      <strong>CICS</strong> — {{ new Date().getFullYear() }}
-    </v-col>
-  </v-footer> -->
-    </div>
+    <main
+      id="appcont"
+      class="mx-auto print:pt-14 pt-14 min-h-screen"
+      :class="{
+        'max-w-screen-xl px-5  lg:px-8': !$route.meta.extendScreen
+      }"
+    >
+      <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
+    </main>
   </div>
 </template>
 
