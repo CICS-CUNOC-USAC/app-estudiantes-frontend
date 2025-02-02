@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-800">
+  <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-900 lg:dark:bg-neutral-800">
     <div class="flex gap-x-1">
       <!-- Desktop -->
       <nav
@@ -116,7 +116,7 @@
       <div
         class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-neutral-900"
       >
-        <div class="mx-auto max-w-screen-xl">
+        <div class="mx-auto  max-w-screen-xl">
           <NuxtPage />
         </div>
       </div>

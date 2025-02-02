@@ -40,13 +40,13 @@ const toggleEnabled = () => {
 }
 </script>
 
-<style scoped lang="postcss">
+<style scoped>
+@reference '~/assets/css/main.css';
 .chip-active {
   @apply border-primary-400 bg-primary-600 text-white hover:border-primary-700 hover:bg-primary-700;
 }
 
 .icon-chip {
-  /* transition: width 0.2s ease-in-out, transform 0.2s ease-in-out, opacity 0.2s ease-in-out; */
-  @apply transition-all duration-200 ease-in-out will-change-[width];
+  @apply transition-all duration-200 ease-in-out;
   }
 </style>

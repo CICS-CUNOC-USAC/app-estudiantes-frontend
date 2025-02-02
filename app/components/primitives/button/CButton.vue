@@ -16,8 +16,9 @@
       'gap-x-2 px-3.5 py-1.5':
         props.variant !== 'link' && props.size === 'large',
       'gap-x-1 px-2.5 py-1': props.variant !== 'link' && props.size === 'small',
-      'bg-primary-600 hover:bg-primary-500 focus:bg-opacity-85':
+      'bg-primary-600 hover:bg-primary-500 focus:bg-primary-600/85':
         !props.severity && !props.outlined && props.variant !== 'link' && props.variant !== 'tonal' && props.variant !== 'text',
+        // 'bg-primary-'
 
       // Colors
       'bg-red-600 text-red-100 hover:bg-red-500': props.severity === 'danger',
@@ -44,7 +45,7 @@
       // Variants
       'bg-primary/30 text-black dark:text-white shadow-none hover:bg-primary/40 active:translate-x-0.5 active:translate-y-0.5 border-none focus:text-white focus:bg-primary/90':
         props.variant === 'tonal',
-      'bg-opacity-0 text-current shadow-none hover:bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5 active:border-black':
+      'bg-transparent text-current shadow-none hover:bg-primary-500/20 active:translate-x-0.5 active:translate-y-0.5 active:border-black active:bg-primary-500/70 active:text-white':
         props.variant === 'text',
       'gap-x-1 !bg-opacity-0 p-0 shadow-none text-color hover:underline active:translate-x-0.5 active:translate-y-0.5':
         props.variant === 'link',

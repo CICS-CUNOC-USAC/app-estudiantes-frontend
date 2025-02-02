@@ -8,6 +8,7 @@
         eliminado.
       </p>
       <CButton
+      class="mt-2"
         :label="backToLabel"
         variant="link"
         icon="icon-park-outline:arrow-left"
