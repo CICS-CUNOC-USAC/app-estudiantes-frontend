@@ -2,6 +2,15 @@
   <main class="pb-12"> 
     <nav class="space-x-4">
       <CButton
+        v-if="fromSearch"
+        icon="icon-park-outline:arrow-left"
+        variant="link"
+        :label="`Regresar a búsqueda &quot;${fromSearch}&quot;` "
+        class="text-muted-color-emphasis mb-4 lg:mb-2"
+        :to="`/portal/general/cursos/programas?curso=${fromSearch}`"
+      />
+      <CButton
+      v-else
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar a programas"
@@ -42,5 +51,6 @@ import CButton from '~/components/primitives/button/CButton.vue';
 
 const route = useRoute()
 const id = route.params.cursoId
+const fromSearch = route.query.fromSearch
 </script>
 <style lang="scss" scoped></style>

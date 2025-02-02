@@ -48,6 +48,7 @@
       :data="filteredData"
       :search-empty="!search"
       :loading="pending"
+      :fromSearch="searchDeb"
     />
 
     <!-- <HelpDialog
@@ -98,15 +99,6 @@ const filteredData = computed(() => {
     item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
   )
 })
-// watch(
-//   teacherSearch,
-//   () => {
-//     data.value = data.value?.filter((item) =>
-//       item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
-//     )
-//   },
-//   { immediate: true }
-// )
 </script>
 <style lang="scss" scoped>
 HelpDialog {

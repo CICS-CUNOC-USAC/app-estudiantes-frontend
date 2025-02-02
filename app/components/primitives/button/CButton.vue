@@ -29,7 +29,7 @@
       'bg-blue-600 text-blue-100 hover:bg-blue-500': props.severity === 'info',
       'bg-zinc-600 text-zinc-100 hover:bg-zinc-500':
         props.severity === 'secondary',
-      'bg-transparent text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 active:translate-x-0.5 active:translate-y-0.5':
+      'bg-transparent text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 active:translate-x-0.5 active:translate-y-0.5 dark:border-white':
         props.outlined,
 
       // Icon position

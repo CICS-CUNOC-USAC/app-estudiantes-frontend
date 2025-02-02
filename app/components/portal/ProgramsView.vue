@@ -12,7 +12,7 @@
       <template #body="slotProps">
         <div class="flex flex-col items-center justify-center gap-y-2">
           <CButton
-            :to="`/portal/general/cursos/programa/${slotProps.data.id}`"
+            :to="`/portal/general/cursos/programa/${slotProps.data.id}?fromSearch=${fromSearch}`"
             icon="lucide:eye"
             fluid
             size="small"
@@ -67,6 +67,7 @@ const { teacherSearch } = defineProps<{
   data: ScrapedProgram[] | null
   searchEmpty: boolean
   loading: boolean
+  fromSearch: string
 }>()
 
 const filters = ref({

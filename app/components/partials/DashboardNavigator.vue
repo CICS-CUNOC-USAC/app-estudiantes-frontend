@@ -97,9 +97,8 @@ defineProps<{
 </script>
 <style >
 @reference '~/assets/css/main.css';
-
 .menu-item {
-  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium ring ring-transparent  transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 dark:bg-neutral-800 dark:before:bg-neutral-700 inset-ring inset-ring-transparent;
+  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium ring ring-transparent  transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 dark:bg-neutral-800 dark:before:bg-neutral-700 inset-ring inset-ring-transparent before:transition;
 }
 
 .active-menu {
