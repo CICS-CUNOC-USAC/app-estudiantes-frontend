@@ -18,7 +18,7 @@
         <span class="text-primary-emphasis-alt">
           Leer
           <Icon
-            name="lucide:arrow-right"
+            name="icon-park-outline:arrow-right"
             class="mb-0.5 inline-block transition-transform group-hover:translate-x-1"
           />
         </span>

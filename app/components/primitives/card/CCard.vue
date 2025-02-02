@@ -18,7 +18,7 @@
       class="flex items-center gap-x-2 self-end text-sm font-semibold text-orange-500"
       >Ver más
       <Icon
-        name="lucide:arrow-right"
+        name="icon-park-outline:arrow-right"
         class="inline-block duration-300 ease-in-out group-hover:translate-x-1"
       />
     </span>

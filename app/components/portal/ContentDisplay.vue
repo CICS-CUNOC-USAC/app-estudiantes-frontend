@@ -16,7 +16,7 @@
         >
           <NuxtLink :to="`#${link.id}`" class="toc-item" v-slot="slotProps">
             <!-- <Icon
-                name="lucide:arrow-right"
+                name="icon-park-outline:arrow-right"
                 size="12"
                 class="mb-1 mr-1 inline text-muted-color-emphasis"
               /> -->

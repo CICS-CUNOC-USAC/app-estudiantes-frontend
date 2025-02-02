@@ -19,11 +19,11 @@
         >
           <template #footer>
             <span
-              class="inline-flex items-center gap-x-2 font-alt text-xs font-medium tracking-tight text-primary-800 dark:text-primary-300"
+              class="inline-flex items-center gap-x-2 up text-xs font-medium tracking-tight text-primary-800 dark:text-primary-300"
             >
-              Leer más
+              Ver publicación
               <Icon
-                name="lucide:arrow-right"
+                name="icon-park-outline:arrow-right"
                 class="transition group-hover:translate-x-1"
               />
             </span>
