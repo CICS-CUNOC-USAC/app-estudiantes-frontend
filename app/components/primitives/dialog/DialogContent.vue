@@ -28,7 +28,7 @@ const emitsAsProps = useEmitAsProps(emits)
     />
     <DialogContent
       v-bind="{ ...props, ...emitsAsProps, ...$attrs }"
-      class="data-[state=open]:animate-contentShow bg-cics-white fixed top-1/2 left-1/2 z-[100] max-h-[85vh] w-11/12 lg:w-[80vw] lg:max-w-lg -translate-x-1/2 -translate-y-1/2 rounded-xl border border-black/80 dark:border-neutral-700 p-6 shadow-lg shadow-black/15 focus:outline-none dark:bg-neutral-900"
+      class="data-[state=open]:animate-contentShow bg-cics-white fixed top-1/2 left-1/2 z-[100]  max-h-[85vh] w-11/12  lg:max-w-xl -translate-x-1/2 -translate-y-1/2 rounded-xl border border-black/80 dark:border-neutral-700 p-6 shadow-lg shadow-black/15 focus:outline-none dark:bg-neutral-900  pb-12"
     >
       <DialogTitle class="mb-4 flex items-center justify-between">
         <span class="text-xl font-semibold">
@@ -39,7 +39,9 @@ const emitsAsProps = useEmitAsProps(emits)
           <span class="sr-only">Close</span>
         </DialogClose>
       </DialogTitle>
-      <slot />
+      <div class="pb-6  overflow-scroll">
+        <slot />
+      </div>
     </DialogContent>
   </DialogPortal>
 </template>

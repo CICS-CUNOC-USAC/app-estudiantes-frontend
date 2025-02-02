@@ -5,19 +5,22 @@
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
-        class="mb-5 text-muted-color-emphasis lg:mb-2"
+        class="text-muted-color-emphasis mb-5 lg:mb-2"
         to="/"
       />
     </nav>
     <h1 class="text-xl font-semibold">
-      <Icon name="icon-park-twotone:book-open" class="mb-1 mr-1.5 inline-block" />
+      <Icon
+        name="icon-park-twotone:book-open"
+        class="mr-1.5 mb-1 inline-block"
+      />
       Programas de Cursos
     </h1>
     <p class="font-weight-light my-4">
       Escribe el nombre del curso para buscar los programas asociados.
     </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+    <div class="mb-4 grid grid-cols-1 gap-6 md:grid-cols-2">
       <CInputText
         ref="searchRef"
         v-model="searchDeb"
@@ -51,15 +54,15 @@
       :fromSearch="searchDeb"
     />
 
-    <!-- <HelpDialog
+    <HelpDialog
       title="Programas de Cursos"
-      :content="content_help"
-    ></HelpDialog> -->
+      content-path="/programas"
+    ></HelpDialog>
   </main>
 </template>
 <script setup lang="ts">
-// import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import { toast } from 'vue-sonner'
+import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
 import ProgramsView from '~/components/portal/ProgramsView.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
@@ -77,9 +80,10 @@ const search = ref(route.query.curso || '')
 const searchDeb = ref(route.query.curso || '')
 const teacherSearch = ref('')
 const { data, pending } = await useFetch<ScrapedProgram[]>('/api/scrap', {
-  onResponseError: ()=>{
+  onResponseError: () => {
     toast.error('Hubo un error al cargar los programas de cursos', {
-      description: 'Puede que este servicio no esté disponible en este momento. Por favor, intenta más tarde.'
+      description:
+        'Puede que este servicio no esté disponible en este momento. Por favor, intenta más tarde.'
     })
   },
   query: { search }
@@ -99,6 +103,20 @@ const filteredData = computed(() => {
     item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
   )
 })
+
+const content_help = `Los Programas de Curso es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de los programas de cada curso todos los semestres.
+  ## Funcionamiento:
+  ### Busqueda por Curso:
+  Para poder buscar algun programa de curso se debe introducir el nombre del curso que se busca en la barra de busqueda.
+  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)
+  ### Busqueda por Docente:
+  Para poder buscar algun programa de curso es necesario primero haber introducido el nombre del curso que se busca en la barra de busqueda.
+  Una vez hecho esto se habilitara la opcion de poder buscar entre esos programas de curso por docente.
+  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)
+  ### Listado de Programas:
+  Cuando se haya realizado una busqueda se mostrara el listado de todos los programas que entren dentro del criterio de la busqueda en la tabla.
+  Aqui se podran ver los detalles de cada uno de los programas y tambien se podra abrir el PDF del mismo utilizando el boton de la columna Ver.
+  ![TestImage](https://upload.wikimedia.org/wikipedia/commons/6/6a/External_link_font_awesome.svg)`
 </script>
 <style lang="scss" scoped>
 HelpDialog {
