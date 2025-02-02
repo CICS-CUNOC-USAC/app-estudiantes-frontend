@@ -29,11 +29,12 @@
       :career-courses="careerCourses?.courses"
       :loading="status === 'pending'"
     />
-    <!-- <HelpDialog title="Pensum" :content="content_help"></HelpDialog> -->
+    <HelpDialog title="Pensum de carrera" content-path="/pensums"></HelpDialog>
   </main>
 </template>
 
 <script setup lang="ts">
+import HelpDialog from '~/components/dialogs/help/HelpDialog.vue';
 import PensumPublicView from '~/components/portal/pensums/PensumPublicView.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import type { CareerCoursesResponse } from '~/utils/types/career-courses'
