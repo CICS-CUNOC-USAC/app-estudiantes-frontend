@@ -1,6 +1,6 @@
 <template>
   <section class="login-page">
-    <div class="login-page__form">
+    <div class="form">
       <LoginForm
         :loading="loading"
         admin
@@ -40,10 +40,12 @@ export default {
   }
 }
 </script>
-<style lang="postcss" scoped>
+<style scoped>
+@reference '~/assets/css/main.css';
+
 .login-page {
   @apply w-full min-h-screen flex justify-center items-center;
-  &__form {
+  .form {
     @apply w-full px-3 md:max-w-lg;
   }
 }

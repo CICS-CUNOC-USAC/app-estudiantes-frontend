@@ -1,6 +1,7 @@
 <template>
   <section class="signup-page">
       <SignupForm
+      class="form"
         :loading="loading"
         :error="error"
         @signup="signupUser($event)"
@@ -22,11 +23,13 @@ const { loading, error } = storeToRefs(useRegularAuthStore())
 
 const { signupUser } = useRegularAuthStore()
 </script>
-<style lang="postcss" scoped>
+<style>
+@reference '~/assets/css/main.css';
+
 .signup-page {
   @apply flex min-h-screen w-full items-center justify-center;
-  &__form {
-    @apply w-full px-3 md:max-w-lg;
+  .form {
+    @apply w-full md:max-w-lg;
   }
 }
 </style>

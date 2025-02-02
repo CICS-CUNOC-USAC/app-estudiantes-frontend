@@ -98,4 +98,6 @@ const login = () => {
   emit('login', newCredentials)
 }
 </script>
-<style scoped lang="scss"></style>
+<style scoped>
+
+</style>

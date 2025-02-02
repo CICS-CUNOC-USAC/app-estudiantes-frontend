@@ -152,7 +152,7 @@ const {
   pending: loading,
   status,
   refresh
-} = await useLazyAsyncData('edit-book', () =>
+} = await useAsyncData('edit-book', () =>
   fetchBookById(+route.params.bookId)
 )
 const file = ref(undefined)
