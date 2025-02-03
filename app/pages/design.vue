@@ -211,7 +211,7 @@
               class="flex items-center gap-x-2 self-end text-sm font-semibold"
               >Ver más
               <Icon
-                name="lucide:arrow-right"
+                name="icon-park-outline:arrow-right"
                 class="inline-block duration-300 ease-in-out"
               />
             </span> </template
@@ -226,7 +226,7 @@
               class="flex items-center gap-x-2 self-end text-sm font-semibold"
               >Ver más
               <Icon
-                name="lucide:arrow-right"
+                name="icon-park-outline:arrow-right"
                 class="inline-block duration-300 ease-in-out"
               />
             </span> </template
@@ -241,7 +241,7 @@
               class="flex items-center gap-x-2 self-end text-sm font-semibold"
               >Ver más
               <Icon
-                name="lucide:arrow-right"
+                name="icon-park-outline:arrow-right"
                 class="inline-block duration-300 ease-in-out"
               />
             </span> </template
@@ -257,7 +257,7 @@
               class="flex items-center gap-x-2 self-end text-sm font-semibold"
               >Ver más
               <Icon
-                name="lucide:arrow-right"
+                name="icon-park-outline:arrow-right"
                 class="inline-block duration-300 ease-in-out"
               />
             </span> </template
@@ -294,7 +294,7 @@
             <div class="flex items-center gap-x-2 self-end">
               <CButton
                 label="Ver más"
-                icon="lucide:arrow-right"
+                icon="icon-park-outline:arrow-right"
                 variant="text"
                 class="flex-1 text-xs"
               />
@@ -340,7 +340,7 @@
               />
               <CButton
                 label="Ver más"
-                icon="lucide:arrow-right"
+                icon="icon-park-outline:arrow-right"
                 class="h-full flex-1 text-xs"
               />
             </div>

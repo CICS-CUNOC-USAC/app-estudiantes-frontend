@@ -139,4 +139,4 @@ const saveBook = async (e: FormSubmitEvent) => {
   }
 }
 </script>
-<style lang="scss" scoped></style>
+

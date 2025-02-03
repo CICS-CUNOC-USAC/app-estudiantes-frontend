@@ -1,113 +1,111 @@
 <template>
   <div>
-    <v-row align="center" justify="start">
-      <v-col cols="12" md="4">
-        <StaffDialog v-slot="{ open }" @save-staff="saveStaff($event)">
-          <v-btn block :disabled="loading" @click="open">
-            <v-icon>mdi-plus</v-icon>
-            Nuevo usuario administrativo
-          </v-btn>
-        </StaffDialog>
-      </v-col>
-      <v-col cols="12" md="3">
-        <v-text-field
-          v-model="name"
-          append-icon="mdi-text-search"
-          label="Buscar"
-          clearable
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12">
-        <v-sheet color="transparent" rounded="lg" border elevation="0">
-          <v-data-table-server
-            :headers="headers"
-            :search="search"
-            :items="staffs"
-            :items-per-page="10"
-            :items-length="responseMeta?.total!"
-            :loading="loading"
-            @update:options="updateOptions"
-          >
-            <template #item.actions="{ item }">
-              <div class="d-flex align-center">
-                <StaffDialog
-                  v-slot="{ open }"
-                  :user-item="item"
-                  update
-                  @save-staff="updateStaff(item.id, $event)"
-                >
-                  <v-btn
-                    icon="mdi-pencil-outline"
-                    variant="text"
-                    density="comfortable"
-                    @click="open"
-                  />
-                </StaffDialog>
-                <StaffRolesDialog v-slot="{ open }" :user-item="item">
-                  <v-btn
-                    icon="mdi-security"
-                    color="blue"
-                    variant="text"
-                    density="comfortable"
-                    @click="open"
-                  />
-                </StaffRolesDialog>
-              </div>
-            </template>
-          </v-data-table-server>
-        </v-sheet>
-      </v-col>
-    </v-row>
+    <div
+      class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr]"
+    >
+      <CButton
+        label="Nuevo usuario"
+        icon="icon-park-outline:plus"
+        class="w-fit"
+        to="/admin/users/create"
+      />
+      <CInputText
+        placeholder="Nombre del usuario"
+        label="Buscar"
+        id="full_name"
+        class="h-12"
+        prepend-icon="icon-park-twotone:doc-search-two"
+        clear-button
+        no-borders
+        :default-value="$route.query.full_name"
+        @input="
+          ($event: Event) => {
+            useDebounceFn(() => {
+              $router.push({
+                query: {
+                  ...$route.query,
+                  full_name:
+                    ($event.target as HTMLInputElement).value || undefined
+                }
+              })
+            }, 500)()
+          }
+        "
+        @clear="
+          () => {
+            $router.push({
+              query: {
+                ...$route.query,
+                name: undefined
+              }
+            })
+          }
+        "
+      />
+    </div>
+
+    <PDataTable
+      :value="data?.results"
+      :loading="status === 'pending'"
+      :rows="limit"
+      :first="currentPage"
+      :total-records="data?.meta?.total"
+      :rows-per-page-options="[5, 10, 25, 50]"
+      row-hover
+      lazy
+      paginator
+      @page="
+        ($event) =>
+          $router.push({ query: { ...$route.query, page: $event.page + 1 } })
+      "
+      @update:rows="limit = $event"
+    >
+      <PColumn field="id" header="Id" class="text-center"> </PColumn>
+      <PColumn field="first_name" header="Nombre" class="text-center">
+      </PColumn>
+      <PColumn field="last_name" header="Apellido" class="text-center">
+      </PColumn>
+      <PColumn field="email" header="Correo electrónico" class="text-center">
+      </PColumn>
+      <PColumn field="actions" header="Acciones" class="text-center">
+        <template #body="slotProps">
+          <div class="flex flex-col items-center justify-center gap-y-2">
+            <CButton
+              :to="`/admin/users/edit/${slotProps.data.id}`"
+              icon="icon-park-twotone:edit"
+              fluid
+              size="small"
+              variant="tonal"
+              label="Editar"
+            />
+          </div>
+        </template>
+      </PColumn>
+    </PDataTable>
   </div>
 </template>
 <script setup lang="ts">
-import StaffDialog from '~/components/dialogs/admin/staffs/StaffDialog.vue'
-import StaffRolesDialog from '~/components/dialogs/admin/staffs/StaffRolesDialog.vue'
-import { useAdminStaffsStore } from '~/stores/admin-staffs'
-const { createStaff, updateStaffById, fetchAllStaffs } = useAdminStaffsStore()
-const { loading, staffs, responseMeta } = storeToRefs(useAdminStaffsStore())
-const { refresh } = await useLazyAsyncData('admin-staffs', () =>
-  fetchAllStaffs()
-)
-const name = ref('')
-const search = ref('')
-const updateOptions = async ({
-  page,
-  itemsPerPage,
-  sortBy
-}: {
-  page: number
-  itemsPerPage: number
-  sortBy: { key: string; order: string }[]
-}) => {
-  const limit = itemsPerPage === -1 ? 'all' : itemsPerPage
-  await fetchAllStaffs({
-    page,
-    limit,
-    full_name: name.value,
-    orderBy: formatOrderBy(sortBy)
-  })
-}
-const saveStaff = async (staffPayload: StaffPayload) => {
-  await createStaff(staffPayload)
-  await refresh()
-}
+import CButton from '~/components/primitives/button/CButton.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
+import { fetchAllStaffs } from '~/lib/api/admin/users'
 
-const updateStaff = async (staffId: number, staffPayload: StaffPayload) => {
-  await updateStaffById(staffId, staffPayload)
-  await refresh()
-}
-const headers = ref([
-  { title: 'Id', key: 'id' },
-  { title: 'First Name', key: 'first_name' },
-  { title: 'Last Name', key: 'last_name' },
-  { title: 'Email', key: 'email' },
-  { title: 'Acciones', key: 'actions', sortable: false }
-])
-watch([name], () => {
-  search.value = String(Date.now())
+const route = useRoute()
+
+const limit = ref(5)
+const currentPage = computed(() => {
+  return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
 })
+
+const { data, refresh, status } = await useLazyAsyncData(
+  'admin-staffs',
+  () =>
+    fetchAllStaffs({
+      page: route.query.page ? Number(route.query.page) : 1,
+      limit: limit.value,
+      full_name: route.query.full_name
+    }),
+  {
+    watch: [limit, () => route.query]
+  }
+)
 </script>
-<style lang="scss" scoped></style>

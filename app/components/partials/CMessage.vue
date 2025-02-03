@@ -7,6 +7,7 @@
         {{ subtitle }}
       </p>
       <CButton
+      v-if="backToLabel && backToRoute"
         class="mt-2"
         :label="backToLabel"
         variant="link"
@@ -21,9 +22,9 @@ import CButton from '../primitives/button/CButton.vue';
 
 defineProps<{
   title: string
-  subtitle: string
-  backToLabel: string
-  backToRoute: string
+  subtitle?: string
+  backToLabel?: string
+  backToRoute?: string
 }>()
 </script>
 <style scoped>

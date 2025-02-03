@@ -2,7 +2,7 @@
   <main class="relative">
     <nav class="space-x-4">
       <CButton
-        icon="lucide:arrow-left"
+        icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
         class="mb-4 text-muted-color-emphasis lg:mb-2"
@@ -32,4 +32,4 @@ import CButton from '~/components/primitives/button/CButton.vue'
 import { careers, contentHelp } from './(files)/consts'
 </script>
 
-<style scoped lang="scss"></style>
+

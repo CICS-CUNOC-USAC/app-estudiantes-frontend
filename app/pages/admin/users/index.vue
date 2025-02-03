@@ -1,7 +1,15 @@
 <template>
   <main>
-    <h1 class="mb-4">Usuarios Administrativos</h1>
-    <p class="font-weight-light my-4">
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">
+        <Icon
+          name="icon-park-twotone:peoples"
+          class="mr-1.5 mb-1 inline-block"
+        />
+        Usuarios administrativos
+      </h1>
+    </header>
+    <p class="mt-2">
       En esta sección podrás manejar a los usuarios administrativos y sus roles.
     </p>
     <StaffsView />
@@ -13,4 +21,4 @@ definePageMeta({
   layout: 'admin'
 })
 </script>
-<style lang="scss" scoped></style>
+

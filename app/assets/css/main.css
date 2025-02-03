@@ -16,7 +16,7 @@
 
   --font-sans: 'Geist Sans', system-ui, sans-serif;
   --font-alt: 'Hubot Sans', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace; 
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
 
   --animate-scaleIn: scaleIn 150ms ease;
   --animate-scaleOut: scaleOut 150ms ease;
@@ -133,5 +133,29 @@
     to {
       opacity: 0;
     }
+  }
+}
+
+@layer base {
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .md-content {
+    /* @apply prose dark:prose-invert max-w-none; */
+    @apply prose dark:prose-invert dark:print:prose prose-headings:my-2 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-hr:my-6 prose-hr:border-gray-200 dark:prose-hr:border-zinc-700 max-w-none
+    prose-h3:text-lg
+    ;
+
+    @apply prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b;
+
+    @apply prose-a:hover:text-color-emphasis dark:prose-a:hover:text-primary-100;
+
+    @apply prose-a:prose-headings:border-b-0 prose-a:prose-headings:border-primary-500 prose-a:hover:prose-headings:border-b;
+
+    @apply prose-p:my-2.5;
   }
 }

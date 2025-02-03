@@ -35,8 +35,3 @@ defineProps({
   }
 })
 </script>
-<style lang="scss" scoped>
-/*.cics-logo {
-  margin-block: 0.8rem;
-}*/
-</style>

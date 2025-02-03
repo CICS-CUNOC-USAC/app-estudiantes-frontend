@@ -124,10 +124,9 @@
 </template>
 <script setup lang="ts">
 import DeleteItemDialog from '@/components/dialogs/DeleteItemDialog.vue'
-import NewLibraryItemDialog from '~/components/dialogs/admin/library/NewLibraryItemDialog.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import { fetchAllBooks, deleteBook } from '~/lib/api/books'
+import { fetchAllBooks, deleteBook } from '~/lib/api/admin/books'
 
 const route = useRoute()
 
@@ -155,4 +154,3 @@ const handleDelete = async (id: number) => {
   refresh()
 }
 </script>
-<style lang="scss" scoped></style>

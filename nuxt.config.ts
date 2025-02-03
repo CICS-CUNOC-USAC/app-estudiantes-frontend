@@ -1,5 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
-import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
+// import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import Aura from '@primevue/themes/aura'
 import tailwindcss from "@tailwindcss/vite";
 
@@ -11,9 +11,9 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-11-15',
   srcDir: 'app/',
-  build: {
-    transpile: ['vuetify']
-  },
+  // build: {
+  //   transpile: ['vuetify']
+  // },
   imports: {
     dirs: ['stores']
   },
@@ -35,6 +35,7 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     // '@nuxtjs/tailwindcss',
+    '@pinia/colada-nuxt',
     '@primevue/nuxt-module',
     '@nuxt/fonts',
     '@nuxt/icon',
@@ -43,12 +44,12 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/color-mode',
     // 'vue-sonner/nuxt',
-    (_options, nuxt) => {
-      nuxt.hooks.hook('vite:extendConfig', (config) => {
-        // @ts-expect-error vite-plugin-vuetify
-        config.plugins.push(vuetify({ autoImport: true }))
-      })
-    }
+    // (_options, nuxt) => {
+    //   nuxt.hooks.hook('vite:extendConfig', (config) => {
+    //     // @ts-expect-error vite-plugin-vuetify
+    //     config.plugins.push(vuetify({ autoImport: true }))
+    //   })
+    // }
   ],
   vite: {
     plugins: [
@@ -57,11 +58,11 @@ export default defineNuxtConfig({
     define: {
       'process.env.DEBUG': false
     },
-    vue: {
-      template: {
-        transformAssetUrls
-      }
-    }
+    // vue: {
+    //   template: {
+    //     transformAssetUrls
+    //   }
+    // }
   },
   css: ['~/assets/css/main.css'],
   colorMode: {

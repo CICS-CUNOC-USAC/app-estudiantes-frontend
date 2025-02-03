@@ -57,11 +57,3 @@ const message = computed(() =>
     : 'Lo sentimos, se Ha ocurrido un error inesperado.'
 )
 </script>
-
-<style scoped lang="scss">
-.container {
-  height: 90vh;
-  display: flex;
-  align-items: center;
-}
-</style>

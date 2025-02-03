@@ -1,7 +1,8 @@
 <template>
   <div class="flex  flex-col gap-y-1.5"
     :class="{
-      'h-full': props.fillHeight
+      'h-full': props.fillHeight,
+      'opacity-60 pointer-events-none': props.disabled
     }">
     <PInputGroup
       unstyled
@@ -16,10 +17,11 @@
         :is="hasPrependClick ? Button : InputGroupAddon"
         icon
         @click="emit('click:prepend')"
-        class="inline-flex w-12 items-center justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
+        class="inline-flex w-12 items-center justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900 
+        "
         :class="{
           'hover:bg-surface-200/80 dark:hover:bg-surface-800': hasPrependClick,
-          'cursor-not-allowed opacity-50': disabled
+          // 'cursor-not-allowed opacity-50': disabled
         }"
         unstyled
         pt:label:class="hidden"
@@ -44,7 +46,7 @@
             :disabled
             ref="$input"
             v-model="vModel"
-            class="z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color placeholder:text-muted-color focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
+            class="z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color placeholder:text-muted-color focus:outline-none  dark:border-surface-700 dark:bg-surface-900"
             :class="{
               'pt-4': props.label,
               'pl-3': !prependUsed || !noBorders,
@@ -84,11 +86,13 @@
         v-if="hasAppendClick || appendIcon"
         :is="hasAppendClick ? Button : InputGroupAddon"
         @click="emit('click:append')"
-        class="inline-flex w-12 items-center justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
+        class="inline-flex w-12 items-center justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900
+        disabled:opacity-50
+        "
         :class="{
           'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800':
             hasAppendClick,
-          'cursor-not-allowed opacity-50': disabled
+          // 'cursor-not-allowed opacity-50': disabled
         }"
         unstyled
         pt:label:class="hidden"
