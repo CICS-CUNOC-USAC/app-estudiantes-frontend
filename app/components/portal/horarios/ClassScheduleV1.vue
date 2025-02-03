@@ -1,7 +1,7 @@
 <template>
     <!--VERSION GRID PLUGIN-->
     <ClientOnly>
-        <GridLayout id="ScheduleLayoutMain" class="w-[300vw]" v-model:layout="gridState.layout" :col-num="classrooms.length + 2"
+        <GridLayout id="ScheduleLayoutMain" class="lg:w-[350vw] sm:w-[600vw] w-[1000vw]" v-model:layout="gridState.layout" :col-num="classrooms.length + 2"
             :row-height="120" :margin="[2, 2]">
             <template class="border" v-for="(item, index) in gridState.layout" :key="index">
                 <template v-if="item.i === '0'">
