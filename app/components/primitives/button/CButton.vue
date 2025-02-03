@@ -2,6 +2,7 @@
   <!-- @vue-ignore: Ignore type checking for this component -->
   <PButton
     v-bind="props"
+    :disabled
     :as="asProp"
     class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none cursor-pointer"
     :pt:label:class="`${props.label ? 'block' : 'hidden'}`"
@@ -39,7 +40,7 @@
       'flex-col gap-y-1': props.iconPos === 'top',
 
       // Loading and disabled
-      'pointer-events-none opacity-80': props.disabled,
+      'pointer-events-none opacity-50': props.disabled,
       'pointer-events-none opacity-90': props.loading,
 
       // Variants

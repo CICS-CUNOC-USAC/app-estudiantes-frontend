@@ -35,6 +35,7 @@ export default defineNuxtConfig({
   modules: [
     '@pinia/nuxt',
     // '@nuxtjs/tailwindcss',
+    '@pinia/colada-nuxt',
     '@primevue/nuxt-module',
     '@nuxt/fonts',
     '@nuxt/icon',

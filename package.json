@@ -32,6 +32,8 @@
   },
   "dependencies": {
     "@mdi/font": "^7.4.47",
+    "@pinia/colada": "^0.13.4",
+    "@pinia/colada-nuxt": "^0.0.4",
     "@pinia/nuxt": "^0.7.0",
     "@primevue/forms": "^4.2.5",
     "@primevue/themes": "^4.2.3",
