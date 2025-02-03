@@ -1,4 +1,3 @@
-import '@mdi/font/css/materialdesignicons.css'
 // import '../assets/styles/main.scss'
 import VueGridLayout from 'vue-grid-layout-v3'
 
