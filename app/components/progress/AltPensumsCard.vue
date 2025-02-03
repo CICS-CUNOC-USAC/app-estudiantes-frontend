@@ -63,7 +63,9 @@ const updateItem = (courseProgressId: number, approved: boolean) => {
   })
 }
 </script>
-<style scoped lang="postcss">
+<style scoped>
+@reference '~/assets/css/main.css';
+
 /* Transiciones para la entrada y salida */
 .course-transition-move,
 .course-transition-enter-active,

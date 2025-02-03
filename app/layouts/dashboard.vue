@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-800">
+  <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-900 lg:dark:bg-neutral-800">
     <div class="flex gap-x-1">
       <!-- Desktop -->
       <nav
@@ -17,7 +17,7 @@
         </h4>
 
         <!-- new menu -->
-        <div class="navigation-menu flex-1 space-y-4 pl-8 pr-6">
+        <div class="mt-4 flex-1 space-y-4 pl-8 pr-6">
           <NuxtLink
             to="/dashboard/home"
             class="flex items-center gap-x-2 rounded-lg p-2 font-medium transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
@@ -116,7 +116,7 @@
       <div
         class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-neutral-900"
       >
-        <div class="mx-auto max-w-screen-xl">
+        <div class="mx-auto  max-w-screen-xl">
           <NuxtPage />
         </div>
       </div>
@@ -161,52 +161,17 @@ const { logout } = useAuthStore()
 
 const drawer = ref(false)
 </script>
-<style lang="postcss" scoped>
-.menu-item {
-  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200;
-  &::before {
-    @apply absolute left-4 top-1/2 h-[calc(100%+4px)] w-0.5 -translate-y-1/2 bg-gray-300 dark:bg-neutral-700;
-    content: '';
+<style>
+@reference 'assets/css/main.css';
 
-    /* Comment if no animation is needed */
-    /* @apply transition-all duration-200 ease-in-out; */
-  }
+.menu-item {
+  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200
+  before:absolute before:left-4 before:top-1/2 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:bg-gray-300 before:dark:bg-neutral-700;
 }
 
 .active-menu {
-  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600;
-  &::before {
-    @apply absolute left-4 top-1/2 h-2/4 w-0.5 -translate-y-1/2 rounded bg-primary-700 dark:bg-primary-400;
-    content: '';
-  }
-}
-
-.navigation-menu {
-  @apply mt-4;
-  &__item {
-    @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200;
-    &::before {
-      @apply absolute left-4 top-1/2 h-[calc(100%+4px)] w-0.5 -translate-y-1/2 bg-gray-300 dark:bg-neutral-700;
-      content: '';
-
-      /* Comment if no animation is needed */
-      @apply transition-all duration-200 ease-in-out;
-    }
-    /* @apply flex items-center gap-x-2 rounded-lg px-1.5 py-2  outline outline-1 outline-transparent transition hover:text-primary-700 dark:hover:text-primary-200;
-     */
-
-    &--active {
-      /* @apply outline-black shadow-md; */
-      @apply z-50 bg-white text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:bg-neutral-800 dark:text-primary-300 dark:outline-neutral-600;
-      &::before {
-        @apply absolute left-4 top-1/2 h-2/4 w-0.5 -translate-y-1/2 rounded bg-primary-700 dark:bg-primary-400;
-        content: '';
-      }
-    }
-  }
-
-  section {
-    @apply mb-4;
-  }
+  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600
+  before:absolute before:left-4 before:top-1/2 before:h-2/4 before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-primary-700 before:dark:bg-primary-400
+  ;
 }
 </style>

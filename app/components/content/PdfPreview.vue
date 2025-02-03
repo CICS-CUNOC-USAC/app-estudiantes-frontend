@@ -67,4 +67,3 @@ const page = ref(1)
 const scale = ref(1)
 const { pdf, pages } = usePDF(props.pdfUrl)
 </script>
-<style lang="scss" scoped></style>

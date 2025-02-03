@@ -27,4 +27,4 @@
 import OfficialPostsInfiniteView from '~/components/portal/OfficialPostsInfiniteView.vue'
 import CButton from '~/components/primitives/button/CButton.vue';
 </script>
-<style lang="scss" scoped></style>
+

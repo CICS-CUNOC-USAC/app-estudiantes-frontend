@@ -52,20 +52,3 @@ defineProps({
   }
 })
 </script>
-<style lang="scss" scoped>
-.card-title {
-  font-weight: 600;
-  font-size: 1.5rem;
-  white-space: pre-wrap;
-  line-height: 1;
-}
-.card-subtitle {
-  font-weight: 400;
-  font-style: italic;
-  font-size: 0.9rem;
-}
-.card-description {
-  font-weight: normal;
-  font-size: 1rem;
-}
-</style>

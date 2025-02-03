@@ -1,6 +1,6 @@
 import { toast } from 'vue-sonner'
 
-const fetchAllBooks = async (params: any) => {
+export const fetchAllBooks = async (params: any) => {
   try {
     const response = await $api<BooksResponse>('/library/admin', {
       params
@@ -46,3 +46,18 @@ export const createBookItem = async (payload: BookPayload) => {
     })
   }
 }
+
+export async function deleteBook(id: string | number) {
+  try {
+    await $api(`/library/admin/${+id}`, {
+      method: 'DELETE'
+    })
+    toast.success('Libro eliminado correctamente')
+    return null
+  } catch (error) {
+    toast.error('Error al eliminar el libro')
+    return error
+  }
+  
+}
+

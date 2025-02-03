@@ -2,7 +2,7 @@ import { toast } from "vue-sonner"
 
 export async function fetchAllBooks(params?: {})  {
   try {
-    const response = await $api<BooksResponse>('/library/admin', {
+    const response = await $api<BooksResponse>('/library', {
       params
     })
     const { results, ...meta } = response
@@ -21,16 +21,3 @@ export async function fetchAllBooks(params?: {})  {
   }
 }
 
-export async function deleteBook(id: string) {
-  try {
-    await $api(`/library/admin/${+id}`, {
-      method: 'DELETE'
-    })
-    toast.success('Libro eliminado correctamente')
-    return null
-  } catch (error) {
-    toast.error('Error al eliminar el libro')
-    return error
-  }
-  
-}

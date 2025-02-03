@@ -8,15 +8,11 @@
     pt:mask:class="rounded-xl max-w-5xl mx-auto"
     removableSort
   >
-    <!-- <DataTable>
-    <template #></template>
-
-  </DataTable> -->
     <PColumn field="" header="Acciones" class="w-min text-center">
       <template #body="slotProps">
         <div class="flex flex-col items-center justify-center gap-y-2">
           <CButton
-            :to="`/portal/general/cursos/programa/${slotProps.data.id}`"
+            :to="`/portal/general/cursos/programa/${slotProps.data.id}?fromSearch=${fromSearch}`"
             icon="lucide:eye"
             fluid
             size="small"
@@ -59,40 +55,6 @@
       </div>
     </template>
   </PDataTable>
-  <!-- <v-sheet rounded="lg" border>
-    <v-data-table
-      :items="data || []"
-      :headers="headers"
-      :search="teacherSearch"
-      :loading="loading"
-      :mobile="smAndDown"
-      class="programs-table"
-    >
-      <template #item.pdfLink="{ item }">
-        <div class="d-flex flex-lg-column ga-2 py-2">
-          <v-btn
-            size="small"
-            :to="`/portal/general/cursos/programa/${item.id}`"
-            prepend-icon="mdi-eye-outline"
-            variant="tonal"
-            text="Ver"
-          />
-
-          <v-btn
-            size="small"
-            :href="item.pdfLink"
-            target="_blank"
-            prepend-icon="mdi-download-outline"
-            variant="tonal"
-            text="Descargar"
-          />
-        </div>
-      </template>
-      <template #item.name="{ item }">
-        <span class="font-weight-medium">{{ item.name }}</span>
-      </template>
-    </v-data-table>
-  </v-sheet> -->
 </template>
 <script setup lang="ts">
 import type { ScrapedProgram } from '~/utils/server/types/programs'
@@ -105,10 +67,11 @@ const { teacherSearch } = defineProps<{
   data: ScrapedProgram[] | null
   searchEmpty: boolean
   loading: boolean
+  fromSearch: string
 }>()
 
 const filters = ref({
   teacher: { value: null, matchMode: FilterMatchMode.CONTAINS }
 })
 </script>
-<style lang="scss" scoped></style>
+

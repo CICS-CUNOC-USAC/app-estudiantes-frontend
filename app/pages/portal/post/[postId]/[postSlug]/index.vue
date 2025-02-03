@@ -117,9 +117,7 @@ useHead({
   a:has(img) {
     @apply block !bg-transparent py-0;
   }
-
-  .alert {
-    &-danger {
+    .alert-danger {
       @apply dark:border-zinc-700;
       & * {
         @apply text-rose-800 dark:text-red-200;
@@ -128,7 +126,7 @@ useHead({
       @apply text-rose-800 dark:text-red-200;
     }
 
-    &-success {
+    .alert-success {
       @apply dark:border-zinc-700;
       & * {
         @apply text-emerald-800 dark:text-emerald-200;
@@ -138,7 +136,7 @@ useHead({
       @apply text-emerald-800 dark:text-emerald-200;
     }
 
-    &-warning {
+    .alert-warning {
       @apply dark:border-zinc-700;
       & * {
         @apply text-amber-800 dark:text-amber-200;
@@ -147,7 +145,6 @@ useHead({
       @apply bg-surface-100/40 dark:bg-surface-900/65;
       @apply text-amber-800 dark:text-amber-200;
     }
-  }
 
   iframe {
     @apply min-h-96 min-w-full rounded-lg shadow-md;

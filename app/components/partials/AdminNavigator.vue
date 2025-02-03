@@ -96,23 +96,20 @@ defineProps<{
   items?: typeof DefaultLayoutItems
 }>()
 </script>
-<style scoped lang="postcss">
-.menu-item {
-  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200;
-  &::before {
-    @apply absolute left-4 top-1/2 h-[calc(100%+4px)] w-0.5 -translate-y-1/2 bg-gray-300 dark:bg-neutral-700;
-    content: '';
+<style >
+@reference '~/assets/css/main.css';
 
-    /* Comment if no animation is needed */
-    /* @apply transition-all duration-200 ease-in-out; */
-  }
+.menu-item {
+  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium ring ring-transparent  transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 dark:bg-neutral-800 dark:before:bg-neutral-700 inset-ring inset-ring-transparent before:transition;
 }
 
 .active-menu {
-  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600;
-  &::before {
-    @apply absolute left-4 top-1/2 h-2/4 w-0.5 -translate-y-1/2 rounded bg-primary-700 dark:bg-primary-400;
+  @apply text-primary-700 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 before:bg-primary-700 before:dark:bg-primary-400 z-50 shadow-md 
+  ring-gray-800 dark:ring-neutral-600 
+  transition before:absolute before:top-1/2 before:left-4 before:h-2/4 before:w-0.5 before:-translate-y-1/2 before:rounded hover:inset-ring-1 hover:inset-ring-gray-800  dark:hover:inset-ring-neutral-600;
+  /* &::before {
+    @apply bg-primary-700 dark:bg-primary-400 absolute top-1/2 left-4 h-2/4 w-0.5 -translate-y-1/2 rounded;
     content: '';
-  }
+  } */
 }
 </style>

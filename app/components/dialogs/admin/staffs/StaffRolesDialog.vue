@@ -1,6 +1,7 @@
 <template>
   <div>
-    <slot :open="() => (dialog = true)">
+    todo: implementar dialogo de roles de usuario con la nueva api
+    <!-- <slot :open="() => (dialog = true)">
       <v-btn color="primary" @click="dialog = true"> Editar </v-btn>
     </slot>
     <v-dialog v-model="dialog" max-width="40rem">
@@ -66,63 +67,63 @@
           <v-btn prepend-icon="mdi-cancel" @click="close"> Cancelar </v-btn>
         </v-card-actions>
       </v-card>
-    </v-dialog>
+    </v-dialog> -->
   </div>
 </template>
 <script setup lang="ts">
-const props = defineProps<{
-  userItem: Staff
-}>()
-const allRoles = ref<Role[]>()
-const pending = ref(false)
-const staffCurrentRoles = ref<Role[]>()
-const { fetchAllRoles, fetchAllStaffRoles, updateStaffRoles } =
-  useAdminStaffsStore()
-const availableRoles = computed(() => {
-  const rolesToCompare = allRoles.value?.map((role) => ({
-    id: role.id,
-    name: role.name,
-    alias: role.alias,
-    description: role.description
-  }))
-  return rolesToCompare?.filter(
-    (role) => !staffCurrentRoles.value?.some((r) => r.id === role.id)
-  )
-})
+// const props = defineProps<{
+//   userItem: Staff
+// }>()
+// const allRoles = ref<Role[]>()
+// const pending = ref(false)
+// const staffCurrentRoles = ref<Role[]>()
+// const { fetchAllRoles, fetchAllStaffRoles, updateStaffRoles } =
+//   useAdminStaffsStore()
+// const availableRoles = computed(() => {
+//   const rolesToCompare = allRoles.value?.map((role) => ({
+//     id: role.id,
+//     name: role.name,
+//     alias: role.alias,
+//     description: role.description
+//   }))
+//   return rolesToCompare?.filter(
+//     (role) => !staffCurrentRoles.value?.some((r) => r.id === role.id)
+//   )
+// })
 
-const dialog = ref(false)
-const fetchAllData = async () => {
-  allRoles.value = await fetchAllRoles()
-  staffCurrentRoles.value = await fetchAllStaffRoles(props.userItem.id)
-}
-watch(dialog, async (value) => {
-  if (value) {
-    pending.value = true
-    await fetchAllData()
-    pending.value = false
-  }
-})
+// const dialog = ref(false)
+// const fetchAllData = async () => {
+//   allRoles.value = await fetchAllRoles()
+//   staffCurrentRoles.value = await fetchAllStaffRoles(props.userItem.id)
+// }
+// watch(dialog, async (value) => {
+//   if (value) {
+//     pending.value = true
+//     await fetchAllData()
+//     pending.value = false
+//   }
+// })
 
-const handleRoleRemove = async (role: Role) => {
-  pending.value = true
-  const rolesIds = staffCurrentRoles.value
-    ?.map((role) => role.id)
-    .filter((id) => id !== role.id)
-  if (rolesIds) await updateStaffRoles(props.userItem.id, rolesIds)
-  await fetchAllData()
-  pending.value = false
-}
-const handleRoleAdd = async (role: Role) => {
-  pending.value = true
-  const rolesIds = staffCurrentRoles.value?.map((role) => role.id)
-  rolesIds?.push(role.id)
-  if (rolesIds) await updateStaffRoles(props.userItem.id, rolesIds)
-  await fetchAllData()
-  pending.value = false
-}
+// const handleRoleRemove = async (role: Role) => {
+//   pending.value = true
+//   const rolesIds = staffCurrentRoles.value
+//     ?.map((role) => role.id)
+//     .filter((id) => id !== role.id)
+//   if (rolesIds) await updateStaffRoles(props.userItem.id, rolesIds)
+//   await fetchAllData()
+//   pending.value = false
+// }
+// const handleRoleAdd = async (role: Role) => {
+//   pending.value = true
+//   const rolesIds = staffCurrentRoles.value?.map((role) => role.id)
+//   rolesIds?.push(role.id)
+//   if (rolesIds) await updateStaffRoles(props.userItem.id, rolesIds)
+//   await fetchAllData()
+//   pending.value = false
+// }
 
-const close = () => {
-  dialog.value = false
-}
+// const close = () => {
+//   dialog.value = false
+// }
 </script>
-<style lang="scss" scoped></style>
+

@@ -2,7 +2,7 @@
   <main>
     <nav class="space-x-4">
       <CButton
-        icon="lucide:arrow-left"
+        icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar a pensums"
         class="mb-4 text-muted-color-emphasis lg:mb-2"
@@ -29,11 +29,12 @@
       :career-courses="careerCourses?.courses"
       :loading="status === 'pending'"
     />
-    <!-- <HelpDialog title="Pensum" :content="content_help"></HelpDialog> -->
+    <HelpDialog title="Pensum de carrera" content-path="/pensums"></HelpDialog>
   </main>
 </template>
 
 <script setup lang="ts">
+import HelpDialog from '~/components/dialogs/help/HelpDialog.vue';
 import PensumPublicView from '~/components/portal/pensums/PensumPublicView.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import type { CareerCoursesResponse } from '~/utils/types/career-courses'
@@ -45,4 +46,4 @@ const { data: careerCourses, pending: loading, status } =
   )
 </script>
 
-<style scoped lang="scss"></style>
+

@@ -1,5 +1,5 @@
 <template>
-  <CCardAlt class="min-w-max px-8 py-8">
+  <CCardAlt class="min-w-max p-8" no-spacing>
     <template #title>
       <h2 class="pb-4 text-center text-2xl font-semibold">Regístrate</h2>
     </template>

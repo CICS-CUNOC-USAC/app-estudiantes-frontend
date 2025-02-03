@@ -124,9 +124,9 @@
     <ElementNotFound
       v-if="!book && !loading"
       class="mt-4"
-      element-type="manual"
-      back-to-route="/admin/manuals"
-      back-to-label="Volver a la lista de manuales"
+      element-type="libro"
+      back-to-route="/admin/books"
+      back-to-label="Volver a la lista de biblioteca"
     />
   </main>
 </template>
@@ -152,7 +152,7 @@ const {
   pending: loading,
   status,
   refresh
-} = await useLazyAsyncData('edit-book', () =>
+} = await useAsyncData('edit-book', () =>
   fetchBookById(+route.params.bookId)
 )
 const file = ref(undefined)
@@ -193,4 +193,4 @@ const updateBookFile = async () => {
   }
 }
 </script>
-<style lang="scss" scoped></style>
+

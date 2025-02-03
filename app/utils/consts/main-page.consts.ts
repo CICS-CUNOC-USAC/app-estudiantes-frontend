@@ -89,14 +89,6 @@ export const sections = [
         img: manualesImg
       },
       {
-        title: 'Biblioteca',
-        subtitle: 'Para estudiar',
-        description:
-          'Material de estudio de los diferentes cursos de la Division',
-        route: '/portal/recursos/biblioteca',
-        img: bibliotecaImg
-      },
-      {
         title: 'Tesario',
         subtitle: 'Para investigar',
         description:
