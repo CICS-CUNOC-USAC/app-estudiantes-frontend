@@ -71,7 +71,8 @@ useSeoMeta({
 })
 
 </script>
-<style lang="postcss">
+<style>
+@reference '~/assets/css/main.css';
 :root {
   @apply bg-white dark:bg-neutral-800 transition-colors;
 }
@@ -82,7 +83,7 @@ html {
 
 body,
 html {
-  scrollbar-gutter: stable;
+  /* scrollbar-gutter: stable; */
 }
 
 /* Common animations */
@@ -146,40 +147,4 @@ html {
   @apply mr-2 w-64 opacity-100 md:max-xl:w-44;
 }
 /* Common animations */
-</style>
-<style lang="scss">
-@use 'vuetify/settings' with (
-  $reset: false,
-  $color-pack: false,
-  $utilities: false
-);
-/*
-Styles used for page and layout transitions - Start
-*-active classes control the transition duration and timing function
-*-to and *-from classes control the transition state
-*/
-.page-enter-active,
-.page-leave-active {
-  transition: all 0.1s ease-in-out;
-}
-.page-leave-to,
-.page-enter-from {
-  opacity: 0;
-  transform: translateX(0.3rem);
-}
-
-.layout-enter-active,
-.layout-leave-active {
-  transition: all 0.1s ease-in-out;
-}
-
-.layout-leave-to,
-.layout-enter-from {
-  opacity: 0;
-  transform: translateX(0.3rem);
-}
-/*
-Styles used for page and layout transitions - End
-*/
-// @import '@/assets/styles/main.scss';
 </style>

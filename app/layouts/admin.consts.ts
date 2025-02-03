@@ -15,19 +15,20 @@ export const ADMIN_LAYOUT_ITEMS = [
     shortName: 'Recursos públicos',
     items: [
       {
-        itemName: 'Manuales',
-        itemIcon: 'icon-park-twotone:book-open',
-        itemLink: '/admin/manuals'
+        itemName: 'Biblioteca/Libros',
+        itemIcon: 'icon-park-twotone:book-one',
+        itemLink: '/admin/books'
       },
+    ]
+  },
+  {
+    sectionName: 'Administración',
+    shortName: 'Administración',
+    items: [
       {
         itemName: 'Usuarios administrativos',
         itemIcon: 'icon-park-twotone:peoples',
         itemLink: '/admin/users'
-      },
-      {
-        itemName: 'Biblioteca/Libros',
-        itemIcon: 'icon-park-twotone:book-one',
-        itemLink: '/admin/books'
       },
     ]
   }

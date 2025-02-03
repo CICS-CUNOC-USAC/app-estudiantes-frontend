@@ -1,144 +1,196 @@
 <template>
   <main>
-    <h1 class="mb-4">Editar libro</h1>
-    <v-skeleton-loader v-if="loading" type="heading, paragraph, actions" />
-    <div v-if="book && !loading">
-      <v-row>
-        <v-col cols="12" md="10">
-          <v-row>
-            <v-col cols="12" :md="true">
-              <v-text-field v-model="book.name" label="Nombre"></v-text-field>
-            </v-col>
-            <v-col cols="12" :md="true">
-              <v-textarea
-                v-model="book.description"
-                label="Descripción"
-                no-resize
-                :rows="2"
-              ></v-textarea>
-            </v-col>
-            <v-col cols="12" :md="true">
-              <v-text-field v-model="book.author" label="Autor"></v-text-field>
-            </v-col>
-            <v-col cols="12" :md="true">
-              <v-text-field
-                v-model="book.source_url"
-                label="URL de fuente"
-              ></v-text-field>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col cols="12" md="2" align-self="center">
-          <div class="d-flex flex-column justify-center" style="gap: 12px">
-            <v-btn prepend-icon="mdi-arrow-left" to="/admin/books"
-              >Cancelar</v-btn
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">
+        <Icon name="icon-park-twotone:book" class="mr-1.5 mb-1 inline-block" />
+        Editar item de biblioteca
+      </h1>
+    </header>
+    <section
+      class="mt-4 grid grid-cols-1 gap-10 md:grid-cols-[300px_1fr]"
+      v-if="book"
+      :class="{
+        'opacity-60': book && status === 'pending'
+      }"
+    >
+      <PForm
+        :initial-values
+        :resolver
+        v-slot="$form"
+        @submit="saveBook"
+        class="flex flex-col gap-4"
+      >
+        <h2 class="font-medium">Información del libro</h2>
+        <CInputText
+          label="Nombre"
+          name="name"
+          id="name"
+          no-borders
+          prepend-icon="icon-park-twotone:book"
+          :error="$form.name?.error?.message"
+        />
+        <CTextarea
+          label="Descripción"
+          name="description"
+          id="description"
+          no-borders
+          :rows="3"
+          prepend-icon="icon-park-twotone:text"
+          :error="$form.description?.error?.message"
+        />
+        <CInputText
+          label="Autor"
+          name="author"
+          id="author"
+          no-borders
+          prepend-icon="icon-park-twotone:people"
+          :error="$form.author?.error?.message"
+        />
+        <CInputText
+          label="URL de fuente"
+          name="source_url"
+          id="source_url"
+          no-borders
+          prepend-icon="icon-park-outline:link-one"
+          :error="$form.source_url?.error?.message"
+        />
+        <div class="flex items-center gap-2">
+          <PToggleSwitch
+            v-model="enableBookEdit"
+            :pt="{
+              input: {
+                id: 'enableBookEdit'
+              }
+            }"
+          />
+          <label for="enableBookEdit" class="text-sm select-none">
+            Actualizar archivo
+          </label>
+        </div>
+        <PFileUpload
+          v-if="enableBookEdit"
+          mode="advanced"
+          accept="application/pdf"
+          :multiple="false"
+          pt:root:class="border-none!"
+          @select="e => (file = e.files[0])"
+        >
+          <template #header="{ chooseCallback }">
+            <CButton
+              label="Seleccionar archivo"
+              @click="chooseCallback"
+              variant="tonal"
+            />
+          </template>
+          <template #empty>
+            <p class="py-2 text-sm">
+              O arrastra el archivo <span class="font-medium">aquí</span>
+            </p>
+          </template>
+          <template #content="{ files, removeFileCallback }">
+            <div
+              v-if="files.length > 0"
+              class=" py-2 text-sm"
             >
-            <v-btn prepend-icon="mdi-content-save-outline" @click="saveBook"
-              >Guardar</v-btn
-            >
-          </div>
-        </v-col>
-        <v-col cols="12">
-          <v-row>
-            <v-col cols="6" md="3">
-              <v-checkbox-btn
-                v-model="enableBookEdit"
-                label="Actualizar archivo de libro?"
-              ></v-checkbox-btn>
-            </v-col>
-            <v-col v-if="enableBookEdit" cols="6">
-              <v-form ref="bookFileForm">
-                <v-file-input
-                  v-model="file"
-                  accept="application/pdf"
-                  :multiple="false"
-                  label="Archivo PDF"
-                  :rules="[requiredFile, pdfFormat]"
-                  variant="underlined"
-                  density="comfortable"
-                ></v-file-input>
-              </v-form>
-            </v-col>
-            <v-col v-if="enableBookEdit" cols="12" md="3" align-self="center">
-              <v-btn
-                prepend-icon="mdi-upload-outline"
-                color="black"
-                variant="tonal"
-                block
-                @click="updateBookFile"
-              >
-                Subir
-              </v-btn>
-            </v-col>
-          </v-row>
-        </v-col>
-        <v-col v-if="!enableBookEdit" cols="12">
-          <div v-if="book.media">
-            <h3 class="mb-4">Previsualización del libro</h3>
+              <div class="flex items-center gap-2">
+                <Icon name="lucide:file" />
+                <span>{{ files[0].name }}</span>
+              </div>
+            </div>
+          </template>
+        </PFileUpload>
 
-            <ClientOnly class="d-flex justify-center">
-              <PdfPreview :pdf-url="book.media.url" />
-              <template #fallback>
-                <v-progress-circular indeterminate :size="50" :width="6" />
-                <p class="font-weight-light">Cargando...</p>
-              </template>
-            </ClientOnly>
-          </div>
-        </v-col>
-      </v-row>
-    </div>
+        <div class="flex gap-4">
+          <CButton
+            label="Cancelar"
+            icon="icon-park-outline:arrow-left"
+            to="/admin/books"
+            class="flex-1"
+          />
+          <CButton
+            label="Guardar"
+            icon="icon-park-outline:check"
+            type="submit"
+            :loading="status === 'pending'"
+            class="flex-1"
+          />
+        </div>
+      </PForm>
+      <div>
+        <h2 class="mb-4 font-medium">Previsualización del libro</h2>
+        <PdfPreview :pdf-url="book.media.url" :key="book.media.url" />
+      </div>
+    </section>
     <ElementNotFound
       v-if="!book && !loading"
-      element-type="manual"
-      back-to-route="/admin/manuals"
-      back-to-label="Volver a la lista de manuales"
+      class="mt-4"
+      element-type="libro"
+      back-to-route="/admin/books"
+      back-to-label="Volver a la lista de biblioteca"
     />
   </main>
 </template>
 <script setup lang="ts">
 import ElementNotFound from '@/components/partials/ElementNotFound.vue'
+import type { FormSubmitEvent } from '@primevue/forms'
+import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { z } from 'zod'
 import PdfPreview from '~/components/content/PdfPreview.vue'
+import CButton from '~/components/primitives/button/CButton.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
+import CTextarea from '~/components/primitives/form/CTextarea.vue'
 definePageMeta({
   layout: 'admin'
 })
 const { requiredFile, pdfFormat } = useFormValidators()
 const route = useRoute()
-const enableBookEdit = ref(false)
+const enableBookEdit = ref(true)
 const { fetchBookById, updateBookItem } = useAdminLibraryStore()
 const { updateMedia } = useMediaStore()
 const {
   data: book,
   pending: loading,
+  status,
   refresh
-} = await useLazyAsyncData('edit-book', () =>
+} = await useAsyncData('edit-book', () =>
   fetchBookById(+route.params.bookId)
 )
 const file = ref(undefined)
 const bookFileForm = ref()
 
-const saveBook = async () => {
-  if (book.value) {
-    const { name, description, author, source_url } = book.value
-    updateBookItem(+route.params.bookId, {
-      name,
-      description,
-      author,
-      source_url
-    })
+const initialValues = reactive({
+  name: book.value?.name,
+  description: book.value?.description,
+  author: book.value?.author,
+  source_url: book.value?.source_url
+})
+
+const resolver = zodResolver(
+  z.object({
+    name: z.string().nonempty('El nombre del libro es requerido'),
+    description: z.string().nonempty('La descripción del libro es requerida'),
+    author: z.string().nonempty('El autor del libro es requerido'),
+    source_url: z.string().url('La URL de la fuente no es válida')
+  })
+)
+
+const saveBook = async (e: FormSubmitEvent) => {
+  if (e.valid) {
+    status.value = 'pending'
+    await updateBookItem(+route.params.bookId, e.values)
+    if (enableBookEdit.value && file.value) {
+      await updateBookFile()
+    }
+    status.value = 'success'
     await refresh()
   }
 }
 
 const updateBookFile = async () => {
-  const { valid } = await bookFileForm.value.validate()
-  if (!valid) return
   if (file.value && book.value?.media?.id) {
-    loading.value = true
     await updateMedia(file.value, book.value.media.id)
-    loading.value = false
-    await refresh()
     enableBookEdit.value = false
   }
 }
 </script>
-<style lang="scss" scoped></style>
+

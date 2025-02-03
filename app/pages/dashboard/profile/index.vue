@@ -35,9 +35,3 @@ definePageMeta({
   layout: 'dashboard'
 })
 </script>
-
-<style lang="scss" scoped>
-// .profile-edit-section {
-//   margin-bottom: 1.5rem;
-// }
-</style>

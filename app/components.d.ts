@@ -13,6 +13,7 @@ declare module 'vue' {
     PColumn: typeof import('primevue/column')['default']
     PDataTable: typeof import('primevue/datatable')['default']
     PDrawer: typeof import('primevue/drawer')['default']
+    PFileUpload: typeof import('primevue/fileupload')['default']
     PForm: typeof import('@primevue/forms/form')['default']
     PIftaLabel: typeof import('primevue/iftalabel')['default']
     PInputGroup: typeof import('primevue/inputgroup')['default']
@@ -23,7 +24,9 @@ declare module 'vue' {
     PSkeleton: typeof import('primevue/skeleton')['default']
     PSplitter: typeof import('primevue/splitter')['default']
     PSplitterPanel: typeof import('primevue/splitterpanel')['default']
+    PTextarea: typeof import('primevue/textarea')['default']
     PToggleButton: typeof import('primevue/togglebutton')['default']
+    PToggleSwitch: typeof import('primevue/toggleswitch')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

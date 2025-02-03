@@ -1,19 +1,27 @@
 <template>
-  <div class="flex flex-col gap-y-1.5 h-full">
+  <div class="flex  flex-col gap-y-1.5"
+    :class="{
+      'h-full': props.fillHeight,
+      'opacity-60 pointer-events-none': props.disabled
+    }">
     <PInputGroup
       unstyled
-      class="group flex h-12 rounded-lg outline outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
-      :class="[test.classAttr]"
+      class="group flex  rounded-lg outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
+      :class="[test.classAttr, {
+        'h-12': !props.fillHeight,
+        'h-full': props.fillHeight
+      }]"
     >
       <component
         v-if="hasPrependClick || prependIcon"
         :is="hasPrependClick ? Button : InputGroupAddon"
         icon
         @click="emit('click:prepend')"
-        class="inline-flex w-12 items-center justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
+        class="inline-flex w-12 items-center justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900 
+        "
         :class="{
           'hover:bg-surface-200/80 dark:hover:bg-surface-800': hasPrependClick,
-          'cursor-not-allowed opacity-50': disabled
+          // 'cursor-not-allowed opacity-50': disabled
         }"
         unstyled
         pt:label:class="hidden"
@@ -26,9 +34,9 @@
       <div class="relative size-full">
         <PIftaLabel class="relative size-full" unstyled>
           <label
-          v-if="props.label"
-            :for="(test.restAttrs.id as string)"
-            class="absolute pt-1.5 left-0 z-10 w-max text-xs text-muted-color"
+            v-if="props.label"
+            :for="test.restAttrs.id as string"
+            class="absolute left-0 z-10 w-max pt-1.5 text-xs text-muted-color"
           >
             {{ props.label }}
           </label>
@@ -38,7 +46,7 @@
             :disabled
             ref="$input"
             v-model="vModel"
-            class="z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color placeholder:text-muted-color focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
+            class="z-10 flex size-full rounded-lg border border-black bg-surface-50 text-sm transition text-color placeholder:text-muted-color focus:outline-none  dark:border-surface-700 dark:bg-surface-900"
             :class="{
               'pt-4': props.label,
               'pl-3': !prependUsed || !noBorders,
@@ -54,9 +62,16 @@
           >
           </PInputText>
         </PIftaLabel>
+        <!-- () => {
+          vModel = '';
+          $input?.$el?.value = ''
+        } -->
         <button
           v-if="props.clearButton && vModel"
-          @click="vModel = ''"
+          @click="()=>{
+            vModel = '';
+            $emit('clear')
+          }"
           type="button"
           class="absolute top-1/2 z-10 flex size-5 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm opacity-0 transition duration-100 text-muted-color hover:bg-neutral-200 group-focus-within:opacity-100 group-hover:opacity-100 lg:size-4 dark:text-muted-color-emphasis dark:hover:bg-neutral-600"
           :class="{
@@ -71,11 +86,13 @@
         v-if="hasAppendClick || appendIcon"
         :is="hasAppendClick ? Button : InputGroupAddon"
         @click="emit('click:append')"
-        class="inline-flex w-12 items-center justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
+        class="inline-flex w-12 items-center justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900
+        disabled:opacity-50
+        "
         :class="{
           'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800':
             hasAppendClick,
-          'cursor-not-allowed opacity-50': disabled
+          // 'cursor-not-allowed opacity-50': disabled
         }"
         unstyled
         pt:label:class="hidden"
@@ -113,6 +130,7 @@ const props = defineProps<{
   error?: string
   type?: string
   label?: string
+  fillHeight?: boolean
 }>()
 const rawAttrs = useAttrs()
 const test = computed(() => {
@@ -120,7 +138,7 @@ const test = computed(() => {
   return { classAttr, restAttrs }
 })
 
-const emit = defineEmits(['click:prepend', 'click:append'])
+const emit = defineEmits(['click:prepend', 'click:append', 'clear'])
 
 const hasPrependClick = computed(
   () => !!getCurrentInstance()?.vnode?.props['onClick:prepend']
@@ -139,3 +157,4 @@ defineOptions({
 defineExpose({ $input })
 </script>
 <style lang="postcss" scoped></style>
+

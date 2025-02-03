@@ -2,19 +2,24 @@
   <!-- @vue-ignore: Ignore type checking for this component -->
   <PButton
     v-bind="props"
+    :disabled
     :as="asProp"
-    class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0 active:translate-y-0 active:shadow-none"
+    class="inline-flex select-none items-center justify-center font-semibold  transition duration-75 ease-out focus-visible:ring-1 focus-visible:ring-primary-500 focus-visible:ring-opacity-50 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none cursor-pointer"
     :pt:label:class="`${props.label ? 'block' : 'hidden'}`"
     :class="{
       'w-full': props.fluid,
       'rounded-lg': props.rounded,
-      '-translate-x-0.5 -translate-y-0.5 border-2 border-black shadow-[3px_3px_0_0_rgba(0,0,0,1)] text-white':
+      ' border-2 border-black ':
         props.variant !== 'text' && props.variant !== 'link' && props.variant !== 'tonal',
+      '  text-white':
+        props.variant !== 'text' && props.variant !== 'link' && props.variant !== 'tonal' && !props.outlined,
+        'shadow-[3px_3px_0_0_rgba(0,0,0,1)]': !props.outlined,
       'gap-x-2 px-3.5 py-1.5':
         props.variant !== 'link' && props.size === 'large',
       'gap-x-1 px-2.5 py-1': props.variant !== 'link' && props.size === 'small',
-      'bg-primary-600 hover:bg-primary-500 focus:bg-opacity-85':
-        !props.severity && !props.outlined,
+      'bg-primary-600 hover:bg-primary-500 focus:bg-primary-600/85':
+        !props.severity && !props.outlined && props.variant !== 'link' && props.variant !== 'tonal' && props.variant !== 'text',
+        // 'bg-primary-'
 
       // Colors
       'bg-red-600 text-red-100 hover:bg-red-500': props.severity === 'danger',
@@ -25,7 +30,7 @@
       'bg-blue-600 text-blue-100 hover:bg-blue-500': props.severity === 'info',
       'bg-zinc-600 text-zinc-100 hover:bg-zinc-500':
         props.severity === 'secondary',
-      'bg-transparent text-color focus:bg-surface-50/20 dark:focus:bg-surface-600/40':
+      'bg-transparent text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 active:translate-x-0.5 active:translate-y-0.5 dark:border-white':
         props.outlined,
 
       // Icon position
@@ -35,13 +40,13 @@
       'flex-col gap-y-1': props.iconPos === 'top',
 
       // Loading and disabled
-      'pointer-events-none opacity-80': props.disabled,
+      'pointer-events-none opacity-50': props.disabled,
       'pointer-events-none opacity-90': props.loading,
 
       // Variants
-      'bg-opacity-30 text-black dark:text-white shadow-none hover:bg-opacity-40 active:translate-x-0.5 active:translate-y-0.5 border-none translate-x-0 translate-y-0':
+      'bg-primary/30 text-black dark:text-white shadow-none hover:bg-primary/40 active:translate-x-0.5 active:translate-y-0.5 border-none focus:text-white focus:bg-primary/90':
         props.variant === 'tonal',
-      'bg-opacity-0 text-current shadow-none hover:bg-opacity-20 active:translate-x-0.5 active:translate-y-0.5 active:border-black':
+      'bg-transparent text-current shadow-none hover:bg-primary-500/20 active:translate-x-0.5 active:translate-y-0.5 active:border-black active:bg-primary-500/70 active:text-white':
         props.variant === 'text',
       'gap-x-1 !bg-opacity-0 p-0 shadow-none text-color hover:underline active:translate-x-0.5 active:translate-y-0.5':
         props.variant === 'link',

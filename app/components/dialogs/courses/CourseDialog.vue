@@ -1,11 +1,11 @@
 <template>
-  <CDialog v-model:open="dialog">
+  <CDialog v-model:open="dialog" >
     <CDialogTrigger
-      class="text-left text-sm hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
+      class="text-left text-sm cursor-pointer hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
     >
       {{ courseName }}
     </CDialogTrigger>
-    <CDialogContent title="Detalles del curso">
+    <CDialogContent title="Detalles del curso" close-button>
       <div class="course-details" v-if="data?.response">
         <header class="course-header">
           <h2 class="text-lg font-bold">{{ courseName }}</h2>
@@ -65,7 +65,9 @@ const { data } = await useLazyAsyncData(
   }
 )
 </script>
-<style lang="postcss" scoped>
+<style scoped>
+@reference '~/assets/css/main.css';
+
 .course-details {
   grid-template-areas:
     'name name career'
