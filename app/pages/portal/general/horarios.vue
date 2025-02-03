@@ -1,6 +1,6 @@
 <template>
   <div class="flex">
-    <div class="bg-cics-silver-pale h-[93vh] dark:bg-neutral-900">
+    <div class="bg-cics-silver-pale h-[93vh] dark:bg-neutral-900 hidden md:block">
       <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
@@ -20,8 +20,8 @@
     </div>
     <div class="mt-6 ml-6">
       <div class="grid grid-cols-1">
-        <div class="mb-4 grid grid-cols-6">
-          <div class="col-start-1">
+        <div class="mb-4 lg:flex lg:flex-row lg:justify-between sm:grid sm:grid-cols-2 flex flex-col items-center content-around">
+          <div class="">
             <ArrowedCombobox
               :options="[
                 'Todas las Carreras',
@@ -36,7 +36,7 @@
               "
             ></ArrowedCombobox>
           </div>
-          <div class="col-span-2 col-start-3">
+          <div class="">
             <ToggleGroupRoot
               :model-value="coursesMode"
               @update:model-value="
@@ -60,9 +60,9 @@
               >
             </ToggleGroupRoot>
           </div>
-          <div class="col-span-2 col-start-5 flex max-h-10">
+          <div class="flex max-h-10 max-lg:mt-2">
             <CInputText
-              class="mr-2"
+              class="mr-2 max-lg:min-w-full"
               v-model="search"
               placeholder="Buscar un curso"
               prepend-icon="lucide:search"
