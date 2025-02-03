@@ -32,4 +32,4 @@ import CButton from '~/components/primitives/button/CButton.vue'
 import { careers, contentHelp } from './(files)/consts'
 </script>
 
-<style scoped lang="scss"></style>
+

@@ -23,4 +23,3 @@ definePageMeta({
   layout: 'admin'
 })
 </script>
-<style lang="scss"></style>

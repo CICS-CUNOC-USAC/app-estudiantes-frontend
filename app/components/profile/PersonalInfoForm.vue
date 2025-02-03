@@ -89,4 +89,4 @@ const save = async () => {
   emit('save', newProfile)
 }
 </script>
-<style lang="scss" scoped></style>
+

@@ -61,4 +61,4 @@ async function load() {
   // page.value++
 }
 </script>
-<style lang="scss" scoped></style>
+

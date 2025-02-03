@@ -26,4 +26,4 @@ definePageMeta({
   layout: 'dashboard'
 })
 </script>
-<style lang="scss" scoped></style>
+

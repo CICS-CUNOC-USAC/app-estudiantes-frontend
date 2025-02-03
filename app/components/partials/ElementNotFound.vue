@@ -26,4 +26,4 @@ defineProps<{
   backToLabel: string
 }>()
 </script>
-<style lang="scss" scoped></style>
+

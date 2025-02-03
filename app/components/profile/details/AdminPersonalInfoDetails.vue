@@ -37,4 +37,4 @@ defineProps<{
   user: Staff | null
 }>()
 </script>
-<style lang="scss" scoped></style>
+

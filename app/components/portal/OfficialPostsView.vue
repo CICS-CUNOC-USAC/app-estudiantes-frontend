@@ -46,4 +46,4 @@ const { data, status } = useFetch<
   }[]
 >('/api/official-posts')
 </script>
-<style lang="scss" scoped></style>
+

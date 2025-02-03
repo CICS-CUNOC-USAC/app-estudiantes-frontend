@@ -193,4 +193,4 @@ const updateBookFile = async () => {
   }
 }
 </script>
-<style lang="scss" scoped></style>
+

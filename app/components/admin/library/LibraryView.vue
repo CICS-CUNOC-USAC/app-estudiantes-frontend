@@ -154,4 +154,3 @@ const handleDelete = async (id: number) => {
   refresh()
 }
 </script>
-<style lang="scss" scoped></style>

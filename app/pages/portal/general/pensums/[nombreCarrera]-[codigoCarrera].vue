@@ -46,4 +46,4 @@ const { data: careerCourses, pending: loading, status } =
   )
 </script>
 
-<style scoped lang="scss"></style>
+

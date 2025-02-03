@@ -72,4 +72,4 @@ const savePassword = async () => {
   emit('savePassword', { user: { password: password.value } })
 }
 </script>
-<style lang="scss" scoped></style>
+

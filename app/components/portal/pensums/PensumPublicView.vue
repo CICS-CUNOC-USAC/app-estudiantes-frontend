@@ -24,4 +24,4 @@ defineProps<{
   loading: boolean
 }>()
 </script>
-<style lang="scss" scoped></style>
+

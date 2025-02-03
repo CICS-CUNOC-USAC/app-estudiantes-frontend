@@ -109,4 +109,3 @@ const { data, refresh, status } = await useLazyAsyncData(
   }
 )
 </script>
-<style lang="scss" scoped></style>

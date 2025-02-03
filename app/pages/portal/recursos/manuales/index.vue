@@ -39,8 +39,6 @@
   </main>
 </template>
 <script setup lang="ts">
-import ManualsView from '~/components/portal/ManualsView.vue'
-import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CButton from '~/components/primitives/button/CButton.vue';
 
@@ -59,10 +57,4 @@ const { data } = useAsyncData(() =>
     .without(['body'])
     .find()
 )
-const content_help = `Los Manuales es la seccion de la Aplicacion para Estdiantes que permite la visualizacion de Manuales creados con el fin de ayudar al estudiantado
-  ## Funcionamiento:
-  ### Busqueda:
-  Para poder buscar un manual basta con ingresar su nombre en la barra de busqueda.
-  ![TestImage](https://as2.ftcdn.net/v2/jpg/04/74/32/65/1000_F_474326573_R0pN6QJCuDOsDDj4sxVgpzGLk5cQHe6s.jpg)`
 </script>
-<style lang="scss" scoped></style>

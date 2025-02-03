@@ -74,4 +74,4 @@ const filters = ref({
   teacher: { value: null, matchMode: FilterMatchMode.CONTAINS }
 })
 </script>
-<style lang="scss" scoped></style>
+

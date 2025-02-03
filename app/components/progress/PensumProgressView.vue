@@ -21,4 +21,4 @@ const props = defineProps<{
 }>()
 const emits = defineEmits(['updateItem'])
 </script>
-<style lang="scss" scoped></style>
+

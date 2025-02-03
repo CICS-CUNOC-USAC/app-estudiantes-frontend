@@ -53,4 +53,4 @@ const route = useRoute()
 const id = route.params.cursoId
 const fromSearch = route.query.fromSearch
 </script>
-<style lang="scss" scoped></style>
+
