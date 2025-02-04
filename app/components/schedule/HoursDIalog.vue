@@ -3,67 +3,49 @@
     <CDialogTrigger
       class="text-left text-sm hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
     >
-      {{ courseName }}
+    <CButton icon="tabler:calendar-week" size="small"/>
     </CDialogTrigger>
-    <CDialogContent title="Detalles del curso">
-      <div class="course-details" v-if="data?.response">
-        <header class="course-header">
-          <h2 class="text-lg font-bold">{{ courseName }}</h2>
-          <p class="">{{ courseCode }}</p>
-        </header>
-        <div class="course-career">
-          <p class="">{{ data.response.career_code }}</p>
-        </div>
-        <div class="course-description">
-          <p class="">
-            {{
-              data.response?.course.description ||
-              'No hay descripción para este curso'
-            }}
-          </p>
-        </div>
-        <div class="course-hours">
-          <p class="">Horas: 4</p>
-        </div>
-        <div class="course-room">
-          <p class="">Salón: 123</p>
-        </div>
-        <CButton label="Ver penusm" variant="text" class="course-button" />
-        <CButton
-          label="Ver en biblioteca"
-          variant="text"
-          class="course-button-s"
-        />
-      </div>
+    <CDialogContent title="" class="p-0 flex justify-center">
+      <DisplayModeSelector
+        :model-value="scheduleType"
+        :classrooms="classrooms"
+        :hours="availableHours || []"
+        :selection="selectedHours"
+        @update:selected-periods="
+          (val: Hour[]) => {
+            emit('update:selectedPeriods', val)
+          }
+        "
+        @update:model-value="
+          (val) => {
+            emit('updateModelValue', val)
+          }
+        "
+      />
     </CDialogContent>
   </CDialog>
 </template>
 <script setup lang="ts">
+import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import {
   CDialog,
   CDialogContent,
   CDialogTrigger
 } from '~/components/primitives/dialog'
+import type { Classroom, Hour } from '~/utils/types/schedule-courses';
 
-const { courseCode, careerCode } = defineProps<{
-  field: number
-  courseCode: string
-  courseName: string
-  mandatory: boolean
-  careerCode: number
+const props = defineProps<{
+  scheduleType: 'calendar' | 'classroom'
+  classrooms: Classroom[] | null
+  availableHours: Hour[]
+  selectedHours: Hour[]
 }>()
 
-const { fetchCareerCourse } = useCoursesStore()
 const dialog = ref(false)
 
-const { data } = await useLazyAsyncData(
-  () => fetchCareerCourse(courseCode, careerCode),
-  {
-    immediate: false,
-    watch: [dialog]
-  }
-)
+const emit = defineEmits(['update:selectedPeriods', 'updateModelValue'])
+
 </script>
 <style lang="postcss" scoped>
 .course-details {

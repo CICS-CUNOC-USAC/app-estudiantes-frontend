@@ -20,6 +20,25 @@
     <div class="mt-6 ml-6">
       <div class="grid grid-cols-1">
         <div class="mb-4 lg:flex lg:flex-row lg:justify-between sm:grid sm:grid-cols-2 flex flex-col items-center content-around">
+            <div class="md:hidden">
+                <HoursDialog
+                    :schedule-type="scheduleType"
+                    :classrooms="classrooms"
+                    :available-hours="availableHours"
+                    :selected-hours="selectedSchedules"
+                    @update:selected-periods="
+                      (val: Hour[]) => {
+                        if (val) selectedSchedules = val as Hour[]
+                      }
+                    "
+                    @update:model-value="
+                      (val: 'calendar' | 'classroom') => {
+                        if (val) scheduleType = val as 'calendar' | 'classroom'
+                      }
+                    "
+                >
+                </HoursDialog>
+            </div>
           <div class="">
             <ArrowedCombobox
               :options="[
@@ -64,7 +83,7 @@
               class="mr-2 max-lg:min-w-full"
               v-model="search"
               placeholder="Buscar un curso"
-              prepend-icon="lucide:search"
+              prepend-icon="icon-park-twotone:search"
               @update:model-value="
                 (val: string) => {
                   searchScheduleCourse(val)
@@ -77,14 +96,14 @@
             />
 
             <PButton
-              class="search-button"
+              class="search-button rounded-l-lg"
               @click="focusPrevCourse"
               unstyled
             >
               <Icon class="shrink-0" icon="radix-icons:chevron-left" />
             </PButton>
             <PButton
-              class="search-button"
+              class="search-button rounded-r-lg"
               @click="focusNextCourse"
               unstyled
             >
@@ -120,8 +139,10 @@
 import { ToggleGroupItem, ToggleGroupRoot } from 'radix-vue'
 import ClassScheduleV1 from '~/components/portal/horarios/ClassScheduleV1.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import CButton from '~/components/primitives/button/CButton.vue'
 import ArrowedCombobox from '~/components/schedule/ArrowedSelector.vue'
 import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
+import HoursDialog from '~/components/schedule/HoursDialog.vue'
 import type { Career } from '~/utils/types/career-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 import { Icon } from '@iconify/vue'

@@ -108,10 +108,11 @@ import type { Classroom, Hour } from '~/utils/types/schedule-courses'
 import CInputText from '../primitives/form/CInputText.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 
-let { classrooms } = defineProps<{
+let { classrooms, selection } = defineProps<{
   modelValue: 'calendar' | 'classroom'
   classrooms?: Classroom[] | null
   hours: Hour[]
+  selection?: Hour[]
 }>()
 
 const classroomSearch = ref('')
@@ -126,11 +127,12 @@ function cleanScheduleSelection() {
     emit('update:selectedPeriods', selectedPeriods.value)
 }
 
-const selectedPeriods = ref<any>([])
+const selectedPeriods = ref<any>(selection || [])
 const emit = defineEmits<{
   'update:modelValue': [value: string]
   'update:selectedPeriods': [value: any]
 }>()
+
 </script>
 <style scoped>
 @reference '~/assets/css/main.css';
