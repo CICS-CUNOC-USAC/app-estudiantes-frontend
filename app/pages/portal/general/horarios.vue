@@ -12,7 +12,6 @@
         "
         @update:model-value="
           (val) => {
-            console.log(val)
             if (val) scheduleType = val as 'calendar' | 'classroom'
           }
         "
@@ -73,6 +72,8 @@
               "
               no-borders
               @keypress.enter="focusNextCourse"
+              @keyup="(e: any) => keyPressed(e.keyCode)"
+              ref="searchInput"
             />
 
             <PButton
@@ -130,6 +131,7 @@ const schedulesKey = computed(() => {
 })
 
 const scrollerSchedules = ref()
+const searchInput = ref()
 
 const foundCourses = ref<Course[]>([])
 const focusedCourseIndex = ref<number | undefined>(0)
@@ -244,7 +246,6 @@ function focusNextCourse() {
       })
     }
   } else {
-    console.log('avanza')
     focusedCourseIndex.value++
 
     const match = foundCourses.value[focusedCourseIndex.value]
@@ -267,7 +268,6 @@ function focusPrevCourse() {
 
   if (focusedCourseIndex.value === 0) {
     focusedCourseIndex.value = foundCourses.value.length - 1
-    console.log('aqui', focusedCourseIndex.value)
 
     const match = foundCourses.value[focusedCourseIndex.value]
     const courseTagId = `S${match.course_code}${match.section.name}`
@@ -293,6 +293,25 @@ function focusPrevCourse() {
       })
     }
   }
+}
+
+function keyPressed(keyCode: number) {
+    switch (keyCode) {
+        case 27: //Escape
+            cancelSearch()
+            break;
+        default:
+            break;
+    }
+}
+
+function cancelSearch() {
+    foundCourses.value = []
+    focusedCourseIndex.value = undefined
+    scrollerSchedules.value.scrollTopLeft()
+    search.value = ''
+    resetClassesSchedule()
+    searchInput.value.$el.querySelector("input").blur()
 }
 
 function resetClassesSchedule() {
