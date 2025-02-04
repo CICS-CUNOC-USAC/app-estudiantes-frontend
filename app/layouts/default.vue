@@ -98,19 +98,10 @@
       </template>
     </PDrawer>
 
-    <main
-      id="appcont"
-      class="mx-auto print:pt-14 pt-14 min-h-screen"
-      :class="{
-        'max-w-screen-xl px-5  lg:px-8': !$route.meta.extendScreen
-      }"
-    >
-      <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
-    </main>
     <div class="d-flex flex-column">
       <main
         id="appcont"
-        class="mx-auto  print:pt-14"
+          class="mx-auto print:pt-14 pt-14 min-h-screen"
         :class="{
           'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen,
         }"
