@@ -1,9 +1,10 @@
 <template>
   <CDialog v-model:open="dialog">
     <CDialogTrigger
-      class="text-left text-sm hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
+      class="lg:hidden text-sm"
+      as-child
     >
-    <CButton icon="tabler:calendar-week" size="small"/>
+    <CButton variant="tonal" class="h-full" icon="tabler:calendar-week" size="small" label="Periodos" />
     </CDialogTrigger>
     <CDialogContent title="" class="p-0 flex justify-center">
       <DisplayModeSelector

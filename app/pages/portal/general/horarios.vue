@@ -1,6 +1,8 @@
 <template>
-  <div class="flex">
-    <div class="bg-cics-silver-pale h-[93vh] dark:bg-neutral-900 hidden md:block">
+  <div class="flex pt-14">
+    <div
+      class="bg-cics-silver-pale hidden min-h-screen lg:block dark:bg-neutral-900"
+    >
       <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
@@ -17,29 +19,47 @@
         "
       />
     </div>
-    <div class="mt-6 ml-6">
+    <div class="px-4 pt-4">
       <div class="grid grid-cols-1">
-        <div class="mb-4 lg:flex lg:flex-row lg:justify-between sm:grid sm:grid-cols-2 flex flex-col items-center content-around">
-            <div class="md:hidden">
-                <HoursDialog
-                    :schedule-type="scheduleType"
-                    :classrooms="classrooms"
-                    :available-hours="availableHours"
-                    :selected-hours="selectedSchedules"
-                    @update:selected-periods="
-                      (val: Hour[]) => {
-                        if (val) selectedSchedules = val as Hour[]
-                      }
-                    "
-                    @update:model-value="
-                      (val: 'calendar' | 'classroom') => {
-                        if (val) scheduleType = val as 'calendar' | 'classroom'
-                      }
-                    "
-                >
-                </HoursDialog>
-            </div>
-          <div class="">
+        <!-- <div class="mb-4 lg:flex lg:flex-row lg:justify-between sm:grid sm:grid-cols-2 flex flex-col items-center content-around"> -->
+        <div class="mb-4 flex flex-col lg:flex-row  justify-between items-center gap-2.5">
+          <!-- <div class="md:hidden">
+            <HoursDialog
+              :schedule-type="scheduleType"
+              :classrooms="classrooms"
+              :available-hours="availableHours"
+              :selected-hours="selectedSchedules"
+              @update:selected-periods="
+                (val: Hour[]) => {
+                  if (val) selectedSchedules = val as Hour[]
+                }
+              "
+              @update:model-value="
+                (val: 'calendar' | 'classroom') => {
+                  if (val) scheduleType = val as 'calendar' | 'classroom'
+                }
+              "
+            >
+            </HoursDialog>
+          </div> -->
+          <div class="flex gap-2.5">
+            <HoursDialog
+              :schedule-type="scheduleType"
+              :classrooms="classrooms"
+              :available-hours="availableHours"
+              :selected-hours="selectedSchedules"
+              @update:selected-periods="
+                (val: Hour[]) => {
+                  if (val) selectedSchedules = val as Hour[]
+                }
+              "
+              @update:model-value="
+                (val: 'calendar' | 'classroom') => {
+                  if (val) scheduleType = val as 'calendar' | 'classroom'
+                }
+              "
+            >
+            </HoursDialog>
             <ArrowedCombobox
               :options="[
                 'Todas las Carreras',
@@ -78,22 +98,24 @@
               >
             </ToggleGroupRoot>
           </div>
-          <div class="flex max-h-10 max-lg:mt-2">
-            <CInputText
-              class="mr-2 max-lg:min-w-full"
-              v-model="search"
-              placeholder="Buscar un curso"
-              prepend-icon="icon-park-twotone:search"
-              @update:model-value="
-                (val: string) => {
-                  searchScheduleCourse(val)
-                }
-              "
-              no-borders
-              @keypress.enter="focusNextCourse"
-              @keyup="(e: any) => keyPressed(e.keyCode)"
-              ref="searchInput"
-            />
+          <div class="flex w-full lg:w-auto gap-1.5">
+            <div class="w-full lg:w-auto flex-1 lg:flex-initial">
+              <CInputText
+                class="h-10!"
+                v-model="search"
+                placeholder="Buscar un curso"
+                prepend-icon="icon-park-twotone:search"
+                @update:model-value="
+                  (val: string) => {
+                    searchScheduleCourse(val)
+                  }
+                "
+                no-borders
+                @keypress.enter="focusNextCourse"
+                @keyup="(e: any) => keyPressed(e.keyCode)"
+                ref="searchInput"
+              />
+            </div>
 
             <PButton
               class="search-button rounded-l-lg"
@@ -317,22 +339,22 @@ function focusPrevCourse() {
 }
 
 function keyPressed(keyCode: number) {
-    switch (keyCode) {
-        case 27: //Escape
-            cancelSearch()
-            break;
-        default:
-            break;
-    }
+  switch (keyCode) {
+    case 27: //Escape
+      cancelSearch()
+      break
+    default:
+      break
+  }
 }
 
 function cancelSearch() {
-    foundCourses.value = []
-    focusedCourseIndex.value = undefined
-    scrollerSchedules.value.scrollTopLeft()
-    search.value = ''
-    resetClassesSchedule()
-    searchInput.value.$el.querySelector("input").blur()
+  foundCourses.value = []
+  focusedCourseIndex.value = undefined
+  scrollerSchedules.value.scrollTopLeft()
+  search.value = ''
+  resetClassesSchedule()
+  searchInput.value.$el.querySelector('input').blur()
 }
 
 function resetClassesSchedule() {
@@ -356,7 +378,7 @@ function highlightFoundCourses() {
 definePageMeta({
   layout: 'default',
   extendScreen: true,
-  menuClass: 'bg-cics-silver-pale dark:bg-neutral-900',
+  menuClass: 'bg-cics-silver-pale dark:bg-neutral-900'
 })
 const search = ref('')
 await $api<Hour[]>('/hours').then((response) => {
@@ -374,6 +396,6 @@ await $api<Career[]>('/careers').then((response) => {
 }
 
 .search-button {
-    @apply mr-2 min-w-6 focus-visible:ring-primary-500 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 inline-flex cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none
+  @apply focus-visible:ring-primary-500 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 inline-flex min-w-6 cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
 }
 </style>
