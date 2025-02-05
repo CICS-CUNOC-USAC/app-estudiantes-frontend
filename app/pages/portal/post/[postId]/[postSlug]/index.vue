@@ -88,6 +88,9 @@ useCustomPageTitle(
     ? `${data.value.title} | Publicación`
     : 'Publicación oficial'
 )
+definePageMeta({
+  title: 'Publicación oficial',
+})
 </script>
 <style>
 @reference '~/assets/css/main.css';
