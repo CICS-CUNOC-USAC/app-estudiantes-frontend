@@ -103,4 +103,9 @@ const filteredData = computed(() => {
     item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
   )
 })
+
+useCustomPageTitle('Programas de Cursos')
+definePageMeta({
+  title: 'Programas de Cursos'
+})
 </script>

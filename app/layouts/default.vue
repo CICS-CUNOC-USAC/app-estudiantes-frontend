@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav
-      class=" fixed top-0 z-20 h-14 w-full border-b  backdrop-blur-sm transition print:hidden"
+      class="fixed top-0 z-20 h-15 w-full border-b backdrop-blur-sm transition print:hidden"
       :class="{
         'border-transparent': !hasScrolled,
         'border-neutral-200 shadow-md dark:border-black/80': hasScrolled,
@@ -10,26 +10,29 @@
       }"
     >
       <div
-        class="mx-auto flex max-w-screen-2xl items-center justify-between px-4 py-2.5"
+        class="mx-auto flex h-full max-w-screen-2xl items-center justify-between px-4 py-2.5"
       >
         <div class="flex grow basis-0 items-center gap-x-3">
           <button
             @click="drawer = !drawer"
             type="button"
-            class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 focus:ring-2 focus:ring-neutral-200 focus:outline-none md:hidden dark:text-neutral-400 dark:focus:ring-neutral-600"
+            class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 focus:ring-2 focus:ring-neutral-200 focus:outline-none lg:hidden dark:text-neutral-400 dark:focus:ring-neutral-600"
           >
             <Icon name="tabler:layout-sidebar-filled" />
           </button>
           <button
-            class="hidden items-center space-x-3 transition hover:opacity-80 md:flex"
+            class="hidden items-center space-x-2 transition hover:opacity-80 lg:flex"
             to="/"
             @click="drawer = true"
           >
             <CICSLogo :width="60" fill="var(--p-primary-500)" />
+            <span v-if=" $route.meta.title">⋅</span>
+            <div class="text-xs font-medium">{{ $route.meta.title }}</div>
           </button>
           <Transition name="title-fade">
-            <NuxtLink class="block text-sm md:hidden" to="/" v-if="!searchOpen">
+            <NuxtLink class="block text-sm lg:hidden" to="/" v-if="!searchOpen">
               <strong>CICS App</strong> ⋅ Portal
+              <div class="text-xs font-medium">{{ $route.meta.title }}</div>
             </NuxtLink>
           </Transition>
         </div>
@@ -101,9 +104,9 @@
     <div class="d-flex flex-column">
       <main
         id="appcont"
-        class="mx-auto  print:pt-14"
+        class="mx-auto print:pt-14"
         :class="{
-          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen,
+          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen
         }"
       >
         <NuxtPage @search="toggleSearch({ leaveOpen: true })" />

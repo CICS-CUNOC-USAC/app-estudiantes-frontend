@@ -89,12 +89,10 @@ import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import { sections } from '~/utils/consts/main-page.consts'
 
-useHead({
-  title: 'Inicio'
-})
 definePageMeta({
   extendScreen: true,
-  menuClass: 'bg-cics-white dark:bg-cics-blue',
+  menuClass: 'bg-cics-white/80 dark:bg-cics-blue/80',
+  title: 'Inicio'
 })
 </script>
 <style scoped>
