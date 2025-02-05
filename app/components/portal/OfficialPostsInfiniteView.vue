@@ -34,7 +34,7 @@
         :to="`/portal/post/${item.link}`"
       >
         <div class="flex-1 space-y-3">
-          <h1 class="text-xl font-bold">{{ item.title }}</h1>
+          <h1 class="text-xl font-semibold">{{ item.title }}</h1>
           <p class="text-muted-color-emphasis">{{ item.description }}</p>
         </div>
         <small class="text-muted-color block">{{ item.posted_since }}</small>

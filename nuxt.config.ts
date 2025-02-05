@@ -99,13 +99,11 @@ export default defineNuxtConfig({
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
     },
     families: [
-      { name: 'Geist Sans', provider: 'fontsource' },
+      { name: 'Geist', provider: 'google' },
       { name: 'Mona Sans', provider: 'google' },
-      { name: 'Hubot Sans', provider: 'google' },
-      { name: 'Geist Mono', provider: 'fontsource' },
-      { name: 'Switzer', provider: 'fontshare' },
-      { name: 'DM Sans', provider: 'google' },
-      { name: 'Instrument Sans', provider: 'google' },
+      { name: 'Geist Mono', provider: 'google' },
+      { name: 'IBM Plex Sans', provider: 'google' },
+      { name: 'Barlow', provider: 'google' },
     ],
     experimental: {
       processCSSVariables: true

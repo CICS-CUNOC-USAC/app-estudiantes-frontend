@@ -28,7 +28,7 @@
       <p class="mb-4 flex-1">
         {{ description }}
       </p>
-      <span class="block pb-4 text-xs tracking-tight">
+      <span class="block pb-4 text-sm tracking-tight">
         <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
         {{ small }}
       </span>
