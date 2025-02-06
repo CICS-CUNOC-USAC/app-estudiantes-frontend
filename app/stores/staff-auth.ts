@@ -6,14 +6,27 @@ type LoginPayload = {
   password: string
 }
 
+export type Permission = {
+  id: number
+  name: string
+  description: string
+  action: string
+  subject: string
+  conditions: any
+  created_at: Date
+  updated_at: Date
+}
+
 export type Role = {
   id: number
   alias: string
   name: string
   description: string
+  permissions: Permission[]
   created_at: Date
   updated_at: Date
 }
+
 
 export type Staff = {
   id: number
