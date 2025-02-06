@@ -8,7 +8,10 @@ export default defineEventHandler(async (event) => {
   const html = await fetch(BASE_URL + `?page=${page}`)
     .then((res) => res.text())
     .catch((err) => {
-      return ''
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Internal Server Error or Service Unavailable',
+      })
     })
   const doc = new JSDOM(html).window.document
   const mainPostsContainer = doc.querySelector('#contenido')

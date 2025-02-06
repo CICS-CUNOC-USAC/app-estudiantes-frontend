@@ -13,8 +13,8 @@
       <PForm :initial-values :resolver v-slot="$form" @submit="saveUser">
         <h2 class="my-2 font-medium">Información del usuario</h2>
         <fieldset
-        :disabled="asyncStatus === 'loading'"
-        class="grid grid-cols-1 gap-4 lg:grid-cols-2 disabled:opacity-60"
+          :disabled="asyncStatus === 'loading'"
+          class="grid grid-cols-1 gap-4 disabled:opacity-60 lg:grid-cols-2"
         >
           <CInputText
             label="Nombres"
@@ -89,12 +89,8 @@ const initialValues = reactive({
 
 const resolver = zodResolver(
   z.object({
-    first_name: z.string()
-    // .nonempty('El nombre es requerido')
-    ,
-    last_name: z.string()
-    // .nonempty('El apellido es requerido')
-    ,
+    first_name: z.string().nonempty('El nombre es requerido'),
+    last_name: z.string().nonempty('El apellido es requerido'),
     email: z.string().email('El correo electrónico no es válido'),
     password: z.string().nonempty('La contraseña es requerida')
   })

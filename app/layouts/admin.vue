@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-800">
+  <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-900 lg:dark:bg-neutral-800">
     <div class="flex gap-x-1">
       <!-- Desktop -->
       <nav

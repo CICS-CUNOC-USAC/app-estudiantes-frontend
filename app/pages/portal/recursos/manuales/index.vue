@@ -57,4 +57,9 @@ const { data } = useAsyncData(() =>
     .without(['body'])
     .find()
 )
+
+useCustomPageTitle('Manuales')
+definePageMeta({
+  title: 'Manuales',
+})
 </script>
