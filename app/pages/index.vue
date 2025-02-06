@@ -8,7 +8,7 @@
           <span>
             <Icon
               name="icon-park-twotone:newspaper-folding"
-              class="mr-1.5 mb-1 inline text-primary-400 dark:text-primary-300"
+              class="mr-1.5 mb-1 inline text-primary-700 dark:text-primary-200"
               size="26"
             />
             Publicaciones oficiales recientes
@@ -30,7 +30,7 @@
       >
         <h2 class="flex justify-between gap-x-4 text-lg font-semibold lg:justify-start">
           <span>
-            <Icon :name="section.icon" class="mr-1.5 mb-1 inline text-primary-400 dark:text-primary-300" size="26" />
+            <Icon :name="section.icon" class="mr-1.5 mb-1 inline text-primary-700 dark:text-primary-200" size="26" />
             {{ section.title }}
           </span>
         </h2>
@@ -79,6 +79,6 @@ import { sections } from '~/utils/consts/main-page.consts'
 
 definePageMeta({
   extendScreen: true,
-  menuClass: 'bg-cics-white/80 dark:bg-cics-blue/80',
+  menuClass: 'bg-cics-white/80 dark:bg-cics-blue/75',
 })
 </script>

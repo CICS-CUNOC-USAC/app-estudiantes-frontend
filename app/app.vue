@@ -83,7 +83,7 @@ html {
 
 body,
 html {
-  /* scrollbar-gutter: stable; */
+  scrollbar-gutter: stable;
 }
 
 /* Common animations */

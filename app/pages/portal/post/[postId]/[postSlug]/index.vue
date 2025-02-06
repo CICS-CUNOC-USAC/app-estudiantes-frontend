@@ -89,7 +89,7 @@ useCustomPageTitle(
     : 'Publicación oficial'
 )
 definePageMeta({
-  title: 'Publicación oficial',
+  title: 'Publicación oficial'
 })
 </script>
 <style>
@@ -98,23 +98,26 @@ definePageMeta({
 .official-post-content {
   @apply prose prose-base prose-neutral dark:prose-invert max-w-none;
 
-  @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-semibold prose-a:no-underline prose-a:transition hover:prose-a:border-b-2;
-
-  @apply hover:prose-a:text-color-emphasis dark:hover:prose-a:text-primary-100;
+  @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b-2;
 
   img {
-    @apply w-full rounded-lg shadow-lg;
+    @apply w-full rounded-lg shadow-lg border dark:border-white/40 border-slate-900/10;
   }
 
   a:has(img) {
     @apply block !bg-transparent py-0;
   }
+
+  .alert {
+    @apply rounded-xl border px-4 py-0.5;
+    @apply bg-surface-100/40 dark:bg-surface-900/65;
+  }
+
   .alert-danger {
     @apply dark:border-zinc-700;
     & * {
       @apply text-rose-800 dark:text-red-200;
     }
-    @apply bg-surface-100/40 dark:bg-surface-900/65 rounded-xl border px-4 py-2;
     @apply text-rose-800 dark:text-red-200;
   }
 
@@ -123,8 +126,7 @@ definePageMeta({
     & * {
       @apply text-emerald-800 dark:text-emerald-200;
     }
-    @apply rounded-xl border px-4 py-2;
-    @apply bg-surface-100/40 dark:bg-surface-900/65;
+
     @apply text-emerald-800 dark:text-emerald-200;
   }
 
@@ -133,8 +135,6 @@ definePageMeta({
     & * {
       @apply text-amber-800 dark:text-amber-200;
     }
-    @apply rounded-xl border px-4 py-2;
-    @apply bg-surface-100/40 dark:bg-surface-900/65;
     @apply text-amber-800 dark:text-amber-200;
   }
 
