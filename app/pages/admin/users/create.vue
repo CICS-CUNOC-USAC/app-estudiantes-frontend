@@ -49,6 +49,25 @@
             prepend-icon="icon-park-twotone:lock"
             :error="$form.password?.error?.message"
           />
+          <div class="flex">
+              <div class="w-full">
+                  <CSelect
+                    name="selectRole"
+                    id="selectRole"
+                    :items="['hola','adios']"
+                    checkmark
+                    placeholder="Selecciona un rol"
+                    clearable
+                    label="Roles"
+                    prepend-icon="icon-park-twotone:permissions"
+                    no-borders
+                    option-label="text"
+                    option-value="value"
+                    :error="$form.roleSelect?.error?.message"
+                  />
+              </div>
+              <CButton class="ml-2" icon="icon-park-twotone:plus-cross"></CButton>
+          </div>
         </fieldset>
 
         <div class="mt-4 space-x-4">
@@ -76,6 +95,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
 import CButton from '~/components/primitives/button/CButton.vue'
+import CSelect from '~/components/primitives/form/CSelect.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { createStaff } from '~/lib/api/admin/users'
 import { FetchError } from 'ofetch'
@@ -92,7 +112,8 @@ const resolver = zodResolver(
     first_name: z.string().nonempty('El nombre es requerido'),
     last_name: z.string().nonempty('El apellido es requerido'),
     email: z.string().email('El correo electrónico no es válido'),
-    password: z.string().nonempty('La contraseña es requerida')
+    password: z.string().nonempty('La contraseña es requerida'),
+    roleSelect: z.string().nonempty('El role es requerido')
   })
 )
 
