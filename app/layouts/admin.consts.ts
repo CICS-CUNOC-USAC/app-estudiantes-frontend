@@ -30,6 +30,11 @@ export const ADMIN_LAYOUT_ITEMS = [
         itemIcon: 'icon-park-twotone:peoples',
         itemLink: '/admin/users'
       },
+      {
+        itemName: 'Roles',
+        itemIcon: 'icon-park-twotone:id-card-h',
+        itemLink: '/admin/roles'
+      },
     ]
   }
 ]
