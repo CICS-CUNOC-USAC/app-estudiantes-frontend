@@ -10,7 +10,7 @@
       </h1>
     </header>
     <section class="mt-4">
-      <PForm :initial-values :resolver v-slot="$form" @submit="saveUser">
+      <PForm :initial-values :resolver v-slot="$form" @submit="saveUser" ref="formRef">
         <h2 class="my-2 font-medium">Información del usuario</h2>
         <fieldset
           :disabled="asyncStatus === 'loading'"
@@ -49,24 +49,30 @@
             prepend-icon="icon-park-twotone:lock"
             :error="$form.password?.error?.message"
           />
-          <div class="flex">
-              <div class="w-full">
-                  <CSelect
-                    name="selectRole"
-                    id="selectRole"
-                    :items="['hola','adios']"
-                    checkmark
-                    placeholder="Selecciona un rol"
-                    clearable
-                    label="Roles"
-                    prepend-icon="icon-park-twotone:permissions"
-                    no-borders
-                    option-label="text"
-                    option-value="value"
-                    :error="$form.roleSelect?.error?.message"
-                  />
+          <div class="flex flex-col">
+              <div class="flex">
+                  <div class="w-full" v-if="status_roles === 'success'">
+                      <CSelect
+                        name="select_role"
+                        id="select_role"
+                        type="string"
+                        :items="roles?.results || []"
+                        checkmark
+                        placeholder="Selecciona un rol"
+                        label="Roles"
+                        prepend-icon="icon-park-twotone:permissions"
+                        no-borders
+                        option-label="name"
+                        option-value="id"
+                        :error="$form.role_select?.error?.message"
+                      />
+                  </div>
+                  <CButton class="ml-2" icon="icon-park-twotone:plus-cross" @click="addRole"></CButton>
               </div>
-              <CButton class="ml-2" icon="icon-park-twotone:plus-cross"></CButton>
+              <div class="flex" v-for="role in selectedRoles">
+                <CInputText :model-value="role.name" disabled />
+                  <CButton class="ml-2" variant="text" icon="icon-park-twotone:delete" @click="removeRole(role.id)"></CButton>
+              </div>
           </div>
         </fieldset>
 
@@ -99,13 +105,17 @@ import CSelect from '~/components/primitives/form/CSelect.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { createStaff } from '~/lib/api/admin/users'
 import { FetchError } from 'ofetch'
+import { getAllRoles } from '~/lib/api/admin/roles'
 
 const initialValues = reactive({
   first_name: '',
   last_name: '',
   email: '',
-  password: ''
+  password: '',
+  select_role: null,
 })
+
+const selectedRoles = ref<Role[]>([])
 
 const resolver = zodResolver(
   z.object({
@@ -113,7 +123,7 @@ const resolver = zodResolver(
     last_name: z.string().nonempty('El apellido es requerido'),
     email: z.string().email('El correo electrónico no es válido'),
     password: z.string().nonempty('La contraseña es requerida'),
-    roleSelect: z.string().nonempty('El role es requerido')
+    select_role: z.number().positive('El role es requerido')
   })
 )
 
@@ -133,6 +143,64 @@ const { mutate, asyncStatus } = useMutation({
     navigateTo('/admin/users')
   }
 })
+
+const formRef = ref()
+
+function addRole() {
+    console.log(selectedRoles)
+    const foundRole =
+        roles.value?.results.find(role => role.id === formRef.value.states.select_role.value);
+
+    if (!foundRole) {
+        console.log('retorna')
+        return
+    }
+
+    const foundSelectedRole =
+        selectedRoles.value.find(role => role.id === formRef.value.states.select_role.value);
+
+    if (!foundSelectedRole) {
+        //Se agrega el rol
+        selectedRoles.value.push(foundRole)
+    } else {
+        //El rol existe, enviar error
+        console.log('aqui retorna')
+        return
+    }
+
+    console.log(selectedRoles.value)
+}
+
+function removeRole(role_id: number) {
+    console.log(selectedRoles)
+    const foundRole =
+        roles.value?.results.find(role => role.id === formRef.value.states.select_role.value);
+
+    if (!foundRole) {
+        console.log('retorna')
+        return
+    }
+
+    const foundSelectedRole =
+        selectedRoles.value.find(role => role.id === formRef.value.states.select_role.value);
+
+    if (!foundSelectedRole) {
+        //Se agrega el rol
+        selectedRoles.value.push(foundRole)
+    } else {
+        //El rol existe, enviar error
+        console.log('aqui retorna')
+        return
+    }
+
+    console.log(selectedRoles.value)
+}
+
+const {
+  data: roles,
+  status: status_roles,
+  error
+} = await useAsyncData('roles', () => getAllRoles())
 
 const saveUser = async (e: FormSubmitEvent) => {
   if (e.valid) {
