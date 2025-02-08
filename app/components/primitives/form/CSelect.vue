@@ -27,7 +27,7 @@
         <label
           v-if="props.label"
           :for="inhAttrs.restAttrs.id as string"
-          class="absolute top-1.5 text-xs text-muted-color"
+          class="absolute top-1.5 text-xs text-muted-color select-none"
         >
           {{ props.label }}
         </label>
@@ -63,7 +63,7 @@
               class: [
                 'flex-1 cursor-pointer focus:outline-none',
                 instance.label === props.placeholder
-                  ? 'text-muted-color'
+                  ? 'text-muted-color select-none'
                   : 'text-color'
               ]
             }),
@@ -73,7 +73,6 @@
               }`
             }
           }"
-          no-borders
         />
       </PIftaLabel>
       <!-- pt:label:class="flex-1 placeholder:text-muted-color/70"

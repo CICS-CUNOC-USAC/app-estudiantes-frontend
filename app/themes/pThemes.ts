@@ -14,6 +14,26 @@ const commonComponentsDefaults = {
     filePadding: '0px',
     headerPadding: '0px'
   },
+  multiselect: {
+    shadow: 'none',
+    focusRingShadow: '0 0 0 2px color-mix(in srgb, {primary.500}, transparent 50%)',
+    borderRadius: '8px',
+    
+    colorScheme: {
+      light: {
+        borderColor: '#000',
+        hoverBorderColor: '#000',
+        focusBorderColor: '#000',
+        background: '{surface.50}'
+      },
+      dark: {
+        borderColor: '{surface.700}',
+        hoverBorderColor: '{surface.700}',
+        focusBorderColor: '{surface.700}',
+        background: '{surface.900}'
+      }
+    }
+  },
   toggleswitch: {
     border: {
       color: '#000'
@@ -27,15 +47,8 @@ const commonComponentsDefaults = {
       borderColor: '#000'
     }
   },
-  breadcrumb: {
-    colorScheme: {
-      light: {
-        background: '{zinc.100}'
-      },
-      dark: {
-        background: '{zinc.900}'
-      }
-    }
+  checkbox: {
+    borderRadius: '8px'
   }
 }
 

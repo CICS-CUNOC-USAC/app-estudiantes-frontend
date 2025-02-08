@@ -18,6 +18,8 @@ declare module 'vue' {
     PIftaLabel: typeof import('primevue/iftalabel')['default']
     PInputGroup: typeof import('primevue/inputgroup')['default']
     PInputText: typeof import('primevue/inputtext')['default']
+    PMessage: typeof import('primevue/message')['default']
+    PMultiSelect: typeof import('primevue/multiselect')['default']
     PSelect: typeof import('primevue/select')['default']
     PSkeleton: typeof import('primevue/skeleton')['default']
     PTextarea: typeof import('primevue/textarea')['default']
