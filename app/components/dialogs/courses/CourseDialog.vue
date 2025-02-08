@@ -1,42 +1,59 @@
 <template>
-  <CDialog v-model:open="dialog" >
-    <CDialogTrigger
-      class="text-left text-sm cursor-pointer hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
+  <DialogRoot v-model:open="dialog">
+    <DialogTrigger
+      class="cursor-pointer text-left text-sm hover:underline hover:underline-offset-2 focus:underline focus:outline-none"
     >
       {{ courseName }}
-    </CDialogTrigger>
-    <CDialogContent title="Detalles del curso" close-button>
-      <div class="course-details" v-if="data?.response">
-        <header class="course-header">
-          <h2 class="text-lg font-bold">{{ courseName }}</h2>
-          <p class="">{{ courseCode }}</p>
-        </header>
-        <div class="course-career">
-          <p class="">{{ data.response.career_code }}</p>
+    </DialogTrigger>
+    <DialogPortal>
+      <DialogOverlay
+        class="data-[state=open]:animate-overlayShow fixed inset-0 z-30 bg-gray-950/50 transition-all duration-500"
+      />
+      <DialogContent
+        class="data-[state=open]:animate-contentShow bg-cics-white fixed top-1/2 left-1/2 z-[100] h-full max-h-[85vh] w-11/12 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-black/80 p-6 pb-46 shadow-lg shadow-black/15 focus:outline-none lg:max-w-xl dark:border-neutral-700 dark:bg-neutral-900"
+      >
+        <DialogTitle class="mb-4 flex items-center justify-between">
+          <h2 class="text-xl font-semibold">Información del curso</h2>
+          <DialogClose
+            class="dark:focus:outline-surface-600 focus:outline-surface-200 cursor-pointer rounded p-1.5 outline-offset-2 hover:bg-neutral-200 focus:outline dark:hover:bg-neutral-800"
+          >
+            <Icon name="lucide:x" />
+            <span class="sr-only">Close</span>
+          </DialogClose>
+        </DialogTitle>
+
+        <div class="mb-4 h-full pb-6" v-if="data?.response">
+          <header class="pb-2">
+            <h2 class=" ">
+              <span class="text-muted-color  font-semibold text-sm"
+                >Nombre del curso:</span
+              >
+              <strong class="block text-primary-600 dark:text-primary-200">{{ courseName }}</strong>
+            </h2>
+            <p class="">
+              <span class="text-muted-color font-semibold text-sm"
+                >Código del curso:</span
+              >
+              <strong class="block">{{ courseCode }}</strong>
+            </p>
+          </header>
+          <h3 class="text-muted-color font-semibold pb-1.5 text-sm">Descripción:</h3>
+          <div class="h-full overflow-scroll text-sm prose dark:prose-invert">
+            <p class="">
+              {{
+                data.response?.course.description ||
+                'No hay descripción para este curso'
+              }}
+            </p>
+          </div>
         </div>
-        <div class="course-description">
-          <p class="">
-            {{
-              data.response?.course.description ||
-              'No hay descripción para este curso'
-            }}
-          </p>
+        <div class="text-center" v-else-if="status === 'pending'">
+          <Icon name="svg-spinners:bars-rotate-fade" class="mx-auto mb-2" />
+          <p>Cargando información...</p>
         </div>
-        <div class="course-hours">
-          <p class="">Horas: 4</p>
-        </div>
-        <div class="course-room">
-          <p class="">Salón: 123</p>
-        </div>
-        <CButton label="Ver penusm" variant="text" class="course-button" />
-        <CButton
-          label="Ver en biblioteca"
-          variant="text"
-          class="course-button-s"
-        />
-      </div>
-    </CDialogContent>
-  </CDialog>
+      </DialogContent>
+    </DialogPortal>
+  </DialogRoot>
 </template>
 <script setup lang="ts">
 import CButton from '~/components/primitives/button/CButton.vue'
@@ -57,7 +74,7 @@ const { courseCode, careerCode } = defineProps<{
 const { fetchCareerCourse } = useCoursesStore()
 const dialog = ref(false)
 
-const { data } = await useLazyAsyncData(
+const { data, status } = await useLazyAsyncData(
   () => fetchCareerCourse(courseCode, careerCode),
   {
     immediate: false,
@@ -65,45 +82,3 @@ const { data } = await useLazyAsyncData(
   }
 )
 </script>
-<style scoped>
-@reference '~/assets/css/main.css';
-
-.course-details {
-  grid-template-areas:
-    'name name career'
-    'desc desc hours'
-    'desc desc hours'
-    'desc desc room'
-    'btn btn-s room';
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto auto auto;
-  @apply grid h-52 w-full gap-4;
-}
-
-.course-header {
-  grid-area: name;
-}
-
-.course-career {
-  grid-area: career;
-}
-
-.course-description {
-  grid-area: desc;
-}
-
-.course-hours {
-  grid-area: hours;
-}
-
-.course-room {
-  grid-area: room;
-}
-
-.course-button {
-  grid-area: btn;
-}
-.course-button-s {
-  grid-area: btn-s;
-}
-</style>

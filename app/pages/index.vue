@@ -26,7 +26,7 @@
       <section
         v-for="section in sections"
         :key="section.name"
-        class="my-2"
+        class="my-5"
       >
         <h2 class="flex justify-between gap-x-4 text-lg font-semibold lg:justify-start">
           <span>
