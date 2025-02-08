@@ -69,6 +69,7 @@
               placeholder="Selecciona uno o varios roles"
               :options="roles?.results"
               option-label="name"
+              :loading="status_roles === 'pending'"
               option-value="id"
               :maxSelectedLabels="3"
               :show-toggle-all="false"
@@ -77,6 +78,12 @@
                   root: {
                     class: 'bg-neutral-200! dark:bg-neutral-700!'
                   }
+                },
+                label: {
+                  class: 'text-sm'
+                },
+                optionLabel: {
+                  class: 'text-sm'
                 }
               }"
             />
@@ -113,14 +120,13 @@
 <script setup lang="ts">
 import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { FetchError } from 'ofetch'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
 import CButton from '~/components/primitives/button/CButton.vue'
-import CSelect from '~/components/primitives/form/CSelect.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import { createStaff } from '~/lib/api/admin/users'
-import { FetchError } from 'ofetch'
 import { getAllRoles } from '~/lib/api/admin/roles'
+import { createStaff } from '~/lib/api/admin/users'
 
 const initialValues = reactive({
   first_name: '',
@@ -142,7 +148,6 @@ const resolver = zodResolver(
   })
 )
 
-// trying to use 'pinia colada'
 const { mutate, asyncStatus } = useMutation({
   mutation: (staffData: StaffPayload) => createStaff(staffData),
   onError(error) {
@@ -158,62 +163,6 @@ const { mutate, asyncStatus } = useMutation({
     navigateTo('/admin/users')
   }
 })
-
-const formRef = ref()
-
-function addRole() {
-  console.log(selectedRoles)
-  const foundRole = roles.value?.results.find(
-    (role) => role.id === formRef.value.states.select_role.value
-  )
-
-  if (!foundRole) {
-    console.log('retorna')
-    return
-  }
-
-  const foundSelectedRole = selectedRoles.value.find(
-    (role) => role.id === formRef.value.states.select_role.value
-  )
-
-  if (!foundSelectedRole) {
-    //Se agrega el rol
-    selectedRoles.value.push(foundRole)
-  } else {
-    //El rol existe, enviar error
-    console.log('aqui retorna')
-    return
-  }
-
-  console.log(selectedRoles.value)
-}
-
-function removeRole(role_id: number) {
-  console.log(selectedRoles)
-  const foundRole = roles.value?.results.find(
-    (role) => role.id === formRef.value.states.select_role.value
-  )
-
-  if (!foundRole) {
-    console.log('retorna')
-    return
-  }
-
-  const foundSelectedRole = selectedRoles.value.find(
-    (role) => role.id === formRef.value.states.select_role.value
-  )
-
-  if (!foundSelectedRole) {
-    //Se agrega el rol
-    selectedRoles.value.push(foundRole)
-  } else {
-    //El rol existe, enviar error
-    console.log('aqui retorna')
-    return
-  }
-
-  console.log(selectedRoles.value)
-}
 
 const {
   data: roles,
