@@ -2,7 +2,7 @@ import { toast } from 'vue-sonner'
 
 export const fetchAllBooks = async (params: any) => {
   try {
-    const response = await $api<BooksResponse>('/library/admin', {
+    const response = await $api<BooksResponse>('/books/admin', {
       params
     })
     const { results, ...meta } = response
@@ -22,14 +22,14 @@ export const fetchAllBooks = async (params: any) => {
   }
 }
 
-export const createBookItem = async (payload: BookPayload) => {
+export const createBookItem = async (payload: BookPayload, type: 'digital' | 'physical') => {
   try {
     const uploadedMedia = await useMediaStore().postMedia({
       file: payload.file,
       path: 'library',
       attach_type: 'library'
     })
-    const response = await $api<Book>('/library/admin', {
+    const response = await $api<Book>(`/books/${type}`, {
       method: 'POST',
       body: {
         ...payload,
@@ -49,7 +49,7 @@ export const createBookItem = async (payload: BookPayload) => {
 
 export async function deleteBook(id: string | number) {
   try {
-    await $api(`/library/admin/${+id}`, {
+    await $api(`/books/admin/${id}`, {
       method: 'DELETE'
     })
     toast.success('Libro eliminado correctamente')

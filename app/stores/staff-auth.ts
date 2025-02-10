@@ -115,10 +115,10 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     },
     async myProfile() {
       this.loading = true
-      const { data } = await useCustomFetch<Staff>('/staff-auth/me')
+      const response = await $api<Staff>('/staff-auth/me')
 
-      if (data.value) {
-        this.user = data?.value ?? null
+      if (response) {
+        this.user = response ?? null
       } else {
         useSnackbarStore().showSnackbar({
           title: 'Error de sesión',

@@ -49,11 +49,14 @@ import { getAllRoles } from '~/lib/api/admin/roles'
 const {
   data: roles,
   status,
-  error
-} = await useAsyncData('roles', () => getAllRoles())
+  error,
+} = await useAsyncData('roles', () => getAllRoles(), {
+})
 
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  subject: ['Roles', 'all'],
+  action: ['manage']
 })
 </script>
 <style scoped></style>

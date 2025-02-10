@@ -38,15 +38,20 @@
             </h3>
             <ul class="flex flex-col gap-1">
               <li v-for="subItem in item.items" :key="subItem.itemName">
-                <NuxtLink
-                  @click="$emit('close')"
-                  :to="subItem.itemLink"
-                  active-class="active-menu"
-                  class="menu-item"
+                <Can
+                  :ability="showMenuItem"
+                  :args="[subItem.action, subItem.subject]"
                 >
-                  <Icon :name="subItem.itemIcon" />
-                  {{ subItem.itemName }}</NuxtLink
-                >
+                  <NuxtLink
+                    @click="$emit('close')"
+                    :to="subItem.itemLink"
+                    active-class="active-menu"
+                    class="menu-item"
+                  >
+                    <Icon :name="subItem.itemIcon" />
+                    {{ subItem.itemName }}</NuxtLink
+                  >
+                </Can>
               </li>
             </ul>
           </section>
@@ -151,14 +156,13 @@ import { useAuthStore } from '~/stores/auth'
 import { ADMIN_LAYOUT_ITEMS } from './admin.consts'
 import AdminNavigator from '~/components/partials/AdminNavigator.vue'
 import AvatarWithMenu from '~/components/partials/AvatarWithMenu.vue'
+import { showMenuItem } from '~/shared/utils/abilities'
 
 const { logout } = useAuthStore()
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
 
 const drawer = ref(false)
-
-
 </script>
 <style lang="postcss" scoped>
 .menu-item {

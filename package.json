@@ -24,6 +24,7 @@
     "@vueuse/core": "^12.5.0",
     "@vueuse/nuxt": "^12.5.0",
     "nuxt": "^3.15.1",
+    "nuxt-authorization": "^0.3.3",
     "prettier": "^3.4.2",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "typescript": "^5.7.3"
