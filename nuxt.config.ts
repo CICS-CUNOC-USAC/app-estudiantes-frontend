@@ -2,6 +2,7 @@
 // import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import Aura from '@primevue/themes/aura'
 import tailwindcss from "@tailwindcss/vite";
+import svgLoader from 'vite-svg-loader';
 
 
 
@@ -54,6 +55,9 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss(),
+      svgLoader({
+        svgo: false
+      })
     ],
     define: {
       'process.env.DEBUG': false

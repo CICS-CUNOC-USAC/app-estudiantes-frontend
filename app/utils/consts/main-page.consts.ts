@@ -10,6 +10,7 @@ import bibliotecaImg from '~/assets/img/biblioteca.jpg'
 import tesarioImg from '~/assets/img/tesario.jpg'
 
 import acercaDeImg from '~/assets/img/acerca_de.jpg'
+import mapaImg from '~/assets/img/mapa.jpg'
 
 export const sections = [
   {
@@ -99,7 +100,7 @@ export const sections = [
     ]
   },
   {
-    containerClass: 'grid w-full grid-cols-1 gap-4 md:px-56',
+    containerClass: 'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3',
     icon: 'icon-park-twotone:add-mode',
     name: 'extra',
     title: 'Extra',
@@ -111,6 +112,14 @@ export const sections = [
           'Conoce más acerca de esta aplicacion, su desarrollo, y cómo puedes contribuir',
         route: '/portal/extras/about',
         img: acercaDeImg
+      },
+      {
+        title: 'Mapa del Módulo G',
+        subtitle: 'Ubicación de salones',
+        description:
+          '',
+        route: '/portal/extras/map',
+        img: mapaImg
       }
     ]
   }

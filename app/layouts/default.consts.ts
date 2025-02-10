@@ -78,6 +78,11 @@ export const DefaultLayoutItems = [
         itemLink: '/portal/extras/config'
       },
       {
+        itemName: 'Mapa Módulo G',
+        itemIcon: 'icon-park-twotone:map-draw',
+        itemLink: '/portal/extras/map'
+      },
+      {
         itemName: 'Acerca de',
         itemIcon: 'icon-park-twotone:info',
         itemLink: '/portal/extras/about'

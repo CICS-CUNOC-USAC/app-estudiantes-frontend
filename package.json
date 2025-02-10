@@ -26,7 +26,8 @@
     "nuxt": "^3.15.1",
     "prettier": "^3.4.1",
     "prettier-plugin-tailwindcss": "^0.6.9",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "vite-svg-loader": "^5.1.0"
   },
   "dependencies": {
     "@pinia/colada": "^0.13.4",
@@ -40,6 +41,7 @@
     "jsdom": "^25.0.1",
     "jwt-decode": "^4.0.0",
     "md-editor-v3": "^5.0.2",
+    "nuxt-app": "file:",
     "pinia": "^2.2.6",
     "primevue": "^4.2.3",
     "radix-vue": "^1.9.10",
