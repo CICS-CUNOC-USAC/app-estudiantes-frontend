@@ -23,6 +23,12 @@ export type BooksResponse = {
 
 export type BookPayload = {
   name: string
+  isbn?: string
+  reference_id?: string
+  total_availability?: number
+  current_availability?: number
+  edition?: string
+  location?: string
   author: string
   description?: string
   source_url: string

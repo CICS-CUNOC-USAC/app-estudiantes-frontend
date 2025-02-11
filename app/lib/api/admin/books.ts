@@ -22,6 +22,27 @@ export const fetchAllBooks = async (params: any) => {
   }
 }
 
+export const createWithoutMedia = async (payload: BookPayload, type: 'digital' | 'physical') => {
+  console.log('payload', payload)
+  try {
+    const response = await $api<Book>(`/books/${type}`, {
+      method: 'POST',
+      body: payload
+    })
+    toast.success('Recurso creado', {
+      description: 'Libro creado correctamente'
+    })
+    return response
+  } catch (error) {
+    toast.error('Error al crear el libro', {
+      description: (error as any).data.message ?? (error as any).data.error
+    })
+    return {
+      error
+    }
+  }
+}
+
 export const createBookItem = async (payload: BookPayload, type: 'digital' | 'physical') => {
   try {
     const uploadedMedia = await useMediaStore().postMedia({
@@ -44,6 +65,9 @@ export const createBookItem = async (payload: BookPayload, type: 'digital' | 'ph
     toast.error('Error al crear el libro', {
       description: (error as any).data.message ?? (error as any).data.error
     })
+    return {
+      error
+    }
   }
 }
 

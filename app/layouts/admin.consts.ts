@@ -7,8 +7,8 @@ export const ADMIN_LAYOUT_ITEMS = [
         itemName: 'Perfil',
         itemIcon: 'icon-park-twotone:people',
         itemLink: '/admin/me',
-        action: '',
-        subject: '',
+        action: [],
+        subject: [],
       },
     ]
   },
@@ -20,8 +20,8 @@ export const ADMIN_LAYOUT_ITEMS = [
         itemName: 'Biblioteca/Libros',
         itemIcon: 'icon-park-twotone:book-one',
         itemLink: '/admin/books',
-        action: '',
-        subject: '',
+        action: [],
+        subject: [],
       },
     ]
   },
@@ -33,15 +33,15 @@ export const ADMIN_LAYOUT_ITEMS = [
         itemName: 'Usuarios administrativos',
         itemIcon: 'icon-park-twotone:peoples',
         itemLink: '/admin/users',
-        action: 'manage',
-        subject: 'all',
+        action: ['manage'],
+        subject: ['all'],
       },
       {
         itemName: 'Roles',
         itemIcon: 'icon-park-twotone:id-card-h',
         itemLink: '/admin/roles',
-        action: 'manage',
-        subject: 'all',
+        action: ['manage'],
+        subject: ['all'],
       },
     ]
   }

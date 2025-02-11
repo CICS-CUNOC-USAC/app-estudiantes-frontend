@@ -1,7 +1,7 @@
 export const showMenuItem = defineAbility(
-  (user: Staff, action: string, subject: string) => {
+  (user: Staff, action: string[], subject: string[]) => {
     // check if user has permission to show menu item in the sidebar menu, based on the permissions array inside the roles array in the user object
-    if (!action || !subject) {
+    if (!action.length || !subject.length) {
       return true
     }
 
