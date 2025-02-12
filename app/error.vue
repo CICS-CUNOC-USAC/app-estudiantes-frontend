@@ -18,13 +18,22 @@
           <p class="mb-4">
             {{ message }}
           </p>
+          puedes
           <NuxtLink
           href="/"
-          class=" inline text-primary-400 transition border-b hover:border-b-2 border-primary-400 hover:border-primary-500 hover:text-primary-500"
+          class=" inline text-primary-400 transition border-b hover:border-b-2 border-primary-400 hover:border-primary-500 hover:text-primary-500 font-semibold "
           >
-          <Icon class="mb-1 mr-1 inline" name="icon-park-outline:arrow-left" />
-          <strong>Regresar al inicio</strong>
+          <Icon class="mb-0.5 inline" name="icon-park-outline:arrow-left" />
+          regresar al inicio
         </NuxtLink>
+        o
+        <NuxtLink
+          href="/dashboard"
+          class=" inline text-primary-400 transition border-b hover:border-b-2 border-primary-400 hover:border-primary-500 hover:text-primary-500 font-semibold "
+        >
+          <Icon class="mb-0.5  inline" name="icon-park-outline:layout-four" />
+          ir al dashboard
+        </NuxtLink> 
       </div>
       </template>
     </CCardAlt>

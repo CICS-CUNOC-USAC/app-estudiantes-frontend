@@ -1,8 +1,8 @@
 import { toast } from 'vue-sonner'
 
-export const fetchAllBooks = async (params: any) => {
+export const fetchAllBooks = async (params: any,  type: 'digital' | 'physical') => {
   try {
-    const response = await $api<BooksResponse>('/books/admin', {
+    const response = await $api<BooksResponse>(`/books/${type}`, {
       params
     })
     const { results, ...meta } = response

@@ -17,12 +17,20 @@ export const ADMIN_LAYOUT_ITEMS = [
     shortName: 'Recursos públicos',
     items: [
       {
-        itemName: 'Biblioteca/Libros',
+        itemName: 'Biblioteca (Digital)',
         itemIcon: 'icon-park-twotone:book-one',
-        itemLink: '/admin/books',
+        itemLink: '/admin/books/digital',
         action: [],
         subject: [],
       },
+      {
+        itemName: 'Biblioteca (Físico)',
+        itemIcon: 'icon-park-twotone:book-one',
+        itemLink: '/admin/books/physical',
+        action: [],
+        subject: [],
+      },
+
     ]
   },
   {

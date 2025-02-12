@@ -6,8 +6,7 @@
 import ContentDisplay from '~/components/portal/ContentDisplay.vue';
 
 const { data } = await useAsyncData(() =>
-  queryCollection('content').path('/associations/cics').first()
-    
+  queryCollection('associations').where('path', 'LIKE', '%/cics').first()
 )
 </script>
 

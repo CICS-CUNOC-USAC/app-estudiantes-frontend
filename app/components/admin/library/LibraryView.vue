@@ -1,13 +1,13 @@
 <template>
   <section>
     <div
-      class="grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr] sticky top-0 z-10"
+      class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr]"
     >
       <CButton
         label="Nuevo libro"
         icon="icon-park-outline:plus"
         class="w-fit"
-        to="/admin/books/create"
+        :to="`/admin/books/create?type=${props.type}`"
       />
       <CInputText
         label="Nombre del libro"
@@ -128,6 +128,10 @@ import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { fetchAllBooks, deleteBook } from '~/lib/api/admin/books'
 
+const props = defineProps<{
+  type: 'physical' | 'digital'
+}>()
+
 const route = useRoute()
 
 const limit = ref(5)
@@ -143,7 +147,7 @@ const { data, status, refresh } = await useAsyncData(
       limit: limit.value,
       name: route.query.name,
       author: route.query.author
-    }),
+    }, props.type),
   {
     watch: [limit, () => route.query]
   }

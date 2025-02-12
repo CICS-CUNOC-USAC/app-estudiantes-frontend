@@ -204,7 +204,7 @@
           <CButton
             label="Cancelar"
             icon="icon-park-outline:arrow-left"
-            to="/admin/books"
+            :to="bookType === 'digital' ? '/admin/books/digital' : '/admin/books/physical'"
             severity="secondary"
             class=""
           />
@@ -238,7 +238,8 @@ const loading = ref(false)
 
 const file = ref()
 
-const bookType = ref<'physical' | 'digital'>('digital')
+const route = useRoute()
+const bookType = ref<'physical' | 'digital'>(route.query.type ?? 'physical')
 
 const initialValues = reactive({
   name: '',
