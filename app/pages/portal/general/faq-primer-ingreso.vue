@@ -6,12 +6,7 @@
 import ContentDisplay from '~/components/portal/ContentDisplay.vue';
 
 const { data } = await useAsyncData(() =>
-  queryContent('faq')
-    .where({
-      _path: { $contains: '/faq/primer-ingreso' }
-    })
-    // .without(['body'])
-    .findOne()
+  queryCollection('faq').where('path', 'LIKE', '%/primer-ingreso').first()
 )
 useCustomPageTitle(data.value?.title)
 </script>

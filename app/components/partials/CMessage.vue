@@ -4,10 +4,17 @@
   >
     <Icon
       name="icon-park-twotone:help"
-      class="text-amber-600 dark:text-amber-400"
+      class="hidden text-amber-600 md:block dark:text-amber-400"
     />
     <div class="">
-      <h2 class="font-semibold dark:text-amber-100" v-if="title">
+      <h2
+        class="text-center font-semibold lg:text-left dark:text-amber-100"
+        v-if="title"
+      >
+        <Icon
+          name="icon-park-twotone:help"
+          class="inline mb-1 mr-1 text-amber-600 md:block dark:text-amber-400 lg:hidden"
+        />
         {{ title }}
       </h2>
       <p class="text-amber-600 dark:text-amber-400" v-if="subtitle">

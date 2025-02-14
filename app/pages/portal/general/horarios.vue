@@ -22,7 +22,15 @@
     <div class="px-4 pt-4">
       <div class="grid grid-cols-1">
         <!-- <div class="mb-4 lg:flex lg:flex-row lg:justify-between sm:grid sm:grid-cols-2 flex flex-col items-center content-around"> -->
+          <CMessage
+            title="Aviso importante"
+            subtitle="Esta versión de los horarios es una versión de prueba (work in progress), por lo que puede contener errores. Si encuentras alguno, por favor reportalo a través de la sección de contacto."
+            class="mb-4"
+            back-to-route="/portal/extras/about"
+            back-to-label="Más información"
+            />
         <div class="mb-4 flex flex-col lg:flex-row  justify-between items-center gap-2.5">
+          
           <!-- <div class="md:hidden">
             <HoursDialog
               :schedule-type="scheduleType"
@@ -168,6 +176,7 @@ import HoursDialog from '~/components/schedule/HoursDialog.vue'
 import type { Career } from '~/utils/types/career-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 import { Icon } from '@iconify/vue'
+import CMessage from '~/components/partials/CMessage.vue'
 
 const schedulesKey = computed(() => {
   return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
