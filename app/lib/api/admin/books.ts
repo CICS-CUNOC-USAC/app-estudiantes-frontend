@@ -1,6 +1,17 @@
 import { toast } from 'vue-sonner'
 
-export const fetchAllBooks = async (params: any,  type: 'digital' | 'physical') => {
+export interface Category {
+  id: number
+  name: string
+  description: string
+  created_at: Date
+  updated_at: Date
+}
+
+export const fetchAllBooks = async (
+  params: any,
+  type: 'digital' | 'physical'
+) => {
   try {
     const response = await $api<BooksResponse>(`/books/${type}`, {
       params
@@ -22,7 +33,10 @@ export const fetchAllBooks = async (params: any,  type: 'digital' | 'physical') 
   }
 }
 
-export const createWithoutMedia = async (payload: BookPayload, type: 'digital' | 'physical') => {
+export const createWithoutMedia = async (
+  payload: BookPayload,
+  type: 'digital' | 'physical'
+) => {
   console.log('payload', payload)
   try {
     const response = await $api<Book>(`/books/${type}`, {
@@ -43,7 +57,10 @@ export const createWithoutMedia = async (payload: BookPayload, type: 'digital' |
   }
 }
 
-export const createBookItem = async (payload: BookPayload, type: 'digital' | 'physical') => {
+export const createBookItem = async (
+  payload: BookPayload,
+  type: 'digital' | 'physical'
+) => {
   try {
     const uploadedMedia = await useMediaStore().postMedia({
       file: payload.file,
@@ -82,6 +99,13 @@ export async function deleteBook(id: string | number) {
     toast.error('Error al eliminar el libro')
     return error
   }
-  
 }
 
+export async function getAllCategories(params?: {}) {
+  const results = await $api<Category[]>(`/categories`, {
+    params
+  })
+  return {
+    results
+  }
+}

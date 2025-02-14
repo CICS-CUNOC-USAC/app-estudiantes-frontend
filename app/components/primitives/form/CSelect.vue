@@ -61,7 +61,8 @@
               'bg-surface-50 dark:bg-surface-900 shadow-lg rounded-xl border border-black dark:border-surface-700 ',
             label: ({ instance, props }) => ({
               class: [
-                'flex-1 cursor-pointer focus:outline-none',
+                'flex-1 cursor-pointer focus:outline-none truncate',
+                
                 instance.label === props.placeholder
                   ? 'text-muted-color select-none'
                   : 'text-color'

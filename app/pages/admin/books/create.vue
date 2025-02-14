@@ -6,6 +6,7 @@
         Crear item de biblioteca
       </h1>
     </header>
+    <h2 class="my-2 font-medium">Tipo de libro</h2>
     <PSelectButton
       v-model="bookType"
       :options="[
@@ -108,21 +109,13 @@
             label="Categoría"
             name="category_id"
             id="category_id"
-            :items="[
-              {
-                label: 'Categoria de ejemplo',
-                value: 1
-              },
-              {
-                label: 'Categoria de ejemplo 2',
-                value: 2
-              }
-            ]"
-            option-label="label"
-            option-value="value"
+            :items="categories?.results"
+            option-label="name"
+            option-value="id"
             no-borders
             prepend-icon="icon-park-twotone:tree-list"
-          />
+            :error="$form.category_id?.error?.message"
+            />
         </div>
 
         <div v-if="bookType === 'physical'" class="mb-4">
@@ -136,7 +129,7 @@
                   variant="filled"
                   fluid
                   size="small"
-                  input-class="rounded-lg! focus:ring-2! focus:ring-primary-400/50 border-black!"
+                  input-class="rounded-lg! focus:ring-2! focus:ring-primary-400/50 border-black! dark:border-surface-700! dark:bg-surface-900!"
                 />
                 <label for="total_availability">Dispobibilidad total</label>
               </PFloatLabel>
@@ -155,7 +148,7 @@
                   variant="filled"
                   fluid
                   size="small"
-                  input-class="rounded-lg! focus:ring-2! focus:ring-primary-400/50 border-black!"
+                  input-class="rounded-lg! focus:ring-2! focus:ring-primary-400/50 border-black! dark:border-surface-700! dark:bg-surface-900!"
                 />
                 <label for="current_availability">Dispobibilidad actual</label>
               </PFloatLabel>
@@ -229,12 +222,16 @@ import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
-import { createBookItem, createWithoutMedia } from '~/lib/api/admin/books'
+import { createBookItem, createWithoutMedia, getAllCategories } from '~/lib/api/admin/books'
 definePageMeta({
   layout: 'admin'
 })
 
 const loading = ref(false)
+
+const { data: categories } = useAsyncData('categories', () =>
+  getAllCategories()
+)
 
 const file = ref()
 
@@ -251,7 +248,8 @@ const initialValues = reactive({
   edition: '',
   location: '',
   author: '',
-  source_url: ''
+  source_url: '',
+  category_id: null
 })
 
 const resolverToUse = computed(() =>
@@ -264,7 +262,10 @@ const digtialResolver = zodResolver(
     description: z.string().nonempty('La descripción del libro es requerida'),
     isbn: z.string(),
     author: z.string().nonempty('El autor del libro es requerido'),
-    source_url: z.string().url('La URL de la fuente no es válida')
+    source_url: z.string().url('La URL de la fuente no es válida'),
+    category_id: z.number(
+      { message: 'La categoría es requerida' }
+    ).int('La categoría es requerida')
   })
 )
 
@@ -287,6 +288,9 @@ const physicalResolver = zodResolver(
     edition: z.string().nonempty('La edición del libro es requerida'),
     location: z.string().nonempty('La ubicación del libro es requerida'),
     author: z.string().nonempty('El autor del libro es requerido'),
+    category_id: z.number(
+      { message: 'La categoría es requerida' }
+    ).int('La categoría es requerida')
   })
 )
 
@@ -309,7 +313,7 @@ const saveBook = async (e: FormSubmitEvent) => {
           )
     
     if (!response.error) {
-      navigateTo('/admin/books')
+      navigateTo(`/admin/books/${bookType.value}`)
     }
     loading.value = false
     // navigateTo('/admin/books')

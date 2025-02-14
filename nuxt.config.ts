@@ -104,9 +104,8 @@ export default defineNuxtConfig({
     families: [
       { name: 'Geist', provider: 'google' },
       { name: 'Mona Sans', provider: 'google' },
+      { name: 'Hubot Sans', provider: 'google' },
       { name: 'Geist Mono', provider: 'google' },
-      { name: 'IBM Plex Sans', provider: 'google' },
-      { name: 'Barlow', provider: 'google' }
     ],
     experimental: {
       processCSSVariables: true

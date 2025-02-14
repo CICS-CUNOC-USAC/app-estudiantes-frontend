@@ -36,7 +36,7 @@
           <label
             v-if="props.label"
             :for="test.restAttrs.id as string"
-            class="absolute left-0 z-10 w-max pt-1.5 text-xs text-muted-color"
+            class="absolute left-0 z-10 w-max pt-1.5 text-xs text-muted-color group-focus-within:text-primary-500 dark:group-focus-within:text-primary-400"
           >
             {{ props.label }}
           </label>
