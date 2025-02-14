@@ -29,7 +29,7 @@
       :career-courses="careerCourses?.courses"
       :loading="status === 'pending'"
     />
-    <HelpDialog title="Pensum de carrera" content-path="/pensums"></HelpDialog>
+    <HelpDialog title="Pensum de carrera" content-path="/help/pensums"></HelpDialog>
     <ElementNotFound
       title="Pensum no encontrado"
       subtitle="Parece que el pensum de la carrera que buscas no existe, verifica que el código de carrera sea correcto."

@@ -56,7 +56,7 @@
 
     <HelpDialog
       title="Programas de Cursos"
-      content-path="/programas"
+      content-path="/help/programas"
     ></HelpDialog>
   </main>
 </template>

@@ -44,7 +44,7 @@
           >
             <ToggleGroupItem
               v-for="(option, index) in schemeOptions"
-              class="group flex items-center gap-2 rounded-lg border-2 border-transparent px-2 py-1 transition duration-[50ms] hover:bg-primary/10 active:bg-primary/15 data-[state=on]:border-black data-[state=on]:bg-primary-600 data-[state=on]:text-white dark:data-[state=on]:border-gray-300"
+              class="group flex items-center gap-2 rounded-lg border-2 border-transparent px-2 py-1 transition duration-[50ms] hover:bg-primary/10 active:bg-primary/15 data-[state=on]:border-black data-[state=on]:bg-primary-600 data-[state=on]:text-white dark:data-[state=on]:border-white"
               :value="option.value"
             >
               <Icon :name="option.icon" :class="option.iconClass" />

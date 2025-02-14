@@ -20,15 +20,14 @@
           >
             <Icon name="tabler:layout-sidebar-filled" />
           </button>
-          <button
+          <NuxtLink
             class="hidden items-center space-x-2 transition hover:opacity-80 lg:flex"
             to="/"
-            @click="drawer = true"
           >
             <CICSLogo :width="60" fill="var(--p-primary-500)" />
             <span v-if=" $route.meta.title">⋅</span>
             <div class="text-xs font-medium">{{ $route.meta.title }}</div>
-          </button>
+          </NuxtLink>
           <Transition name="title-fade">
             <NuxtLink class="block text-sm lg:hidden" to="/" v-if="!searchOpen">
               <strong>CICS App</strong> ⋅ Portal
@@ -74,7 +73,7 @@
             icon="icon-park-twotone:people"
             :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
-            class="max-w-[13ch] min-w-0 !px-2"
+            class="max-w-[12ch] min-w-0 !px-2"
             pt:label:class="hidden lg:block truncate"
           />
         </div>
@@ -110,7 +109,7 @@
           'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen
         }"
       >
-        <NuxtPage @search="toggleSearch({ leaveOpen: true })" />
+        <NuxtPage @search="toggleSearch({ leaveOpen: true })"/>
       </main>
     </div>
   </div>

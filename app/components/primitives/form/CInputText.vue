@@ -6,7 +6,7 @@
     }">
     <PInputGroup
       unstyled
-      class="group flex  rounded-lg outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
+      class="group flex  rounded-lg outline-2 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
       :class="[test.classAttr, {
         'h-12': !props.fillHeight,
         'h-full': props.fillHeight
@@ -36,7 +36,7 @@
           <label
             v-if="props.label"
             :for="test.restAttrs.id as string"
-            class="absolute left-0 z-10 w-max pt-1.5 text-xs text-muted-color"
+            class="absolute left-0 z-10 w-max pt-1.5 text-xs text-muted-color group-focus-within:text-primary-500 dark:group-focus-within:text-primary-400"
           >
             {{ props.label }}
           </label>

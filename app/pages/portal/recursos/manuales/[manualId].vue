@@ -37,11 +37,7 @@ import CButton from '~/components/primitives/button/CButton.vue'
 const route = useRoute()
 
 const { data, status } = await useAsyncData(() =>
-  queryContent('manuals')
-    .where({
-      _path: { $contains: route.params.manualId }
-    })
-    .findOne()
+  queryCollection('content').where('path', 'LIKE', `%${route.params.manualId}`).first()
 )
 
 const handlePrint = () => {

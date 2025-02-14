@@ -98,7 +98,11 @@ definePageMeta({
 .official-post-content {
   @apply prose prose-base prose-neutral dark:prose-invert max-w-none;
 
-  @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b-2;
+  /* @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b-2; */
+
+  @apply prose-a:no-underline prose-a:text-primary-500 prose-a:hover:text-primary-700 dark:prose-a:text-primary-400 dark:prose-a:hover:text-primary-300;
+
+  @apply prose-a:after:content-['_↗'];
 
   img {
     @apply w-full rounded-lg shadow-lg border dark:border-white/40 border-slate-900/10;

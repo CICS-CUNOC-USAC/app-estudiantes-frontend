@@ -6,14 +6,27 @@ type LoginPayload = {
   password: string
 }
 
+export type Permission = {
+  id: number
+  name: string
+  description: string
+  action: string
+  subject: string
+  conditions: any
+  created_at: Date
+  updated_at: Date
+}
+
 export type Role = {
   id: number
   alias: string
   name: string
   description: string
+  permissions: Permission[]
   created_at: Date
   updated_at: Date
 }
+
 
 export type Staff = {
   id: number
@@ -102,10 +115,10 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     },
     async myProfile() {
       this.loading = true
-      const { data } = await useCustomFetch<Staff>('/staff-auth/me')
+      const response = await $api<Staff>('/staff-auth/me')
 
-      if (data.value) {
-        this.user = data?.value ?? null
+      if (response) {
+        this.user = response ?? null
       } else {
         useSnackbarStore().showSnackbar({
           title: 'Error de sesión',

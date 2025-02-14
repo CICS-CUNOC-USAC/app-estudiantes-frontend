@@ -6,14 +6,8 @@
 import ContentDisplay from '~/components/portal/ContentDisplay.vue';
 
 const { data } = await useAsyncData(() =>
-  queryContent('associations')
-    .where({
-      _path: { $contains: '/associations/cics' }
-    })
-    .findOne()
+  queryCollection('associations').where('path', 'LIKE', '%/cics').first()
 )
-
-useCustomPageTitle(data.value?.title);
 </script>
 
 <style scoped lang="postcss">
