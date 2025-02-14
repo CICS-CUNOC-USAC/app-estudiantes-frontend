@@ -1,8 +1,8 @@
 # AEIO - Asociación de Estudiantes de Ingeniería de Occidente
 
-La **A.E.I.O.** es una organización autónoma que representa la voz y los intereses de los estudiantes de ingeniería de nuestra unidad académica. Creado por y para los estudiantes, trabajamos para fortalecer nuestra comunidad estudiantil, defender nuestros derechos, promover el desarrollo académico y ser un puente entre los estudiantes, los docentes y las autoridades universitarias.  
+La **A.E.I.O.** es una organización autónoma que representa la voz y los intereses de los estudiantes de ingeniería de nuestra unidad académica. Creado por y para los estudiantes, trabajamos para fortalecer nuestra comunidad estudiantil, defender nuestros derechos, promover el desarrollo académico y ser un puente entre los estudiantes, los docentes y las autoridades universitarias.
 
-## Estructura de la organización  
+## Estructura de la organización
 
 | Carrera  | Nombre | Secretaría |
 |----------|--------------------------------------|------------------------------|
@@ -21,7 +21,7 @@ La **A.E.I.O.** es una organización autónoma que representa la voz y los inter
 | Civil | Ana Patricia Cifuentes Pac | Primer Ingreso |
 | Civil | Andrea Fernanda Franco Sandoval | Primer Ingreso |
 
-## Información de contacto  
+## Información de contacto
 
-- **Correo:** [asoingenieriacunoc@gmail.com](mailto:asoingenieriacunoc@gmail.com)  
-- **Facebook:** [Asociación de Estudiantes de Ingeniería de Occidente](#)  
+- **Correo:** [asoingenieriacunoc@gmail.com](mailto:asoingenieriacunoc@gmail.com)
+- **Facebook:** [Asociación de Estudiantes de Ingeniería de Occidente](https://www.facebook.com/AEIO.CUNOC/ )
