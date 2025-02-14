@@ -91,7 +91,7 @@
             id="edition"
             no-borders
             prepend-icon="icon-park-twotone:bookshelf"
-            :error="$form.total_availability?.error?.message"
+            :error="$form.edition?.error?.message"
           />
 
           <CInputText
@@ -119,20 +119,21 @@
         </div>
 
         <div v-if="bookType === 'physical'" class="mb-4">
-          <h5 class="my-3 font-medium">Dispobibilidad</h5>
+          <h5 class="my-3 font-medium">Disponibilidad</h5>
           <section class="grid grid-cols-2 gap-4">
             <div>
-              <PFloatLabel variant="in" class="mb-2">
+              <PIftaLabel variant="in" class="mb-2">
                 <PInputNumber
                   inputId="total_availability"
                   name="total_availability"
                   variant="filled"
                   fluid
                   size="small"
+                  placeholder="0"
                   input-class="rounded-lg! focus:ring-2! focus:ring-primary-400/50 border-black! dark:border-surface-700! dark:bg-surface-900!"
                 />
-                <label for="total_availability">Dispobibilidad total</label>
-              </PFloatLabel>
+                <label for="total_availability">Disponibilidad total</label>
+              </PIftaLabel>
               <div
                 v-if="$form.total_availability?.invalid"
                 class="mt-1.5 text-xs font-medium text-red-500"
@@ -141,17 +142,18 @@
               </div>
             </div>
             <div>
-              <PFloatLabel variant="in">
+              <PIftaLabel variant="in">
                 <PInputNumber
                   inputId="current_availability"
                   name="current_availability"
                   variant="filled"
                   fluid
                   size="small"
+                  placeholder="0"
                   input-class="rounded-lg! focus:ring-2! focus:ring-primary-400/50 border-black! dark:border-surface-700! dark:bg-surface-900!"
                 />
-                <label for="current_availability">Dispobibilidad actual</label>
-              </PFloatLabel>
+                <label for="current_availability">Disponibilidad actual</label>
+              </PIftaLabel>
               <div
                 v-if="$form.current_availability?.invalid"
                 class="mt-1.5 text-xs font-medium text-red-500"
@@ -243,8 +245,8 @@ const initialValues = reactive({
   description: '',
   isbn: '',
   reference_id: '',
-  total_availability: 0,
-  current_availability: 0,
+  total_availability: null,
+  current_availability: null,
   edition: '',
   location: '',
   author: '',
@@ -311,7 +313,7 @@ const saveBook = async (e: FormSubmitEvent) => {
             e.values as Omit<BookPayload, 'file'>,
             bookType.value
           )
-    
+
     if (!response.error) {
       navigateTo(`/admin/books/${bookType.value}`)
     }
