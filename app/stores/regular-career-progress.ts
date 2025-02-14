@@ -44,6 +44,7 @@ export type Progress = {
 
 export type ProgressCredits = {
   mandatory_credits: number
+  not_mandatory_credits: number
   total_credits: number
 }
 
@@ -51,6 +52,7 @@ export type ProgressResponse = {
   progress: Progress
   current_credits: ProgressCredits
   mandatory_credits: number
+  not_mandatory_credits: number
   available_credits: number
 }
 

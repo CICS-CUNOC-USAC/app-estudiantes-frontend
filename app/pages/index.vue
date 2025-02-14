@@ -1,25 +1,14 @@
 <template>
   <div class="greetings">
     <HomeBanner />
-    <!-- <h1 class="text-xl font-semibold">CICS App - Portal - Ingeniería CUNOC</h1>
-    <section class="my-6">
-      <p>
-        El nuevo portal para los estudiantes de Ingenieria del Centro
-        Universitario De Occidente fue creada con el fin de apoyar a los
-        estudiantes a encontrar informacion que les puede ser util a lo largo de
-        su carrera.
-      </p>
-      <br />
-      <p>Está compuesta por secciones con informacion y herramientas.</p>
-    </section> -->
 
-    <div class="max-w-screen-xl px-5 pt-6 lg:px-8 mx-auto">
-      <section class="portal-section">
-        <h2 class="">
+    <div class="max-w-screen-xl px-5 pt-2 lg:px-8 mx-auto">
+      <section class="my-6">
+        <h2 class="flex justify-between gap-x-4 text-lg font-semibold lg:justify-start">
           <span>
             <Icon
               name="icon-park-twotone:newspaper-folding"
-              class="mr-1.5 mb-1 inline"
+              class="mr-1.5 mb-1 inline text-primary-700 dark:text-primary-200"
               size="26"
             />
             Publicaciones oficiales recientes
@@ -37,11 +26,11 @@
       <section
         v-for="section in sections"
         :key="section.name"
-        class="portal-section"
+        class="my-5"
       >
-        <h2>
+        <h2 class="flex justify-between gap-x-4 text-lg font-semibold lg:justify-start">
           <span>
-            <Icon :name="section.icon" class="mr-1.5 mb-1 inline" size="26" />
+            <Icon :name="section.icon" class="mr-1.5 mb-1 inline text-primary-700 dark:text-primary-200" size="26" />
             {{ section.title }}
           </span>
         </h2>
@@ -82,37 +71,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import InfoCard from '@/components/cards/InfoCard.vue'
 import HomeBanner from '~/components/portal/HomeBanner.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import { sections } from '~/utils/consts/main-page.consts'
 
-useHead({
-  title: 'Inicio'
-})
 definePageMeta({
   extendScreen: true,
-  menuClass: 'bg-cics-white dark:bg-cics-blue',
+  menuClass: 'bg-cics-white/80 dark:bg-cics-blue/75',
 })
 </script>
-<style scoped>
-@reference '~/assets/css/main.css';
-.portal-section {
-  @apply my-6;
-  h2 {
-    @apply flex justify-between gap-x-4 text-lg font-semibold lg:justify-start;
-
-    svg {
-      @apply text-gray-500 dark:text-gray-200;
-    }
-
-    a {
-      @apply shrink-0;
-    }
-    /* :deep(a){
-    } */
-  }
-}
-</style>

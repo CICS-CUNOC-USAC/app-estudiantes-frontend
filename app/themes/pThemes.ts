@@ -12,7 +12,32 @@ const commonComponentsDefaults = {
   fileupload: {
     contentPadding: '0px',
     filePadding: '0px',
-    headerPadding: '0px',
+    headerPadding: '0px'
+  },
+  multiselect: {
+    shadow: 'none',
+    focusRingShadow: '0 0 0 2px color-mix(in srgb, {primary.500}, transparent 50%)',
+    borderRadius: '8px',
+    overlayBorderRadius: '8px',
+    
+    colorScheme: {
+      light: {
+        overlayBackground: '{surface.50}',
+        overlayBorderColor: '#000',
+        borderColor: '#000',
+        hoverBorderColor: '#000',
+        focusBorderColor: '#000',
+        background: '{surface.50}'
+      },
+      dark: {
+        overlayBackground: '{surface.900}',
+        overlayBorderColor: '{surface.700}',
+        borderColor: '{surface.700}',
+        hoverBorderColor: '{surface.700}',
+        focusBorderColor: '{surface.700}',
+        background: '{surface.900}'
+      }
+    }
   },
   toggleswitch: {
     border: {
@@ -20,22 +45,15 @@ const commonComponentsDefaults = {
     },
     checked: {
       hoverBorderColor: '#000',
-      borderColor: '#000',
+      borderColor: '#000'
     },
 
     hover: {
       borderColor: '#000'
-    },
-  },
-  breadcrumb: {
-    colorScheme: {
-      light: {
-        background: '{zinc.100}'
-      },
-      dark: {
-        background: '{zinc.900}'
-      }
     }
+  },
+  checkbox: {
+    borderRadius: '8px'
   }
 }
 
@@ -70,6 +88,40 @@ const BluePrimaries = {
     800: '{indigo.800}',
     900: '{indigo.900}',
     950: '{indigo.950}'
+  }
+}
+
+const PurplePrimaries = {
+  name: 'Morado',
+  values: {
+    50: '{purple.50}',
+    100: '{purple.100}',
+    200: '{purple.200}',
+    300: '{purple.300}',
+    400: '{purple.400}',
+    500: '{purple.500}',
+    600: '{purple.600}',
+    700: '{purple.700}',
+    800: '{purple.800}',
+    900: '{purple.900}',
+    950: '{purple.950}'
+  }
+}
+
+const RosePrimaries = {
+  name: 'Rosa',
+  values: {
+    50: '{rose.50}',
+    100: '{rose.100}',
+    200: '{rose.200}',
+    300: '{rose.300}',
+    400: '{rose.400}',
+    500: '{rose.500}',
+    600: '{rose.600}',
+    700: '{rose.700}',
+    800: '{rose.800}',
+    900: '{rose.900}',
+    950: '{rose.950}'
   }
 }
 
@@ -124,8 +176,25 @@ const YellowPrimaries = {
   }
 }
 
+const AmberPrimaries = {
+  name: 'Ambar',
+  values: {
+    50: '{amber.50}',
+    100: '{amber.100}',
+    200: '{amber.200}',
+    300: '{amber.300}',
+    400: '{amber.400}',
+    500: '{amber.500}',
+    600: '{amber.600}',
+    700: '{amber.700}',
+    800: '{amber.800}',
+    900: '{amber.900}',
+    950: '{amber.950}'
+  }
+}
+
 const EmeraldPrimaries = {
-  name: 'Verde',
+  name: 'Esmeralda',
   values: {
     50: '{emerald.50}',
     100: '{emerald.100}',
@@ -141,8 +210,59 @@ const EmeraldPrimaries = {
   }
 }
 
+const GreenPrimaries = {
+  name: 'Verde',
+  values: {
+    50: '{green.50}',
+    100: '{green.100}',
+    200: '{green.200}',
+    300: '{green.300}',
+    400: '{green.400}',
+    500: '{green.500}',
+    600: '{green.600}',
+    700: '{green.700}',
+    800: '{green.800}',
+    900: '{green.900}',
+    950: '{green.950}'
+  }
+}
+
+const LimePrimaries = {
+  name: 'Lima',
+  values: {
+    50: '{lime.50}',
+    100: '{lime.100}',
+    200: '{lime.200}',
+    300: '{lime.300}',
+    400: '{lime.400}',
+    500: '{lime.500}',
+    600: '{lime.600}',
+    700: '{lime.700}',
+    800: '{lime.800}',
+    900: '{lime.900}',
+    950: '{lime.950}'
+  }
+}
+
+const RedPrimaries = {
+  name: 'Rojo',
+  values: {
+    50: '{red.50}',
+    100: '{red.100}',
+    200: '{red.200}',
+    300: '{red.300}',
+    400: '{red.400}',
+    500: '{red.500}',
+    600: '{red.600}',
+    700: '{red.700}',
+    800: '{red.800}',
+    900: '{red.900}',
+    950: '{red.950}'
+  }
+}
+
 const PinkPrimaries = {
-  name: 'Rosa',
+  name: 'Rosado',
   values: {
     50: '{pink.50}',
     100: '{pink.100}',
@@ -175,15 +295,57 @@ const StonePrimaries = {
   }
 }
 
+const SlatePrimaries = {
+  name: 'Slate',
+  values: {
+    50: '{slate.50}',
+    100: '{slate.100}',
+    200: '{slate.200}',
+    300: '{slate.300}',
+    400: '{slate.400}',
+    500: '{slate.500}',
+    600: '{slate.600}',
+    700: '{slate.700}',
+    800: '{slate.800}',
+    900: '{slate.900}',
+    950: '{slate.950}'
+  }
+}
+
+const GrayPrimaries = {
+  name: 'Gris',
+  values: {
+    50: '{gray.50}',
+    100: '{gray.100}',
+    200: '{gray.200}',
+    300: '{gray.300}',
+    400: '{gray.400}',
+    500: '{gray.500}',
+    600: '{gray.600}',
+    700: '{gray.700}',
+    800: '{gray.800}',
+    900: '{gray.900}',
+    950: '{gray.950}'
+  }
+}
+
 export const allThemesPrimaries = [
   OrangePrimaries,
   BluePrimaries,
   FuchsiaPrimaries,
   TealPrimaries,
   YellowPrimaries,
+  AmberPrimaries,
   EmeraldPrimaries,
   PinkPrimaries,
-  StonePrimaries
+  StonePrimaries,
+  LimePrimaries,
+  RedPrimaries,
+  GreenPrimaries,
+  PurplePrimaries,
+  RosePrimaries,
+  SlatePrimaries,
+  GrayPrimaries
 ]
 
 export const AuraBase = definePreset(Aura, {
@@ -242,5 +404,5 @@ export const AuraBase = definePreset(Aura, {
 
 export default {
   preset: AuraBase,
-  options: {...commonOptionsDefaults}
+  options: { ...commonOptionsDefaults }
 }

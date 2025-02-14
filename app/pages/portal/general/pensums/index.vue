@@ -30,6 +30,11 @@ import InfoCard from '@/components/cards/InfoCard.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 
 import { careers, contentHelp } from './(files)/consts'
+
+useCustomPageTitle('Pensums de estudios')
+definePageMeta({
+  title: 'Pensums de estudios',
+})
 </script>
 
 

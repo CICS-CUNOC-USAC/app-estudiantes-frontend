@@ -40,7 +40,7 @@
         :to="`/portal/post/${item.internal_link}?fromSearch=${route.query.q}`"
       >
         <div class="flex-1 space-y-3">
-          <h1 class="text-xl font-bold">
+          <h1 class="text-xl font-semibold">
             <span v-html="highlightQuery(item.title)"></span>
           </h1>
           <p class="text-muted-color-emphasis">

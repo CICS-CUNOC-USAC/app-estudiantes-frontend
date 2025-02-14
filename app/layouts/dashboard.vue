@@ -62,11 +62,7 @@
         >
           <template v-if="user">
             <div class="flex min-w-0 items-center">
-              <PAvatar
-                class="shrink-0"
-                shape="circle"
-                :label="displayName?.charAt(0)"
-              />
+              <AvatarWithMenu :display-name="displayName" />
               <div class="ml-2 flex min-w-0 flex-col items-start">
                 <span
                   class="w-full truncate text-sm font-medium"
@@ -153,6 +149,7 @@ import CICSLogo from '~/components/partials/CICSLogo.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import DashboardNavigator from '~/components/partials/DashboardNavigator.vue'
 import { DashboardLayoutItems } from './dashboard.consts'
+import AvatarWithMenu from '~/components/partials/AvatarWithMenu.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())

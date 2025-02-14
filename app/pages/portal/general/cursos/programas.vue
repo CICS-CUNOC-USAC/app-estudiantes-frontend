@@ -56,7 +56,7 @@
 
     <HelpDialog
       title="Programas de Cursos"
-      content-path="/programas"
+      content-path="/help/programas"
     ></HelpDialog>
   </main>
 </template>
@@ -102,5 +102,10 @@ const filteredData = computed(() => {
   return data.value.filter((item) =>
     item.teacher.toLowerCase().includes(teacherSearch.value.toLowerCase())
   )
+})
+
+useCustomPageTitle('Programas de Cursos')
+definePageMeta({
+  title: 'Programas de Cursos'
 })
 </script>

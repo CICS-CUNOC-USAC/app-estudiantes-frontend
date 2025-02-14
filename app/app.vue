@@ -48,21 +48,21 @@
 <script lang="ts" setup>
 import { Toaster } from 'vue-sonner'
 
-useHead({
-  titleTemplate: (titleChunk) => {
-    return titleChunk ? `${titleChunk} | CICS App` : 'CICS App | Portal'
-  }
-})
+// useHead({
+//   titleTemplate: (titleChunk) => {
+//     return titleChunk ? `${titleChunk} | CICS App` : 'CICS App | Portal'
+//   }
+// })
 
 const route = useRoute()
 useSeoMeta({
   title: () =>
-    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App',
+    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App | Portal',
   description:
     'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
   ogImage: 'https://cics-app.vercel.app/og.png',
   ogTitle: () =>
-    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App',
+    route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App | Portal',
   ogDescription:
     'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
   ogType: 'website',
@@ -83,7 +83,7 @@ html {
 
 body,
 html {
-  /* scrollbar-gutter: stable; */
+  scrollbar-gutter: stable;
 }
 
 /* Common animations */
