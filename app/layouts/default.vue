@@ -106,7 +106,7 @@
         id="appcont"
           class="mx-auto print:pt-14  min-h-screen"
         :class="{
-          'max-w-screen-xl px-5  lg:px-8': !$route.meta.extendScreen,
+          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen,
         }"
       >
         <NuxtPage @search="toggleSearch({ leaveOpen: true })"/>
