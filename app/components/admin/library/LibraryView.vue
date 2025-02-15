@@ -72,7 +72,7 @@
         "
       />
       <CSelect
-        :items="categories?.results"
+        :items="categories?.results || []"
         label="Categoria"
         id="category"
         prepend-icon="icon-park-twotone:category-management"
