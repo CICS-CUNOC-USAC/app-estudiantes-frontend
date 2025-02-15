@@ -20,9 +20,14 @@ export const DashboardLayoutItems = [
         itemLink: '/dashboard/pensum/progress'
       },
       {
-        itemName: 'Biblioteca/Libros',
+        itemName: 'Biblioteca (Digital)',
         itemIcon: 'icon-park-twotone:book-one',
-        itemLink: '/dashboard/books'
+        itemLink: '/dashboard/books/digital'
+      },
+      {
+        itemName: 'Biblioteca (Fisica)',
+        itemIcon: 'icon-park-twotone:book-one',
+        itemLink: '/dashboard/books/physical'
       },
     ]
   }

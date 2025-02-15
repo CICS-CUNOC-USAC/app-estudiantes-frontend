@@ -13,12 +13,12 @@
       En esta sección se podrán administrar todos los recursos de libros
       disponibles en la biblioteca de Ingenieria (Solo usuarios registrados).
     </p>
-    <LibraryView type="physical" />
+    <UserLibraryView type="physical" />
   </main>
 </template>
 <script setup lang="ts">
-import LibraryView from '@/components/admin/library/LibraryView.vue'
+import UserLibraryView from '~/components/dashboard/UserLibraryView.vue';
 definePageMeta({
-  layout: 'admin'
+  layout: 'dashboard'
 })
 </script>

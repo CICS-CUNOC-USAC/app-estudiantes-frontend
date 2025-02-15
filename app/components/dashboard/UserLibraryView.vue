@@ -1,9 +1,18 @@
 <template>
   <section>
-    <div class="grid grid-cols-1 gap-2 pb-4 md:grid-cols-3">
+    <div
+      class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr_1fr]"
+    >
+      <CButton
+        label="Nuevo libro"
+        icon="icon-park-outline:plus"
+        class="w-fit"
+        :to="`/dashboard/books/create?type=${props.type}`"
+      />
       <CInputText
         label="Nombre del libro"
         id="name"
+        class="h-12"
         prepend-icon="icon-park-twotone:doc-search-two"
         clear-button
         no-borders
@@ -37,6 +46,7 @@
         prepend-icon="icon-park-twotone:people-search"
         clear-button
         no-borders
+        class="h-12"
         :default-value="$route.query.author"
         @input="
           ($event: Event) => {
@@ -56,6 +66,27 @@
               query: {
                 ...$route.query,
                 author: undefined
+              }
+            })
+          }
+        "
+      />
+      <CSelect
+        :items="categories?.results"
+        label="Categoria"
+        id="category"
+        prepend-icon="icon-park-twotone:category-management"
+        no-borders
+        clearable
+        checkmark
+        option-label="name"
+        option-value="id"
+        @value-change="
+          ($event: number | null) => {
+            $router.push({
+              query: {
+                ...$route.query,
+                category_id: $event || undefined
               }
             })
           }
@@ -89,41 +120,43 @@
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
-            <CButton
-              :to="`/dashboard/books/${slotProps.data.id}`"
-              icon="lucide:eye"
-              fluid
-              size="small"
-              variant="tonal"
-              label="Ver"
-            />
           </div>
         </template>
       </PColumn>
     </PDataTable>
   </section>
 </template>
-
 <script setup lang="ts">
-import { fetchAllBooks } from '~/lib/api/books'
+import { fetchAllBooks, getAllCategories } from '~/lib/api/books'
 import CButton from '../primitives/button/CButton.vue'
 import CInputText from '../primitives/form/CInputText.vue'
 
 const route = useRoute()
+
+const props = defineProps<{
+  type: 'physical' | 'digital'
+}>()
 
 const limit = ref(5)
 const currentPage = computed(() => {
   return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
 })
 
+const { data: categories } = useAsyncData('categories', () =>
+  getAllCategories()
+)
+
 const { data, status } = await useAsyncData(
   () =>
-    fetchAllBooks({
-      page: route.query.page ? Number(route.query.page) : 1,
-      limit: limit.value,
-      name: route.query.name,
-      author: route.query.author
-    }),
+    fetchAllBooks(
+      {
+        page: route.query.page ? Number(route.query.page) : 1,
+        limit: limit.value,
+        name: route.query.name,
+        author: route.query.author
+      },
+      props.type
+    ),
   {
     watch: [limit, () => route.query]
   }
