@@ -7,20 +7,17 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
-    PAvatar: typeof import('primevue/avatar')['default']
     PButton: typeof import('primevue/button')['default']
     PCheckbox: typeof import('primevue/checkbox')['default']
     PColumn: typeof import('primevue/column')['default']
     PDataTable: typeof import('primevue/datatable')['default']
     PDrawer: typeof import('primevue/drawer')['default']
     PFileUpload: typeof import('primevue/fileupload')['default']
-    PFloatLabel: typeof import('primevue/floatlabel')['default']
     PForm: typeof import('@primevue/forms/form')['default']
     PIftaLabel: typeof import('primevue/iftalabel')['default']
     PInputGroup: typeof import('primevue/inputgroup')['default']
     PInputNumber: typeof import('primevue/inputnumber')['default']
     PInputText: typeof import('primevue/inputtext')['default']
-    PMessage: typeof import('primevue/message')['default']
     PMultiSelect: typeof import('primevue/multiselect')['default']
     PSelect: typeof import('primevue/select')['default']
     PSelectButton: typeof import('primevue/selectbutton')['default']

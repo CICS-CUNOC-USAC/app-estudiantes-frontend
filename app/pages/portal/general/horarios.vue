@@ -169,14 +169,13 @@
 import { ToggleGroupItem, ToggleGroupRoot } from 'radix-vue'
 import ClassScheduleV1 from '~/components/portal/horarios/ClassScheduleV1.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
 import ArrowedCombobox from '~/components/schedule/ArrowedSelector.vue'
 import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
-import HoursDialog from '~/components/schedule/HoursDialog.vue'
-import type { Career } from '~/utils/types/career-courses'
-import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
+import HoursDialog from '~/components/schedule/HoursDIalog.vue'
 import { Icon } from '@iconify/vue'
 import CMessage from '~/components/partials/CMessage.vue'
+import type { Career } from '~/utils/types/career-courses'
+import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 
 const schedulesKey = computed(() => {
   return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
