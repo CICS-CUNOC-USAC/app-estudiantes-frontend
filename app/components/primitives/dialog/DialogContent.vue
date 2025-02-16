@@ -39,9 +39,9 @@ const emitsAsProps = useEmitAsProps(emits)
           <span class="sr-only">Close</span>
         </DialogClose>
       </DialogTitle>
-      <div class="pb-6  overflow-scroll">
+      <!-- <div class="pb-6 "> -->
         <slot />
-      </div>
+      <!-- </div> -->
     </DialogContent>
   </DialogPortal>
 </template>

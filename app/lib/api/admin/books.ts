@@ -1,8 +1,19 @@
 import { toast } from 'vue-sonner'
 
-export const fetchAllBooks = async (params: any) => {
+export interface Category {
+  id: number
+  name: string
+  description: string
+  created_at: Date
+  updated_at: Date
+}
+
+export const fetchAllBooks = async (
+  params: any,
+  type: 'digital' | 'physical'
+) => {
   try {
-    const response = await $api<BooksResponse>('/library/admin', {
+    const response = await $api<BooksResponse>(`/books/${type}`, {
       params
     })
     const { results, ...meta } = response
@@ -22,14 +33,41 @@ export const fetchAllBooks = async (params: any) => {
   }
 }
 
-export const createBookItem = async (payload: BookPayload) => {
+export const createWithoutMedia = async (
+  payload: BookPayload,
+  type: 'digital' | 'physical'
+) => {
+  console.log('payload', payload)
+  try {
+    const response = await $api<Book>(`/books/${type}`, {
+      method: 'POST',
+      body: payload
+    })
+    toast.success('Recurso creado', {
+      description: 'Libro creado correctamente'
+    })
+    return response
+  } catch (error) {
+    toast.error('Error al crear el libro', {
+      description: (error as any).data.message ?? (error as any).data.error
+    })
+    return {
+      error
+    }
+  }
+}
+
+export const createBookItem = async (
+  payload: BookPayload,
+  type: 'digital' | 'physical'
+) => {
   try {
     const uploadedMedia = await useMediaStore().postMedia({
       file: payload.file,
       path: 'library',
       attach_type: 'library'
     })
-    const response = await $api<Book>('/library/admin', {
+    const response = await $api<Book>(`/books/${type}`, {
       method: 'POST',
       body: {
         ...payload,
@@ -44,12 +82,15 @@ export const createBookItem = async (payload: BookPayload) => {
     toast.error('Error al crear el libro', {
       description: (error as any).data.message ?? (error as any).data.error
     })
+    return {
+      error
+    }
   }
 }
 
 export async function deleteBook(id: string | number) {
   try {
-    await $api(`/library/admin/${+id}`, {
+    await $api(`/books/admin/${id}`, {
       method: 'DELETE'
     })
     toast.success('Libro eliminado correctamente')
@@ -58,6 +99,13 @@ export async function deleteBook(id: string | number) {
     toast.error('Error al eliminar el libro')
     return error
   }
-  
 }
 
+export async function getAllCategories(params?: {}) {
+  const results = await $api<Category[]>(`/categories`, {
+    params
+  })
+  return {
+    results
+  }
+}

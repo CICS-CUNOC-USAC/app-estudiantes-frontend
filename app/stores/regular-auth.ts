@@ -165,9 +165,9 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       this.loading = true
       // const snackbarStore = useSnackbarStore()
 
-      const { data } = await useCustomFetch<User>('/auth/me')
-      if (data.value) {
-        this.user = data?.value
+      const response = await $api<User>('/auth/me')
+      if (response) {
+        this.user = response
       } else {
         useSnackbarStore().showSnackbar({
           title: 'Error de sesión',

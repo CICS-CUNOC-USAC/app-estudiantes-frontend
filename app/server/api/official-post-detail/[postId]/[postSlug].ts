@@ -5,7 +5,25 @@ export default defineEventHandler(async (event) => {
   const postId = getRouterParam(event, 'postId')
   const postSlug = getRouterParam(event, 'postSlug')
 
-  const html = (await $fetch(`${BASE_URL}/${postId}/${postSlug}/`)) as string
+  // const html = (await $fetch(`${BASE_URL}/${postId}/${postSlug}/`)) as string
+  const response = await fetch(`${BASE_URL}/${postId}/${postSlug}/`)
+
+  if (!response.ok) {
+    console.log('response.status', response.status)
+    if (response.status === 500) {
+      throw createError({
+        statusCode: 500,
+        statusMessage: 'Internal Server Error or Service Unavailable',
+      })
+    }
+    if (response.status === 404) {
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Not Found',
+      })
+    }
+  }
+  const html = await response.text()
 
   const doc = new JSDOM(html).window.document
 

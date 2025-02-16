@@ -2,7 +2,7 @@
   <DialogRoot>
     <DialogTrigger as-child>
       <button
-        class="bg-primary-500 ring-primary-200 fixed right-10 bottom-10 rounded-full p-2.5 text-white transition hover:ring-2"
+        class="bg-surface-600 dark:bg-surface-200 ring-primary-200 fixed right-10 bottom-10 rounded-full p-2.5 text-primary-contrast transition hover:ring-2"
       >
         <Icon name="icon-park-twotone:help" />
       </button>
@@ -53,11 +53,7 @@ const { contentPath } = defineProps<{
 }>()
 
 const { data, status } = useAsyncData(() =>
-  queryContent('help')
-    .where({
-      _path: { $contains: contentPath }
-    })
-    .findOne()
+  queryCollection('content').path(contentPath).first()
 )
 </script>
 <style scoped></style>

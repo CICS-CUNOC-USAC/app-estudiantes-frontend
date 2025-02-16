@@ -5,12 +5,8 @@
 <script lang="ts" setup>
 import ContentDisplay from '~/components/portal/ContentDisplay.vue';
 
-const { data } = useAsyncData(() =>
-  queryContent('associations')
-    .where({
-      _path: { $contains: '/associations/cics' }
-    })
-    .findOne()
+const { data } = await useAsyncData(() =>
+  queryCollection('associations').where('path', 'LIKE', '%/cics').first()
 )
 </script>
 

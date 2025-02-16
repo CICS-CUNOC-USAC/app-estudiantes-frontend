@@ -12,8 +12,10 @@
 @theme {
   --color-cics-white: #faf6ed;
   --color-cics-blue: #272933;
+  --color-cics-silver-pale: #f8f5f3;
 
-  --font-sans: 'Geist Sans', system-ui, sans-serif;
+  /* --font-sans: 'Geist Sans', system-ui, sans-serif; */
+  --font-sans: 'Mona Sans', system-ui, sans-serif;
   --font-alt: 'Hubot Sans', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
 

@@ -1,13 +1,13 @@
 <template>
   <section>
     <div
-      class="grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr] sticky top-0 z-10"
+      class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr_1fr]"
     >
       <CButton
         label="Nuevo libro"
         icon="icon-park-outline:plus"
         class="w-fit"
-        to="/admin/books/create"
+        :to="`/admin/books/create?type=${props.type}`"
       />
       <CInputText
         label="Nombre del libro"
@@ -71,6 +71,27 @@
           }
         "
       />
+      <CSelect
+        :items="categories?.results || []"
+        label="Categoria"
+        id="category"
+        prepend-icon="icon-park-twotone:category-management"
+        no-borders
+        clearable
+        checkmark
+        option-label="name"
+        option-value="id"
+        @value-change="
+          ($event: number | null) => {
+            $router.push({
+              query: {
+                ...$route.query,
+                category_id: $event || undefined
+              }
+            })
+          }
+        "
+      />
     </div>
 
     <PDataTable
@@ -126,7 +147,16 @@
 import DeleteItemDialog from '@/components/dialogs/DeleteItemDialog.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import { fetchAllBooks, deleteBook } from '~/lib/api/admin/books'
+import CSelect from '~/components/primitives/form/CSelect.vue'
+import {
+  fetchAllBooks,
+  deleteBook,
+  getAllCategories
+} from '~/lib/api/admin/books'
+
+const props = defineProps<{
+  type: 'physical' | 'digital'
+}>()
 
 const route = useRoute()
 
@@ -138,15 +168,22 @@ const currentPage = computed(() => {
 const { data, status, refresh } = await useAsyncData(
   'admin-books',
   () =>
-    fetchAllBooks({
-      page: route.query.page ? Number(route.query.page) : 1,
-      limit: limit.value,
-      name: route.query.name,
-      author: route.query.author
-    }),
+    fetchAllBooks(
+      {
+        page: route.query.page ? Number(route.query.page) : 1,
+        limit: limit.value,
+        name: route.query.name,
+        author: route.query.author
+      },
+      props.type
+    ),
   {
     watch: [limit, () => route.query]
   }
+)
+
+const { data: categories } = useAsyncData('categories', () =>
+  getAllCategories()
 )
 
 const handleDelete = async (id: number) => {

@@ -45,12 +45,8 @@
     </nav>
     <footer class="flex w-full items-center justify-between gap-2 px-4 py-2.5">
       <template v-if="user">
-        <div class="flex min-w-0 items-center">
-          <PAvatar
-            class="shrink-0"
-            shape="circle"
-            :label="displayName?.charAt(0)"
-          />
+        <div class="flex h-full min-w-0 items-center">
+          <AvatarWithMenu :display-name="displayNameFull" />
           <div class="ml-2 flex min-w-0 flex-col items-start">
             <span
               class="w-full truncate text-sm font-medium"
@@ -82,6 +78,7 @@
 import { DefaultLayoutItems } from '~/layouts/default.consts'
 import CICSLogo from './CICSLogo.vue'
 import CButton from '../primitives/button/CButton.vue'
+import AvatarWithMenu from './AvatarWithMenu.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())

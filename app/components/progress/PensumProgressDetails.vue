@@ -14,15 +14,15 @@
       >
         Guardando...
       </div>
-      <section class="relative flex justify-center gap-x-3 py-4 lg:gap-x-10">
+      <section class="relative flex justify-center py-4 sm:gap-x-4 lg:gap-x-10">
         <div>
-          <h6 class="text-sm font-normal lg:text-base">Créditos acumulados:</h6>
+          <h6 class="pensum-count">Créditos acumulados:</h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.total_credits
           }}</strong>
         </div>
         <div>
-          <h6 class="text-sm font-normal lg:text-base">
+          <h6 class="pensum-count">
             Créditos obligatorios:
           </h6>
           <strong class="text-muted-color-emphasis">{{
@@ -34,7 +34,19 @@
           >
         </div>
         <div>
-          <h6 class="text-sm font-normal lg:text-base">
+          <h6 class="pensum-count">
+            Créditos optativos:
+          </h6>
+          <strong class="text-muted-color-emphasis">{{
+            careerProgress?.current_credits.not_mandatory_credits
+          }}</strong>
+          /
+          <span class="text-muted-color-emphasis">
+            {{ careerProgress?.not_mandatory_credits }}</span
+          >
+        </div>
+        <div>
+          <h6 class="pensum-count">
             Créditos disponibles:
           </h6>
           <strong class="text-muted-color-emphasis">{{
@@ -70,4 +82,9 @@ onUnmounted(() => {
   })
 })
 </script>
-<style lang="postcss" scoped></style>
+<style>
+@reference '~/assets/css/main.css';
+.pensum-count {
+  @apply font-normal text-sm lg:text-base;
+}
+</style>

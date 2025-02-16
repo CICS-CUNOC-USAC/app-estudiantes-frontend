@@ -23,3 +23,8 @@ export type Course = {
   name: string;
   credits: number;
 }
+
+export type Career = {
+    code: number;
+    name: string;
+}

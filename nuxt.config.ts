@@ -1,9 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
 import Aura from '@primevue/themes/aura'
-import tailwindcss from "@tailwindcss/vite";
-
-
+import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   devtools: {
@@ -24,40 +22,45 @@ export default defineNuxtConfig({
     head: {
       link: [
         // favicon
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
       ],
       meta: [
-        { name: 'theme-color', content: '#ffffff', media: '(prefers-color-scheme: light)' },
-        { name: 'theme-color', content: '#262626', media: '(prefers-color-scheme: dark)' }
+        {
+          name: 'theme-color',
+          content: '#ffffff',
+          media: '(prefers-color-scheme: light)'
+        },
+        {
+          name: 'theme-color',
+          content: '#262626',
+          media: '(prefers-color-scheme: dark)'
+        }
       ]
-    },
+    }
   },
   modules: [
-    '@pinia/nuxt',
-    // '@nuxtjs/tailwindcss',
+    '@pinia/nuxt', // '@nuxtjs/tailwindcss',
     '@pinia/colada-nuxt',
     '@primevue/nuxt-module',
     '@nuxt/fonts',
     '@nuxt/icon',
     '@vueuse/nuxt',
     'radix-vue/nuxt',
-    '@nuxt/content',
-    '@nuxtjs/color-mode',
-    // 'vue-sonner/nuxt',
+    '@nuxt/content', // 'vue-sonner/nuxt',
     // (_options, nuxt) => {
     //   nuxt.hooks.hook('vite:extendConfig', (config) => {
     //     // @ts-expect-error vite-plugin-vuetify
     //     config.plugins.push(vuetify({ autoImport: true }))
     //   })
     // }
+    '@nuxtjs/color-mode',
+    'nuxt-authorization'
   ],
   vite: {
-    plugins: [
-      tailwindcss(),
-    ],
+    plugins: [tailwindcss()],
     define: {
       'process.env.DEBUG': false
-    },
+    }
     // vue: {
     //   template: {
     //     transformAssetUrls
@@ -66,16 +69,16 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   colorMode: {
-    classPrefix: "",
-    classSuffix: "",
-    preference: "system",
+    classPrefix: '',
+    classSuffix: '',
+    preference: 'system'
   },
   primevue: {
     composables: {
       exclude: ['useToast']
     },
     directives: {
-      prefix: 'P',
+      prefix: 'P'
     },
     components: {
       prefix: 'P'
@@ -99,16 +102,13 @@ export default defineNuxtConfig({
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
     },
     families: [
-      { name: 'Geist Sans', provider: 'fontsource' },
+      { name: 'Geist', provider: 'google' },
       { name: 'Mona Sans', provider: 'google' },
       { name: 'Hubot Sans', provider: 'google' },
-      { name: 'Geist Mono', provider: 'fontsource' },
-      { name: 'Switzer', provider: 'fontshare' },
-      { name: 'DM Sans', provider: 'google' },
-      { name: 'Instrument Sans', provider: 'google' },
+      { name: 'Geist Mono', provider: 'google' },
     ],
     experimental: {
       processCSSVariables: true
     }
-  },
+  }
 })

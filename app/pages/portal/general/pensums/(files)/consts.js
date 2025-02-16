@@ -9,27 +9,27 @@ export const careers = [
   {
     name: 'Civil',
     img: logoCivil,
-    route: 'pensums/civil-33'
+    route: '/portal/general/pensums/civil-33'
   },
   {
     name: 'Ciencias y Sistemas',
     img: logoSistemas,
-    route: 'pensums/sistemas-58'
+    route: '/portal/general/pensums/sistemas-58'
   },
   {
     name: 'Mecanica',
     img: logoMecanica,
-    route: 'pensums/mecanica-34'
+    route: '/portal/general/pensums/mecanica-34'
   },
   {
     name: 'Industrial',
     img: logoIndustrial,
-    route: 'pensums/industrial-35'
+    route: '/portal/general/pensums/industrial-35'
   },
   {
     name: 'Mecanica Industrial',
     img: logoMecanicaIndustrial,
-    route: 'pensums/mecanicaindustrial-36'
+    route: '/portal/general/pensums/mecanicaindustrial-36'
   }
 ]
 

@@ -6,7 +6,7 @@
   >
     <PInputGroup
       unstyled
-      class="group flex rounded-lg outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
+      class="group flex rounded-lg outline-2 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
       :class="[test.classAttr]"
     >
       <component
@@ -28,7 +28,7 @@
         <Icon v-if="prependIcon && !hasPrependClick" :name="prependIcon" />
       </component>
       <div class="relative size-full">
-        <PIftaLabel class="relative size-full flex flex-col border-t border-b border-r border-black bg-surface-50 dark:bg-surface-900"
+        <PIftaLabel class="relative size-full flex flex-col border-t border-b border-r border-black dark:border-surface-700 bg-surface-50 dark:bg-surface-900"
         :class="{
           'border-l-0': noBorders && (hasPrependClick || prependIcon),
           'border-r-0': noBorders && (hasAppendClick || appendIcon),
@@ -39,7 +39,7 @@
           <label
             v-if="props.label"
             :for="test.restAttrs.id as string"
-            class="left-0 z-10 w-full mt-px pt-1 text-xs text-muted-color "
+            class="left-0 z-10 w-full mt-px pt-1 text-xs text-muted-color group-focus-within:text-primary-500 dark:group-focus-within:text-primary-400"
           >
             {{ props.label }}
           </label>
