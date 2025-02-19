@@ -3,12 +3,6 @@
     <div
       class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr_1fr]"
     >
-      <CButton
-        label="Nuevo libro"
-        icon="icon-park-outline:plus"
-        class="w-fit"
-        :to="`/dashboard/books/create?type=${props.type}`"
-      />
       <CInputText
         label="Nombre del libro"
         id="name"
