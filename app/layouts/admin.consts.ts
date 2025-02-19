@@ -34,6 +34,20 @@ export const ADMIN_LAYOUT_ITEMS = [
     ]
   },
   {
+    sectionName: 'Biblioteca',
+    shortName: 'Biblioteca',
+    items: [
+      {
+        itemName: 'Préstamos',
+        itemIcon: 'lucide:hand-helping',
+        itemLink: '/admin/books/loans',
+        action: [],
+        subject: [],
+      },
+
+    ]
+  },
+  {
     sectionName: 'Administración',
     shortName: 'Administración',
     items: [

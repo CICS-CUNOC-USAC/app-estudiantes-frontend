@@ -2,29 +2,35 @@
   <div class="relative flex flex-col items-start gap-4 lg:flex-row lg:gap-12">
     <div class="sticky top-20 hidden w-3/12 self-start lg:block print:hidden">
       <h4 class="mb-2 text-xl font-semibold">Secciones</h4>
-      <ul
-        class="space-y-2.5 border-l-2 border-gray-200 dark:border-neutral-700"
-      >
-        <li
-          v-for="link of data?.body?.toc?.links"
-          :key="link.id"
-          :class="{
-            // 'ml-2': link.depth === 2,
-            'ml-2': link.depth === 3
-          }"
-          class="hover:text-primary-600 dark:hover:text-primary-300 text-sm"
+      <div class="max-h-96 overflow-y-auto">
+        <ul
+          class="space-y-2.5 border-l-2  border-gray-200 dark:border-neutral-700"
         >
-          <NuxtLink :to="`#${link.id}`" class="toc-item" v-slot="slotProps">
-            <!-- <Icon
-                name="icon-park-outline:arrow-right"
-                size="12"
-                class="mb-1 mr-1 inline text-muted-color-emphasis"
-              /> -->
+          <li
+            v-for="link of data?.body?.toc?.links"
+            :key="link.id"
+            :class="{
+              // 'ml-2': link.depth === 2,
+              'ml-2': link.depth === 3
+            }"
+            class="hover:text-primary-600 dark:hover:text-primary-300 text-sm"
+          >
+            <NuxtLink
+              :to="`#${link.id}`"
+              class="toc-item"
+              v-slot="slotProps"
+            >
+              <!-- <Icon
+            name="icon-park-outline:arrow-right"
+            size="12"
+            class="mb-1 mr-1 inline text-muted-color-emphasis"
+            /> -->
 
-            {{ link.text }}
-          </NuxtLink>
-        </li>
-      </ul>
+              {{ link.text }}
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
     </div>
     <PopoverRoot>
       <PopoverTrigger

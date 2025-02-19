@@ -43,7 +43,7 @@
     <ElementNotFound
       v-if="!book && !loading"
       element-type="biblioteca"
-      back-to-route="/dashboard/books"
+      back-to-route="/dashboard/books/digital"
       back-to-label="Volver a la lista de libros"
     />
   </main>

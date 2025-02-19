@@ -15,7 +15,7 @@
 ## ¿Cómo des-asignarse un curso?  
 1. Revisar el **horario académico** para verificar los periodos de tiempo en los que se aceptan des-asignaciones.  
 2. Enviar un **correo electrónico** con el formulario de desasignación de cursos.  
-   - **Correo:** <correo>  
+   - **Correo:** correo
    - **Formulario:** [Link del formulario](#)
 
 ## ¿Cómo puedo ver mis notas?  

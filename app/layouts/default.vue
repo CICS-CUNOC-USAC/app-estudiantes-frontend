@@ -73,7 +73,7 @@
             icon="icon-park-twotone:people"
             :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
-            class="max-w-[12ch] min-w-0 !px-2"
+            class="max-w-[13ch] min-w-0 !px-2"
             pt:label:class="hidden lg:block truncate"
           />
         </div>
