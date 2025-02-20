@@ -98,7 +98,7 @@ const items = [
   {
     icon: 'icon-park-twotone:chart-line-area',
     title: 'Progreso Academico',
-    description: 'Ver informacion de tu perfil',
+    description: 'Ver informacion de tu progreso en la carrera',
     to: '/dashboard/pensum/progress'
   },
   {
