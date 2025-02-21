@@ -32,16 +32,18 @@
        inkscape:label="biblio">
       <title
          id="title1">Biblioteca</title>
+         
     </path>
+
     <path
        id="gn1"
        fill="#00000000"
        style="opacity:0.5;fill-rule:evenodd;stroke:#000000"
        d="m 351.98245,54.672958 53.34005,0.01764 -0.0176,120.015112 -50.64136,0.0176 -1.32978,-17.24705 -0.0572,-9.73575 -1.36028,-59.54716 0.0384,-24.024548 z"
        sodipodi:nodetypes="ccccccccc"
-       inkscape:label="gradas 2n N">
-      <title
-         id="title12">Gradas a Segundo Nivel (Norte)</title>
+       inkscape:label="gradas 2n N"
+       data-important="0">
+      <title id="title12">Gradas a Segundo Nivel (Norte)</title>
     </path>
     <path
        d="m 96.486328,470.55469 v 2.77236 H 85.371094 v 53.10264 h -2.654297 v 16.26367 h 2.654297 V 668.49723 H 189.1543 v 2.53988 h 32.52539 v -7.74858 l 2.48467,-3.11666 h 6.47626 V 481.45898 h -9.23264 l -0.27439,-8.60757 h -96.0125 v -2.29672 z"
@@ -49,19 +51,22 @@
        style="opacity:1;fill-rule:evenodd;stroke:#000000"
        id="lobby"
        sodipodi:nodetypes="cccccccccccccccccccc"
-       inkscape:label="lobby">
-      <title
-         id="title3">Entrada Biblioteca</title>
+       inkscape:label="lobby"
+       data-important="0">
+      <title id="title3">Entrada Biblioteca</title>
+      <desc>Puerta en medio de los Lockers al lado izquierdo.</desc>
     </path>
     <path
-       id="lab_compu"
+       id="lc"
        fill="#00000000"
        style="opacity:1;fill-rule:evenodd;stroke:#000000"
        d="m 49.352448,697.26091 0.03528,-6.59679 172.020252,-0.0499 -0.0688,9.37916 9.4285,10e-4 0.0255,106.03179 -78.11449,78.03006 -103.185091,0.019 -0.846646,-8.67813 -8.678128,-0.77611 0.388046,-175.00893 z"
        sodipodi:nodetypes="cccccccccccc"
-       inkscape:label="lab compu">
-      <title
-         id="title4">Laboratorio de Computación</title>
+       inkscape:label="lab compu"
+       data-important="0">
+      <title id="title4">Laboratorio de Computación</title>
+      
+      <desc>En el salón antes de entrar a biblioteca, en la izquierda al fondo.</desc>
     </path>
     <path
        id="aso"
@@ -69,19 +74,22 @@
        style="opacity:1;fill-rule:evenodd;stroke:#000000"
        d="m 49.319753,481.35757 0.0206,-7.98226 h 15.918451 v 194.67585 h -15.96834 l -0.0206,-8.00721 -9.370672,-0.0107 0.0414,-178.77771 z"
        sodipodi:nodetypes="ccccccccc"
-       inkscape:label="aso">
-      <title
-         id="title2">Oficinas AEIO</title>
+       inkscape:label="aso"
+       data-important="0">
+      <title id="title2">Oficinas AEIO</title>
+      <desc>En el salón antes de entrar a biblioteca, en frente.</desc>
     </path>
     <path
-       id="lab_suelos"
+       id="ls"
        fill="#00000000"
        style="opacity:1;fill-rule:evenodd;stroke:#000000"
        d="m 318.05694,911.84132 h 124.55947 l 0.0499,9.37915 8.0072,0.15703 -0.0213,169.3736 -7.86111,-0.025 -0.74833,8.6415 -176.25836,0.6628 -1.82095,-1.6464 -10e-6,-7.633 -7.92176,-0.075 -0.0227,-116.67982 z"
        sodipodi:nodetypes="ccccccccccccc"
-       inkscape:label="lab suelos">
+       inkscape:label="lab suelos"
+       data-important="1">
       <title
          id="title5">Laboratorio de Suelos</title>
+      <desc>Entrando al módulo, primer salón a mano derecha, antes de llegar a las gradas.</desc>
     </path>
     <path
        id="gn2"
@@ -89,7 +97,8 @@
        style="opacity:0.5;fill-rule:evenodd;stroke:#000000"
        d="m 517.44226,966.4472 51.68386,0.24945 2.50155,120.96215 -54.18541,-0.2822 z"
        sodipodi:nodetypes="ccccc"
-       inkscape:label="gradas 2n S ">
+       inkscape:label="gradas 2n S "
+       data-important="0">
       <title
          id="title8">Gradas a Segundo Nivel (Sur)</title>
     </path>
@@ -99,9 +108,11 @@
        style="display:inline;opacity:1;fill-rule:evenodd;stroke:#000000"
        d="m 479.88092,50.747946 0.75101,-8.980044 177.34414,0.154835 0.95964,8.725828 36.31758,-0.268045 4.04274,-8.468745 174.03817,-0.582387 0.0383,9.343725 9.35552,-0.01069 0.0236,170.745557 -8.6941,7.83923 -172.76666,0.156 0.027,-9.32565 -38.01687,-0.0525 -4.93907,9.2823 -178.35308,-0.0167 -0.003,-9.3112 -8.15155,0.0817 0.0446,-169.373793 z"
        sodipodi:nodetypes="cccccccccccccccccccc"
-       inkscape:label="lab agua">
+       inkscape:label="lab agua"
+       data-important="1">
       <title
          id="title11">Laboratorio de Aguas</title>
+      <desc>Al fondo del primer nivel, tiene seguro con huella dactilar.</desc>
     </path>
     <path
        id="sa"
@@ -109,9 +120,11 @@
        style="opacity:1;fill-rule:evenodd;stroke:#000000"
        d="m 702.18761,257.30147 h 170.98736 l -0.0353,9.49806 9.70116,0.0353 v 63.78073 H 692.06311 v -62.12271 z"
        sodipodi:nodetypes="cccccccc"
-       inkscape:label="salon agua">
+       inkscape:label="salon agua"
+       data-important="1">
       <title
          id="title10">Salón de Aguas</title>
+      <desc>Terminando el Salón Mayor, con una puerta blanca.</desc>
     </path>
     <path
        id="sm"
@@ -119,9 +132,11 @@
        style="opacity:1;fill-rule:evenodd;stroke:#000000"
        d="m 692.02783,355.97968 h 190.74243 v 85.61713 l -9.52478,2.43411 0.10584,37.28773 9.41894,0.0706 v 178.64401 l -9.50388,0.0748 v 36.86811 l 9.50388,2.56929 v 174.93475 l -8.76632,0.82901 -0.81137,36.51164 9.57769,7.4258 V 1090.675 l -9.41894,0.035 0.0353,9.2778 -173.13925,0.017 -5.39739,-9.2946 -2.82216,-0.018 V 921.36287 l 9.28078,-0.0254 0.0663,-38.91243 -9.34707,-9.26814 V 700.05295 l 9.34707,-0.0343 -0.68501,-37.98975 -8.66206,-2.47389 V 481.37117 l 6.16509,-0.0122 3.08491,-3.17596 v -36.73657 l -9.25,-0.097 z"
        sodipodi:nodetypes="cccccccccccccccccccccccccccccccccc"
-       inkscape:label="mayor">
+       inkscape:label="mayor"
+       data-important="1">
       <title
          id="title9">Salón Mayor</title>
+      <desc>Entrando al módulo, es el salón más grande del primer nivel. </desc>
     </path>
     <path
        id="bm"
@@ -129,7 +144,8 @@
        style="opacity:1;fill-rule:evenodd;stroke:#000000"
        d="m 631.97668,1022.6229 h 34.64826 v 68.2521 l -7.6875,-0.033 -0.99994,8.6875 -25.96082,0.375 z"
        sodipodi:nodetypes="ccccccc"
-       inkscape:label="bath m">
+       inkscape:label="bath m"
+       data-important="0">
       <title
          id="title7">Baño de Mujeres</title>
     </path>
@@ -139,7 +155,8 @@
        style="opacity:1;fill-rule:evenodd;stroke-width:1.29103;stroke:#000000"
        d="m 510.6793,985.27363 h -38.89084 v 105.35007 l 8.25381,0.1385 -0.10039,7.791 1.78527,1.4844 28.95215,-0.01 z"
        sodipodi:nodetypes="cccccccc"
-       inkscape:label="bath h">
+       inkscape:label="bath h"
+       data-important="0">
       <title
          id="title6">Baño de Hombres</title>
     </path>
@@ -149,9 +166,13 @@
        style="opacity:0.5;fill-rule:evenodd;stroke:#000000"
        d="M 328.06067,384.08838 H 339 l 16,-34.625 27.375,13.875 -9.625,20.75 h 223.19974 v 122.7304 l -4.77297,1.76777 v 79.72629 l 4.77297,1.59099 v 88.03479 l -4.41942,1.76777 v 96.3433 l 4.41942,2.2981 v 17.14734 l -17.35962,17.73711 h -19.09188 l -0.11244,-4.375 h -60.34519 l -2.2981,4.375 h -72.12489 l -0.0884,-4.68458 H 364.0716 l -1.76776,4.68458 h -19.18028 l -15.06289,-15.5274 v -20.5061 l 3.35876,-1.23744 v -97.49235 l -3.35876,-1.23743 v -87.94641 l 3.18198,-1.32582 v -79.19596 l -3.18198,-1.14905 z"
        sodipodi:nodetypes="ccccccccccccccccccccccccccccccccccc"
-       inkscape:label="plazuela">
+       inkscape:label="plazuela"
+       
+       data-important="0">
       <title
          id="title6">Plazuela</title>
+         
+      <desc>Espacio común al centro del módulo G</desc>
     </path>
   </g>
 </svg>
