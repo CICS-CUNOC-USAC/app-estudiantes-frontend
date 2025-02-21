@@ -120,23 +120,14 @@
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
-            <CButton
-              :to="`/admin/books/edit/${slotProps.data.id}`"
-              icon="icon-park-twotone:edit"
-              fluid
-              size="small"
-              variant="tonal"
-              label="Editar"
-            />
-            <DeleteItemDialog @confirm="() => handleDelete(slotProps.data.id)">
+            <BookDetailDialog :title="slotProps.data.name" :book-item="slotProps.data" show-all-info>
               <CButton
-                icon="icon-park-twotone:delete"
-                fluid
-                size="small"
+              icon="icon-park-twotone:eyes"
+              size="small"
+                label="Detalles"
                 variant="tonal"
-                label="Eliminar"
-              />
-            </DeleteItemDialog>
+                />
+            </BookDetailDialog>
           </div>
         </template>
       </PColumn>
@@ -145,6 +136,7 @@
 </template>
 <script setup lang="ts">
 import DeleteItemDialog from '@/components/dialogs/DeleteItemDialog.vue'
+import BookDetailDialog from '~/components/dialogs/BookDetailDialog.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'

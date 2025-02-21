@@ -53,7 +53,7 @@ const commonComponentsDefaults = {
     }
   },
   checkbox: {
-    borderRadius: '8px'
+    borderRadius: '6px'
   }
 }
 

@@ -114,6 +114,14 @@
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
+            <BookDetailDialog :title="slotProps.data.name" :book-item="slotProps.data">
+              <CButton
+              icon="icon-park-twotone:eyes"
+              size="small"
+                label="Detalles"
+                variant="tonal"
+                />
+            </BookDetailDialog>
           </div>
         </template>
       </PColumn>
@@ -124,6 +132,8 @@
 import { fetchAllBooks, getAllCategories } from '~/lib/api/books'
 import CButton from '../primitives/button/CButton.vue'
 import CInputText from '../primitives/form/CInputText.vue'
+import BookDetailDialog from '../dialogs/BookDetailDialog.vue';
+import CSelect from '../primitives/form/CSelect.vue';
 
 const route = useRoute()
 
