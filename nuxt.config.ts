@@ -106,6 +106,7 @@ export default defineNuxtConfig({
       { name: 'Mona Sans', provider: 'google' },
       { name: 'Hubot Sans', provider: 'google' },
       { name: 'Geist Mono', provider: 'google' },
+      { name: 'General Sans', provider: 'fontshare' },
     ],
     experimental: {
       processCSSVariables: true
