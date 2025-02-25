@@ -8,6 +8,21 @@ export interface Category {
   updated_at: Date
 }
 
+export interface Media {
+  id:          number;
+  filename:    string;
+  type:        string;
+  size:        string;
+  path:        string;
+  created_at:  Date;
+  updated_at:  Date;
+  key:         string;
+  attach_type: string;
+  dir:         string;
+  url:         string;
+}
+
+
 export const fetchAllBooks = async (
   params: any,
   type: 'digital' | 'physical'
@@ -33,6 +48,11 @@ export const fetchAllBooks = async (
       description: (error as any).data.message ?? (error as any).data.error
     })
   }
+}
+
+export async function getBookById(id: number) {
+  const result = await $api<Book>(`/books/${id}`)
+  return result
 }
 
 export async function getAllCategories(params?: {}) {

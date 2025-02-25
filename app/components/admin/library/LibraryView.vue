@@ -110,33 +110,58 @@
       "
       @update:rows="limit = $event"
     >
-      <PColumn field="name" header="Nombre" class="text-center"> </PColumn>
-      <PColumn field="author" header="Autor" class="text-center"></PColumn>
+      <PColumn
+        field="name"
+        header="Nombre"
+        class="text-center"
+        body-class="w-52"
+      >
+      </PColumn>
+      <PColumn
+        field="author"
+        header="Autor"
+        class="text-center"
+        body-class="w-60"
+      ></PColumn>
       <PColumn
         field="description"
         header="Descripcion"
         class="text-center"
-      ></PColumn>
+        body-class="truncate max-w-0"
+      >
+        <template #body="slotProps">
+          <p class="truncate text-sm">
+            {{ slotProps.data.description }}
+          </p>
+        </template>
+      </PColumn>
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
-            <CButton
-              :to="`/admin/books/edit/${slotProps.data.id}`"
-              icon="icon-park-twotone:edit"
-              fluid
-              size="small"
-              variant="tonal"
-              label="Editar"
-            />
-            <DeleteItemDialog @confirm="() => handleDelete(slotProps.data.id)">
+            <BookDetailDialog
+              :title="slotProps.data.name"
+              :book-item="slotProps.data"
+              show-all-info
+            >
               <CButton
-                icon="icon-park-twotone:delete"
-                fluid
+                icon="icon-park-twotone:eyes"
                 size="small"
+                label="Detalles"
                 variant="tonal"
-                label="Eliminar"
               />
-            </DeleteItemDialog>
+            </BookDetailDialog>
+            <BookActionDialog
+              :book-name="slotProps.data.name"
+              :book-reference-id="slotProps.data.library_reference.id"
+              v-if="props.type === 'physical'"
+              >
+              <CButton
+                icon="lucide:hand-helping"
+                size="small"
+                label="Dísponibilidad"
+                variant="tonal"
+              />
+            </BookActionDialog>
           </div>
         </template>
       </PColumn>
@@ -144,13 +169,14 @@
   </section>
 </template>
 <script setup lang="ts">
-import DeleteItemDialog from '@/components/dialogs/DeleteItemDialog.vue'
+import BookActionDialog from '~/components/dialogs/admin/books/BookActionDialog.vue'
+import BookDetailDialog from '~/components/dialogs/BookDetailDialog.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import {
-  fetchAllBooks,
   deleteBook,
+  fetchAllBooks,
   getAllCategories
 } from '~/lib/api/admin/books'
 

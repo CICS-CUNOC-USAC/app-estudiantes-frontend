@@ -6,3 +6,13 @@ export async function getAllRoles(params?: {}) {
     results
   }
 }
+
+export async function createRole (payload: Role) {
+  const result = await $api<Role>(`/roles`, {
+    method: 'POST',
+    body: payload
+  })
+  return {
+    result
+  }
+}

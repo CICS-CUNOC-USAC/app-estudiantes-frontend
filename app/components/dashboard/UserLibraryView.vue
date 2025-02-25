@@ -3,12 +3,6 @@
     <div
       class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr_1fr]"
     >
-      <CButton
-        label="Nuevo libro"
-        icon="icon-park-outline:plus"
-        class="w-fit"
-        :to="`/dashboard/books/create?type=${props.type}`"
-      />
       <CInputText
         label="Nombre del libro"
         id="name"
@@ -120,6 +114,14 @@
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
+            <BookDetailDialog :title="slotProps.data.name" :book-item="slotProps.data">
+              <CButton
+              icon="icon-park-twotone:eyes"
+              size="small"
+                label="Detalles"
+                variant="tonal"
+                />
+            </BookDetailDialog>
           </div>
         </template>
       </PColumn>
@@ -130,6 +132,8 @@
 import { fetchAllBooks, getAllCategories } from '~/lib/api/books'
 import CButton from '../primitives/button/CButton.vue'
 import CInputText from '../primitives/form/CInputText.vue'
+import BookDetailDialog from '../dialogs/BookDetailDialog.vue';
+import CSelect from '../primitives/form/CSelect.vue';
 
 const route = useRoute()
 

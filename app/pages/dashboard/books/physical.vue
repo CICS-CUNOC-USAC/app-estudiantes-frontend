@@ -10,8 +10,7 @@
       </h1>
     </header>
     <p class="font-weight-light mt-2">
-      En esta sección se podrán administrar todos los recursos de libros
-      disponibles en la biblioteca de Ingenieria (Solo usuarios registrados).
+      En esta sección podrás encontrar información sobre los libros físicos que se encuentran disponibles en la biblioteca del Módulo de Ingeniería para consultar su disponibilidad y más detalles.
     </p>
     <UserLibraryView type="physical" />
   </main>

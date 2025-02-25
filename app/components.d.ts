@@ -19,6 +19,8 @@ declare module 'vue' {
     PInputNumber: typeof import('primevue/inputnumber')['default']
     PInputText: typeof import('primevue/inputtext')['default']
     PMultiSelect: typeof import('primevue/multiselect')['default']
+    PRadioButton: typeof import('primevue/radiobutton')['default']
+    PRadioButtonGroup: typeof import('primevue/radiobuttongroup')['default']
     PSelect: typeof import('primevue/select')['default']
     PSelectButton: typeof import('primevue/selectbutton')['default']
     PSkeleton: typeof import('primevue/skeleton')['default']

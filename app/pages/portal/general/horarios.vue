@@ -386,7 +386,8 @@ function highlightFoundCourses() {
 definePageMeta({
   layout: 'default',
   extendScreen: true,
-  menuClass: 'bg-cics-silver-pale dark:bg-neutral-900'
+  menuClass: 'bg-cics-silver-pale dark:bg-neutral-900',
+  title: 'Horarios',
 })
 const search = ref('')
 await $api<Hour[]>('/hours').then((response) => {

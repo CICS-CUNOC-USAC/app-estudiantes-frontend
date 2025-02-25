@@ -12,7 +12,7 @@
         <div>
           <h3 class="text-lg font-medium">Adjuntos</h3>
           <ul class="mt-2">
-            <li class="items flex group" v-for="attachment in attachments">
+            <li class="items flex group mt-1.5" v-for="attachment in attachments">
               <a
                 :href="attachment.url"
                 target="_blank"
@@ -20,7 +20,7 @@
               >
                 <Icon name="lucide:external-link" class="text-muted-color group-hover:text-primary-500" />
                 <span
-                  class="text-sm font-medium border-b border-transparent group-hover:border-primary-500"
+                  class="text-sm font-medium group-hover:text-primary-500"
                 >{{ attachment.title }}</span>
               </a>
             </li>

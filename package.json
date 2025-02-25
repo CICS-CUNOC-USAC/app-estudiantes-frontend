@@ -36,7 +36,7 @@
     "@primevue/forms": "^4.2.5",
     "@primevue/themes": "^4.2.5",
     "@tailwindcss/typography": "^0.5.16",
-    "@tailwindcss/vite": "^4.0.3",
+    "@tailwindcss/vite": "^4.0.6",
     "@tato30/vue-pdf": "^1.11.3",
     "jsdom": "^25.0.1",
     "jwt-decode": "^4.0.0",
