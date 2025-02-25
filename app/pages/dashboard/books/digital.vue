@@ -10,8 +10,7 @@
       </h1>
     </header>
     <p class="font-weight-light mt-2">
-      En esta sección se podrán administrar todos los recursos de libros
-      disponibles en el portal de estudiantes (Solo usuarios registrados).
+      En esta sección podrás encontrar todos los recursos digitales disponibles dentro de esta aplicación y también podrás descargarlos.
     </p>
     <UserLibraryView type="digital" />
   </main>

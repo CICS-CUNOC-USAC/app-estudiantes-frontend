@@ -101,6 +101,38 @@ export async function deleteBook(id: string | number) {
   }
 }
 
+export async function loanOrReturn({
+  bookReferenceId,
+  loan,
+  external,
+  data
+}: {
+  bookReferenceId: string
+  loan: boolean
+  external: boolean
+  data: {
+    ra?: string
+    personal_id?: string
+    place: string
+  }
+}) {
+  const actionType = loan
+    ? external
+      ? 'external-loan'
+      : 'simple-loan'
+    : external
+      ? 'external-return'
+      : 'simple-return'
+
+  const endpoint = `/loans/${actionType}/${bookReferenceId}`
+
+  const response = await $api(endpoint, {
+    method: 'POST',
+    body: data
+  })
+  return response
+}
+
 export async function getAllCategories(params?: {}) {
   const results = await $api<Category[]>(`/categories`, {
     params

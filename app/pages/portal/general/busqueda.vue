@@ -123,6 +123,10 @@ const highlightQuery = (title: string) => {
 useHead({
   title: route.query.q ? `"${route.query.q}" en Ingeniería CUNOC` : 'Busqueda de publicaciones',
 })
+
+definePageMeta({
+  title: 'Búsqueda',
+})
 </script>
 
 <style lang="postcss" scoped></style>

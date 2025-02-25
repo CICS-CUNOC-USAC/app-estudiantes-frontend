@@ -1,16 +1,32 @@
 import { toast } from 'vue-sonner'
+import type { Media } from '~/lib/api/books';
 import type { Metadata } from '~/utils/types/fetching'
 
-export type Book = {
-  id: number
-  name: string
-  description: string
-  file: null
-  source_url: string
-  author: string
-  created_at: Date
-  updated_at: Date
-  media: MediaResponse
+export interface Book {
+  id:                number;
+  name:              string;
+  isbn:              string;
+  description:       string;
+  file:              null;
+  source_url:        null;
+  media_id:          null;
+  created_at:        Date;
+  updated_at:        Date;
+  author:            string;
+  category_id:       number;
+  media?:            Media;
+  library_reference: LibraryReference;
+}
+
+export interface LibraryReference {
+  id:                   string;
+  book_id:              number;
+  total_availability:   number;
+  current_availability: number;
+  edition:              string;
+  location:             string;
+  created_at:           Date;
+  updated_at:           Date;
 }
 
 export type BooksResponse = {

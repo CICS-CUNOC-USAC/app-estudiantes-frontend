@@ -36,6 +36,7 @@
             label="Editar"
             size="small"
             icon="icon-park-twotone:edit"
+            disabled
           />
         </footer>
       </div>
