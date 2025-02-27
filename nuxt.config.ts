@@ -60,7 +60,11 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()],
     define: {
       'process.env.DEBUG': false
+    },
+    build: {
+      cssMinify: false
     }
+  
     // vue: {
     //   template: {
     //     transformAssetUrls
