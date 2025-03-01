@@ -63,8 +63,9 @@ export default defineNuxtConfig({
     },
     build: {
       cssMinify: false
-    }
-  
+    },
+    
+
     // vue: {
     //   template: {
     //     transformAssetUrls
@@ -76,6 +77,13 @@ export default defineNuxtConfig({
     classPrefix: '',
     classSuffix: '',
     preference: 'system'
+  },
+  postcss: {
+    plugins: {
+      cssnano: {
+        preset: ['cssnano-preset-default', { calc: false }]
+      }
+    }
   },
   primevue: {
     composables: {
@@ -110,7 +118,7 @@ export default defineNuxtConfig({
       { name: 'Mona Sans', provider: 'google' },
       { name: 'Hubot Sans', provider: 'google' },
       { name: 'Geist Mono', provider: 'google' },
-      { name: 'General Sans', provider: 'fontshare' },
+      { name: 'General Sans', provider: 'fontshare' }
     ],
     experimental: {
       processCSSVariables: true

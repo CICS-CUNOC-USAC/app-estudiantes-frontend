@@ -37,7 +37,6 @@
           :disabled="!email || !password"
           :severity="admin ? 'danger' : ''"
           type="submit"
-          rounded
           label="Iniciar sesión"
         />
       </form>
@@ -47,7 +46,14 @@
         <span class="align-center flex gap-2">
           ¿No tienes una cuenta?
           <CButton to="/sign-up" variant="link" label="Regístrate" />
+          
         </span>
+        <CButton
+          class="self-start"
+            to="/recover-password"
+            variant="link"
+            label="¿Olvidaste tu contraseña?"
+          />
         <div class="align-center flex">
           <CButton
             to="/"

@@ -62,7 +62,7 @@
         >
           <template v-if="user">
             <div class="flex min-w-0 items-center">
-              <AvatarWithMenu :display-name="displayName" />
+              <AvatarWithMenu :display-name="displayNameFull" />
               <div class="ml-2 flex min-w-0 flex-col items-start">
                 <span
                   class="w-full truncate text-sm font-medium"
