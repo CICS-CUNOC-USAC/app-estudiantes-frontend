@@ -8,6 +8,31 @@ export interface Category {
   updated_at: Date
 }
 
+export interface Loan {
+  id: number
+  ra?: string
+  personal_id: string
+  place: string,
+  returned_at?: Date,
+  created_at: Date
+  updated_at: Date
+  library_reference: LibraryReference
+}
+
+export interface LibraryReference {
+  id: string,
+  current_availability: number,
+  total_availability: number,
+  edition: string,
+  location: string,
+  book: Book
+}
+
+export interface Book {
+  id: number,
+  name: string,
+}
+
 export const fetchAllBooks = async (
   params: any,
   type: 'digital' | 'physical'
@@ -28,6 +53,26 @@ export const fetchAllBooks = async (
       type: SnackbarType.ERROR
     })
     toast.error('Error al obtener los libros', {
+      description: (error as any).data.message ?? (error as any).data.error
+    })
+  }
+}
+
+export const fetchAllLoans = async (
+  params: any,
+) => {
+  try {
+    const response = await $api<Loan[]>(`/loans/outstanding-loans`, {
+      params
+    })
+    return response
+  } catch (error) {
+    useSnackbarStore().showSnackbar({
+      title: 'Error al obtener los prestamos',
+      message: (error as any).data.message ?? (error as any).data.error,
+      type: SnackbarType.ERROR
+    })
+    toast.error('Error al obtener los prestamos', {
       description: (error as any).data.message ?? (error as any).data.error
     })
   }

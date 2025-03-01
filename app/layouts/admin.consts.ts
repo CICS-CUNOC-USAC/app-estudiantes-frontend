@@ -30,7 +30,13 @@ export const ADMIN_LAYOUT_ITEMS = [
         action: [],
         subject: [],
       },
-
+      {
+        itemName: 'Prestamos',
+        itemIcon: 'lucide:hand-helping',
+        itemLink: '/admin/books/loans',
+        action: [],
+        subject: [],
+      },
     ]
   },
   {
