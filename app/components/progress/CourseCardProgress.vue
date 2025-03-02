@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-16 rounded-[10px] border border-surface-950/75 bg-surface-50 shadow-[2px_2px_0_0_rgba(0,0,0,1)] ease-in-out text-color dark:bg-gray-700 relative"
+    class="flex min-h-16 relative rounded-[10px] border border-surface-950/75 bg-surface-0 shadow-[2px_2px_0_0_rgba(0,0,0,1)] ease-in-out text-color dark:bg-surface-800"
   >
     <div
       class="mr-3 w-5 shrink-0 rounded-lg border border-surface-950/75"
@@ -38,7 +38,7 @@
     </div>
     <div
       v-if="course.career_course.mandatory"
-      class="absolute size-3 rounded bg-surface-950/75 dark:bg-cics-white top-1 right-1"
+      class="absolute size-2.5 rounded-sm bg-surface-950/75 dark:bg-cics-white top-1 right-1"
     ></div>
   </div>
 </template>

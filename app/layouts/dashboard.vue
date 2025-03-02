@@ -1,9 +1,9 @@
 <template>
-  <div class="min-h-screen lg:bg-cics-white dark:bg-neutral-900 lg:dark:bg-neutral-800">
+  <div class="min-h-screen lg:bg-cics-white dark:bg-surface-900 lg:dark:bg-surface-900">
     <div class="flex gap-x-1">
       <!-- Desktop -->
       <nav
-        class="hidden w-[22rem] shrink-0 flex-col self-start bg-cics-white py-5 lg:sticky lg:top-0 lg:flex lg:h-screen dark:bg-neutral-800"
+        class="hidden w-[22rem] shrink-0 flex-col self-start bg-cics-white py-5 lg:sticky lg:top-0 lg:flex lg:h-screen dark:bg-surface-900"
       >
         <h4
           class="flex select-none items-center gap-x-4 px-8 text-lg font-medium"
@@ -21,7 +21,7 @@
           <NuxtLink
             to="/dashboard/home"
             class="flex items-center gap-x-2 rounded-lg p-2 font-medium transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
-            active-class="  text-primary-700 shadow-md outline outline-1 outline-black dark:text-primary-300 dark:outline-neutral-700"
+            active-class="  text-primary-700 shadow-md outline  outline-black dark:text-primary-300 dark:outline-neutral-700"
             @click="$emit('close')"
           >
             <Icon name="lucide:house" />
@@ -61,9 +61,9 @@
           class="flex w-full items-center justify-between gap-2 px-4 py-2.5"
         >
           <template v-if="user">
-            <div class="flex min-w-0 items-center">
+            <div class="flex min-w-0 h-full items-center">
               <AvatarWithMenu :display-name="displayNameFull" />
-              <div class="ml-2 flex min-w-0 flex-col items-start">
+              <div class="ml-2 flex  min-w-0 flex-col items-start">
                 <span
                   class="w-full truncate text-sm font-medium"
                   :title="displayNameFull"
@@ -92,7 +92,7 @@
 
       <!-- Mobile -->
       <nav
-        class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 px-4 py-2.5 backdrop-blur-sm transition lg:hidden dark:border-neutral-700 dark:bg-surface-900/80"
+        class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 px-4 py-2.5 backdrop-blur-sm transition lg:hidden dark:border-neutral-700 dark:bg-surface-800/80"
       >
         <div class="flex grow basis-0 items-center gap-x-3">
           <button
@@ -110,7 +110,7 @@
         </div>
       </nav>
       <div
-        class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-neutral-900"
+        class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-surface-800"
       >
         <div class="mx-auto  max-w-screen-xl">
           <NuxtPage />
@@ -121,7 +121,7 @@
         v-model:visible="drawer"
         block-scroll
         unstyled
-        class="h-full w-10/12 bg-cics-white shadow-lg md:w-5/12 dark:bg-neutral-800"
+        class="h-full w-10/12 bg-cics-white shadow-lg md:w-5/12 dark:bg-surface-800"
         :pt="{
           transition: {
             name: 'slide'
@@ -162,8 +162,8 @@ const drawer = ref(false)
 @reference 'assets/css/main.css';
 
 .menu-item {
-  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-neutral-800 dark:hover:text-primary-300 hover:before:dark:bg-primary-200
-  before:absolute before:left-4 before:top-1/2 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:bg-gray-300 before:dark:bg-neutral-700;
+  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-surface-900 dark:hover:text-primary-300 hover:before:dark:bg-primary-200
+  before:absolute before:left-4 before:top-1/2 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:bg-surface-300 dark:before:bg-surface-700;
 }
 
 .active-menu {

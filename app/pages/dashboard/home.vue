@@ -43,7 +43,7 @@
         </h2>
 
         <section
-          class="border-surface-950/75 bg-surface-50 text-color dark:bg-surface-800 h-48  overflow-hidden rounded-xl border p-5 duration-300 ease-in-out"
+          class="border-surface-950/75 bg-surface-50 text-color dark:bg-surface-900 h-48  overflow-hidden rounded-xl border p-5 duration-300 ease-in-out"
         >
           <div v-if="status === 'success' && data" class="grid grid-cols-2 gap-4">
             <div>
