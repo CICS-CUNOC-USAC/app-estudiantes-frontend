@@ -2,7 +2,7 @@
   <div class="flex flex-col gap-y-1.5">
     <PInputGroup
       unstyled
-      class="group flex h-12 rounded-lg outline outline-2 outline-offset-1 outline-transparent transition-all duration-75 focus-within:outline-primary-400/50"
+      class="group flex h-12 rounded-lg  transition-all duration-200 focus-within:ring-2 focus-within:ring-primary-400/50  focus-within:ring-offset-transparent"
       :class="[inhAttrs.classAttr]"
     >
       <component

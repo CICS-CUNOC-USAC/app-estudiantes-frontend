@@ -47,7 +47,8 @@ const filteredCourses = computed(() => {
   return props.semesterCourses.courses
 })
 </script>
-<style scoped lang="postcss">
+<style scoped>
+@reference '~/assets/css/main.css';
 /* Transiciones para la entrada y salida */
 .course-transition-move,
 .course-transition-enter-active,

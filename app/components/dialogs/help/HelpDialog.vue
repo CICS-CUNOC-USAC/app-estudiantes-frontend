@@ -16,10 +16,6 @@
       >
         <DialogTitle class="mb-4 flex items-center justify-between">
           <span class="text-xl font-semibold">
-            <Icon
-              name="icon-park-twotone:help"
-              class="text-primary-400 mr-1.5 mb-0.5 inline-block"
-            />
             {{ title }}
           </span>
           <DialogClose

@@ -7,7 +7,7 @@
     </DialogTrigger>
     <DialogPortal>
       <DialogOverlay
-        class="data-[state=open]:animate-overlayShow fixed inset-0 z-30 bg-gray-950/50 transition-all duration-500"
+        class="data-[state=open]:animate-overlayShow fixed inset-0 z-30 bg-surface-900/70 transition-all duration-500"
       />
       <DialogContent
         class="data-[state=open]:animate-contentShow bg-cics-white fixed top-1/2 left-1/2 z-[100] h-full max-h-[85vh] w-11/12 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-black/80 p-6 pb-46 shadow-lg shadow-black/15 focus:outline-none lg:max-w-xl dark:border-neutral-700 dark:bg-neutral-900"
@@ -38,7 +38,7 @@
             </p>
           </header>
           <h3 class="text-muted-color font-semibold pb-1.5 text-sm">Descripción:</h3>
-          <div class="h-full overflow-scroll text-sm prose dark:prose-invert">
+          <div class="h-full overflow-y-auto leading-snug font-light ">
             <p class="">
               {{
                 data.response?.course.description ||

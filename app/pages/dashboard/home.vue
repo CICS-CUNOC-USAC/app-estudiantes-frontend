@@ -7,7 +7,9 @@
 
     <div class="grid gap-6 md:grid-cols-2">
       <section>
-        <h2 class="mb-4 font-bold text-muted-color-emphasis">Accesos Directos:</h2>
+        <h2 class="text-muted-color-emphasis mb-4 font-bold">
+          Accesos Directos:
+        </h2>
         <div class="grid grid-cols-2 gap-4 md:grid-cols-2">
           <CCardAlt
             interactive
@@ -18,7 +20,7 @@
             :to="item.to"
           >
             <template #content>
-              <div class="flex gap-4 flex-col lg:flex-row">
+              <div class="flex flex-col gap-4 lg:flex-row">
                 <Icon
                   :name="item.icon"
                   class="text-primary-600 dark:text-primary-200 shrink-0"
@@ -36,48 +38,56 @@
       </section>
 
       <section>
-        <h2 class="mb-4 font-bold text-muted-color-emphasis">Estadísticas generales:</h2>
+        <h2 class="text-muted-color-emphasis mb-4 font-bold">
+          Estadísticas generales:
+        </h2>
 
         <section
-          class="grid grid-cols-2 gap-4  overflow-hidden p-5 rounded-xl border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-800"
-          v-if="status === 'success' && data"
+          class="border-surface-950/75 bg-surface-50 text-color dark:bg-surface-900 h-48  overflow-hidden rounded-xl border p-5 duration-300 ease-in-out"
         >
-          <div>
-            <h6 class="text-muted-color">Créditos acumulados:</h6>
-            <strong class="text-muted-color-emphasis text-3xl">{{
-              data.current_credits.total_credits
-            }}</strong>
+          <div v-if="status === 'success' && data" class="grid grid-cols-2 gap-4">
+            <div>
+              <h6 class="text-muted-color">Créditos acumulados:</h6>
+              <strong class="text-muted-color-emphasis text-3xl">{{
+                data.current_credits.total_credits
+              }}</strong>
+            </div>
+            <div>
+              <h6 class="text-muted-color">Créditos obligatorios:</h6>
+              <strong class="text-primary-500 text-3xl">{{
+                data.current_credits.mandatory_credits
+              }}</strong>
+              /
+              <span class="text-muted-color-emphasis text-3xl">
+                {{ data.mandatory_credits }}</span
+              >
+            </div>
+            <div>
+              <h6 class="text-muted-color">Créditos optativos:</h6>
+              <strong class="text-primary-500 text-3xl">{{
+                data.current_credits.not_mandatory_credits
+              }}</strong>
+              /
+              <span class="text-muted-color-emphasis text-3xl">
+                {{ data.not_mandatory_credits }}</span
+              >
+            </div>
+            <div>
+              <h6 class="text-muted-color">Créditos disponibles:</h6>
+              <strong class="text-primary-500 text-3xl">{{
+                data.current_credits.total_credits
+              }}</strong>
+              /
+              <span class="text-muted-color-emphasis text-3xl">
+                {{ data.available_credits }}
+              </span>
+            </div>
           </div>
-          <div>
-            <h6 class="text-muted-color">Créditos obligatorios:</h6>
-            <strong class="text-primary-500 text-3xl">{{
-              data.current_credits.mandatory_credits
-            }}</strong>
-            /
-            <span class="text-muted-color-emphasis text-3xl">
-              {{ data.mandatory_credits }}</span
-            >
-          </div>
-          <div>
-            <h6 class="text-muted-color">Créditos optativos:</h6>
-            <strong class="text-primary-500 text-3xl">{{
-              data.current_credits.not_mandatory_credits
-            }}</strong>
-            /
-            <span class="text-muted-color-emphasis text-3xl">
-              {{ data.not_mandatory_credits }}</span
-            >
-          </div>
-          <div>
-            <h6 class="text-muted-color">Créditos disponibles:</h6>
-            <strong class="text-primary-500 text-3xl">{{
-              data.current_credits.total_credits
-            }}</strong>
-            /
-            <span class="text-muted-color-emphasis text-3xl">
-              {{ data.available_credits }}
-            </span>
-          </div>
+          <template v-else>
+            <div class="flex items-center justify-center h-full">
+              <Icon name="lucide:loader" size="32" class="animate-spin" />
+            </div>
+          </template>
         </section>
       </section>
     </div>
