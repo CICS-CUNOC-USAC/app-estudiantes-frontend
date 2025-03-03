@@ -100,7 +100,7 @@
             type="button"
             class="inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 lg:hidden dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
           >
-            <Icon name="tabler:layout-sidebar-filled" />
+            <Icon name="lucide:menu" />
           </button>
           <Transition name="title-fade">
             <NuxtLink class="block text-sm lg:hidden" to="/dashboard/home">
@@ -109,6 +109,8 @@
           </Transition>
         </div>
       </nav>
+
+      
       <div
         class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-surface-800"
       >
@@ -158,8 +160,8 @@ const { logout } = useAuthStore()
 
 const drawer = ref(false)
 </script>
-<style>
-@reference 'assets/css/main.css';
+<style scoped>
+@reference '~/assets/css/main.css';
 
 .menu-item {
   @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-surface-900 dark:hover:text-primary-300 hover:before:dark:bg-primary-200

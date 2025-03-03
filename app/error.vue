@@ -26,14 +26,6 @@
           <Icon class="mb-0.5 inline" name="icon-park-outline:arrow-left" />
           regresar al inicio
         </NuxtLink>
-        o
-        <NuxtLink
-          href="/dashboard"
-          class=" inline text-primary-400 transition border-b hover:border-b-2 border-primary-400 hover:border-primary-500 hover:text-primary-500 font-semibold "
-        >
-          <Icon class="mb-0.5  inline" name="icon-park-outline:layout-four" />
-          ir al dashboard
-        </NuxtLink> 
       </div>
       </template>
     </CCardAlt>
@@ -48,9 +40,6 @@ const { error } = defineProps<{
   error: NuxtError
 }>()
 
-definePageMeta({
-  layout: 'empty'
-})
 
 const title = computed(() =>
   error.statusCode === 404 ? 'Página no encontrada' : 'Ha ocurrido un error'
@@ -63,6 +52,6 @@ const icon = computed(() =>
 const message = computed(() =>
   error.statusCode === 404
     ? 'Parece que la página que buscas no existe o ha sido movida.'
-    : 'Lo sentimos, se Ha ocurrido un error inesperado.'
+    : 'Lo sentimos, se ha producido un error inesperado.'
 )
 </script>
