@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex min-h-16 rounded-[10px] border border-surface-950/75 bg-surface-50 shadow-[2px_2px_0_0_rgba(0,0,0,1)] ease-in-out text-color dark:bg-gray-700"
+    class="flex min-h-16 rounded-[10px] border border-surface-950/75 bg-surface-0 shadow-[2px_2px_0_0_rgba(0,0,0,1)] ease-in-out text-color dark:bg-surface-800"
   >
     <div
       class="mr-3 w-5 shrink-0 rounded-lg border border-surface-950/75"

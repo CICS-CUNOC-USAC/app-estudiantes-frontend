@@ -75,6 +75,7 @@
             :label="user ? displayName : 'Ingresar'"
             class="max-w-[13ch] min-w-0 !px-2"
             pt:label:class="hidden lg:block truncate"
+            v-Ptooltip.bottom="`Ir a mi espacio`"
           />
         </div>
       </div>
@@ -84,14 +85,14 @@
       v-model:visible="drawer"
       block-scroll
       unstyled
-      class="bg-cics-white h-full w-10/12 shadow-lg md:w-5/12 dark:bg-neutral-800"
+      class="bg-cics-white h-full w-10/12 shadow-lg md:w-5/12 dark:bg-surface-800"
       :pt="{
         transition: {
           name: 'slide'
         },
         mask(options) {
           return {
-            class: `bg-primary-950/40 transition-all duration-500 ${options.props.visible ? 'mask-enter' : 'mask-leave'}`
+            class: `bg-surface-900/50 transition-all duration-500 ${options.props.visible ? 'mask-enter' : 'mask-leave'}`
           }
         }
       }"

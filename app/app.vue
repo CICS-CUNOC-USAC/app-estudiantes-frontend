@@ -74,7 +74,7 @@ useSeoMeta({
 <style>
 @reference '~/assets/css/main.css';
 :root {
-  @apply bg-white dark:bg-neutral-800 transition-colors;
+  @apply bg-white dark:bg-surface-800 transition-colors;
 }
 
 html {
