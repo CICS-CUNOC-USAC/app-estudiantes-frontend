@@ -155,10 +155,12 @@ export async function loanOrReturn({
   bookReferenceId: string
   loan: boolean
   external: boolean
-  data: {
+  data?: {
     ra?: string
     personal_id?: string
-    place: string
+    place?: string
+    loan_id?: number
+    library_reference_id?: string
   }
 }) {
   const actionType = loan

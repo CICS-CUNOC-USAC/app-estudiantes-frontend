@@ -1,10 +1,5 @@
 <template>
-  <DialogRoot
-    @update:open="
-      (open) => {
-      }
-    "
-  >
+  <DialogRoot v-model:open="open" @update:open="(open) => {}">
     <DialogTrigger as-child>
       <slot />
     </DialogTrigger>
@@ -29,63 +24,87 @@
             <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
               Prestamo #{{ loanInfo.id }}
             </p>
-            <p class="text-gray-600 dark:text-gray-400">
-              <span class="font-medium">Libro:</span> {{ loanInfo.library_reference.book.name }}
-            </p>
+            <h6 class="text-muted-color text-sm font-semibold">
+              Registrado a:
+            </h6>
             <template v-if="loanInfo.ra">
-              <p class="text-gray-600 dark:text-gray-400">
-                <span class="font-medium">Registro Academico:</span> {{ loanInfo.ra }}
+              <p class="">
+                <span class="font-medium">Registro Academico:</span>
+                {{ loanInfo.ra }}
               </p>
             </template>
             <template v-else>
-              <p class="text-gray-600 dark:text-gray-400">
-                <span class="font-medium">Identificacion Personal:</span> {{ loanInfo.personal_id }}
+              <p class="">
+                <span class="font-medium">Identificacion Personal:</span>
+                {{ loanInfo.personal_id }}
               </p>
             </template>
-            <p
-              class="text-gray-600 dark:text-gray-400"
-              v-if="loanInfo.library_reference.id"
-            >
+
+            <h6 class="text-muted-color mt-5 text-sm font-semibold">
+              Información del libro:
+            </h6>
+
+            <p class="">
+              <span class="font-medium">Libro:</span>
+              {{ loanInfo.library_reference.book.name }} -
+              {{ loanInfo.library_reference.id }}
+            </p>
+            <p class="" v-if="loanInfo.library_reference.id">
               <span class="font-medium">Edición:</span>
               {{ loanInfo.library_reference.edition }}
             </p>
 
-            <!-- {{ data.media?.url }} -->
-
-            <p
-              v-if="loanInfo.library_reference"
-              class="dark:text-gray-400"
-              :class="
-                loanInfo.library_reference.current_availability > 0
-                  ? 'text-green-600'
-                  : 'text-red-600'
-              "
-            >
-              {{
-                loanInfo.library_reference.current_availability > 0
-                  ? 'Disponible en biblioteca'
-                  : 'No disponible'
-              }}
+            <p v-if="loanInfo.library_reference" class="">
+              <span class="font-medium">Ubicación:</span>
+              {{ loanInfo.library_reference.location }}
             </p>
-
-            <template v-if="loanInfo.library_reference">
-              <p class="text-gray-600 dark:text-gray-400">
-                <span class="font-medium">Ubicación:</span>
-                {{ loanInfo.library_reference.location }}
-              </p>
-            </template>
           </div>
+
+          <CButton
+            label="Registar Devolución"
+            icon="icon-park-outline:arrow-right"
+            variant="tonal"
+            class="mt-4 w-full"
+            @click="mutate"
+            :loading="asyncStatus === 'loading'"
+          />
         </div>
       </DialogContent>
     </DialogPortal>
   </DialogRoot>
 </template>
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue';
-import type { Loan } from '~/lib/api/admin/books';
+import { toast } from 'vue-sonner'
+import CButton from '~/components/primitives/button/CButton.vue'
+import { loanOrReturn, type Loan } from '~/lib/api/admin/books'
 
 const { loanInfo } = defineProps<{
   loanInfo: Loan
 }>()
+
+const open = ref(false)
+const emit = defineEmits(['success'])
+
+const { mutate, asyncStatus } = useMutation({
+  mutation: () => {
+    return loanOrReturn({
+      bookReferenceId: loanInfo.library_reference.id,
+      loan: false,
+      external: true,
+      data: {
+        loan_id: loanInfo.id,
+        library_reference_id: loanInfo.library_reference.id
+      }
+    })
+  },
+  onSuccess: () => {
+    toast.success('Operación realizada con éxito')
+    emit('success')
+    open.value = false
+  },
+  onError: (error) => {
+    toast.error(error.data.message || 'Ha ocurrido un error inesperado')
+  }
+})
 </script>
 <style scoped></style>

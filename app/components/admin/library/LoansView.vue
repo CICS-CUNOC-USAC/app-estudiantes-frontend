@@ -116,13 +116,8 @@
           <div class="flex flex-col items-center justify-center gap-y-2">
             <LoanDetailDialog
               :loanInfo="slotProps.data"
+              @success="refresh"
             >
-              <CButton
-                icon="icon-park-twotone:eyes"
-                size="small"
-                label="Detalles"
-                variant="tonal"
-              />
               <CButton
                 icon="lucide:helping-hand"
                 size="small"
