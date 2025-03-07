@@ -1,122 +1,129 @@
 <template>
-  <CCardAlt class="min-w-max p-8" no-spacing>
+  <CCardAlt class="w-full p-8 md:max-w-3xl" no-spacing>
     <template #title>
       <h2 class="pb-4 text-center text-2xl font-semibold">Regístrate</h2>
     </template>
     <template #content>
-      <PForm
-        :initial-values
-        :resolver
-        v-slot="$form"
-        @submit="signup"
-        class="mb-4 bg-transparent"
-      >
-        <!-- {{ $form }} -->
-        <fieldset
-          class="my-4 grid max-h-80 p-1.5  grid-cols-1 gap-x-4 gap-y-3 overflow-y-auto lg:max-h-none lg:grid-cols-2 "
-        >
-          <CInputText
-            name="firstName"
-            id="firstName"
-            label="Nombre(s)"
-            placeholder="Juan"
-            type="text"
-            prepend-icon="icon-park-twotone:people"
-            no-borders
-            :error="$form.firstName?.error?.message"
-          />
-          <CInputText
-            name="lastName"
-            id="lastName"
-            label="Apellido(s)"
-            placeholder="Pérez"
-            type="text"
-            prepend-icon="icon-park-twotone:people"
-            no-borders
-            :error="$form.lastName?.error?.message"
-          />
-          <CInputText
-            name="ra"
-            id="ra"
-            label="Registro Académico"
-            placeholder="201900000"
-            type="text"
-            prepend-icon="icon-park-twotone:id-card-h"
-            no-borders
-            :error="$form.ra?.error?.message"
-          />
-          <CSelect
-            name="careerCode"
-            id="careerCode"
-            :items="careerItems"
-            checkmark
-            placeholder="Selecciona una carrera"
-            clearable
-            label="Carrera"
-            prepend-icon="icon-park-twotone:bachelor-cap-one"
-            no-borders
-            option-label="text"
-            option-value="value"
-            :error="$form.careerCode?.error?.message"
-          />
-
-          <CInputText
-            name="email"
-            id="email"
-            label="Correo electrónico"
-            placeholder="nombre@cunoc.edu.gt"
-            type="text"
-            prepend-icon="icon-park-twotone:mail"
-            no-borders
-            :error="$form.email?.error?.message"
-          />
-          <CInputText
-            name="password"
-            id="password"
-            :class="{
-              'font-mono': showPassword
-            }"
-            label="Contraseña"
-            placeholder="********"
-            prepend-icon="icon-park-twotone:lock"
-            :type="showPassword ? 'text' : 'password'"
-            @click:append="showPassword = !showPassword"
-            :append-icon="
-              showPassword
-                ? 'icon-park-outline:preview-close'
-                : 'icon-park-twotone:preview-open'
-            "
-            no-borders
-            :error="$form.password?.error?.message"
-          />
-          <CInputText
-            name="confirmPassword"
-            id="confirmPassword"
-            prepend-icon="icon-park-twotone:lock"
-            :class="{
-              'font-mono': showPassword
-            }"
-            label="Confirmar contraseña"
-            placeholder="********"
-            :type="showPassword ? 'text' : 'password'"
-            @click:append="showPassword = !showPassword"
-            :append-icon="
-              showPassword
-                ? 'icon-park-outline:preview-close'
-                : 'icon-park-twotone:preview-open'
-            "
-            no-borders
-            :error="$form.confirmPassword?.error?.message"
-          />
-        </fieldset>
+      <p class="text-center">
+        Ingresa tu registro académico y buscaremos tu información en el sistema
+        de Registro automáticamente.
+      </p>
+      <!-- {{ $form }} -->
+      <div class="my-3 grid grid-cols-2 gap-4">
+        <CInputText
+          name="ra"
+          id="ra"
+          label="Registro Académico"
+          placeholder="201900000"
+          type="number"
+          prepend-icon="icon-park-twotone:id-card-h"
+          no-borders
+        />
         <CButton
-          class="w-full"
-          :loading="loading"
           rounded
           type="submit"
-          label="Registrarse"
+          icon="icon-park-twotone:search"
+          label="Consultar"
+          @click="fakeSearchUser"
+          :loading
         />
-      </PForm>
+      </div>
+
+      <div
+        v-if="status"
+        class="mb-2 text-xs font-medium"
+        :class="success ? 'text-green-500' : 'text-red-500'"
+      >
+        {{ status }}
+      </div>
+      <fieldset
+        class="my-4 grid max-h-80 grid-cols-2 gap-x-4 gap-y-3 overflow-visible lg:max-h-none lg:grid-cols-2"
+      >
+        <CInputText
+          name="firstName"
+          id="firstName"
+          label="Nombre(s)"
+          type="text"
+          class="col-span-1"
+          prepend-icon="icon-park-twotone:people"
+          no-borders
+          readonly
+          :disabled="!success || loading"
+          :defaultValue="fakeValues.firstName"
+        />
+        <CInputText
+          name="lastName"
+          id="lastName"
+          label="Apellido(s)"
+          type="text"
+          class="col-span-1"
+          prepend-icon="icon-park-twotone:people"
+          no-borders
+          readonly
+          :disabled="!success || loading"
+          :defaultValue="fakeValues.lastName"
+        />
+       
+        <CInputText
+          name="carrerCode"
+          id="carrerCode"
+          label="Código de Carrera"
+          type="text"
+          prepend-icon="icon-park-twotone:id-card-h"
+          no-borders
+          readonly
+          root-class="col-span-2 lg:col-span-1"
+          :disabled="!success || loading"
+          :defaultValue="`${fakeValues.careerCode} - ${fakeValues.careerName}`"
+        />
+        <CInputText
+          name="email"
+          id="email"
+          label="Correo institucional"
+          type="text"
+          prepend-icon="icon-park-twotone:mail"
+          no-borders
+          readonly
+          root-class="col-span-2 lg:col-span-1"
+          :disabled="!success || loading"
+          :defaultValue="fakeValues.email"
+        />
+      </fieldset>
+      <fieldset class="my-2 grid grid-cols-2 gap-2 md:grid-cols-3" v-if="success">
+        <CInputText
+          name="username"
+          id="username"
+          label="Nombre de usuario"
+          prepend-icon="icon-park-twotone:people"
+          no-borders
+          root-class="col-span-2 md:col-span-1"
+        />
+        <CInputText
+          name="password"
+          id="password"
+          label="Contraseña"
+          type="password"
+          prepend-icon="icon-park-twotone:lock"
+          no-borders
+          root-class="col-span-1 md:col-span-1"
+        />
+        <CInputText
+          name="confirmPassword"
+          id="confirmPassword"
+          label="Confirmar contraseña"
+          type="password"
+          prepend-icon="icon-park-twotone:lock"
+          no-borders
+          root-class="col-span-1 md:col-span-1"
+        />
+      </fieldset>
+      <CButton
+        class="mb-3 w-full"
+        v-if="success"
+        rounded
+        icon="icon-park-outline:arrow-right"
+        label="Continuar"
+      />
     </template>
     <template #footer>
       <div class="flex flex-col gap-y-4">
@@ -137,13 +144,9 @@
   </CCardAlt>
 </template>
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '@primevue/forms'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
-import { z } from 'zod'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import CSelect from '~/components/primitives/form/CSelect.vue'
 
 defineProps({
   loading: {
@@ -156,117 +159,57 @@ defineProps({
   }
 })
 
-// start - refactor with primevue forms
+// start - mocking new sign up flow
 
-const initialValues = reactive({
+const loading = ref(false)
+const success = ref(false)
+const status = ref('')
+const fakeValues = reactive({
   firstName: '',
   lastName: '',
-  ra: '',
-  careerCode: null,
   email: '',
-  password: '',
-  confirmPassword: ''
+  ra: '',
+  careerCode: '',
+  careerName: ''
 })
 
-const resolver = zodResolver(
-  z
-    .object({
-      firstName: z
-        .string()
-        .nonempty({
-          message: 'Nombre requerido'
-        })
-        .max(100),
-      lastName: z
-        .string()
-        .nonempty({
-          message: 'Apellido requerido'
-        })
-        .max(100),
-      ra: z
-        .string({ message: 'Registro Académico requerido' })
-        .length(9, { message: 'Registro Académico debe tener 9 dígitos' })
-        .regex(/[0-9]{9}/, {
-          message: 'Registro Académico debe contener solo dígitos'
-        }),
-      careerCode: z.number({
-        message: 'Carrera requerida'
-      }),
+async function fakeSearchUser() {
+  loading.value = true
+  const promise = new Promise<void>((resolve, reject) => {
+    setTimeout(() => {
+      const random = Math.floor(Math.random() * 100)
+      if (random % 2 === 0) {
+        loading.value = false
+        success.value = false
+        console.log(
+          'No se encontró información con el registro académico ingresado'
+        )
+        fakeValues.firstName = ''
+        fakeValues.lastName = ''
+        fakeValues.email = ''
+        fakeValues.careerCode = ''
+        fakeValues.careerName = ''
 
-      email: z
-        .string()
-        .email({
-          message: 'E-mail debe ser válido e institucional'
-        })
-        .regex(/.+@cunoc\.edu\.gt$/, {
-          message: 'E-mail debe ser válido e institucional'
-        }),
-      password: z
-        .string()
-        .min(8, {
-          message: 'La contraseña debe tener al menos 8 caracteres'
-        })
-        .max(100, {
-          message: 'La contraseña no debe exceder los 100 caracteres'
-        }),
-      confirmPassword: z.string()
-    })
-    .refine(
-      (values) => {
-        return values.password === values.confirmPassword
-      },
-      {
-        message: 'Las contraseñas deben coincidir',
-        path: ['confirmPassword']
+        status.value =
+          'No se encontró información con el registro académico ingresado'
+        reject('No se encontró información con el registro académico ingresado')
+        return
       }
-    )
-    .transform((values) => {
-      return {
-        first_name: values.firstName,
-        last_name: values.lastName,
-        user: {
-          email: values.email,
-          career_code: Number(values.careerCode),
-          ra: values.ra,
-          password: values.password
-        }
-      }
-    })
-)
 
-// end - refactor with primevue forms
-
-const emit = defineEmits(['signup'])
-const careerItems = [
-  {
-    text: 'Ingeniería Civil',
-    value: 33
-  },
-  {
-    text: 'Ingeniería Mécánica',
-    value: 34
-  },
-  {
-    text: 'Ingeniería Industrial',
-    value: 35
-  },
-  {
-    text: 'Ingeniería Mécanica Industrial',
-    value: 36
-  },
-  {
-    text: 'Ingeniería en Ciencias y Sistemas',
-    value: 58
-  }
-]
-
-const showPassword = ref(false)
-
-const signup = (e: FormSubmitEvent) => {
-  if (e.valid) {
-    emit('signup', e.values)
-  }
+      fakeValues.firstName = 'Juan'
+      fakeValues.lastName = 'Pérez'
+      ;(fakeValues.email = 'juanperez202131284@cunoc.edu.gt'),
+        (fakeValues.careerCode = '120058')
+      fakeValues.careerName = 'Ingeniería en Ciencias y Sistemas'
+      resolve()
+    }, 1000)
+  })
+  await promise
+  loading.value = false
+  success.value = true
+  console.log('Usuario encontrado')
+  status.value =
+    'Hemos encontrado tu información en el sistema de Registro, llena los campos restantes para continuar'
 }
 </script>
-<style scoped lang="postcss">
-</style>
+<style scoped lang="postcss"></style>
