@@ -20,8 +20,8 @@
         <div class="mt-4 flex-1 space-y-4 pl-8 pr-6">
           <NuxtLink
             to="/dashboard/home"
-            class="flex items-center gap-x-2 rounded-lg p-2 font-medium transition duration-200 hover:text-primary-700 dark:bg-neutral-800 dark:hover:text-primary-200"
-            active-class="  text-primary-700 shadow-md outline  outline-black dark:text-primary-300 dark:outline-neutral-700"
+            class="flex items-center gap-x-2 text-lg rounded-lg p-2 font-medium transition duration-200 hover:text-primary-700 dark:hover:text-primary-200"
+            active-class="  text-primary-700 shadow-md outline  outline-black dark:text-primary-300 dark:outline-surface-700"
             @click="$emit('close')"
           >
             <Icon name="lucide:house" />
@@ -92,13 +92,13 @@
 
       <!-- Mobile -->
       <nav
-        class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 px-4 py-2.5 backdrop-blur-sm transition lg:hidden dark:border-neutral-700 dark:bg-surface-800/80"
+        class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 px-4 py-2.5 backdrop-blur-sm transition lg:hidden dark:border-surface-700 dark:bg-surface-800/80"
       >
         <div class="flex grow basis-0 items-center gap-x-3">
           <button
             @click="drawer = !drawer"
             type="button"
-            class="inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-neutral-200 lg:hidden dark:text-neutral-400 dark:hover:bg-primary-900/70 dark:focus:ring-neutral-600"
+            class="inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-surface-200 lg:hidden dark:text-surface-400 dark:hover:bg-primary-900/70 dark:focus:ring-surface-600"
           >
             <Icon name="lucide:menu" />
           </button>
@@ -164,12 +164,12 @@ const drawer = ref(false)
 @reference '~/assets/css/main.css';
 
 .menu-item {
-  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:bg-surface-900 dark:hover:text-primary-300 hover:before:dark:bg-primary-200
+  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700  dark:hover:text-primary-300 hover:before:dark:bg-primary-200
   before:absolute before:left-4 before:top-1/2 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:bg-surface-300 dark:before:bg-surface-700;
 }
 
 .active-menu {
-  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-neutral-600
+  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-surface-600
   before:absolute before:left-4 before:top-1/2 before:h-2/4 before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-primary-700 before:dark:bg-primary-400
   ;
 }

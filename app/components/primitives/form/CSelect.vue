@@ -56,9 +56,9 @@
             }`,
             option:
               'flex gap-2 items-center cursor-pointer hover:bg-surface-200/80  dark:hover:bg-surface-800 px-3 py-1.5 rounded-lg data-[p-focused=true]:bg-surface-200/80 dark:data-[p-focused=true]:bg-surface-800',
-            listContainer: 'py-2 px-1.5 overflow-y-scroll',
+            listContainer: 'py-2 px-1.5 overflow-y-auto',
             overlay:
-              'bg-surface-50 dark:bg-surface-900 shadow-lg rounded-xl border border-black dark:border-surface-700 ',
+              'bg-surface-50 dark:bg-surface-900 shadow-lg rounded-xl border border-black dark:border-surface-700 overflow-hidden',
             label: ({ instance, props }) => ({
               class: [
                 'flex-1 cursor-pointer focus:outline-none truncate',
