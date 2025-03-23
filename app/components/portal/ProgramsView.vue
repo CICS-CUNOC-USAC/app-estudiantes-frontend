@@ -4,8 +4,6 @@
     v-model:filters="filters"
     pt:root:class="max-w-5xl mx-auto"
     :loading
-    pt:tableContainer:class="rounded-xl max-w-5xl mx-auto  border border-black "
-    pt:mask:class="rounded-xl max-w-5xl mx-auto"
     removableSort
   >
     <PColumn field="" header="Acciones" class="w-min text-center">
@@ -43,7 +41,7 @@
 
     <template #empty>
       <div class="text-center">
-        <span class="text-sm font-semibold text-muted-color-emphasis">
+        <span class="text-muted-color-emphasis text-sm font-semibold">
           {{
             data?.length === 0 && !loading
               ? searchEmpty
@@ -74,4 +72,3 @@ const filters = ref({
   teacher: { value: null, matchMode: FilterMatchMode.CONTAINS }
 })
 </script>
-

@@ -5,25 +5,25 @@
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
-        class="mb-4 text-muted-color lg:mb-2"
+        class="text-muted-color mb-4 lg:mb-2"
         to="/"
       />
       <CButton
         icon="lucide:layout-dashboard"
         variant="link"
         label="Ir a publicaciones"
-        class="mb-4 text-muted-color lg:mb-2"
+        class="text-muted-color mb-4 lg:mb-2"
         to="/portal/general/publicaciones"
       />
     </nav>
     <h1 class="py-3 text-xl font-semibold" v-if="route.query.q">
-      <Icon name="lucide:search" class="mb-1 mr-1.5 inline-block" />
+      <Icon name="lucide:search" class="mr-1.5 mb-1 inline-block" />
       Buscando:
-      <span class="font-normal text-primary-400"> {{ route.query.q }} </span>
+      <span class="text-primary-400 font-normal"> {{ route.query.q }} </span>
       en Ingeniería CUNOC
     </h1>
-    <h1 class="py-3 text-center font-semibold mt-4" v-else>
-      <Icon name="lucide:info" class="mb-1 mr-1.5 inline-block" />
+    <h1 class="mt-4 py-3 text-center font-semibold" v-else>
+      <Icon name="lucide:info" class="mr-1.5 mb-1 inline-block" />
       Utiliza el botón de búsqueda en la parte superior o haz clic
       <button @click="$emit('search')" class="text-primary-400">aquí</button>
       para encontrar publicaciones oficiales
@@ -33,10 +33,21 @@
       v-if="data && status === 'success' && route.query.q"
       class="grid grid-cols-1 gap-4 lg:grid-cols-2 2xl:grid-cols-2"
     >
+      <p
+        v-if="!data.length"
+        class="text-muted-color-emphasis col-span-2 mt-6 text-center"
+      >
+        <Icon name="lucide:inbox" class="mr-1.5 mb-1 inline-block" />
+        Parece que no hay resultados para ésta búsqueda, puedes
+        <button class="text-primary-600" @click="$emit('search')">
+          intentar
+        </button>
+        con otro término
+      </p>
       <NuxtLink
         v-for="(item, index) in data"
         :key="index"
-        class="group flex flex-col gap-2 rounded-xl border border-black bg-surface-50 p-5 transition hover:bg-primary-50 active:translate-x-1 active:translate-y-1 dark:bg-neutral-900 dark:hover:bg-zinc-700/60"
+        class="group bg-surface-50 hover:bg-primary-50 flex flex-col gap-2 rounded-xl border border-black p-5 transition active:translate-x-1 active:translate-y-1 dark:bg-neutral-900 dark:hover:bg-zinc-700/60"
         :to="`/portal/post/${item.internal_link}?fromSearch=${route.query.q}`"
       >
         <div class="flex-1 space-y-3">
@@ -45,10 +56,10 @@
           </h1>
           <p class="text-muted-color-emphasis">
             Categoría:
-            <span class="font-medium text-color">{{ item.category }}</span>
+            <span class="text-color font-medium">{{ item.category }}</span>
           </p>
         </div>
-        <small class="block text-muted-color"
+        <small class="text-muted-color block"
           >Fecha: <strong>{{ item.posted_since }}</strong></small
         >
         <span class="text-primary-emphasis-alt">
@@ -121,11 +132,14 @@ const highlightQuery = (title: string) => {
 }
 
 useHead({
-  title: route.query.q ? `"${route.query.q}" en Ingeniería CUNOC` : 'Busqueda de publicaciones',
+  title: () =>
+    route.query.q
+      ? `"${route.query.q}" en Ingeniería CUNOC | CICS App`
+      : 'Busqueda de publicaciones | CICS App'
 })
 
 definePageMeta({
-  title: 'Búsqueda',
+  title: 'Búsqueda'
 })
 </script>
 

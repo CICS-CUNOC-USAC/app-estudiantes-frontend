@@ -1,6 +1,5 @@
-import { definePreset } from '@primevue/themes'
-import Aura from '@primevue/themes/aura'
-import Lara from '@primevue/themes/lara'
+import { definePreset } from '@primeuix/themes'
+import Aura from '@primeuix/themes/aura'
 
 const commonOptionsDefaults = {
   darkModeSelector: '.dark'
@@ -13,6 +12,10 @@ const commonComponentsDefaults = {
     contentPadding: '0px',
     filePadding: '0px',
     headerPadding: '0px'
+  },
+  datatable: {
+    // borderColor: '#000 !important',
+    // headerBorderColor: 'red !important',
   },
   multiselect: {
     shadow: 'none',
