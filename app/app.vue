@@ -43,6 +43,14 @@
     </Toaster>
     <!-- w-full px-4 py-3 rounded-md !font-normal text-sm bg-white !border shadow -->
     <!-- <GeneralSnackbar /> -->
+     <div class="fixed bottom-2 left-2 border p-2">
+      screen-<span class="font-bold inline sm:hidden">xs</span>
+      <span class="hidden font-bold sm:inline md:hidden">sm</span>
+      <span class="hidden font-bold md:inline lg:hidden">md</span>
+      <span class="hidden font-bold lg:inline xl:hidden">lg</span>
+      <span class="hidden font-bold xl:inline 2xl:hidden">xl</span>
+      <span class="hidden font-bold 2xl:inline">2xl</span>
+     </div>
   </main>
 </template>
 <script lang="ts" setup>
@@ -67,14 +75,13 @@ useSeoMeta({
     'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
   ogType: 'website',
   ogUrl: 'https://cics-app.vercel.app/',
-  ogSiteName: 'CICS App',
+  ogSiteName: 'CICS App'
 })
-
 </script>
 <style>
 @reference '~/assets/css/main.css';
 :root {
-  @apply bg-white dark:bg-surface-800 transition-colors;
+  @apply dark:bg-surface-800 bg-white transition-colors;
 }
 
 html {

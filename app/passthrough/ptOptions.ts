@@ -5,7 +5,7 @@ const ptConfig = {
     pcPaginator: {
       paginatorContainer: {
         class:
-          'border! border-black/40! mt-2 rounded-xl overflow-hidden'
+          'mt-2 rounded-xl overflow-hidden !border-none'
       }
     }
   }

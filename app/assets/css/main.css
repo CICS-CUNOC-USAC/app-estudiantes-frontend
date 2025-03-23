@@ -10,6 +10,7 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --color-cics-primary: #ff6600;
   --color-cics-white: #faf6ed;
   --color-cics-blue: #272933;
   --color-cics-silver-pale: #f8f5f3;

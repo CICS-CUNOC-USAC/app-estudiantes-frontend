@@ -9,7 +9,7 @@
         de Registro automáticamente.
       </p>
       <!-- {{ $form }} -->
-      <div class="my-3 grid grid-cols-2 gap-4">
+      <div class="my-3 grid grid-cols-2 md:grid-cols-3 gap-4">
         <CInputText
           name="ra"
           id="ra"
@@ -19,12 +19,23 @@
           prepend-icon="icon-park-twotone:id-card-h"
           no-borders
         />
+        <CInputText
+          name="pin"
+          id="pin"
+          label="PIN"
+          placeholder="*******"
+
+          type="password"
+          prepend-icon="icon-park-twotone:id-card-h"
+          no-borders
+        />
         <CButton
           rounded
           type="submit"
           icon="icon-park-twotone:search"
           label="Consultar"
           @click="fakeSearchUser"
+          class="max-md:col-span-2"
           :loading
         />
       </div>
