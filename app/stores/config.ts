@@ -1,4 +1,4 @@
-import { updatePrimaryPalette } from '@primevue/themes'
+import { updatePrimaryPalette } from '@primeuix/themes'
 import { defineStore } from 'pinia'
 import { allThemesPrimaries } from '~/themes/pThemes'
 

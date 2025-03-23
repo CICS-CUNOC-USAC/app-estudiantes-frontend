@@ -3,7 +3,7 @@
     <CICSLogo :width="68" fill="var(--p-primary-500)" />
     <button
       @click="$emit('close')"
-      class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500 focus:outline focus:outline-offset-1 focus:outline-neutral-200 dark:focus:ring-neutral-600"
+      class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-surface-500 focus:outline focus:outline-offset-1 focus:outline-surface-200 dark:focus:ring-surface-600"
     >
       <Icon name="lucide:x" />
     </button>
@@ -14,8 +14,8 @@
     >
       <NuxtLink
         to="/admin/home"
-        class="hover:text-primary-700 dark:hover:text-primary-200 flex items-center gap-x-2 rounded-lg p-2 transition duration-200 dark:bg-neutral-800"
-        active-class="  text-primary-700 shadow-lg outline outline-1 outline-black dark:text-primary-300 dark:outline-neutral-700"
+        class="hover:text-primary-700 dark:hover:text-primary-200 flex items-center gap-x-2 rounded-lg p-2 transition duration-200"
+        active-class="  text-primary-700 shadow-lg outline outline-1 outline-black dark:text-primary-300 dark:outline-surface-700"
         @click="$emit('close')"
       >
         <Icon name="lucide:house" />
@@ -113,11 +113,11 @@ defineProps<{
 @reference '~/assets/css/main.css';
 
 .menu-item {
-  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium inset-ring ring ring-transparent inset-ring-transparent transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 before:transition dark:bg-neutral-800 dark:before:bg-neutral-700;
+  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium inset-ring ring ring-transparent inset-ring-transparent transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 before:transition dark:before:bg-surface-700;
 }
 
 .active-menu {
-  @apply text-primary-700 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 before:bg-primary-700 before:dark:bg-primary-400 z-50 shadow-md ring-gray-800 transition before:absolute before:top-1/2 before:left-4 before:h-2/4 before:w-0.5 before:-translate-y-1/2 before:rounded hover:inset-ring hover:inset-ring-gray-800 dark:ring-neutral-600 dark:hover:inset-ring-neutral-600;
+  @apply text-primary-700 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 before:bg-primary-700 before:dark:bg-primary-400 z-50 shadow-md ring-gray-800 transition before:absolute before:top-1/2 before:left-4 before:h-2/4 before:w-0.5 before:-translate-y-1/2 before:rounded hover:inset-ring hover:inset-ring-gray-800 dark:ring-surface-600 dark:hover:inset-ring-surface-600;
   /* &::before {
     @apply bg-primary-700 dark:bg-primary-400 absolute top-1/2 left-4 h-2/4 w-0.5 -translate-y-1/2 rounded;
     content: '';

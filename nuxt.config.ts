@@ -1,6 +1,5 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify'
-import Aura from '@primevue/themes/aura'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
@@ -23,7 +22,7 @@ export default defineNuxtConfig({
       link: [
         // favicon
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        {rel: 'manifest', href: '/site.webmanifest'},
+        { rel: 'manifest', href: '/site.webmanifest' }
       ],
       meta: [
         {
@@ -64,8 +63,7 @@ export default defineNuxtConfig({
     },
     build: {
       cssMinify: false
-    },
-    
+    }
 
     // vue: {
     //   template: {
@@ -96,7 +94,8 @@ export default defineNuxtConfig({
     components: {
       prefix: 'P'
     },
-    importTheme: { from: '@/themes/pThemes.ts' },
+    importPT: { from: '@/passthrough/ptOptions.ts' },
+    importTheme: { as: 'Aura',from: '@/themes/pThemes.ts' },
     options: {
       theme: {
         options: {
@@ -119,7 +118,7 @@ export default defineNuxtConfig({
       { name: 'Mona Sans', provider: 'google' },
       { name: 'Hubot Sans', provider: 'google' },
       { name: 'Geist Mono', provider: 'google' },
-      { name: 'Bricolage Grotesque', provider: 'google' },
+      { name: 'Bricolage Grotesque', provider: 'google' }
     ],
     experimental: {
       processCSSVariables: true
