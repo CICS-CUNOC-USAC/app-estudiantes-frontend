@@ -42,6 +42,31 @@ const commonComponentsDefaults = {
       }
     }
   },
+  select: {
+    shadow: 'none',
+    focusRingShadow: '0 0 0 2px color-mix(in srgb, {primary.500}, transparent 50%)',
+    borderRadius: '8px',
+    overlayBorderRadius: '8px',
+    
+    colorScheme: {
+      light: {
+        overlayBackground: '{surface.50}',
+        overlayBorderColor: '#000',
+        borderColor: '#000',
+        hoverBorderColor: '#000',
+        focusBorderColor: '#000',
+        background: '{surface.50}'
+      },
+      dark: {
+        overlayBackground: '{surface.900}',
+        overlayBorderColor: '{surface.700}',
+        borderColor: '{surface.700}',
+        hoverBorderColor: '{surface.700}',
+        focusBorderColor: '{surface.700}',
+        background: '{surface.900}'
+      }
+    }
+  },
   toggleswitch: {
     border: {
       color: '#000'
