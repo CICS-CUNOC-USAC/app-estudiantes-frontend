@@ -44,6 +44,6 @@ const { data, status } = useFetch<
     original_link: string
     posted_since: string
   }[]
->('/api/official-posts')
+>('/api/official-posts', {default: () => []})
 </script>
 
