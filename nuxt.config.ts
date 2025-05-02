@@ -3,6 +3,9 @@
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
+  routeRules: {
+    '/': {ssr: false}
+  },
   devtools: {
     enabled: false
   },
