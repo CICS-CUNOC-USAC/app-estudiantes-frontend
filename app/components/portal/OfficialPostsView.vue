@@ -42,6 +42,7 @@
 <script setup lang="ts">
 import CCardAlt from '../primitives/card/CCardAlt.vue'
 
+/*
 const status = ref('success')
 const data:
   {
@@ -51,7 +52,7 @@ const data:
     original_link: string
     posted_since: string
   }[] = []
-/*
+*/
 const { data, status } = useFetch<
   {
     title: string
@@ -61,6 +62,5 @@ const { data, status } = useFetch<
     posted_since: string
   }[]
 >('/api/official-posts', {default: () => []})
-*/
 </script>
 
