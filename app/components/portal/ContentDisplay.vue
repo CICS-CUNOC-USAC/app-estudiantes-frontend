@@ -106,6 +106,8 @@ const props = defineProps<{
 .content-renderer {
   @apply prose dark:prose-invert dark:print:prose prose-headings:my-2 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-hr:my-6 prose-hr:border-gray-200 dark:prose-hr:border-zinc-700 mx-auto max-w-none lg:w-9/12;
 
+  @apply font-content prose-headings:font-sans;
+
   /* @apply prose-a:hover:text-primary-600; */
   /* @apply prose-a:no-underline prose-a:hover:underline prose-a:hover:decoration-primary-500; */
   /* @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-semibold prose-a:no-underline prose-a:transition prose-a:hover:border-b-2; */
