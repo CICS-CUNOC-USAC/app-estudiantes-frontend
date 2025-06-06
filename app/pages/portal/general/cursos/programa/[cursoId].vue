@@ -30,7 +30,7 @@ import PdfPreview from '~/components/content/PdfPreview.vue'
 import CButton from '~/components/primitives/button/CButton.vue';
 
 const route = useRoute()
-const pdfProgramURL = import.meta.env.VITE_PDF_PROGRAM_URL;
+const pdfProgramURL = `${import.meta.env.VITE_APP_BASE_URL}/api/pdfprogram`;
 const id = route.params.cursoId
 const fromSearch = route.query.fromSearch
 </script>
