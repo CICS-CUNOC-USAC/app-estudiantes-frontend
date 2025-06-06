@@ -4,7 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   routeRules: {
-    '/': {ssr: false}
+    '/': {ssr: false},
+    '/portal/general/publicaciones': {ssr: false},
+    '/portal/general/busqueda': {ssr: false}
   },
   devtools: {
     enabled: false
@@ -118,8 +120,7 @@ export default defineNuxtConfig({
     },
     families: [
       { name: 'Geist', provider: 'google' },
-      { name: 'Mona Sans', provider: 'google' },
-      { name: 'Hubot Sans', provider: 'google' },
+      { name: 'Inter', provider: 'google' },
       { name: 'Geist Mono', provider: 'google' },
       { name: 'Bricolage Grotesque', provider: 'google' }
     ],
