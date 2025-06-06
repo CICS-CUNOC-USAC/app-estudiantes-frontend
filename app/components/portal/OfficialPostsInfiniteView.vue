@@ -82,6 +82,6 @@ async function load() {
 
   data.value?.push(...res)
   status.value = 'success'
-  // page.value++
+  page.value++
 }
 </script>

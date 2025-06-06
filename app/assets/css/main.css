@@ -17,6 +17,7 @@
   /* --font-sans: 'Geist Sans', system-ui, sans-serif; */
   --font-sans: 'Bricolage Grotesque', system-ui, sans-serif;
   --font-alt: 'Hubot Sans', system-ui, sans-serif;
+  --font-content: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
 
   --animate-scaleIn: scaleIn 150ms ease;

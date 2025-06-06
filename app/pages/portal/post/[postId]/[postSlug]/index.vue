@@ -97,6 +97,8 @@ definePageMeta({
 
 .official-post-content {
   @apply prose prose-base prose-neutral dark:prose-invert max-w-none;
+  
+  @apply font-content;
 
   /* @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b-2; */
 
@@ -113,7 +115,7 @@ definePageMeta({
   }
 
   .alert {
-    @apply rounded-xl border px-4 py-0.5;
+    @apply rounded-xl border px-4 py-1;
     @apply bg-surface-100/40 dark:bg-surface-900/65;
   }
 
