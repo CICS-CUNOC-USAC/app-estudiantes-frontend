@@ -35,24 +35,13 @@
   <template v-else-if="status === 'error'">
     <div class="flex items-center justify-center h-32 gap-4 text-red-500">
       <Icon name="mdi:alert-circle" />
-      Error al obtener las publicaciones oficiales.
+      No pudimos obtener las ultimas publicaciones. Intenta más tarde.
     </div>
   </template>
 </template>
 <script setup lang="ts">
 import CCardAlt from '../primitives/card/CCardAlt.vue'
 
-/*
-const status = ref('success')
-const data:
-  {
-    title: string
-    description: string
-    link: string
-    original_link: string
-    posted_since: string
-  }[] = []
-*/
 const { data, status } = useFetch<
   {
     title: string

@@ -4,7 +4,9 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   routeRules: {
-    '/': {ssr: false}
+    '/': {ssr: false},
+    '/portal/general/publicaciones': {ssr: false},
+    '/portal/general/busqueda': {ssr: false}
   },
   devtools: {
     enabled: false
