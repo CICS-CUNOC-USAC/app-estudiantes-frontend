@@ -8,10 +8,9 @@
         Ingresa tu registro académico y buscaremos tu información en el sistema
         de Registro automáticamente.
       </p>
-      <!-- {{ $form }} -->
-      <div class="my-3 grid grid-cols-2 md:grid-cols-3 gap-4">
+      <div class="my-3 grid grid-cols-2 gap-4 md:grid-cols-3">
         <CInputText
-          name="ra"
+          v-model="searchValues.ra"
           id="ra"
           label="Registro Académico"
           placeholder="201900000"
@@ -20,11 +19,10 @@
           no-borders
         />
         <CInputText
-          name="pin"
+          v-model="searchValues.pin"
           id="pin"
           label="PIN"
           placeholder="*******"
-
           type="password"
           prepend-icon="icon-park-twotone:id-card-h"
           no-borders
@@ -34,9 +32,9 @@
           type="submit"
           icon="icon-park-twotone:search"
           label="Consultar"
-          @click="fakeSearchUser"
+          @click="execute"
           class="max-md:col-span-2"
-          :loading
+          :disabled="!searchValues.ra || !searchValues.pin || loading"
         />
       </div>
 
@@ -74,7 +72,7 @@
           :disabled="!success || loading"
           :defaultValue="fakeValues.lastName"
         />
-       
+
         <CInputText
           name="carrerCode"
           id="carrerCode"
@@ -100,7 +98,10 @@
           :defaultValue="fakeValues.email"
         />
       </fieldset>
-      <fieldset class="my-2 grid grid-cols-2 gap-2 md:grid-cols-3" v-if="success">
+      <fieldset
+        class="my-2 grid grid-cols-2 gap-2 md:grid-cols-3"
+        v-if="success"
+      >
         <CInputText
           name="username"
           id="username"
@@ -158,6 +159,7 @@
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import { getUserInfoBySirecaCredentials } from '~/lib/api/auth/user'
 
 defineProps({
   loading: {
@@ -175,52 +177,42 @@ defineProps({
 const loading = ref(false)
 const success = ref(false)
 const status = ref('')
-const fakeValues = reactive({
-  firstName: '',
-  lastName: '',
-  email: '',
+
+const searchValues = ref({
   ra: '',
-  careerCode: '',
-  careerName: ''
+  pin: ''
 })
 
-async function fakeSearchUser() {
-  loading.value = true
-  const promise = new Promise<void>((resolve, reject) => {
-    setTimeout(() => {
-      const random = Math.floor(Math.random() * 100)
-      if (random % 2 === 0) {
-        loading.value = false
-        success.value = false
-        console.log(
-          'No se encontró información con el registro académico ingresado'
-        )
-        fakeValues.firstName = ''
-        fakeValues.lastName = ''
-        fakeValues.email = ''
-        fakeValues.careerCode = ''
-        fakeValues.careerName = ''
-
-        status.value =
-          'No se encontró información con el registro académico ingresado'
-        reject('No se encontró información con el registro académico ingresado')
-        return
-      }
-
-      fakeValues.firstName = 'Juan'
-      fakeValues.lastName = 'Pérez'
-      ;(fakeValues.email = 'juanperez202131284@cunoc.edu.gt'),
-        (fakeValues.careerCode = '120058')
-      fakeValues.careerName = 'Ingeniería en Ciencias y Sistemas'
-      resolve()
-    }, 1000)
-  })
-  await promise
-  loading.value = false
-  success.value = true
-  console.log('Usuario encontrado')
-  status.value =
-    'Hemos encontrado tu información en el sistema de Registro, llena los campos restantes para continuar'
+const fakeValues = {
+  firstName: '',
+  lastName: '',
+  careerCode: '',
+  careerName: '',
+  email: '',
+  username: '',
+  password: ''
 }
+
+// const { mutate, asyncStatus } = useMutation({
+//   mutation: (userCreds: { ra: string; pin: string }) =>
+//     getUserInfoBySirecaCredentials(userCreds),
+//   onSuccess: () => {
+//     console.log('User info fetched successfully')
+//   },
+//   onError: () => {
+//     console.error('Error fetching user info')
+//   }
+// })
+const { execute } = useCustomFetch('/auth/student-info', {
+  immediate: false,
+  query: searchValues,
+  watch: false,
+  onRequest: (data) => {
+    console.log('Fetching user info...', data.response?._data)
+  },
+  onResponse: (data) => {
+    console.log('Response:', data.response?._data)
+  }
+})
 </script>
 <style scoped lang="postcss"></style>
