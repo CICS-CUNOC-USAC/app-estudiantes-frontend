@@ -9,133 +9,41 @@
         de Registro automáticamente.
       </p>
       <div class="my-3 grid grid-cols-2 gap-4 md:grid-cols-3">
-        <CInputText
-          v-model="searchValues.ra"
-          id="ra"
-          label="Registro Académico"
-          placeholder="201900000"
-          type="number"
-          prepend-icon="icon-park-twotone:id-card-h"
-          no-borders
-        />
-        <CInputText
-          v-model="searchValues.pin"
-          id="pin"
-          label="PIN"
-          placeholder="*******"
-          type="password"
-          prepend-icon="icon-park-twotone:id-card-h"
-          no-borders
-        />
-        <CButton
-          rounded
-          type="submit"
-          icon="icon-park-twotone:search"
-          label="Consultar"
-          @click="execute"
-          class="max-md:col-span-2"
-          :disabled="!searchValues.ra || !searchValues.pin || loading"
-        />
+        <CInputText v-model="searchValues.ra" id="ra" label="Registro Académico" placeholder="201900000" type="number"
+          prepend-icon="icon-park-twotone:id-card-h" no-borders />
+        <CInputText v-model="searchValues.pin" id="pin" label="PIN" placeholder="*******" type="password"
+          prepend-icon="icon-park-twotone:id-card-h" no-borders />
+        <CButton rounded type="submit" icon="icon-park-twotone:search" label="Consultar" @click="execute"
+          class="max-md:col-span-2" :disabled="!searchValues.ra || !searchValues.pin || loading" />
       </div>
 
-      <div
-        v-if="status"
-        class="mb-2 text-xs font-medium"
-        :class="success ? 'text-green-500' : 'text-red-500'"
-      >
+      <div v-if="status" class="mb-2 text-xs font-medium" :class="success ? 'text-green-500' : 'text-red-500'">
         {{ status }}
       </div>
-      <fieldset
-        class="my-4 grid max-h-80 grid-cols-2 gap-x-4 gap-y-3 overflow-visible lg:max-h-none lg:grid-cols-2"
-      >
-        <CInputText
-          name="firstName"
-          id="firstName"
-          label="Nombre(s)"
-          type="text"
-          class="col-span-1"
-          prepend-icon="icon-park-twotone:people"
-          no-borders
-          readonly
-          :disabled="!success || loading"
-          :defaultValue="fakeValues.firstName"
-        />
-        <CInputText
-          name="lastName"
-          id="lastName"
-          label="Apellido(s)"
-          type="text"
-          class="col-span-1"
-          prepend-icon="icon-park-twotone:people"
-          no-borders
-          readonly
-          :disabled="!success || loading"
-          :defaultValue="fakeValues.lastName"
-        />
+      <fieldset class="my-4 grid max-h-80 grid-cols-2 gap-x-4 gap-y-3 overflow-visible lg:max-h-none lg:grid-cols-2">
+        <CInputText name="firstName" id="firstName" label="Nombre(s)" type="text" class="col-span-1"
+          prepend-icon="icon-park-twotone:people" no-borders readonly :disabled="!success || loading"
+          :defaultValue="studentValues.firstName" />
+        <CInputText name="lastName" id="lastName" label="Apellido(s)" type="text" class="col-span-1"
+          prepend-icon="icon-park-twotone:people" no-borders readonly :disabled="!success || loading"
+          :defaultValue="studentValues.lastName" />
 
-        <CInputText
-          name="carrerCode"
-          id="carrerCode"
-          label="Código de Carrera"
-          type="text"
-          prepend-icon="icon-park-twotone:id-card-h"
-          no-borders
-          readonly
-          root-class="col-span-2 lg:col-span-1"
-          :disabled="!success || loading"
-          :defaultValue="`${fakeValues.careerCode} - ${fakeValues.careerName}`"
-        />
-        <CInputText
-          name="email"
-          id="email"
-          label="Correo institucional"
-          type="text"
-          prepend-icon="icon-park-twotone:mail"
-          no-borders
-          readonly
-          root-class="col-span-2 lg:col-span-1"
-          :disabled="!success || loading"
-          :defaultValue="fakeValues.email"
-        />
+        <CInputText name="carrerCode" id="carrerCode" label="Código de Carrera" type="text"
+          prepend-icon="icon-park-twotone:id-card-h" no-borders readonly root-class="col-span-2 lg:col-span-1"
+          :disabled="!success || loading" :defaultValue="`${studentValues.careerCode} - ${studentValues.careerName}`" />
+        <CInputText name="email" id="email" label="Correo institucional" type="text"
+          prepend-icon="icon-park-twotone:mail" no-borders readonly root-class="col-span-2 lg:col-span-1"
+          :disabled="!success || loading" :defaultValue="studentValues.email" />
       </fieldset>
-      <fieldset
-        class="my-2 grid grid-cols-2 gap-2 md:grid-cols-3"
-        v-if="success"
-      >
-        <CInputText
-          name="username"
-          id="username"
-          label="Nombre de usuario"
-          prepend-icon="icon-park-twotone:people"
-          no-borders
-          root-class="col-span-2 md:col-span-1"
-        />
-        <CInputText
-          name="password"
-          id="password"
-          label="Contraseña"
-          type="password"
-          prepend-icon="icon-park-twotone:lock"
-          no-borders
-          root-class="col-span-1 md:col-span-1"
-        />
-        <CInputText
-          name="confirmPassword"
-          id="confirmPassword"
-          label="Confirmar contraseña"
-          type="password"
-          prepend-icon="icon-park-twotone:lock"
-          no-borders
-          root-class="col-span-1 md:col-span-1"
-        />
+      <fieldset class="my-2 grid grid-cols-2 gap-2 md:grid-cols-3" v-if="success">
+        <CInputText name="username" id="username" label="Nombre de usuario" prepend-icon="icon-park-twotone:people"
+          no-borders root-class="col-span-2 md:col-span-1" />
+        <CInputText name="password" id="password" label="Contraseña" type="password"
+          prepend-icon="icon-park-twotone:lock" no-borders root-class="col-span-1 md:col-span-1" />
+        <CInputText name="confirmPassword" id="confirmPassword" label="Confirmar contraseña" type="password"
+          prepend-icon="icon-park-twotone:lock" no-borders root-class="col-span-1 md:col-span-1" />
       </fieldset>
-      <CButton
-        class="mb-3 w-full"
-        v-if="success"
-        rounded
-        icon="icon-park-outline:arrow-right"
-        label="Continuar"
-      />
+      <CButton class="mb-3 w-full" v-if="success" rounded icon="icon-park-outline:arrow-right" label="Continuar" @click="signUpMutation"/>
     </template>
     <template #footer>
       <div class="flex flex-col gap-y-4">
@@ -144,22 +52,21 @@
           <CButton to="/login" variant="link" label="Inicia sesión" />
         </span>
         <div class="align-center flex">
-          <CButton
-            to="/"
-            variant="text"
-            icon="icon-park-outline:arrow-left"
-            label="Regresar al portal"
-          />
+          <CButton to="/" variant="text" icon="icon-park-outline:arrow-left" label="Regresar al portal" />
         </div>
       </div>
     </template>
   </CCardAlt>
 </template>
 <script lang="ts" setup>
+import { toast } from 'vue-sonner'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import { getUserInfoBySirecaCredentials } from '~/lib/api/auth/user'
+import { type UserSirecaInfoResponse } from '~/lib/api/auth/user'
+
+const regularAuthStore = useRegularAuthStore()
+const { signupUser } = regularAuthStore
 
 defineProps({
   loading: {
@@ -183,7 +90,7 @@ const searchValues = ref({
   pin: ''
 })
 
-const fakeValues = {
+const studentValues = ref({
   firstName: '',
   lastName: '',
   careerCode: '',
@@ -191,28 +98,61 @@ const fakeValues = {
   email: '',
   username: '',
   password: ''
-}
+})
 
-// const { mutate, asyncStatus } = useMutation({
-//   mutation: (userCreds: { ra: string; pin: string }) =>
-//     getUserInfoBySirecaCredentials(userCreds),
-//   onSuccess: () => {
-//     console.log('User info fetched successfully')
-//   },
-//   onError: () => {
-//     console.error('Error fetching user info')
-//   }
-// })
-const { execute } = useCustomFetch('/auth/student-info', {
+/*
+const { mutate: sirecaInfoMutation, asyncStatus } = useMutation({
+  mutation: (userCreds: { ra: string; pin: string }) =>
+    getUserInfoBySirecaCredentials(searchValues.value),
+  onSuccess: (response) => {
+  },
+  onError: (error) => {
+  }
+})
+*/
+
+const { mutate: signUpMutation, asyncStatus } = useMutation({
+  mutation: () =>
+    signupUser({
+      first_name: studentValues.value.firstName,
+      last_name: studentValues.value.lastName,
+      user: {
+        email: studentValues.value.email,
+        career_code: Number(studentValues.value.careerCode.slice(-2)),
+        ra: searchValues.value.ra,
+        password: studentValues.value.password
+      }
+    }),
+  onSuccess: (response) => {
+  },
+  onError: (error) => {
+  }
+})
+
+const { execute } = useCustomFetch<UserSirecaInfoResponse>('/auth/student-info', {
   immediate: false,
   query: searchValues,
   watch: false,
   onRequest: (data) => {
     console.log('Fetching user info...', data.response?._data)
   },
-  onResponse: (data) => {
-    console.log('Response:', data.response?._data)
+  onResponse: (response) => {
+    const studentData = response.response._data.estudiante
+    const careerData = response.response._data.inscrito
+    studentValues.value.firstName = studentData.nombres
+    studentValues.value.lastName = studentData.apellidos
+    studentValues.value.email = studentData.correo
+    studentValues.value.careerCode = careerData.codigo
+    studentValues.value.careerName = careerData.carrera
+
+    toast.success('Informacion obtenida exitosamente')
+    success.value = true
+  },
+  onResponseError: (error) => {
+    toast.error('Error al Consultar', { description: error.response ?? 'No se ha podido consultar SIRECA, por favor intenta mas tarde' })
   }
 })
+
+
 </script>
 <style scoped lang="postcss"></style>

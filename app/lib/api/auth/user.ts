@@ -29,8 +29,8 @@ export const getUserInfoBySirecaCredentials = async (credentials: {
   const res = await $api<UserSirecaInfoResponse>(
     '/auth/student-info',
     {
-      method: 'POST',
-      body: credentials
+      method: 'GET',
+      query: credentials
     }
   )
   return res
