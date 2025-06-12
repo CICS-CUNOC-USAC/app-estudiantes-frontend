@@ -1,5 +1,5 @@
 <template>
-  <section class="signup-page">
+  <section class="signup-page px-2">
       <SignupForm
       class="form"
         :loading="loading"
@@ -29,7 +29,7 @@ const { signupUser } = useRegularAuthStore()
 .signup-page {
   @apply flex min-h-screen w-full items-center justify-center;
   .form {
-    @apply w-full md:max-w-lg;
+    /* @apply w-full md:max-w-3xl; */
   }
 }
 </style>
