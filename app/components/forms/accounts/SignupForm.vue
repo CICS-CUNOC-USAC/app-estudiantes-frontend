@@ -113,7 +113,7 @@
           prepend-icon="icon-park-twotone:people"
           no-borders
           root-class="col-span-2 md:col-span-1"
-          :error="$form.username?.error"
+          :error="$form.username?.error?.message"
         />
         <CInputText
           name="password"
@@ -123,7 +123,7 @@
           prepend-icon="icon-park-twotone:lock"
           no-borders
           root-class="col-span-1 md:col-span-1"
-          :error="$form.password?.error"
+          :error="$form.password?.error?.message"
         />
         <CInputText
           name="confirmPassword"
@@ -133,13 +133,14 @@
           prepend-icon="icon-park-twotone:lock"
           no-borders
           root-class="col-span-1 md:col-span-1"
-          :error="$form.confirmPassword?.error"
+          :error="$form.confirmPassword?.error?.message"
         />
         <CButton
           class="mb-3 w-full"
           icon="icon-park-outline:arrow-right"
           label="Continuar"
           type="submit"
+          :loading="asyncStatus === 'loading'"
         />
       </PForm>
     </template>
