@@ -24,6 +24,7 @@ export type SignupPayload = {
     email: string
     career_code: number
     ra: string
+    username: string
     password: string
   }
 }
