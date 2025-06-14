@@ -265,6 +265,7 @@ const { mutate: signUpMutation, asyncStatus } = useMutation({
         email: studentValues.value.email,
         career_code: Number(studentValues.value.careerCode.slice(-2)),
         ra: searchValues.value.ra,
+        username: values.username,
         password: values.password
       }
     })
