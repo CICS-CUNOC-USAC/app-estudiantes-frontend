@@ -76,13 +76,13 @@
               v-if="!showAllInfo && data.library_reference"
               class="dark:text-gray-400"
               :class="
-                data.library_reference.current_availability > 0
+                data.library_reference.is_available
                   ? 'text-green-600'
                   : 'text-red-600'
               "
             >
               {{
-                data.library_reference.current_availability > 0
+                data.library_reference.is_available
                   ? 'Disponible en biblioteca'
                   : 'No disponible'
               }}
@@ -91,16 +91,12 @@
             <template v-else>
               <div class="dark:text-gray-400" v-if="data.library_reference">
                 <h6>
-                  <span class="text-muted-color">Disponibilidad actual: </span>
-                  <strong>{{
-                    data.library_reference.current_availability
-                  }}</strong>
-                </h6>
-                <h6>
-                  <span class="text-muted-color">Disponibilidad total: </span>
-                  <strong>{{
-                    data.library_reference.total_availability
-                  }}</strong>
+                  <span class="text-muted-color">Disponibilidad: </span>
+                  <strong
+                    :class="data.library_reference.is_available ? 'text-green-600' : 'text-red-600'"
+                  >
+                    {{ data.library_reference.is_available ? 'Disponible' : 'No Disponible' }}
+                  </strong>
                 </h6>
               </div>
             </template>

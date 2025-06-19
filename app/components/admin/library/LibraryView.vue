@@ -186,7 +186,7 @@ const props = defineProps<{
 
 const route = useRoute()
 
-const limit = ref(5)
+const limit = ref(10)
 const currentPage = computed(() => {
   return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
 })
@@ -199,7 +199,8 @@ const { data, status, refresh } = await useAsyncData(
         page: route.query.page ? Number(route.query.page) : 1,
         limit: limit.value,
         name: route.query.name,
-        author: route.query.author
+        author: route.query.author,
+        category_id: route.query.category_id
       },
       props.type
     ),

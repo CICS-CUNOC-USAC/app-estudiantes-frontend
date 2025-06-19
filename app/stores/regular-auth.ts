@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
-import { SnackbarType } from './snackbar'
 import { toast } from 'vue-sonner'
 
 type UserPayload = {
