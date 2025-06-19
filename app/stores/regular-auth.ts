@@ -18,12 +18,13 @@ export type UserUpdatePayload = {
 }
 
 export type SignupPayload = {
-  firstName: string
-  lastName: string
+  first_name: string
+  last_name: string
   user: {
     email: string
     career_code: number
     ra: string
+    username: string
     password: string
   }
 }
