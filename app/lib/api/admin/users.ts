@@ -1,3 +1,5 @@
+import { toast } from "vue-sonner"
+
 export const fetchAllStaffs = async (params?: {}) => {
   try {
     const response = await $api<StaffsResponse>('/staffs', {
@@ -9,11 +11,7 @@ export const fetchAllStaffs = async (params?: {}) => {
       meta
     }
   } catch (error) {
-    useSnackbarStore().showSnackbar({
-      title: 'Error al obtener los usuarios',
-      message: (error as any).data.message ?? (error as any).data.error,
-      type: SnackbarType.ERROR
-    })
+    toast.error('Error al obtener los usuarios', {description: (error as any).data.message ?? (error as any).data.error })
   }
 }
 

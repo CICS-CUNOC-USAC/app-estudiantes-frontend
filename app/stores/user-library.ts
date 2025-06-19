@@ -1,3 +1,4 @@
+import { toast } from 'vue-sonner'
 import type { Metadata } from '~/utils/types/fetching'
 
 export const useUserLibraryStore = defineStore('user-library', () => {
@@ -18,11 +19,7 @@ export const useUserLibraryStore = defineStore('user-library', () => {
       responseMeta.value = meta
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al obtener los libros',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al obtener los libros', {description: (error as any).data.message ?? (error as any).data.error })
       return {
         error
       }

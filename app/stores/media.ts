@@ -1,3 +1,5 @@
+import { toast } from "vue-sonner"
+
 export type MediaPayload = {
   file: File | undefined
   path: string
@@ -38,11 +40,7 @@ export const useMediaStore = defineStore('media', () => {
       })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al subir el archivo',
-        message: (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al subir el archivo', { description: (error as any).data.error })
     } finally {
       loading.value = false
     }
@@ -57,18 +55,10 @@ export const useMediaStore = defineStore('media', () => {
         method: 'PATCH',
         body: formData
       })
-      useSnackbarStore().showSnackbar({
-        title: 'Archivo actualizado',
-        message: 'El archivo se ha subido correctamente',
-        type: SnackbarType.SUCCESS
-      })
+      toast.success('Archivo actualizado', { description: 'El archivo se ha subido correctamente' })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al subir el archivo',
-        message: (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.success('Error al subir el archivo', { description: (error as any).data.error })
     } finally {
       uploading.value = false
     }

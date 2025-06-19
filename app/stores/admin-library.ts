@@ -71,11 +71,6 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
         meta
       }
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al obtener los libros',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
       toast.error('Error al obtener los libros', {
         description: (error as any).data.message ?? (error as any).data.error
       })
@@ -108,18 +103,10 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
           media_id: uploadedMedia?.id
         }
       })
-      useSnackbarStore().showSnackbar({
-        title: 'Recurso creado',
-        message: 'Lirbo creado correctamente',
-        type: SnackbarType.SUCCESS
-      })
+      toast.success('Recurso creado', {description: 'Libro creado correctamente' })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al crear el recurso',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al crear el recurso', {description: (error as any).data.message ?? (error as any).data.error })
     } finally {
       loading.value = false
     }
@@ -134,18 +121,10 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
         method: 'PATCH',
         body: payload
       })
-      useSnackbarStore().showSnackbar({
-        title: 'Recurso actualizado',
-        message: 'Libro actualizado correctamente',
-        type: SnackbarType.SUCCESS
-      })
+      toast.success('Recurso actualizado', {description: 'Libro actualizado correctamente' })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al crear el recurso',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al crear el recurso', {description: (error as any).data.message ?? (error as any).data.error })
     } finally {
       loading.value = false
     }
@@ -157,19 +136,11 @@ export const useAdminLibraryStore = defineStore('admin-library', () => {
       const response = await $api<Book>(`/library/admin/${+id}`, {
         method: 'DELETE'
       })
-      useSnackbarStore().showSnackbar({
-        title: 'Recurso eliminado',
-        message: 'Libro eliminado correctamente',
-        type: SnackbarType.SUCCESS
-      })
+      toast.success('Recurso eliminado', {description: 'Libro eliminado correctamente' })
       await fetchAllBooks()
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al eliminar el recurso',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al eliminar el recurso', {description: (error as any).data.message ?? (error as any).data.error })
     } finally {
       loading.value = false
     }

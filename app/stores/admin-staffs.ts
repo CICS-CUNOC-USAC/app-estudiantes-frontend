@@ -1,3 +1,4 @@
+import { toast } from 'vue-sonner'
 import type { Role } from './staff-auth'
 import type { Metadata } from '~/utils/types/fetching'
 
@@ -37,11 +38,7 @@ export const useAdminStaffsStore = defineStore('admin-staffs', () => {
       }
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al obtener los usuarios',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al obtener los usuarios', {description: (error as any).data.message ?? (error as any).data.error })
     } finally {
       loading.value = false
     }
@@ -55,11 +52,7 @@ export const useAdminStaffsStore = defineStore('admin-staffs', () => {
       })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al crear el usuario',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al crear el usuario', {description: (error as any).data.message ?? (error as any).data.error })
     }
   }
 
@@ -71,11 +64,7 @@ export const useAdminStaffsStore = defineStore('admin-staffs', () => {
       })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al actualizar el usuario',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al actualizar el usuario', {description: (error as any).data.message ?? (error as any).data.error })
     }
   }
 
@@ -88,11 +77,7 @@ export const useAdminStaffsStore = defineStore('admin-staffs', () => {
       }
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al obtener los roles',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al obtener los roles', {description: (error as any).data.message ?? (error as any).data.error })
     }
   }
 
@@ -106,11 +91,7 @@ export const useAdminStaffsStore = defineStore('admin-staffs', () => {
       })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al obtener los roles',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al obtener los roles', {description: (error as any).data.message ?? (error as any).data.error })
     }
   }
 
@@ -119,11 +100,7 @@ export const useAdminStaffsStore = defineStore('admin-staffs', () => {
       const response = await $api<Role[]>(`/staffs/${staffId}/roles`)
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al obtener los roles',
-        message: (error as any).data.message ?? (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al obtener los roles', {description: (error as any).data.message ?? (error as any).data.error })
     }
   }
 

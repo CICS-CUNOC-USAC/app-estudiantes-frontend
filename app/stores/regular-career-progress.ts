@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { toast } from 'vue-sonner'
 export type Course = {
   code: string
   name: string
@@ -78,17 +79,9 @@ export const useCareerProgressStoreC = defineStore('career_progress', () => {
     // Error handling
     if (error.value) {
       if (error.value.data) {
-        useSnackbarStore().showSnackbar({
-          title: 'Error',
-          message: error.value.data.message,
-          type: SnackbarType.ERROR
-        })
+        toast.error(error.value.data.message)
       } else {
-        useSnackbarStore().showSnackbar({
-          title: 'Error',
-          message: 'Something went wrong',
-          type: SnackbarType.ERROR
-        })
+        toast.error('Algo ha salido mal')
       }
     }
 
@@ -123,17 +116,9 @@ export const useCareerProgressStoreC = defineStore('career_progress', () => {
     // Error handling
     if (error.value) {
       if (error.value.data) {
-        useSnackbarStore().showSnackbar({
-          title: 'Error',
-          message: error.value.data.message,
-          type: SnackbarType.ERROR
-        })
+        toast.error(error.value.data.message)
       } else {
-        useSnackbarStore().showSnackbar({
-          title: 'Error',
-          message: 'Something went wrong',
-          type: SnackbarType.ERROR
-        })
+        toast.error('Algo ha salido mal')
       }
     }
 

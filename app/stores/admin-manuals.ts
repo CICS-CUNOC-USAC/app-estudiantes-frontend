@@ -2,6 +2,7 @@
 import { type FetchError } from 'ofetch'
 import type { MediaResponse } from './media'
 import type { Metadata } from '~/utils/types/fetching'
+import { toast } from 'vue-sonner'
 export type Manual = {
   id: number
   name: string
@@ -78,18 +79,10 @@ export const useAdminManualsStore = defineStore('admin-manuals', () => {
           media_id: uploadedMedia?.id
         }
       })
-      useSnackbarStore().showSnackbar({
-        title: 'Recurso creado',
-        message: 'Manual creado correctamente',
-        type: SnackbarType.SUCCESS
-      })
+      toast.success('Recurso creado', {description: 'Manual creado correctamente' })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al crear el recurso',
-        message: (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al crear el recurso', {description: (error as any).data.error })
     } finally {
       loading.value = false
     }
@@ -102,18 +95,10 @@ export const useAdminManualsStore = defineStore('admin-manuals', () => {
         method: 'PATCH',
         body: payload
       })
-      useSnackbarStore().showSnackbar({
-        title: 'Recurso actualizado',
-        message: 'Manual actualizado correctamente',
-        type: SnackbarType.SUCCESS
-      })
+      toast.success('Recurso actualizado', {description: 'Manual actualizado correctamente' })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al actualizar el recurso',
-        message: (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al actualizar el recurso', {description: (error as any).data.error })
     } finally {
       loading.value = false
     }
@@ -125,18 +110,10 @@ export const useAdminManualsStore = defineStore('admin-manuals', () => {
       const response = await $api<Manual>(`/manuals/admin/${+id}`, {
         method: 'DELETE'
       })
-      useSnackbarStore().showSnackbar({
-        title: 'Recurso eliminado',
-        message: 'Manual eliminado correctamente',
-        type: SnackbarType.SUCCESS
-      })
+      toast.success('Recurso eliminado', {description: 'Manual eliminado correctamente' })
       return response
     } catch (error) {
-      useSnackbarStore().showSnackbar({
-        title: 'Error al eliminar el recurso',
-        message: (error as any).data.error,
-        type: SnackbarType.ERROR
-      })
+      toast.error('Error al eliminar el recurso', {description: (error as any).data.error })
     } finally {
       loading.value = false
     }
