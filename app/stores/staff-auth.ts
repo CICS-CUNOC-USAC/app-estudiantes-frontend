@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
+import { toast } from 'vue-sonner'
 
 type LoginPayload = {
   email: string
@@ -66,21 +67,13 @@ export const useStaffAuthStore = defineStore('staff-auth', {
       )
       if (error.value) {
         if (error.value.data) {
-          useSnackbarStore().showSnackbar({
-            title: 'Error',
-            message: convertError(error.value.data.message),
-            type: SnackbarType.ERROR
-          })
+          toast.error(convertError(error.value.data.message))
           error.value = null
           this.loading = false
           return
         }
         if (error.value.cause) {
-          useSnackbarStore().showSnackbar({
-            title: 'Error',
-            message: convertError(error.value!.message),
-            type: SnackbarType.ERROR
-          })
+          toast.error(convertError(error.value!.message))
           error.value = null
           this.loading = false
           return
@@ -120,12 +113,7 @@ export const useStaffAuthStore = defineStore('staff-auth', {
       if (response) {
         this.user = response ?? null
       } else {
-        useSnackbarStore().showSnackbar({
-          title: 'Error de sesión',
-          message:
-            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde',
-          type: SnackbarType.ERROR
-        })
+        toast.error('Error de sesión', { description: 'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde' })
       }
 
       this.loading = false

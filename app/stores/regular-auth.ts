@@ -78,21 +78,10 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         }
       )
       if (error.value) {
-        toast.error(error.value.toString())
         if (error.value.data) {
-          useSnackbarStore().showSnackbar({
-            title: 'Error',
-            message: convertError(error.value.data.message),
-            type: SnackbarType.ERROR
-          })
-        }
-        if (error.value.cause) {
-          useSnackbarStore().showSnackbar({
-            title: 'Error',
-            message: convertError(error.value!.message),
-            type: SnackbarType.ERROR
-          })
-          // toast.error(convertError(error.value!.message))
+          toast.error(convertError(error.value.data.message))
+        } else if (error.value.cause) {
+          toast.error(convertError(error.value!.message))
         }
         /*
         Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
@@ -164,18 +153,11 @@ export const useRegularAuthStore = defineStore('regular-auth', {
     },
     async myProfile() {
       this.loading = true
-      // const snackbarStore = useSnackbarStore()
-
       const response = await $api<User>('/auth/me')
       if (response) {
         this.user = response
       } else {
-        useSnackbarStore().showSnackbar({
-          title: 'Error de sesión',
-          message:
-            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde',
-          type: SnackbarType.ERROR
-        })
+        toast.error('Error de sesión', {description: 'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde' })
       }
       this.loading = false
     },
