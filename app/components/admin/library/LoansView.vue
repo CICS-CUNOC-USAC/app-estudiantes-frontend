@@ -89,11 +89,11 @@
     </div>
 
     <PDataTable
-      :value="data?.results"
+      :value="data"
       :loading="status === 'pending'"
       :rows="limit"
       :first="currentPage"
-      :total-records="data?.meta?.total"
+      :total-records="data?.length"
       :rows-per-page-options="[5, 10, 25, 50]"
       row-hover
       lazy
@@ -104,18 +104,74 @@
       "
       @update:rows="limit = $event"
     >
-      <PColumn field="name" header="Nombre" class="text-center"> </PColumn>
-      <PColumn field="author" header="Autor" class="text-center"></PColumn>
       <PColumn
-        field="description"
-        header="Descripcion"
+        field="library_reference_id"
+        header="Referencia"
         class="text-center"
+        body-class="w-52"
+      >
+      </PColumn>
+      <PColumn
+        field="library_reference.book.name"
+        header="Nombre"
+        class="text-center"
+        body-class="w-52"
+      >
+      </PColumn>
+      <PColumn
+        field="library_reference.book.author"
+        header="Autor"
+        class="text-center"
+        body-class="w-60"
       ></PColumn>
+      <PColumn
+        field="place"
+        header="Lugar"
+        class="text-center"
+        body-class="w-60"
+      ></PColumn>
+      <PColumn
+        field="id"
+        header="Identificacion"
+        class="text-center"
+        body-class="truncate max-w-0"
+      >
+        <template #body="slotProps">
+          <p class="truncate text-sm">
+            {{ slotProps.data.ra?.length ?? 0 > 0 ? slotProps.data.ra : slotProps.data.personal_id }}
+          </p>
+        </template>
+      </PColumn>
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
-            <CButton icon="icon-park-twotone:eyes" size="small" label="Detalles" variant="tonal"
-              @click="openDetail(slotProps.data, false)" />
+            <LoanDetailDialog
+              :title="slotProps.data.name"
+              :loan-item="slotProps.data"
+              show-all-info
+            >
+              <CButton
+                icon="lucide:receipt-text"
+                size="small"
+                label="Detalle del Prestamo"
+                variant="tonal"
+              />
+            </LoanDetailDialog>
+            <CButton icon="icon-park-twotone:eyes" size="small" label="Detalle del Libro" variant="tonal"
+              @click="openDetail(slotProps.data.library_reference.book, true)" />
+            <LoanActionDialog
+              :book-name="slotProps.data.library_reference.book.name"
+              :book-reference-id="slotProps.data.library_reference_id"
+              :loan_id="slotProps.data.id"
+              @confirm="refresh"
+              >
+              <CButton
+                icon="lucide:hand-helping"
+                size="small"
+                label="Retornar"
+                variant="tonal"
+              />
+            </LoanActionDialog>
           </div>
         </template>
       </PColumn>
@@ -123,30 +179,28 @@
   </section>
 </template>
 <script setup lang="ts">
-import { fetchAllBooks, getAllCategories } from '~/lib/api/books'
-import CButton from '../primitives/button/CButton.vue'
-import CInputText from '../primitives/form/CInputText.vue'
-import CSelect from '../primitives/form/CSelect.vue';
-import BookDetailDialog from '../dialogs/BookDetailDialog.vue';
+import LoanActionDialog from '~/components/dialogs/admin/loans/LoanActionDialog.vue'
+import BookDetailDialog from '~/components/dialogs/BookDetailDialog.vue'
+import LoanDetailDialog from '~/components/dialogs/LoanDetailDialog.vue'
+import CButton from '~/components/primitives/button/CButton.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
+import CSelect from '~/components/primitives/form/CSelect.vue'
+import {
+  getAllCategories
+} from '~/lib/api/admin/books'
+import { fetchAllOutstandingLoans } from '~/lib/api/admin/loans'
 
 const route = useRoute()
-
-const props = defineProps<{
-  type: 'physical' | 'digital'
-}>()
 
 const limit = ref(10)
 const currentPage = computed(() => {
   return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
 })
 
-const { data: categories } = useAsyncData('categories', () =>
-  getAllCategories()
-)
-
-const { data, status } = await useAsyncData(
+const { data, status, refresh } = await useAsyncData(
+  'admin-books',
   () =>
-    fetchAllBooks(
+    fetchAllOutstandingLoans(
       {
         page: route.query.page ? Number(route.query.page) : 1,
         limit: limit.value,
@@ -154,11 +208,14 @@ const { data, status } = await useAsyncData(
         author: route.query.author,
         category_id: route.query.category_id
       },
-      props.type
     ),
   {
     watch: [limit, () => route.query]
   }
+)
+
+const { data: categories } = useAsyncData('categories', () =>
+  getAllCategories()
 )
 
 const dialog = useDialog()
@@ -177,4 +234,3 @@ function openDetail(bookItem: any, showAllInfo: any) {
   })
 }
 </script>
-<style lang="postcss" scoped></style>

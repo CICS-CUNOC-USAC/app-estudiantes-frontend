@@ -51,6 +51,13 @@ export const ADMIN_LAYOUT_ITEMS = [
         action: ['manage'],
         subject: ['all'],
       },
+      {
+        itemName: 'Prestamos Externos',
+        itemIcon: 'lucide:hand-helping',
+        itemLink: '/admin/loans/outstanding',
+        action: ['manage'],
+        subject: ['all'],
+      },
     ]
   }
 ]

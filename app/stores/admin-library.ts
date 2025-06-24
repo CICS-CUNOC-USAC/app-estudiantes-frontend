@@ -15,7 +15,8 @@ export interface Book {
   author:            string;
   category_id:       number;
   media?:            Media;
-  library_reference: LibraryReference;
+  library_reference: LibraryReference[];
+  totalAvailable?:   number;
 }
 
 export interface LibraryReference {

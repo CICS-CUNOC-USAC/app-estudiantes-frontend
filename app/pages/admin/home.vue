@@ -60,7 +60,13 @@ const items = [
     title: 'Biblioteca Digital',
     description: 'Administrar libros disponibles en la biblioteca digital',
     to: '/admin/books/digital'
-  }
+  },
+  {
+    icon: 'lucide:hand-helping',
+    title: 'Prestamos Externos',
+    description: 'Administrar prestamos externos pendientes de la biblioteca de Ingenieria',
+    to: '/admin/loans/outstanding'
+  },
 ]
 
 

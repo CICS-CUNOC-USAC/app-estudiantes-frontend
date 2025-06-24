@@ -51,6 +51,7 @@
       <span class="hidden font-bold xl:inline 2xl:hidden">xl</span>
       <span class="hidden font-bold 2xl:inline">2xl</span>
      </div>
+    <PDynamicDialog/>
   </main>
 </template>
 <script lang="ts" setup>
