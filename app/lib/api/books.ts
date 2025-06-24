@@ -50,6 +50,11 @@ export async function getBookById(id: number) {
   return result
 }
 
+export async function getAdminBookByIdAndType(id: number, type: 'physical' | 'digital') {
+  const result = await $api<Book>(`/books/admin/${id}/${type}`)
+  return result
+}
+
 export async function getAllCategories(params?: {}) {
   const results = await $api<Category[]>(`/categories`, {
     params

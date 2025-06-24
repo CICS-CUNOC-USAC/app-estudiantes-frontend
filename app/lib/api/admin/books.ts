@@ -106,8 +106,9 @@ export async function loanOrReturn({
   loan: boolean
   external: boolean
   data: {
-    ra?: string
+    ra?: string | null
     personal_id?: string
+    loan_id?: number
     place: string
   }
 }) {
@@ -121,11 +122,17 @@ export async function loanOrReturn({
 
   const endpoint = `/loans/${actionType}/${bookReferenceId}`
 
-  const response = await $api(endpoint, {
-    method: 'POST',
-    body: data
-  })
-  return response
+  if (actionType == 'external-return') {
+    return await $api(endpoint, {
+      method: 'POST',
+      body: { loan_id: data.loan_id, bookReferenceId }
+    })
+  } else {
+    return await $api(endpoint, {
+      method: 'POST',
+      body: data
+    })
+  }
 }
 
 export async function getAllCategories(params?: {}) {
