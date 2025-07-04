@@ -43,14 +43,14 @@
     </Toaster>
     <!-- w-full px-4 py-3 rounded-md !font-normal text-sm bg-white !border shadow -->
     <!-- <GeneralSnackbar /> -->
-     <div class="fixed bottom-2 left-2 border p-2">
+     <!-- <div class="fixed bottom-2 left-2 border p-2">
       screen-<span class="font-bold inline sm:hidden">xs</span>
       <span class="hidden font-bold sm:inline md:hidden">sm</span>
       <span class="hidden font-bold md:inline lg:hidden">md</span>
       <span class="hidden font-bold lg:inline xl:hidden">lg</span>
       <span class="hidden font-bold xl:inline 2xl:hidden">xl</span>
       <span class="hidden font-bold 2xl:inline">2xl</span>
-     </div>
+     </div> -->
     <PDynamicDialog/>
   </main>
 </template>
