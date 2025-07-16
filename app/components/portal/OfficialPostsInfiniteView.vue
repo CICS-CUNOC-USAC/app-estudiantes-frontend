@@ -63,7 +63,10 @@ const { data, status, error } = useFetch<
     posted_since: string
   }[]
 >('/api/official-posts', {
-  params: { page: page.value }
+  params: { page: page.value },
+  getCachedData: (key, nuxtApp) => {
+    return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+  }
 })
 
 async function load() {

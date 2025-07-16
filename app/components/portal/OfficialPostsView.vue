@@ -1,7 +1,7 @@
 <template>
   <!-- v-if="status === 'pending'" -->
   <template v-if="status === 'pending'">
-    <div class="flex items-center justify-center h-32 gap-4">
+    <div class="flex h-32 items-center justify-center gap-4">
       <Icon name="svg-spinners:bars-rotate-fade" />
       Obteniendo publicaciones oficiales...
     </div>
@@ -19,7 +19,7 @@
         >
           <template #footer>
             <span
-              class="inline-flex items-center gap-x-2 up text-xs font-medium tracking-tight text-primary-800 dark:text-primary-300"
+              class="up text-primary-800 dark:text-primary-300 inline-flex items-center gap-x-2 text-xs font-medium tracking-tight"
             >
               Ver publicación
               <Icon
@@ -33,9 +33,9 @@
     </section>
   </template>
   <template v-else-if="status === 'error'">
-    <div class="flex items-center justify-center h-32 gap-4 text-red-500">
-      <Icon name="mdi:alert-circle" />
-      No pudimos obtener las ultimas publicaciones. Intenta más tarde.
+    <div class="flex h-32 items-center justify-center gap-4 text-red-500">
+      <Icon name="icon-park-twotone:caution" />
+      No pudimos obtener las ultimas publicaciones. Por favor intenta más tarde.
     </div>
   </template>
 </template>
@@ -50,6 +50,10 @@ const { data, status } = useFetch<
     original_link: string
     posted_since: string
   }[]
->('/api/official-posts', {default: () => []})
+>('/api/official-posts', {
+  default: () => [],
+  getCachedData: (key, nuxtApp) => {
+    return nuxtApp.payload.data[key] || nuxtApp.static.data[key]
+  }
+})
 </script>
-
