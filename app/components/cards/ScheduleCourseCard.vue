@@ -1,22 +1,13 @@
 <template>
-  <component
-    :is="to ? NuxtLink : 'div'"
-    :to
-    unstyled
-    class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-950/75 text-color duration-300 ease-in-out dark:bg-surface-800
+  <component :is="to ? NuxtLink : 'div'" :to unstyled class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-950/75 text-color duration-300 ease-in-out dark:bg-surface-800
       -translate-x-0.5 -translate-y-0.5 shadow-[2px_2px_0_0_rgba(0,0,0,1)]
-    "
-    :class="{
+    " :class="{
       'p-2': !noSpacing,
       'cursor-pointer': to,
       [colorCareer[career_id]]: true
-    }"
-  >
+    }">
     <slot name="career">
-      <h3
-      v-if="career"
-        class="mb-2 text-xs font-semibold transition-colors duration-300 ease-in-out"
-      >
+      <h3 v-if="career" class="mb-2 text-xs font-semibold transition-colors duration-300 ease-in-out">
         {{ semesterToRoman(semester || 1) }} &bull; {{ career }}
       </h3>
     </slot>
@@ -25,17 +16,20 @@
         {{ curso }}
       </p>
       <div class="grid grid-cols-2">
-      <span class="block text-xs tracking-tight justify-self-start">
-        <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
-        Seccion: {{ seccion }}
-      </span>
-      <span class="block text-xs tracking-tight justify-self-end">
-        <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
-        {{ transformToWeekdays(days || []) }}
-      </span>
+        <span class="block text-xs tracking-tight justify-self-start">
+          <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
+          Seccion: {{ seccion }}
+        </span>
+        <span class="block text-xs tracking-tight justify-self-end">
+          <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
+          {{ transformToWeekdays(days || []) }}
+        </span>
       </div>
     </slot>
     <slot name="footer">
+      <div class="dark:min-h-1 dark:mt-1 light:hidden dark:block" :class="{
+        [colorCareer[career_id]]: true
+      }"></div>
     </slot>
   </component>
 </template>
@@ -82,12 +76,12 @@ function transformToWeekdays(numbers: number[]): string {
 }
 
 const colorCareer: Record<number, string> = {
-    0: 'bg-sky-300',
-    58: 'bg-orange-300', //sistemas
-    33: 'bg-red-300', //civil
-    34: 'bg-lime-300', //mecanica
-    35: 'bg-teal-300', //industrial
-    36: 'bg-green-300', //mec-industrial
+  0: 'bg-sky-300',
+  58: 'bg-orange-300', //sistemas
+  33: 'bg-red-300', //civil
+  34: 'bg-lime-300', //mecanica
+  35: 'bg-teal-300', //industrial
+  36: 'bg-green-300', //mec-industrial
 }
 </script>
 <style lang="postcss" scoped></style>
