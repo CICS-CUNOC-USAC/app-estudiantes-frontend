@@ -4,18 +4,20 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineNuxtConfig({
   routeRules: {
-    '/': {ssr: false},
-    '/portal/general/publicaciones': {ssr: false},
-    '/portal/general/busqueda': {ssr: false}
+    '/': { ssr: false },
+    '/portal/general/publicaciones': { ssr: false },
+    '/portal/general/busqueda': { ssr: false }
   },
   devtools: {
     enabled: false
   },
   compatibilityDate: '2024-11-15',
   srcDir: 'app/',
-  // build: {
-  //   transpile: ['vuetify']
-  // },
+  strapi: {
+    version: 'v5',
+    url: process.env.STRAPI_URL || 'http://localhost:1337',
+    token: process.env.STRAPI_TOKEN || undefined
+  },
   imports: {
     dirs: ['stores']
   },
@@ -44,22 +46,23 @@ export default defineNuxtConfig({
     }
   },
   modules: [
-    '@pinia/nuxt', // '@nuxtjs/tailwindcss',
+    // '@nuxtjs/tailwindcss',
+    '@pinia/nuxt',
     '@pinia/colada-nuxt',
     '@primevue/nuxt-module',
     '@nuxt/fonts',
     '@nuxt/icon',
     '@vueuse/nuxt',
-    'radix-vue/nuxt',
-    '@nuxt/content', // 'vue-sonner/nuxt',
-    // (_options, nuxt) => {
+    'radix-vue/nuxt', // 'vue-sonner/nuxt',
+    '@nuxt/content', // (_options, nuxt) => {
     //   nuxt.hooks.hook('vite:extendConfig', (config) => {
     //     // @ts-expect-error vite-plugin-vuetify
     //     config.plugins.push(vuetify({ autoImport: true }))
     //   })
     // }
     '@nuxtjs/color-mode',
-    'nuxt-authorization'
+    'nuxt-authorization',
+    '@nuxtjs/strapi'
   ],
   vite: {
     plugins: [tailwindcss()],
@@ -100,7 +103,7 @@ export default defineNuxtConfig({
       prefix: 'P'
     },
     importPT: { from: '@/passthrough/ptOptions.ts' },
-    importTheme: { as: 'Aura',from: '@/themes/pThemes.ts' },
+    importTheme: { as: 'Aura', from: '@/themes/pThemes.ts' },
     options: {
       theme: {
         options: {
