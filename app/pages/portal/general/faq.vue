@@ -1,14 +1,13 @@
 <template>
-  <ContentDisplay :data />
+  <!-- <ContentDisplay :data /> -->
+  <div class="mx-auto content-renderer" v-if="data?.data.content">
+    <StrapiBlocks :content="data?.data.content" />
+  </div>
 </template>
-
 <script lang="ts" setup>
-import ContentDisplay from '~/components/portal/ContentDisplay.vue';
-
-const { data } = await useAsyncData(() =>
-queryCollection('faq').where('path', 'LIKE', '%/reingreso').first()
-)
-
-useCustomPageTitle(data.value?.title)
+import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
+const { data } = await useAsyncData('faq', () => $strapi('/faq'))
 </script>
-
+<style>
+@reference '~/assets/css/main.css';
+</style>
