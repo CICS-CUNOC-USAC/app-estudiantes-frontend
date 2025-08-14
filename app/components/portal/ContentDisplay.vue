@@ -91,7 +91,7 @@ const props = defineProps<{
   data?: ParsedContent | null
 }>()
 </script>
-<style>
+<style scoped>
 @reference '~/assets/css/main.css';
 
 .toc-item {
