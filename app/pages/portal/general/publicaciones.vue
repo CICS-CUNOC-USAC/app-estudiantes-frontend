@@ -32,6 +32,7 @@ import CButton from '~/components/primitives/button/CButton.vue'
 
 useCustomPageTitle('Publicaciones oficiales')
 definePageMeta({
-  title: 'Publicaciones oficiales'
+  title: 'Publicaciones oficiales',
+  keepalive: true
 })
 </script>
