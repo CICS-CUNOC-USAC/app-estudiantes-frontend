@@ -76,7 +76,8 @@ useSeoMeta({
     'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
   ogType: 'website',
   ogUrl: 'https://cics.cunoc.edu.gt/',
-  ogSiteName: 'CICS App'
+  ogSiteName: 'CICS App',
+  twitterCard: 'summary_large_image',
 })
 </script>
 <style>
