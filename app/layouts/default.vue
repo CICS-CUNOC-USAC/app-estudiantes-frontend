@@ -110,7 +110,7 @@
           'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen,
         }"
       >
-        <NuxtPage @search="toggleSearch({ leaveOpen: true })"/>
+        <NuxtPage @search="toggleSearch({ leaveOpen: true })" keepalive />
       </main>
     </div>
   </div>

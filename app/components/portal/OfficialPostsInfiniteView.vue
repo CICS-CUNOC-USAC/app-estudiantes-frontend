@@ -16,10 +16,16 @@
       class="group bg-surface-50 flex flex-col gap-12 rounded-xl border border-black p-5 transition active:translate-x-1 active:translate-y-1 dark:bg-neutral-900 dark:hover:bg-zinc-700/60"
     >
       <div class="flex-1 animate-pulse space-y-6">
-        <div class="h-6.5 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"></div>
-        <div class="h-12 w-full rounded bg-neutral-200 dark:bg-neutral-700"></div>
+        <div
+          class="h-6.5 w-1/2 rounded bg-neutral-200 dark:bg-neutral-700"
+        ></div>
+        <div
+          class="h-12 w-full rounded bg-neutral-200 dark:bg-neutral-700"
+        ></div>
       </div>
-      <div class="h-4 w-1/3 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700"></div>
+      <div
+        class="h-4 w-1/3 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700"
+      ></div>
     </div>
   </div>
   <CInfiniteScroll @load-more="load" v-if="data">
