@@ -147,11 +147,18 @@
 }
 
 @layer components {
+  .content-renderer {
+    @apply prose dark:prose-invert dark:print:prose prose-headings:my-2 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-hr:my-6 prose-hr:border-gray-200 dark:prose-hr:border-zinc-700 mx-auto max-w-4xl;
+
+    @apply font-content prose-headings:font-sans;
+
+    @apply prose-headings:prose-a:text-color! prose-headings:hover:prose-a:underline;
+    @apply prose-a:no-underline prose-a:text-primary-500 prose-a:hover:text-primary-700 dark:prose-a:text-primary-400 dark:prose-a:hover:text-primary-300;
+  }
+
   .md-content {
     /* @apply prose dark:prose-invert max-w-none; */
-    @apply prose dark:prose-invert dark:print:prose prose-headings:my-2 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-hr:my-6 prose-hr:border-gray-200 dark:prose-hr:border-zinc-700 max-w-none
-    prose-h3:text-lg
-    ;
+    @apply prose dark:prose-invert dark:print:prose prose-headings:my-2 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-hr:my-6 prose-hr:border-gray-200 dark:prose-hr:border-zinc-700 prose-h3:text-lg max-w-none;
 
     @apply prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b;
 
