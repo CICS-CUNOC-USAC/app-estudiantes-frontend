@@ -16,7 +16,7 @@
         su carrera.
       </p>
     </header>
-    <picture class="lg:w-4/12 w-3/4 select-none pointer-events-none">
+    <!-- <picture class="lg:w-4/12 w-3/4 select-none pointer-events-none">
       <img
       src="~/assets/img/landing-logo-sparks.svg"
       alt="Logo de Ingeniería CUNOC"
@@ -27,11 +27,15 @@
       alt="Logo de Ingeniería CUNOC"
       class="hidden dark:block"
       />
-    </picture>
+    </picture> -->
+    <div class="my-6 flex flex-col items-center lg:w-5/12">
+      <HomeBannerIllustration/>
+    </div>
   </div>
   </div>
 </template>
 <script setup lang="ts">
 import landingLogoSparks from '~/assets/img/landing-logo-sparks.svg'
+import HomeBannerIllustration from './HomeBannerIllustration.vue';
 </script>
 <style scoped></style>
