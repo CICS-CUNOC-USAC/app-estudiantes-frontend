@@ -16,7 +16,9 @@
   --color-cics-silver-pale: #f8f5f3;
 
   /* --font-sans: 'Geist Sans', system-ui, sans-serif; */
-  --font-sans: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-sans: 'Stack Sans Text', system-ui, sans-serif;
+  --font-heading: 'Stack Sans Headline', system-ui, sans-serif;
+  --font-heading-alt: 'Stack Sans Notch', system-ui, sans-serif;
   --font-alt: 'Hubot Sans', system-ui, sans-serif;
   --font-content: 'Geist', system-ui, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
@@ -150,7 +152,7 @@
   .content-renderer {
     @apply prose dark:prose-invert dark:print:prose prose-headings:my-2 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-hr:my-6 prose-hr:border-gray-200 dark:prose-hr:border-zinc-700 mx-auto max-w-4xl;
 
-    @apply font-content prose-headings:font-sans;
+    @apply font-sans prose-headings:font-heading;
 
     @apply prose-headings:prose-a:text-color! prose-headings:hover:prose-a:underline;
     @apply prose-a:no-underline prose-a:text-primary-500 prose-a:hover:text-primary-700 dark:prose-a:text-primary-400 dark:prose-a:hover:text-primary-300;

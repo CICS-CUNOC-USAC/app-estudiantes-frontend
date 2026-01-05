@@ -27,7 +27,7 @@
           data?.meta
         }}</small>
         <h1
-          class="text-color flex flex-col items-start gap-3 text-2xl font-bold"
+          class="text-color flex flex-col items-start gap-3 font-heading text-2xl font-bold"
         >
           {{ data?.title }}
 
@@ -98,7 +98,7 @@ definePageMeta({
 .official-post-content {
   @apply prose prose-base prose-neutral dark:prose-invert max-w-none;
   
-  @apply font-content;
+  @apply font-sans prose-headings:font-heading;
 
   /* @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b-2; */
 
