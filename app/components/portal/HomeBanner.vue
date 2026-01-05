@@ -4,8 +4,8 @@
   >
   <div class="max-w-screen-2xl mx-auto flex flex-col lg:items-center lg:justify-between justify-center items-center lg:flex-row">
     <header class="lg:w-6/12 space-y-4 lg:space-y-8 text-center lg:text-left">
-      <h2 class="text-muted-color-emphasis uppercase font-light tracking-widest">Ingeniería CUNOC</h2>
-      <h1 class="text-4xl lg:text-5xl  font-bold tracking-wide">
+      <h2 class="text-muted-color-emphasis uppercase font-light tracking-widest font-heading-alt">Ingeniería CUNOC</h2>
+      <h1 class="text-4xl lg:text-5xl font-heading-alt font-bold tracking-wide">
         PORTAL <br />
         ESTUDIANTIL
       </h1>
@@ -28,7 +28,7 @@
       class="hidden dark:block"
       />
     </picture> -->
-    <div class="my-6 flex flex-col items-center lg:w-5/12">
+    <div class="my-6 flex flex-col items-center max-w-full">
       <HomeBannerIllustration/>
     </div>
   </div>

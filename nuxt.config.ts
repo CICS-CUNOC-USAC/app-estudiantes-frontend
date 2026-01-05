@@ -123,7 +123,9 @@ export default defineNuxtConfig({
     },
     families: [
       { name: 'Geist', provider: 'google' },
-      { name: 'Inter', provider: 'google' },
+      { name: 'Stack Sans Notch', provider: 'google' },
+      { name: 'Stack Sans Headline', provider: 'google' },
+      { name: 'Stack Sans Text', provider: 'google' },
       { name: 'Geist Mono', provider: 'google' },
       { name: 'Bricolage Grotesque', provider: 'google' }
     ],
