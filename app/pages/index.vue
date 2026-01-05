@@ -4,7 +4,7 @@
 
     <div class="max-w-screen-xl px-5 pt-2 lg:px-8 mx-auto">
       <section class="my-6">
-        <h2 class="flex justify-between gap-x-4 text-lg font-semibold lg:justify-start">
+        <h2 class="flex justify-between gap-x-4 text-lg font-heading font-semibold lg:justify-start">
           <span>
             <Icon
               name="icon-park-twotone:newspaper-folding"

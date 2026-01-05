@@ -19,7 +19,7 @@
     <slot name="title">
       <h3
       v-if="title"
-        class="mb-2 text-lg font-semibold transition-colors duration-300 ease-in-out"
+        class="mb-2 text-lg font-semibold font-heading transition-colors duration-300 ease-in-out"
       >
         {{ title }}
       </h3>
@@ -28,8 +28,8 @@
       <p class="mb-4 flex-1">
         {{ description }}
       </p>
-      <span class="block pb-4 text-sm tracking-tight">
-        <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
+      <span class="block pb-4 text-sm tracking-tight text-muted-color">
+        <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block text-sm! " />
         {{ small }}
       </span>
     </slot>

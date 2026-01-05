@@ -19,7 +19,6 @@ declare module 'vue' {
     PForm: typeof import('@primevue/forms/form')['default']
     PIftaLabel: typeof import('primevue/iftalabel')['default']
     PInputGroup: typeof import('primevue/inputgroup')['default']
-    PInputNumber: typeof import('primevue/inputnumber')['default']
     PInputText: typeof import('primevue/inputtext')['default']
     PMultiSelect: typeof import('primevue/multiselect')['default']
     PRadioButton: typeof import('primevue/radiobutton')['default']
