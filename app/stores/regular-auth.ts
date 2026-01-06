@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { useAuthStore } from './auth'
 import { toast } from 'vue-sonner'
+import { type FetchError } from 'ofetch'
 
 type UserPayload = {
   email: string
@@ -67,64 +68,41 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       this.loading = true
       this.error = null
       const router = useRouter()
-      // Fetch the data from the API
 
-      const { data, error } = await useCustomFetch<LoginResponse>(
-        '/auth/login',
-        {
-          method: 'POST',
-          body: payload
-        }
-      )
-      if (error.value) {
-        if (error.value.data) {
-          toast.error(convertError(error.value.data.message))
-        } else if (error.value.cause) {
-          toast.error(convertError(error.value!.message))
-        }
-        /*
-        Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
-        and be able to make the request again
-        */
-        error.value = null
-        this.loading = false
-        return
-      }
-      // Success
-      // Set cookies, user and role
+      const loginResponse = await $api<LoginResponse>('/auth/login', {
+        method: 'POST',
+        body: payload
+      })
+
       const tokenCookie = useCookie('cicsapp-user-token')
       const roleCookie = useCookie('cicsapp-roleuser')
-      tokenCookie.value = data?.value?.token
+      tokenCookie.value = loginResponse.token
       roleCookie.value = 'regular'
       // Set the user in the store
-      this.user = data?.value?.user ?? null
+      this.user = loginResponse.user ?? null
       this.authenticated = true
       // Set the token and role in the auth store
       const authStore = useAuthStore()
       authStore.role = 'regular'
-      authStore.token = data?.value?.token ?? ''
+      authStore.token = loginResponse.token ?? ''
       authStore.isAuthenticated = true
       // Redirect to the dashboard
       router.push('/dashboard/home')
-      // Show success snackbar
-      toast.success(`Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`)
-      // Return the data and error
+
       this.loading = false
-      return { data, error: false }
+      return { data: { value: loginResponse }, error: null }
+
     },
-    
+
     async signupUser(payload: SignupPayload) {
       this.loading = true
       this.error = null
       const router = useRouter()
       try {
-        const response = await $api<LoginResponse>(
-          '/auth/sign-up',
-          {
-            method: 'POST',
-            body: payload
-          }
-        )
+        const response = await $api<LoginResponse>('/auth/sign-up', {
+          method: 'POST',
+          body: payload
+        })
 
         const tokenCookie = useCookie('cicsapp-user-token')
         const roleCookie = useCookie('cicsapp-roleuser')
@@ -140,11 +118,15 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         authStore.isAuthenticated = true
 
         router.push('/dashboard/home')
-        toast.success(`Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`)
+        toast.success(
+          `Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`
+        )
       } catch (error) {
         // example of error message: {statusCode: 400, message: [{email: "Email already exists"}, {ra: "RA already exists"}], error: "Bad Request"}, we want to get all the messages and show them in the toast as description so let's map the error.data.message
         toast.error('Error al registrar usuario', {
-          description: error.data?.message.map((m: any) => Object.values(m)).join(', ')
+          description: error.data?.message
+            .map((m: any) => Object.values(m))
+            .join(', ')
         })
       } finally {
         this.loading = false
@@ -156,7 +138,10 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       if (response) {
         this.user = response
       } else {
-        toast.error('Error de sesión', {description: 'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde' })
+        toast.error('Error de sesión', {
+          description:
+            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde'
+        })
       }
       this.loading = false
     },

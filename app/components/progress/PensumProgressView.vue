@@ -14,9 +14,10 @@
   </section>
 </template>
 <script setup lang="ts">
+import type { ProgressResponse } from '~/lib/api/dashboard/career-progress';
 import AltPensumsCard from './AltPensumsCard.vue'
 const props = defineProps<{
-  careerProgress: ProgressResponse | null
+  careerProgress: ProgressResponse
   loading: boolean
 }>()
 const emits = defineEmits(['updateItem'])
