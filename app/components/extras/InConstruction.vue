@@ -14,7 +14,7 @@
     <template #content>
       <div class="text-center">
         <p class="mb-4">
-          Esta sección está en construcción. Por favor, regresa más tarde.
+          Aun estamos trabajando en esta sección. Por favor, regresa más tarde.
         </p>
         <CButton
           variant="link"
