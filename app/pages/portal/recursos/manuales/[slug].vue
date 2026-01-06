@@ -1,7 +1,7 @@
 <template>
   <main class="">
     <nav
-      class="mb-4 flex flex-wrap gap-x-3 print:hidden"
+      class="flex flex-wrap gap-x-3 print:hidden"
       v-if="data && status === 'success'"
     >
       <CButton
@@ -46,7 +46,7 @@ import type { ContentManual } from '~/lib/api/strapi/types'
 
 const route = useRoute()
 
-const { data, status } = await useAsyncData<ContentManual>('manuals', () =>
+const { data, status } = await useAsyncData<ContentManual>(`public-manual-${route.params.slug}`, () =>
   $strapi(`/manuals/${route.params.slug}`, {
     params: {
       "populate[author]": "*",

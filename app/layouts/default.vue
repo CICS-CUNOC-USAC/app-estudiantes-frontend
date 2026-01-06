@@ -4,7 +4,7 @@
       class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
       :class="{
         'border-transparent': !hasScrolled,
-        'border-neutral-200 shadow-md dark:border-black/75': hasScrolled,
+        'border-neutral-200 shadow-md dark:border-gray-700/75': hasScrolled,
         'dark:bg-surface-800/75 bg-white/80': !$route.meta.menuClass,
         [$route.meta.menuClass as string]: $route.meta.menuClass
       }"
@@ -58,7 +58,7 @@
             </Transition>
             <CButton
             class="px-2!"
-              v-Ptooltip.bottom="'(Ctrl/Cmd + K) Buscar en Ingeniería CUNOC'"
+              v-Ptooltip.bottom="'Buscar en Ingeniería CUNOC'"
               :icon="
                 searchOpen
                   ? 'icon-park-twotone:close-one'

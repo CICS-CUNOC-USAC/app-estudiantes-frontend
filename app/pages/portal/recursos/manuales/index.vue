@@ -48,7 +48,7 @@ import type { ContentManual } from '~/lib/api/strapi/types'
 //   .all()
 // )
 const { data } = await useAsyncData<Strapi5ResponseMany<ContentManual>>(
-  'manuals',
+  'public-manuals',
   () => $strapi('/manuals')
 )
 
