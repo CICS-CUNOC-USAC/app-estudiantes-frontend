@@ -41,6 +41,7 @@
 import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CourseCardProgress from './CourseCardProgress.vue'
+import type { SemesterProgress } from '~/lib/api/dashboard/career-progress';
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterProgress: SemesterProgress

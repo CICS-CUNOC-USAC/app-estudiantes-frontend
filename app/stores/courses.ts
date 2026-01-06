@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { type CareerCourse } from './regular-career-progress'
+import { type CareerCourse } from '~/lib/api/dashboard/career-progress'
 
 export const useCoursesStore = defineStore('courses', () => {
   const loading = ref<boolean>(false)

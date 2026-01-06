@@ -167,7 +167,9 @@ const {
   data: permissions,
   status: statusPermissions,
   error
-} = await useAsyncData('roles', () => getAllPermissions())
+} = await useAsyncData('roles-permissions', () => getAllPermissions(), {
+  lazy: true
+})
 
 const saveRole = async (e: FormSubmitEvent) => {
   if (e.valid) {

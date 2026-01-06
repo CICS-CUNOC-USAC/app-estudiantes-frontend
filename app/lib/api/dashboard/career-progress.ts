@@ -1,5 +1,3 @@
-import { defineStore } from 'pinia'
-import { toast } from 'vue-sonner'
 export type Course = {
   code: string
   name: string
@@ -57,52 +55,27 @@ export type ProgressResponse = {
   available_credits: number
 }
 
-type UpdatePayload = {
+export type UpdateCareerItemPayload = {
   careerProgressId: number
   courseProgressId: number
   approved: boolean
 }
-export const useCareerProgressStoreC = defineStore('career_progress', () => {
-  const loading = ref<boolean>(false)
-  const coursesProgress = ref<ProgressResponse | null>(null)
 
-  const fetchProgress = async () => {
-    loading.value = true
+export const careerProgressApi = {
+  fetchProgress: async (): Promise<ProgressResponse> => {
+    return $api<ProgressResponse>('/user-courses-progress')
+  },
 
-    const { data, error } = await useCustomFetch<ProgressResponse>(
-      '/user-courses-progress',
-      {
-        method: 'GET'
-      }
-    )
-
-    // Error handling
-    if (error.value) {
-      if (error.value.data) {
-        toast.error(error.value.data.message)
-      } else {
-        toast.error('Algo ha salido mal')
-      }
-    }
-
-    // Success
-    if (data.value) {
-      coursesProgress.value = data.value
-    }
-    // console.log(coursesProgress.value)
-    loading.value = false
-    return coursesProgress.value
-  }
-
-  const updateItem = async (payload: UpdatePayload) => {
-    loading.value = true
+  updateCareerItem: async (
+    payload: UpdateCareerItemPayload
+  ): Promise<ProgressResponse> => {
     const {
       careerProgressId,
       courseProgressId: course_semester_progress_id,
       approved
     } = payload
 
-    const { data, error } = await useCustomFetch(
+    return $api<ProgressResponse>(
       `/user-courses-progress/${careerProgressId}`,
       {
         method: 'PATCH',
@@ -112,27 +85,5 @@ export const useCareerProgressStoreC = defineStore('career_progress', () => {
         }
       }
     )
-
-    // Error handling
-    if (error.value) {
-      if (error.value.data) {
-        toast.error(error.value.data.message)
-      } else {
-        toast.error('Algo ha salido mal')
-      }
-    }
-
-    if (data.value) {
-      await fetchProgress()
-    }
-    // Success
-    loading.value = false
   }
-
-  return {
-    loading,
-    coursesProgress,
-    fetchProgress,
-    updateItem
-  }
-})
+}

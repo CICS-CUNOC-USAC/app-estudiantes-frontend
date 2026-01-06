@@ -62,10 +62,11 @@
   </CCardAlt>
 </template>
 <script setup lang="ts">
+import type { ProgressResponse } from '~/lib/api/dashboard/career-progress';
 import CCardAlt from '../primitives/card/CCardAlt.vue'
 
 defineProps<{
-  careerProgress: ProgressResponse | null
+  careerProgress: ProgressResponse
   loading: boolean
 }>()
 

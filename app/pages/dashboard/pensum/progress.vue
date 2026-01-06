@@ -1,31 +1,55 @@
 <template>
   <main>
     <h1 class="pb-3 text-xl font-semibold">
-      <Icon name="icon-park-twotone:up-and-down" class="mb-1 mr-1.5 inline-block" />
+      <Icon
+        name="icon-park-twotone:up-and-down"
+        class="mr-1.5 mb-1 inline-block"
+      />
       Progreso de carrera
     </h1>
     <PensumProgressDetails
-      :career-progress="coursesProgress"
-      :loading="loading"
+      v-if="data"
+      :career-progress="data"
+      :loading="pending"
     />
     <PensumProgressView
-      :career-progress="coursesProgress"
-      :loading="loading"
-      @update-item="updateItem"
+      v-if="data"
+      :career-progress="data"
+      :loading="pending"
+      @update-item="handleUpdateItem($event)"
     />
   </main>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
+import { type FetchError } from 'ofetch'
+import { toast } from 'vue-sonner'
 import PensumProgressDetails from '~/components/progress/PensumProgressDetails.vue'
 import PensumProgressView from '~/components/progress/PensumProgressView.vue'
+import {
+  careerProgressApi,
+  type UpdateCareerItemPayload
+} from '~/lib/api/dashboard/career-progress'
 
 definePageMeta({
   layout: 'dashboard'
 })
-const careerProgressStore = useCareerProgressStoreC()
-const { loading, coursesProgress } = storeToRefs(careerProgressStore)
-const { fetchProgress, updateItem } = careerProgressStore
-await fetchProgress()
+
+const { data, pending, refresh } = await useAsyncData(
+  'fetchCareerProgress',
+  () => careerProgressApi.fetchProgress()
+)
+
+const { mutate: handleUpdateItem } = useMutation({
+  mutation: (payload: UpdateCareerItemPayload) =>
+    careerProgressApi.updateCareerItem(payload),
+  onSuccess: () => {
+    refresh()
+  },
+  onError: (error: FetchError) => {
+    toast.error(
+      `Error al actualizar el curso: ${error.data.message ?? 'Error desconocido'}`
+    )
+  }
+})
 </script>

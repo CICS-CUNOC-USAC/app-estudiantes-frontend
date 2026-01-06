@@ -28,7 +28,6 @@ export type Role = {
   updated_at: Date
 }
 
-
 export type Staff = {
   id: number
   first_name: string
@@ -58,53 +57,32 @@ export const useStaffAuthStore = defineStore('staff-auth', {
       // this.error = null
       const router = useRouter()
       // Fetch the data from the API
-      const { data, error } = await useCustomFetch<LoginResponse>(
-        '/staff-auth/login',
-        {
-          method: 'POST',
-          body: payload
-        }
-      )
-      if (error.value) {
-        if (error.value.data) {
-          toast.error(convertError(error.value.data.message))
-          error.value = null
-          this.loading = false
-          return
-        }
-        if (error.value.cause) {
-          toast.error(convertError(error.value!.message))
-          error.value = null
-          this.loading = false
-          return
-        }
-        /*
-        Note: Set the error value to null to bypass nuxt's de-duplication (key based) mechanism
-        and be able to make the request again
-        */
-      }
+      const loginResponse = await $api<LoginResponse>('/staff-auth/login', {
+        method: 'POST',
+        body: payload
+      })
       // Success
       // Set cookies, user and role
       const tokenCookie = useCookie('cicsapp-user-token')
       const roleCookie = useCookie('cicsapp-roleuser')
-      tokenCookie.value = data?.value?.token
+      tokenCookie.value = loginResponse.token
       roleCookie.value = 'staff'
       // Set the user in the store
-      this.user = data?.value?.staff ?? null
+      this.user = loginResponse.staff ?? null
       // Set the authenticated flag
       this.authenticated = true
       // Set the staff roles
-      this.staffRoles = data?.value?.staff?.roles ?? []
+      this.staffRoles = loginResponse.staff?.roles ?? []
       // Set the token and role in the auth store
       const authStore = useAuthStore()
       authStore.role = 'staff'
-      authStore.token = data?.value?.token ?? ''
+      authStore.token = loginResponse.token ?? ''
       authStore.isAuthenticated = true
       // Redirect to the dashboard
       router.push('/admin/home')
       // Return the data and error
       this.loading = false
-      return { data, error: false }
+      return { data: { value: loginResponse }, error: false }
     },
     async myProfile() {
       this.loading = true
@@ -113,7 +91,10 @@ export const useStaffAuthStore = defineStore('staff-auth', {
       if (response) {
         this.user = response ?? null
       } else {
-        toast.error('Error de sesión', { description: 'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde' })
+        toast.error('Error de sesión', {
+          description:
+            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde'
+        })
       }
 
       this.loading = false

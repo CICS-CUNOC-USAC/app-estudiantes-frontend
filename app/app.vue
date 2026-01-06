@@ -56,6 +56,8 @@
 </template>
 <script lang="ts" setup>
 import { Toaster } from 'vue-sonner'
+import 'vue-sonner/style.css'
+
 
 // useHead({
 //   titleTemplate: (titleChunk) => {
@@ -82,6 +84,7 @@ useSeoMeta({
 </script>
 <style>
 @reference '~/assets/css/main.css';
+
 
 
 
