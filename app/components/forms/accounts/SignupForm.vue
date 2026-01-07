@@ -32,9 +32,10 @@
           type="submit"
           icon="icon-park-twotone:search"
           label="Consultar"
-          @click="execute"
+          @click="getStudentInfo(searchValues)"
           class="max-md:col-span-2"
-          :disabled="!searchValues.ra || !searchValues.pin || loading"
+          :disabled="!searchValues.ra || !searchValues.pin"
+          :loading="studentAsyncStatus === 'loading'"
         />
       </div>
 
@@ -47,6 +48,7 @@
       </div>
       <fieldset
         class="my-4 grid max-h-80 grid-cols-2 gap-x-4 gap-y-3 overflow-visible lg:max-h-none lg:grid-cols-2"
+        v-if="success"
       >
         <CInputText
           name="firstName"
@@ -57,7 +59,6 @@
           prepend-icon="icon-park-twotone:people"
           no-borders
           readonly
-          :disabled="!success || loading"
           :defaultValue="studentValues.firstName"
         />
         <CInputText
@@ -69,7 +70,6 @@
           prepend-icon="icon-park-twotone:people"
           no-borders
           readonly
-          :disabled="!success || loading"
           :defaultValue="studentValues.lastName"
         />
 
@@ -82,7 +82,6 @@
           no-borders
           readonly
           root-class="col-span-2 lg:col-span-1"
-          :disabled="!success || loading"
           :defaultValue="`${studentValues.careerCode} - ${studentValues.careerName}`"
         />
         <CInputText
@@ -94,7 +93,6 @@
           no-borders
           readonly
           root-class="col-span-2 lg:col-span-1"
-          :disabled="!success || loading"
           :defaultValue="studentValues.email"
         />
       </fieldset>
@@ -251,8 +249,6 @@ const { mutate: sirecaInfoMutation, asyncStatus } = useMutation({
 const { mutate: signUpMutation, asyncStatus } = useMutation({
   mutation: (formEvent: FormSubmitEvent) => {
     const { valid, values } = formEvent
-    console.log('Form values:', values)
-    console.log('Form valid:', valid)
     if (!valid) {
       toast.error('Por favor, completa todos los campos correctamente.')
       return Promise.reject('Form is not valid')
@@ -274,35 +270,69 @@ const { mutate: signUpMutation, asyncStatus } = useMutation({
   onError: (error) => {}
 })
 
-const { execute } = useCustomFetch<UserSirecaInfoResponse>(
-  '/auth/student-info',
+const { mutate: getStudentInfo, asyncStatus: studentAsyncStatus } = useMutation(
   {
-    immediate: false,
-    query: searchValues,
-    watch: false,
-    onRequest: (data) => {
-      console.log('Fetching user info...', data.response?._data)
+    mutation: (credentials: { ra: string; pin: string }) =>
+      $api<UserSirecaInfoResponse>('/auth/student-info', {
+        method: 'GET',
+        query: credentials
+      }),
+    onError: (error) => {
+      status.value = error.data?.message
+        ? `No hemos podido obtener tu información: ${error.data?.message}`
+        : 'No se ha podido consultar SIRECA, por favor intenta más tarde'
+      // toast.error('Error al Consultar', {
+      //   description:
+      //     error.data?.message ??
+      //     'No se ha podido consultar SIRECA, por favor intenta más tarde'
+      // })
+      success.value = false
     },
-    onResponse: (response) => {
-      const studentData = response.response._data.estudiante
-      const careerData = response.response._data.inscrito
+    onSuccess: (response) => {
+      const studentData = response.estudiante
+      const careerData = response.inscrito
       studentValues.value.firstName = studentData.nombres
       studentValues.value.lastName = studentData.apellidos
       studentValues.value.email = studentData.correo
       studentValues.value.careerCode = careerData.codigo
       studentValues.value.careerName = careerData.carrera
 
-      toast.success('Informacion obtenida exitosamente')
+      toast.success('Información obtenida exitosamente')
+      status.value = 'Información obtenida exitosamente.'
       success.value = true
-    },
-    onResponseError: (error) => {
-      toast.error('Error al Consultar', {
-        description:
-          error.response ??
-          'No se ha podido consultar SIRECA, por favor intenta mas tarde'
-      })
     }
   }
 )
+
+// const { execute } = useCustomFetch<UserSirecaInfoResponse>(
+//   '/auth/student-info',
+//   {
+//     immediate: false,
+//     query: searchValues,
+//     watch: false,
+//     onRequest: (data) => {
+//       console.log('Fetching user info...', data.response?._data)
+//     },
+//     onResponse: (response) => {
+//       const studentData = response.response._data.estudiante
+//       const careerData = response.response._data.inscrito
+//       studentValues.value.firstName = studentData.nombres
+//       studentValues.value.lastName = studentData.apellidos
+//       studentValues.value.email = studentData.correo
+//       studentValues.value.careerCode = careerData.codigo
+//       studentValues.value.careerName = careerData.carrera
+
+//       toast.success('Informacion obtenida exitosamente')
+//       success.value = true
+//     },
+//     onResponseError: (error) => {
+//       toast.error('Error al Consultar', {
+//         description:
+//           error.response ??
+//           'No se ha podido consultar SIRECA, por favor intenta mas tarde'
+//       })
+//     }
+//   }
+// )
 </script>
 <style scoped lang="postcss"></style>
