@@ -51,7 +51,7 @@
       :data="filteredData"
       :search-empty="!search"
       :loading="pending"
-      :fromSearch="searchDeb"
+      :fromSearch="searchDeb as string"
     />
 
     <HelpDialog
