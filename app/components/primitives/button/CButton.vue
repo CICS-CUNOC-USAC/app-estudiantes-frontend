@@ -48,12 +48,13 @@
         props.variant === 'tonal',
       'bg-transparent text-current shadow-none hover:bg-primary-500/20 active:translate-x-0.5 active:translate-y-0.5 active:border-black active:bg-primary-500/70 active:text-white':
         props.variant === 'text',
-      'gap-x-1 !bg-opacity-0 p-0 shadow-none text-color hover:underline active:translate-x-0.5 active:translate-y-0.5':
+      'gap-x-1 bg-opacity-0! p-0 shadow-none text-color hover:underline active:translate-x-0.5 active:translate-y-0.5':
         props.variant === 'link',
 
       // Sizes extra
       'text-sm': props.size === 'large',
       'text-xs': props.size === 'small',
+      [props.class ?? '']: Boolean(props.class)
     }"
     unstyled
   >
@@ -68,10 +69,12 @@
 <script setup lang="ts">
 import { NuxtLink } from '#components'
 import { type ButtonProps } from 'primevue'
+import type { HTMLAttributes } from 'vue';
 const props = withDefaults(
   defineProps<{
     label?: string
     icon?: string
+    class?: HTMLAttributes['class']
     severity?: ButtonProps['severity']
     outlined?: boolean
     iconPos?: ButtonProps['iconPos']

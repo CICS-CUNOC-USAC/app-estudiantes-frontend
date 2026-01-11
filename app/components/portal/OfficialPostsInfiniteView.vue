@@ -28,7 +28,7 @@
       ></div>
     </div>
   </div>
-  <CInfiniteScroll @load-more="load" v-if="data">
+  <CInfiniteScroll @load-more="load" v-if="data" :loading="status === 'pending'">
     <div
       class="grid grid-cols-1 gap-6 pb-12 transition md:grid-cols-2 lg:grid-cols-2"
       :class="{ 'opacity-50': status === 'pending' }"
