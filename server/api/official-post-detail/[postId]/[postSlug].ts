@@ -57,6 +57,22 @@ export default defineEventHandler(async (event) => {
     }
   })
 
+  // Wrap all iframes in a div with loading info
+    const iframes = postContent?.querySelectorAll('iframe')
+    iframes?.forEach((iframe) => {
+      const wrapper = doc.createElement('div')
+      wrapper.className = 'holds-the-iframe'
+      
+      // Clone the iframe to preserve all its attributes
+      const iframeClone = iframe.cloneNode(true) as HTMLIFrameElement
+      
+      // Replace the iframe with the wrapper
+      iframe.parentNode?.replaceChild(wrapper, iframe)
+      
+      // Add the iframe inside the wrapper
+      wrapper.appendChild(iframeClone)
+    })
+
   //finally, delete all the <a> tags that have the attribute 'data-gallery' because they are not needed
   // const links = postContent?.querySelectorAll('a')
   // links?.forEach((link) => {

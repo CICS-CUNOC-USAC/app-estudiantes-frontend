@@ -149,6 +149,15 @@
 }
 
 @layer components {
+  .holds-the-iframe {
+    @apply relative outline dark:outline-surface-600 outline-surface-300 rounded-lg overflow-hidden;
+
+  }
+  .holds-the-iframe::after {
+    @apply absolute top-4 left-4 -z-10 text-surface-500 dark:text-surface-600 font-medium text-sm;
+    content: 'Cargando contenido...';
+  }
+
   .content-renderer {
     @apply prose dark:prose-invert dark:print:prose prose-headings:my-2 prose-h1:text-2xl prose-h1:font-bold prose-h2:text-xl prose-hr:my-6 prose-hr:border-gray-200 dark:prose-hr:border-zinc-700 mx-auto max-w-4xl;
 
