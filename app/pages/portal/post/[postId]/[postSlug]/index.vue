@@ -145,7 +145,7 @@ definePageMeta({
   }
 
   iframe {
-    @apply min-h-96 min-w-full rounded-lg shadow-md;
+    @apply min-h-96 min-w-full  shadow-md;
   }
 }
 </style>
