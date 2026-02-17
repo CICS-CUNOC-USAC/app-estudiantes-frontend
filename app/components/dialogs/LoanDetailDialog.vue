@@ -117,21 +117,66 @@ const printing = ref(false)
 
 const handlePrint = async () => {
   printing.value = true
+  let iframe: HTMLIFrameElement | null = null
+  
+  const cleanup = () => {
+    if (iframe && iframe.parentNode) {
+      document.body.removeChild(iframe)
+    }
+    printing.value = false
+  }
+
   try {
     const response = await $api<string>(
       `/print/external-loan-receipt/${loanItem.id}`
     )
-    const iframe = document.createElement('iframe')
+    
+    // Create blob URL instead of using document.write
+    const blob = new Blob([response], { type: 'text/html' })
+    const blobUrl = URL.createObjectURL(blob)
+    
+    iframe = document.createElement('iframe')
     iframe.style.display = 'none'
     document.body.appendChild(iframe)
-    iframe.contentWindow.document.write(response)
-    iframe.contentWindow.document.close()
-    iframe.contentWindow.print()
-    setTimeout(() => document.body.removeChild(iframe), 1000)
+    
+    // Load content via src instead of document.write
+    iframe.src = blobUrl
+    
+    iframe.onload = () => {
+      try {
+        iframe.contentWindow?.print()
+        
+        // Cleanup after print dialog closes or after a reasonable timeout
+        if (iframe.contentWindow?.matchMedia) {
+          const afterPrint = iframe.contentWindow.matchMedia('print')
+          afterPrint.addEventListener('change', (e) => {
+            if (!e.matches) {
+              URL.revokeObjectURL(blobUrl)
+              cleanup()
+            }
+          })
+        }
+        
+        // Fallback cleanup after 30 seconds
+        setTimeout(() => {
+          URL.revokeObjectURL(blobUrl)
+          cleanup()
+        }, 30000)
+      } catch (printError) {
+        URL.revokeObjectURL(blobUrl)
+        cleanup()
+        toast.error('Error al imprimir')
+      }
+    }
+    
+    iframe.onerror = () => {
+      URL.revokeObjectURL(blobUrl)
+      cleanup()
+      toast.error('Error al cargar el documento')
+    }
   } catch (error) {
+    cleanup()
     toast.error('Error al imprimir')
-  } finally {
-    printing.value = false
   }
 }
 
