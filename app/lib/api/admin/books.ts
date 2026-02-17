@@ -8,6 +8,22 @@ export interface Category {
   updated_at: Date
 }
 
+export type BookPayload = {
+  name: string
+  isbn?: string
+  reference_id?: string
+  total_availability?: number
+  current_availability?: number
+  edition?: string
+  location?: string
+  author: string
+  description?: string
+  source_url: string
+  file?: File | undefined
+  category_id?: number
+  is_available?: boolean
+}
+
 export const fetchAllBooks = async (
   params: any,
   type: 'digital' | 'physical'
@@ -93,6 +109,27 @@ export async function deleteBook(id: string | number) {
   } catch (error) {
     toast.error('Error al eliminar el libro')
     return error
+  }
+}
+
+export const updateBook = async (
+  id: number | string,
+  payload: Partial<BookPayload>
+) => {
+  try {
+    const response = await $api<Book>(`/books/admin/${id}`, {
+      method: 'PATCH',
+      body: payload
+    })
+    toast.success('Libro actualizado', {
+      description: 'Libro actualizado correctamente'
+    })
+    return response
+  } catch (error) {
+    toast.error('Error al actualizar el libro', {
+      description: (error as any).data.message ?? (error as any).data.error
+    })
+    return { error }
   }
 }
 

@@ -138,7 +138,11 @@
       >
         <template #body="slotProps">
           <p class="truncate text-sm">
-            {{ slotProps.data.ra?.length ?? 0 > 0 ? slotProps.data.ra : slotProps.data.personal_id }}
+            {{
+              (slotProps.data.ra?.length ?? 0 > 0)
+                ? slotProps.data.ra
+                : slotProps.data.personal_id
+            }}
           </p>
         </template>
       </PColumn>
@@ -157,14 +161,19 @@
                 variant="tonal"
               />
             </LoanDetailDialog>
-            <CButton icon="icon-park-twotone:eyes" size="small" label="Detalle del Libro" variant="tonal"
-              @click="openDetail(slotProps.data.library_reference.book, true)" />
+            <CButton
+              icon="icon-park-twotone:eyes"
+              size="small"
+              label="Detalle del Libro"
+              variant="tonal"
+              @click="openDetail(slotProps.data.library_reference.book, true)"
+            />
             <LoanActionDialog
               :book-name="slotProps.data.library_reference.book.name"
               :book-reference-id="slotProps.data.library_reference_id"
               :loan_id="slotProps.data.id"
               @confirm="refresh"
-              >
+            >
               <CButton
                 icon="lucide:hand-helping"
                 size="small"
@@ -172,6 +181,113 @@
                 variant="tonal"
               />
             </LoanActionDialog>
+          </div>
+        </template>
+      </PColumn>
+    </PDataTable>
+
+    <h2 class="mt-8 mb-4 text-lg font-semibold">
+      <Icon
+        name="icon-park-twotone:bookshelf"
+        class="mr-1.5 mb-1 inline-block"
+      />
+      Préstamos Retornados
+    </h2>
+
+    <PDataTable
+      :value="returnedLoans"
+      :loading="returnedStatus === 'pending'"
+      :rows="limit"
+      :first="currentPage"
+      :total-records="returnedLoans?.length"
+      :rows-per-page-options="[5, 10, 25, 50]"
+      row-hover
+      lazy
+      paginator
+      @page="
+        ($event) =>
+          $router.push({ query: { ...$route.query, page: $event.page + 1 } })
+      "
+      @update:rows="limit = $event"
+    >
+      <PColumn
+        field="library_reference_id"
+        header="Referencia"
+        class="text-center"
+        body-class="w-52"
+      >
+      </PColumn>
+      <PColumn
+        field="library_reference.book.name"
+        header="Nombre"
+        class="text-center"
+        body-class="w-52"
+      >
+      </PColumn>
+      <PColumn
+        field="library_reference.book.author"
+        header="Autor"
+        class="text-center"
+        body-class="w-60"
+      ></PColumn>
+      <PColumn
+        field="place"
+        header="Lugar"
+        class="text-center"
+        body-class="w-60"
+      ></PColumn>
+      <PColumn
+        field="id"
+        header="Identificacion"
+        class="text-center"
+        body-class="truncate max-w-0"
+      >
+        <template #body="slotProps">
+          <p class="truncate text-sm">
+            {{
+              (slotProps.data.ra?.length ?? 0 > 0)
+                ? slotProps.data.ra
+                : slotProps.data.personal_id
+            }}
+          </p>
+        </template>
+      </PColumn>
+      <PColumn
+        field="returned_at"
+        header="Fecha de Retorno"
+        class="text-center"
+        body-class="w-40"
+      >
+        <template #body="slotProps">
+          <p class="text-sm">
+            {{
+              new Date(slotProps.data.returned_at).toLocaleDateString('es-CO')
+            }}
+          </p>
+        </template>
+      </PColumn>
+      <PColumn field="" header="Acciones" class="w-32 text-center">
+        <template #body="slotProps">
+          <div class="flex flex-col items-center justify-center gap-y-2">
+            <LoanDetailDialog
+              :title="slotProps.data.name"
+              :loan-item="slotProps.data"
+              show-all-info
+            >
+              <CButton
+                icon="lucide:receipt-text"
+                size="small"
+                label="Detalle del Prestamo"
+                variant="tonal"
+              />
+            </LoanDetailDialog>
+            <CButton
+              icon="icon-park-twotone:eyes"
+              size="small"
+              label="Detalle del Libro"
+              variant="tonal"
+              @click="openDetail(slotProps.data.library_reference.book, true)"
+            />
           </div>
         </template>
       </PColumn>
@@ -185,10 +301,11 @@ import LoanDetailDialog from '~/components/dialogs/LoanDetailDialog.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
+import { getAllCategories } from '~/lib/api/admin/books'
 import {
-  getAllCategories
-} from '~/lib/api/admin/books'
-import { fetchAllOutstandingLoans } from '~/lib/api/admin/loans'
+  fetchAllOutstandingLoans,
+  fetchAllReturnedLoans
+} from '~/lib/api/admin/loans'
 
 const route = useRoute()
 
@@ -200,15 +317,32 @@ const currentPage = computed(() => {
 const { data, status, refresh } = await useAsyncData(
   'admin-books',
   () =>
-    fetchAllOutstandingLoans(
-      {
-        page: route.query.page ? Number(route.query.page) : 1,
-        limit: limit.value,
-        name: route.query.name,
-        author: route.query.author,
-        category_id: route.query.category_id
-      },
-    ),
+    fetchAllOutstandingLoans({
+      page: route.query.page ? Number(route.query.page) : 1,
+      limit: limit.value,
+      name: route.query.name,
+      author: route.query.author,
+      category_id: route.query.category_id
+    }),
+  {
+    watch: [limit, () => route.query]
+  }
+)
+
+const {
+  data: returnedLoans,
+  status: returnedStatus,
+  refresh: refreshReturned
+} = await useAsyncData(
+  'returned-loans',
+  () =>
+    fetchAllReturnedLoans({
+      page: route.query.page ? Number(route.query.page) : 1,
+      limit: limit.value,
+      name: route.query.name,
+      author: route.query.author,
+      category_id: route.query.category_id
+    }),
   {
     watch: [limit, () => route.query]
   }
@@ -223,14 +357,14 @@ function openDetail(bookItem: any, showAllInfo: any) {
   dialog.open(BookDetailDialog, {
     header: 'Información del libro',
     style: {
-      width: '50vw',
+      width: '50vw'
     },
     props: {
       modal: true,
-      dismissableMask: true,
+      dismissableMask: true
     },
     data: { bookItem, showAllInfo },
-    onClose: () => { }
+    onClose: () => {}
   })
 }
 </script>
