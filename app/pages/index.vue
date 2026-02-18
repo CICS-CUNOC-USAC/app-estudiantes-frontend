@@ -2,13 +2,15 @@
   <div class="greetings">
     <HomeBanner />
 
-    <div class="max-w-screen-xl px-5 pt-2 lg:px-8 mx-auto">
+    <div class="mx-auto max-w-screen-xl px-5 pt-2 lg:px-8">
       <section class="my-6">
-        <h2 class="flex justify-between gap-x-4 text-lg font-heading font-semibold lg:justify-start">
+        <h2
+          class="font-heading flex justify-between gap-x-4 text-lg font-semibold lg:justify-start"
+        >
           <span>
             <Icon
               name="icon-park-twotone:newspaper-folding"
-              class="mr-1.5 mb-1 inline text-primary-700 dark:text-primary-200"
+              class="text-primary-700 dark:text-primary-200 mr-1.5 mb-1 inline"
               size="26"
             />
             Publicaciones oficiales recientes
@@ -23,14 +25,38 @@
         <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
         <OfficialPostsView />
       </section>
-      <section
-        v-for="section in sections"
-        :key="section.name"
-        class="my-5"
-      >
-        <h2 class="flex justify-between gap-x-4 text-lg font-semibold lg:justify-start">
+      <section class="my-6">
+        <h2
+          class="font-heading flex justify-between gap-x-4 text-lg font-semibold lg:justify-start"
+        >
           <span>
-            <Icon :name="section.icon" class="mr-1.5 mb-1 inline text-primary-700 dark:text-primary-200" size="26" />
+            <Icon
+              name="icon-park-twotone:announcement"
+              class="text-primary-700 dark:text-primary-200 mr-1.5 mb-1 inline"
+              size="26"
+            />
+            Comunicados recientes del CICS
+          </span>
+          <CButton
+            variant="link"
+            icon="lucide:square-arrow-up-right"
+            to="/portal/asociaciones/cics/comunicados"
+            label="Ver más"
+          />
+        </h2>
+        <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
+        <CICSPostsView />
+      </section>
+      <section v-for="section in sections" :key="section.name" class="my-5">
+        <h2
+          class="flex justify-between gap-x-4 text-lg font-semibold lg:justify-start"
+        >
+          <span>
+            <Icon
+              :name="section.icon"
+              class="text-primary-700 dark:text-primary-200 mr-1.5 mb-1 inline"
+              size="26"
+            />
             {{ section.title }}
           </span>
         </h2>
@@ -71,6 +97,7 @@
   </div>
 </template>
 <script setup lang="ts">
+import CICSPostsView from '~/components/portal/CICSPostsView.vue'
 import HomeBanner from '~/components/portal/HomeBanner.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
@@ -79,6 +106,6 @@ import { sections } from '~/utils/consts/main-page.consts'
 
 definePageMeta({
   extendScreen: true,
-  menuClass: 'bg-cics-white/80 dark:bg-cics-blue/75',
+  menuClass: 'bg-cics-white/80 dark:bg-cics-blue/75'
 })
 </script>

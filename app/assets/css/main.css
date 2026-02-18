@@ -165,6 +165,8 @@
 
     @apply prose-headings:prose-a:text-color! prose-headings:hover:prose-a:underline;
     @apply prose-a:no-underline prose-a:text-primary-500 prose-a:hover:text-primary-700 dark:prose-a:text-primary-400 dark:prose-a:hover:text-primary-300;
+
+    @apply prose-img:rounded-lg prose-img:shadow-md prose-img:ring-2 prose-img:ring-gray-300/75 ;
   }
 
   .md-content {

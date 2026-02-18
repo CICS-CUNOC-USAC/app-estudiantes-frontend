@@ -107,7 +107,7 @@ definePageMeta({
   @apply prose-a:after:content-['_↗'];
 
   img {
-    @apply w-full rounded-lg shadow-lg border dark:border-white/40 border-slate-900/10;
+    @apply w-full rounded-lg shadow-md ring-2 ring-gray-300/75;
   }
 
   a:has(img) {

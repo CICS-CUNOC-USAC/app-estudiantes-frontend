@@ -13,3 +13,10 @@ export interface ContentManual extends BaseContentItem {
   content: BlocksContent;
   slug: string;
 }
+
+export interface Comunicado extends BaseContentItem {
+    id:          number;
+    content:     BlocksContent;
+    title:       string;
+    description: string;
+}

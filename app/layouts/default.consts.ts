@@ -46,6 +46,11 @@ export const DefaultLayoutItems = [
         itemLink: '/portal/asociaciones/cics'
       },
       {
+        itemName: 'Comunicados CICS',
+        itemIcon: 'icon-park-twotone:message',
+        itemLink: '/portal/asociaciones/cics/comunicados'
+      },
+      {
         itemName: 'AEIO',
         itemIcon: 'icon-park-twotone:peoples',
         itemLink: '/portal/asociaciones/aeio'
