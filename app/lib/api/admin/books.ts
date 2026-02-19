@@ -133,6 +133,27 @@ export const updateBook = async (
   }
 }
 
+export const updateLibraryReference = async (
+  bookId: number | string,
+  referenceId: number | string,
+  payload: { edition?: string; location?: string }
+) => {
+  try {
+    await $api(`/books/admin/${bookId}/${referenceId}`, {
+      method: 'PATCH',
+      body: payload
+    })
+    toast.success('Referencia actualizada', {
+      description: 'Referencia actualizada correctamente'
+    })
+  } catch (error) {
+    toast.error('Error al actualizar la referencia', {
+      description: (error as any).data.message ?? (error as any).data.error
+    })
+    return { error }
+  }
+}
+
 export async function loanOrReturn({
   bookReferenceId,
   loan,
