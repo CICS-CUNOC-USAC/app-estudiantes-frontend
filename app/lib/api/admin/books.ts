@@ -133,6 +133,27 @@ export const updateBook = async (
   }
 }
 
+export const createLibraryReference = async (
+  bookId: number | string,
+  referenceId: string,
+  payload: { edition: string; location: string }
+) => {
+  try {
+    await $api(`/books/admin/${bookId}/${referenceId}`, {
+      method: 'POST',
+      body: payload
+    })
+    toast.success('Referencia creada', {
+      description: 'Referencia creada correctamente'
+    })
+  } catch (error) {
+    toast.error('Error al crear la referencia', {
+      description: (error as any).data.message ?? (error as any).data.error
+    })
+    return { error }
+  }
+}
+
 export const updateLibraryReference = async (
   bookId: number | string,
   referenceId: number | string,
@@ -148,6 +169,25 @@ export const updateLibraryReference = async (
     })
   } catch (error) {
     toast.error('Error al actualizar la referencia', {
+      description: (error as any).data.message ?? (error as any).data.error
+    })
+    return { error }
+  }
+}
+
+export const deleteLibraryReference = async (
+  bookId: number | string,
+  referenceId: number | string
+) => {
+  try {
+    await $api(`/books/admin/${bookId}/${referenceId}`, {
+      method: 'DELETE'
+    })
+    toast.success('Referencia eliminada', {
+      description: 'Referencia eliminada correctamente'
+    })
+  } catch (error) {
+    toast.error('Error al eliminar la referencia', {
       description: (error as any).data.message ?? (error as any).data.error
     })
     return { error }

@@ -92,6 +92,16 @@
                   {{ data.library_reference.length }}
                 </strong>
               </h6>
+
+              <div class="mb-2 flex justify-end">
+                <CButton
+                  icon="icon-park-outline:plus"
+                  size="small"
+                  label="Agregar existencia"
+                  variant="tonal"
+                  @click="openCreateReferenceDialog"
+                />
+              </div>
             </div>
           </div>
         </template>
@@ -159,6 +169,14 @@
                     @click="openEditReferenceDialog(slotProps.data)"
                   />
                   <CButton
+                    icon="icon-park-outline:delete"
+                    size="small"
+                    label="Eliminar"
+                    severity="danger"
+                    variant="tonal"
+                    @click="openDeleteReferenceDialog(slotProps.data)"
+                  />
+                  <CButton
                     icon="lucide:hand-helping"
                     size="small"
                     label="Prestamo"
@@ -183,6 +201,8 @@ import { getAdminBookByIdAndType, getBookById } from '~/lib/api/books'
 import CButton from '../primitives/button/CButton.vue'
 import BookActionDialog from './admin/books/BookActionDialog.vue'
 import LibraryReferenceEditDialog from './admin/books/LibraryReferenceEditDialog.vue'
+import LibraryReferenceCreateDialog from './admin/books/LibraryReferenceCreateDialog.vue'
+import LibraryReferenceDeleteDialog from './admin/books/LibraryReferenceDeleteDialog.vue'
 
 const dialogRef: any = inject('dialogRef')
 
@@ -222,6 +242,34 @@ function openEditReferenceDialog(referenceItem: any) {
       dismissableMask: true
     },
     data: { bookId: bookItem.id, referenceItem },
+    onClose: () => {
+      refresh()
+    }
+  })
+}
+
+function openDeleteReferenceDialog(referenceItem: any) {
+  dialog.open(LibraryReferenceDeleteDialog, {
+    header: 'Eliminar referencia',
+    props: {
+      modal: true,
+      dismissableMask: true
+    },
+    data: { bookId: bookItem.id, referenceItem },
+    onClose: () => {
+      refresh()
+    }
+  })
+}
+
+function openCreateReferenceDialog() {
+  dialog.open(LibraryReferenceCreateDialog, {
+    header: 'Agregar existencia',
+    props: {
+      modal: true,
+      dismissableMask: true
+    },
+    data: { bookId: bookItem.id },
     onClose: () => {
       refresh()
     }
