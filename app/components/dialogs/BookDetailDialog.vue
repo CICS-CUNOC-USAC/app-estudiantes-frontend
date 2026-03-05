@@ -161,25 +161,6 @@
             <PColumn field="" header="Acciones" class="w-32 text-center">
               <template #body="slotProps">
                 <div class="flex flex-col items-center justify-center gap-y-2">
-                  <KebabMenu>
-                    <CButton
-                      icon="icon-park-twotone:edit"
-                      size="small"
-                      label="Editar"
-                      variant="tonal"
-                      block
-                      @click="openEditReferenceDialog(slotProps.data)"
-                    />
-                    <CButton
-                      icon="icon-park-outline:delete"
-                      size="small"
-                      label="Eliminar"
-                      severity="danger"
-                      variant="tonal"
-                      block
-                      @click="openDeleteReferenceDialog(slotProps.data)"
-                    />
-                  </KebabMenu>
                   <CButton
                     icon="lucide:hand-helping"
                     size="small"
@@ -187,6 +168,30 @@
                     variant="tonal"
                     @click="openActionDialog(slotProps.data.id)"
                   />
+                  <KebabMenu>
+                    <div class="flex flex-col">
+                      <button
+                        class="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-800"
+                        @click="openEditReferenceDialog(slotProps.data)"
+                      >
+                        <Icon
+                          name="icon-park-twotone:edit"
+                          class="text-gray-500 dark:text-gray-400"
+                        />
+                        <span>Editar</span>
+                      </button>
+                      <button
+                        class="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
+                        @click="openDeleteReferenceDialog(slotProps.data)"
+                      >
+                        <Icon
+                          name="icon-park-outline:delete"
+                          class="text-red-500"
+                        />
+                        <span>Eliminar</span>
+                      </button>
+                    </div>
+                  </KebabMenu>
                 </div>
               </template>
             </PColumn>
