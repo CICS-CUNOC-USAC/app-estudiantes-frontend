@@ -161,21 +161,25 @@
             <PColumn field="" header="Acciones" class="w-32 text-center">
               <template #body="slotProps">
                 <div class="flex flex-col items-center justify-center gap-y-2">
-                  <CButton
-                    icon="icon-park-twotone:edit"
-                    size="small"
-                    label="Editar"
-                    variant="tonal"
-                    @click="openEditReferenceDialog(slotProps.data)"
-                  />
-                  <CButton
-                    icon="icon-park-outline:delete"
-                    size="small"
-                    label="Eliminar"
-                    severity="danger"
-                    variant="tonal"
-                    @click="openDeleteReferenceDialog(slotProps.data)"
-                  />
+                  <KebabMenu>
+                    <CButton
+                      icon="icon-park-twotone:edit"
+                      size="small"
+                      label="Editar"
+                      variant="tonal"
+                      block
+                      @click="openEditReferenceDialog(slotProps.data)"
+                    />
+                    <CButton
+                      icon="icon-park-outline:delete"
+                      size="small"
+                      label="Eliminar"
+                      severity="danger"
+                      variant="tonal"
+                      block
+                      @click="openDeleteReferenceDialog(slotProps.data)"
+                    />
+                  </KebabMenu>
                   <CButton
                     icon="lucide:hand-helping"
                     size="small"
@@ -199,6 +203,7 @@ import { useAsyncData } from '#app'
 import { useDialog } from 'primevue/usedialog'
 import { getAdminBookByIdAndType, getBookById } from '~/lib/api/books'
 import CButton from '../primitives/button/CButton.vue'
+import KebabMenu from '../partials/KebabMenu.vue'
 import BookActionDialog from './admin/books/BookActionDialog.vue'
 import LibraryReferenceEditDialog from './admin/books/LibraryReferenceEditDialog.vue'
 import LibraryReferenceCreateDialog from './admin/books/LibraryReferenceCreateDialog.vue'
