@@ -140,7 +140,9 @@ import CButton from '~/components/primitives/button/CButton.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  subject: ['Book', 'all'],
+  action: ['manage'],
 })
 const { requiredFile, pdfFormat } = useFormValidators()
 const route = useRoute()

@@ -19,6 +19,8 @@
 <script setup lang="ts">
 import LoansView from '@/components/admin/library/LoansView.vue'
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  subject: ['all', 'Loan'],
+  action: ['manage'],
 })
 </script>
