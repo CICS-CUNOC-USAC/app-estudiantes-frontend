@@ -8,7 +8,7 @@
       <Icon v-if="props.loading" name="svg-spinners:bars-rotate-fade"/>
       <CButton
         class="w-fit"
-        @click="$emit('loadMore')"
+        @click="handleLoadMore"
         variant="tonal"
         size="small"
         label="Ver más"
@@ -22,10 +22,22 @@ import CButton from '../button/CButton.vue'
 const emit = defineEmits(['loadMore'])
 
 const scrollEnd = useTemplateRef<Element | null>('scrollEnd')
+const hasTriggeredOnce = ref(false)
 
-const props = defineProps<{
-  loading?: boolean
-}>()
+const props = withDefaults(
+  defineProps<{
+    loading?: boolean
+    immediate?: boolean
+  }>(),
+  {
+    immediate: true
+  }
+)
+
+const handleLoadMore = () => {
+  hasTriggeredOnce.value = true
+  emit('loadMore')
+}
 
 onMounted(() => {
   const options = {
@@ -33,6 +45,12 @@ onMounted(() => {
   }
   const observer = new IntersectionObserver((entries) => {
     if (entries[0] && entries[0].isIntersecting) {
+      // If immediate is false and this is the first trigger, skip emitting
+      if (!props.immediate && !hasTriggeredOnce.value) {
+        hasTriggeredOnce.value = true
+        return
+      }
+      
       emit('loadMore', () => {
         observer.disconnect()
       })
