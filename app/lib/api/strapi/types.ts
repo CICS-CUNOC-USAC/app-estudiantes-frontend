@@ -34,6 +34,26 @@ export interface StrapiPostReactionResponse {
   total: number;
 }
 
+export interface StrapiPostCommentUser {
+  id: number;
+  name: string | null;
+}
+
+export interface StrapiPostCommentReply {
+  id: number;
+  content: string;
+  createdAt: string;
+  user: StrapiPostCommentUser;
+}
+
+export interface StrapiPostComment {
+  id: number;
+  content: string;
+  createdAt: string;
+  user: StrapiPostCommentUser;
+  replies: StrapiPostCommentReply[];
+}
+
 export const REACTION_TYPES = ['like', 'love', 'haha', 'sad', 'angry'] as const;
 
 export const MAPPED_REACTIONS_EMOJIS: Record<string, string> = {
