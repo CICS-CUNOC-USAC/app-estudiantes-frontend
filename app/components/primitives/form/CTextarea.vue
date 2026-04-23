@@ -1,7 +1,8 @@
 <template>
   <div class="flex flex-col gap-y-1.5"
     :class="{
-      'h-full': props.fillHeight
+      'h-full': props.fillHeight,
+      [props.rootClass as string]: !!props.rootClass
     }"
   >
     <PInputGroup
@@ -133,6 +134,7 @@ const props = defineProps<{
   label?: string
   rows?: number
   fillHeight?: boolean
+  rootClass?: string
 }>()
 const rawAttrs = useAttrs()
 const test = computed(() => {
