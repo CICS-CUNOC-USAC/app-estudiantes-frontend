@@ -12,39 +12,8 @@
         to="/portal/asociaciones/cics/comunicados"
       />
     </nav>
-    <!-- <ContentDisplay :data v-if="data && status === 'success'" /> -->
-    <!-- Reactions -->
-
-    <div v-if="data && reactionsData" class="mb-4">
-      <p class="text-muted-foreground mb-2 text-sm">Reacciones:</p>
-      <div class="flex flex-wrap gap-2">
-        <button
-          v-for="reaction in Object.keys(reactionsData.counts)"
-          :key="reaction"
-          class="flex w-12 items-center rounded-full border-2 border-black px-2 py-1 transition hover:shadow-[3px_3px_0_0_rgba(0,0,0,1)]"
-          :class="{
-            'border-primary-500/50 shadow-primary-500/50':
-              reactionsData.userReaction?.includes(reaction),
-            '': !reactionsData.userReaction?.includes(reaction)
-          }"
-          @click="toggleReaction(reaction)"
-        >
-          <!-- <span class="text-sm">{{
-            MAPPED_REACTIONS_EMOJIS[reaction] || '❓'
-          }}</span> -->
-          <Icon
-            :name="
-              MAPPED_REACTIONS_ICON_COMPONENTS[reaction] ||
-              'lucide:question-mark'
-            "
-          />
-          <span class="text-muted-foreground ml-1 text-xs">{{
-            reactionsData.counts[reaction]
-          }}</span>
-        </button>
-      </div>
-    </div>
     <main v-if="data && status === 'success'">
+      <ComunicadoPostReactions :post-id="String(data.data.id)" />
       <h1 class="py-3 text-xl font-semibold">
         <Icon name="lucide:megaphone" class="mr-1.5 mb-1 inline-block" />
         {{ data.data.title }}
@@ -57,6 +26,8 @@
       <div class="content-renderer mx-auto">
         <StrapiBlocks :content="data.data.content" v-if="data.data.content" />
       </div>
+
+      <ComunicadoPostComments :post-id="String(data.data.id)" />
     </main>
     <ElementNotFound
       v-else-if="status === 'error' && !data"
@@ -68,16 +39,12 @@
   </main>
 </template>
 <script setup lang="ts">
-import { toast } from 'vue-sonner'
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
-import {
-  MAPPED_REACTIONS_EMOJIS,
-  MAPPED_REACTIONS_ICON_COMPONENTS,
-  type Comunicado,
-  type StrapiPostReactionResponse
-} from '~/lib/api/strapi/types'
+import ComunicadoPostComments from '~/components/portal/comunicados/ComunicadoPostComments.vue'
+import ComunicadoPostReactions from '~/components/portal/comunicados/ComunicadoPostReactions.vue'
+import { type Comunicado } from '~/lib/api/strapi/types'
 
 const route = useRoute()
 const postId = route.params.postId as string
@@ -86,35 +53,6 @@ const { data, status } = await useAsyncData<{ data: Comunicado }>(
   `cics-comunicados-${postId}`,
   () => $strapi(`/comunicados/${postId}`)
 )
-
-// Reactions
-const { data: reactionsData, refresh: refreshReactions } =
-  await useAsyncData<StrapiPostReactionResponse>(
-    `cics-comunicados-${postId}-reactions`,
-    () => $api(`/reactions/${data.value?.data.id}`),
-    { lazy: true }
-  )
-
-const toggleReaction = async (reaction: string) => {
-  if (!authenticated.value) {
-    toast.error('Debes iniciar sesión para reaccionar a la publicación.')
-    return
-  }
-  try {
-    await $api(`/reactions/toggle`, {
-      method: 'POST',
-      body: {
-        strapiPostId: String(data.value?.data.id),
-        type: reaction
-      }
-    })
-    refreshReactions()
-  } catch (error) {
-    toast.error('Error al reaccionar a la publicación.')
-  }
-}
-
-const { authenticated } = storeToRefs(useRegularAuthStore())
 
 const formatPublishedDate = (dateString: string) => {
   const date = new Date(dateString)
