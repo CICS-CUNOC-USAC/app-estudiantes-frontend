@@ -29,7 +29,6 @@ export default defineNuxtConfig({
       link: [
         // favicon
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'manifest', href: '/site.webmanifest' }
       ],
       meta: [
         {
@@ -62,7 +61,8 @@ export default defineNuxtConfig({
     // }
     '@nuxtjs/color-mode',
     'nuxt-authorization',
-    '@nuxtjs/strapi'
+    '@nuxtjs/strapi',
+    'shadcn-nuxt'
   ],
   vite: {
     plugins: [tailwindcss()],
@@ -78,6 +78,20 @@ export default defineNuxtConfig({
     //     transformAssetUrls
     //   }
     // }
+  },
+  shadcn: {
+    /**
+     * Prefix for all the imported component.
+     * @default "Ui"
+     */
+    prefix: '',
+    /**
+     * Directory that the component lives in.
+     * Will respect the Nuxt aliases.
+     * @link https://nuxt.com/docs/api/nuxt-config#alias
+     * @default "@/components/ui"
+     */
+    componentDir: '@/components/ui'
   },
   css: ['~/assets/css/main.css'],
   colorMode: {

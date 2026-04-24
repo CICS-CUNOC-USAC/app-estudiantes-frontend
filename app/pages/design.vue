@@ -12,54 +12,54 @@
       <p class="text-primary-emphasis-alt">Botones de la aplicación</p>
 
       <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
-        <CButton
+        <Button
           class="h-min"
           label="Iniciar sesión"
           icon="lucide:log-in"
           icon-pos="left"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="danger"
           label="Danger"
           icon="lucide:octagon-alert"
           icon-pos="left"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="warn"
           label="Warn"
           icon="lucide:triangle-alert"
           icon-pos="right"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="info"
           label="Información"
           icon="lucide:info"
           icon-pos="bottom"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="success"
           label="Exito"
           icon="lucide:check"
           icon-pos="top"
         />
-        <CButton class="h-min" severity="secondary" label="Secondary" />
-        <CButton class="h-min" outlined label="Outlined" />
+        <Button class="h-min" severity="secondary" label="Secondary" />
+        <Button class="h-min" outlined label="Outlined" />
       </div>
 
       <h2 class="text-2xl font-semibold">Variantes</h2>
       <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
-        <CButton
+        <Button
           class="h-min"
           label="Continuar"
           variant="text"
           icon="lucide:log-in"
           icon-pos="left"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="danger"
           label="Danger"
@@ -67,7 +67,7 @@
           icon="lucide:octagon-alert"
           icon-pos="left"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="warn"
           variant="text"
@@ -75,14 +75,14 @@
           icon="lucide:triangle-alert"
           icon-pos="right"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="info"
           label="Información Link"
           variant="link"
           icon="lucide:info"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="success"
           variant="link"
@@ -90,26 +90,26 @@
           icon="lucide:check"
           icon-pos="right"
         />
-        <CButton
+        <Button
           class="h-min"
           variant="text"
           severity="secondary"
           label="Secondary"
         />
-        <CButton class="h-min" outlined label="Outlined" />
+        <Button class="h-min" outlined label="Outlined" />
       </div>
 
       <h2 class="mt-4 text-2xl font-semibold">Botones cargando</h2>
 
       <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
-        <CButton
+        <Button
           loading
           class="h-min"
           label="Iniciar sesión"
           icon="lucide:log-in"
           icon-pos="left"
         />
-        <CButton
+        <Button
           loading
           class="h-min"
           severity="danger"
@@ -117,7 +117,7 @@
           icon="lucide:octagon-alert"
           icon-pos="left"
         />
-        <CButton
+        <Button
           loading
           class="h-min"
           severity="warn"
@@ -125,7 +125,7 @@
           icon="lucide:triangle-alert"
           icon-pos="right"
         />
-        <CButton
+        <Button
           loading
           class="h-min"
           severity="info"
@@ -133,7 +133,7 @@
           icon="lucide:info"
           icon-pos="bottom"
         />
-        <CButton
+        <Button
           loading
           class="h-min"
           severity="success"
@@ -141,21 +141,21 @@
           icon="lucide:check"
           icon-pos="top"
         />
-        <CButton loading class="h-min" severity="secondary" label="Secondary" />
-        <CButton loading class="h-min" outlined label="Outlined" />
+        <Button loading class="h-min" severity="secondary" label="Secondary" />
+        <Button loading class="h-min" outlined label="Outlined" />
       </div>
 
       <h2 class="mt-4 text-2xl font-semibold">Botones desactivados</h2>
 
       <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
-        <CButton
+        <Button
           disabled
           class="h-min"
           label="Desactivado"
           icon="lucide:log-in"
           icon-pos="left"
         />
-        <CButton
+        <Button
           disabled
           class="h-min"
           severity="danger"
@@ -163,7 +163,7 @@
           icon="lucide:octagon-alert"
           icon-pos="left"
         />
-        <CButton
+        <Button
           disabled
           class="h-min"
           severity="warn"
@@ -171,7 +171,7 @@
           icon="lucide:triangle-alert"
           icon-pos="right"
         />
-        <CButton
+        <Button
           disabled
           class="h-min"
           severity="info"
@@ -179,7 +179,7 @@
           icon="lucide:info"
           icon-pos="bottom"
         />
-        <CButton
+        <Button
           disabled
           class="h-min"
           severity="success"
@@ -187,7 +187,7 @@
           icon="lucide:check"
           icon-pos="top"
         />
-        <CButton
+        <Button
           disabled
           class="h-min"
           severity="secondary"
