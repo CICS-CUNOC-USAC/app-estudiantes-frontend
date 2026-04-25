@@ -2,7 +2,6 @@
     <CCardAlt
     class="hover:bg-primary-100/75 dark:hover:bg-primary-900/30 group"
     interactive-inverse
-      no-spacing
       :to="route"
     >
       <template #content>

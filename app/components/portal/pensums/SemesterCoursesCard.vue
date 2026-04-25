@@ -1,10 +1,10 @@
 <template>
-  <CCardAlt>
-    <template #title>
+  <CCardAlt :title="`Semestre ${semesterCourses.semester}`" class="gap-3">
+    <!-- <template #title>
       <h1 class="mb-2 text-2xl font-bold">
         Semestre {{ semesterCourses.semester }}
       </h1>
-    </template>
+    </template> -->
 
     <template #content>
       <div class="mb-2">

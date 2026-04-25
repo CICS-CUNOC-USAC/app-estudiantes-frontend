@@ -1,13 +1,13 @@
 <template>
-  <CCardAlt class="w-full p-8 md:max-w-3xl" no-spacing>
-    <template #title>
-      <h2 class="pb-4 text-center text-2xl font-semibold">Regístrate</h2>
-    </template>
-    <template #content>
-      <p class="text-center">
+  <Card class="gap-4 px-4 py-8">
+    <CardHeader>
+      <CardTitle class="text-lg">Regístrate</CardTitle>
+      <CardDescription class="">
         Ingresa tu registro académico y buscaremos tu información en el sistema
         de Registro automáticamente.
-      </p>
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
       <div class="my-3 grid grid-cols-2 gap-4 md:grid-cols-3">
         <CInputText
           v-model="searchValues.ra"
@@ -141,8 +141,8 @@
           :loading="asyncStatus === 'loading'"
         />
       </PForm>
-    </template>
-    <template #footer>
+    </CardContent>
+    <CardFooter>
       <div class="flex flex-col gap-y-4">
         <span class="align-center flex gap-2">
           ¿Ya tienes una cuenta?
@@ -157,17 +157,24 @@
           />
         </div>
       </div>
-    </template>
-  </CCardAlt>
+    </CardFooter>
+  </Card>
 </template>
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
-import Button from '~/components/ui/button/Button.vue'
-import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import Button from '~/components/ui/button/Button.vue'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '~/components/ui/card'
 import { type UserSirecaInfoResponse } from '~/lib/api/auth/user'
 
 const regularAuthStore = useRegularAuthStore()

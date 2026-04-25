@@ -485,6 +485,7 @@
 
         <CCardAlt
           class="group hover:bg-primary-100/75 dark:hover:bg-primary-900/30"
+          to="/"
           interactive-inverse
           :title="'Titulo de la noticia oficial de Ingenieria CUNOC'"
           :description="'Lorem ipsum dolor sit amet consectetur adipisicing elit. Fugit id unde tempora, magnam sit praesentium explicabo ipsam sequi nam quia iusto repellendus nesciunt quidem voluptatem dolorem natus ad vero amet?'"
@@ -503,33 +504,7 @@
           </template>
         </CCardAlt>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
-          </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
-        </Card>
-
-        <Card to="/">
-          <CardHeader>
-            <CardTitle>Card Title</CardTitle>
-            <CardDescription>Card Description</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p>Card Content</p>
-          </CardContent>
-          <CardFooter>
-            <p>Card Footer</p>
-          </CardFooter>
-        </Card>
-
-        <!-- <CCardAlt
+        <CCardAlt
           title="Titulo"
           description="Tarjeta elevada no interactiva"
           small="Texto pequeño"
@@ -658,7 +633,7 @@
               />
             </div>
           </template>
-        </CCardAlt> -->
+        </CCardAlt>
       </div>
     </div>
     <!-- 

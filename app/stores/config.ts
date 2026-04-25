@@ -1,38 +1,27 @@
-import { updatePrimaryPalette } from '@primeuix/themes'
 import { defineStore } from 'pinia'
-import { allThemesPrimaries } from '~/themes/pThemes'
-
-// change to composition api
+import { allThemes, defaultTheme, applyTheme } from '~/themes/themes'
 
 export const useConfigsStore = defineStore('config', () => {
-  const theme = ref('Naranja')
-  const pv = usePrimeVue();
+  const theme = ref(defaultTheme.name)
 
-  // todo: try to make the change of the theme at app.vue level to see if it works and can eliminate the visible shift of the theme on page load/reload
   function initTheme() {
     const themeCookie = useCookie('cicsapp-theme')
     if (!themeCookie.value) {
-      theme.value = 'Naranja'
-      themeCookie.value = 'Naranja'
+      themeCookie.value = defaultTheme.name
     } else {
       theme.value = themeCookie.value
-      const selectedTheme = allThemesPrimaries.find(
-        (theme) => theme.name === themeCookie.value
-      )
-      selectedTheme && updatePrimaryPalette(selectedTheme.values)
-      pv.config.theme.preset.name = themeCookie.value
+      const selected = allThemes.find((t) => t.name === themeCookie.value)
+      if (selected) applyTheme(selected)
     }
   }
 
   function changeTheme(newTheme: string) {
-    const selectedTheme = allThemesPrimaries.find(
-      (theme) => theme.name === newTheme
-    )
-    selectedTheme && updatePrimaryPalette(selectedTheme.values)
+    const selected = allThemes.find((t) => t.name === newTheme)
+    if (!selected) return
+    applyTheme(selected)
     theme.value = newTheme
     const themeCookie = useCookie('cicsapp-theme')
     themeCookie.value = newTheme
-    pv.config.theme.preset.name = newTheme
   }
 
   return {

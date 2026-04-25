@@ -14,22 +14,30 @@
       Pensas de estudios
     </h1>
     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-      <InfoCard
-        v-for="(career, index) in careers"
-        :img="career.img"
-        :title="career.name"
-        :route="career.route"
-      />
+      <Card
+      v-for="(career, index) in careers"
+      :key="index"
+      class="pb-0 hover:bg-primary-100/75 dark:hover:bg-primary-900/30 group overflow-hidden transition"
+      :to="career.route"
+      >
+      <CardHeader class="gap-0">
+        <CardTitle class="font-heading text-lg font-semibold">
+          {{ career.name }}
+        </CardTitle>
+      </CardHeader>
+      <CardContent class="p-0">
+        <img :src="career.img" class="h-28 w-full select-none object-cover" />
+      </CardContent>
+      </Card>
     </div>
   </main>
 </template>
 
 <script setup lang="ts">
-import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
-import InfoCard from '@/components/cards/InfoCard.vue'
 import Button from '~/components/ui/button/Button.vue'
 
-import { careers, contentHelp } from './(files)/consts'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '~/components/ui/card'
+import { careers } from './(files)/consts'
 
 useCustomPageTitle('Pensums de estudios')
 definePageMeta({

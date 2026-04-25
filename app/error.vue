@@ -1,7 +1,7 @@
 <template>
   <div class="mx-6 lg:mx-auto flex h-screen max-w-2xl flex-col justify-center">
-    <CCardAlt class="py-8" unstyled>
-      <template #title>
+    <CCardAlt class="h-max" unstyled>
+      <template #content>
         <header
           class="flex items-center flex-col justify-center gap-y-4 pb-6 text-xl font-bold"
         >
@@ -11,8 +11,6 @@
             {{ title }}
           </h1>
         </header>
-      </template>
-      <template #content>
         <div class="text-center">
 
           <p class="mb-4">

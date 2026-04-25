@@ -1,7 +1,5 @@
 <template>
   <CCardAlt
-    unstyled
-    no-spacing
     class="sticky top-16 z-20 mb-4 text-center lg:top-4"
     :class="{
       'shadow-lg dark:shadow-xl': hasScrolled
@@ -14,7 +12,7 @@
       >
         Guardando...
       </div>
-      <section class="relative flex justify-center py-4 sm:gap-x-4 lg:gap-x-10">
+      <section class="relative flex justify-center  sm:gap-x-4 lg:gap-x-10">
         <div>
           <h6 class="pensum-count">Créditos acumulados:</h6>
           <strong class="text-muted-color-emphasis">{{

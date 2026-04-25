@@ -19,7 +19,7 @@
     <h1 class="py-3 text-xl font-semibold" v-if="route.query.q">
       <Icon name="lucide:search" class="mr-1.5 mb-1 inline-block" />
       Buscando:
-      <span class="text-primary-400 font-normal"> {{ route.query.q }} </span>
+      <span class="text-primary-600 font-normal"> {{ route.query.q }} </span>
       en Ingeniería CUNOC
     </h1>
     <h1 class="mt-4 py-3 text-center font-semibold" v-else>
@@ -51,10 +51,10 @@
         :to="`/portal/post/${item.internal_link}?fromSearch=${route.query.q}`"
       >
         <div class="flex-1 space-y-3">
-          <h1 class="text-xl font-semibold">
+          <h1 class="text-lg font-semibold">
             <span v-html="highlightQuery(item.title)"></span>
           </h1>
-          <p class="text-muted-color-emphasis">
+          <p class="text-muted-color-emphasis text-sm">
             Categoría:
             <span class="text-color font-medium">{{ item.category }}</span>
           </p>
@@ -62,7 +62,7 @@
         <small class="text-muted-color block"
           >Fecha: <strong>{{ item.posted_since }}</strong></small
         >
-        <span class="text-primary-emphasis-alt">
+        <span class="text-primary-600 text-sm">
           Leer
           <Icon
             name="icon-park-outline:arrow-right"
@@ -119,18 +119,51 @@ const { data, status } = await useAsyncData(
   }
 )
 
-const highlightQuery = (title: string) => {
-  const query = route.query.q?.toString() || ''
-  if (!query) return title
+const removeDiacritics = (value: string) =>
+  value.normalize('NFD').replace(/\p{M}/gu, '')
 
-  const regex = new RegExp(`(${query})`, 'gi')
-
-  return title.replace(
-    regex,
-    '<span class="text-primary-400 font-semibold">$1</span>'
-  )
+const buildNormalizedIndexMap = (value: string) => {
+  const indexMap: number[] = []
+  const normalized = [...value].reduce((acc, char, i) => {
+    const normalizedChar = removeDiacritics(char).toLowerCase()
+    indexMap.push(...Array(normalizedChar.length).fill(i))
+    return acc + normalizedChar
+  }, '')
+  return { normalized, indexMap }
 }
 
+const highlightQuery = (title?: string) => {
+  const safeTitle = title ?? ''
+  const normalizedQuery = removeDiacritics(route.query.q?.toString().trim() || '').toLowerCase()
+  if (!normalizedQuery) return safeTitle
+
+  const { normalized: normalizedTitle, indexMap } = buildNormalizedIndexMap(safeTitle)
+
+  const ranges: Array<[number, number]> = []
+  let searchFrom = 0
+
+  while (searchFrom < normalizedTitle.length) {
+    const matchIndex = normalizedTitle.indexOf(normalizedQuery, searchFrom)
+    if (matchIndex === -1) break
+
+    const start = indexMap[matchIndex]
+    const end = indexMap[matchIndex + normalizedQuery.length - 1]
+
+    if (start === undefined || end === undefined) { searchFrom = matchIndex + 1; continue }
+
+    ranges.push([start, end + 1])
+    searchFrom = matchIndex + normalizedQuery.length
+  }
+
+  if (!ranges.length) return safeTitle
+
+  return ranges.reduce((acc, [start, end], i) => {
+    const prev = i === 0 ? 0 : ranges[i - 1][1]
+    return acc +
+      safeTitle.slice(prev, start) +
+      `<span class="text-primary-600 font-semibold">${safeTitle.slice(start, end)}</span>`
+  }, '') + safeTitle.slice(ranges.at(-1)![1])
+}
 useHead({
   title: () =>
     route.query.q

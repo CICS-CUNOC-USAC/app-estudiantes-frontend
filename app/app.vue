@@ -89,8 +89,8 @@ useSeoMeta({
 
 
 
-:root {
-  @apply dark:bg-surface-800 bg-white transition-colors;
+body {
+  @apply dark:bg-zinc-950 bg-white transition-colors;
 }
 
 html {

@@ -36,17 +36,13 @@
         <CCardAlt
           v-for="post in data.data"
           :to="`/portal/asociaciones/cics/comunicados/${post.documentId}`"
-          class="hover:bg-primary-200 dark:hover:bg-primary-900/50"
+          :title="post.title"
+          header-icon="lucide:text"
+          :description="post.description"
+          class="hover:bg-primary-100 dark:hover:bg-primary-900/50"
           interactive-inverse
           :key="post.documentId"
         >
-          <template #title>
-            <Icon name="lucide:text" class="mr-1.5 mb-1 inline-block" />
-            <h3 class="py-2 text-lg font-semibold">{{ post.title }}</h3>
-          </template>
-          <template #content>
-            <p class="text-muted-color text-sm">{{ post.description }}</p>
-          </template>
         </CCardAlt>
       </div>
       <p

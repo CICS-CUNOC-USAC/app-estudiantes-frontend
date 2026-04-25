@@ -4,8 +4,8 @@
       class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
       :class="{
         'border-transparent': !hasScrolled,
-        'border-neutral-200 shadow-md dark:border-gray-700/75': hasScrolled,
-        'dark:bg-surface-800/75 bg-white/80': !$route.meta.menuClass,
+        'border-neutral-200 shadow-md dark:border-neutral-700/75': hasScrolled,
+        'dark:bg-surface-950/75 bg-white/80': !$route.meta.menuClass,
         [$route.meta.menuClass as string]: $route.meta.menuClass
       }"
     >

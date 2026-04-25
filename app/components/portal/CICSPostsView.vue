@@ -18,7 +18,7 @@
         >
           <template #footer>
             <span
-              class="up text-primary-800 dark:text-primary-300 inline-flex items-center gap-x-2 text-xs font-medium tracking-tight"
+              class="up text-primary-800 dark:text-primary-300 inline-flex gap-x-2 text-xs font-medium tracking-tight"
             >
               Ver comunicado
               <Icon

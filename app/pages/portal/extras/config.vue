@@ -69,7 +69,7 @@
 <script setup lang="ts">
 import Button from '~/components/ui/button/Button.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
-import { allThemesPrimaries } from '~/themes/pThemes'
+import { allThemes } from '~/themes/themes'
 
 const schemeOptions = [
   {
@@ -99,6 +99,6 @@ const configsStore = useConfigsStore()
 const { theme } = storeToRefs(configsStore)
 const { changeTheme: handleThemeChange } = configsStore
 
-const options = allThemesPrimaries.map((theme) => theme.name)
+const options = allThemes.map((t) => t.name)
 </script>
 <style lang="postcss" scoped></style>

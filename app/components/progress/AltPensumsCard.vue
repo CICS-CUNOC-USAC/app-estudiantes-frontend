@@ -1,11 +1,5 @@
 <template>
-  <CCardAlt>
-    <template #title>
-      <h1 class="mb-2 text-2xl font-bold">
-        Semestre {{ semesterProgress.semester }}
-      </h1>
-    </template>
-
+  <CCardAlt :title="`Semestre ${semesterProgress.semester}`" class="gap-3">
     <template #content>
       <div class="mb-2">
         <span class="block text-sm"> Filtrar por: </span>
@@ -41,7 +35,7 @@
 import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CourseCardProgress from './CourseCardProgress.vue'
-import type { SemesterProgress } from '~/lib/api/dashboard/career-progress';
+import type { SemesterProgress } from '~/lib/api/dashboard/career-progress'
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterProgress: SemesterProgress

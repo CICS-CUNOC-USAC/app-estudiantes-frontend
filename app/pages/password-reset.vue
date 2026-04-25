@@ -1,21 +1,21 @@
 <template>
   <section class="flex min-h-screen w-full items-center justify-center">
     <div class="w-full px-3 md:max-w-lg">
-      <CCardAlt class="px-8 py-12">
-        <template #title>
-          <h2 class="pb-4 text-center text-2xl font-semibold">
-            Cambiar contraseña
-          </h2>
-        </template>
-        <template #content>
-          <p class="text-center">Escribe tu nueva contraseña para continuar</p>
+      <Card class="gap-4 px-4 py-8">
+        <CardHeader>
+          <CardTitle class="text-lg">Cambiar contraseña</CardTitle>
+          <CardDescription>
+            Escribe tu nueva contraseña para continuar
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent>
           <PForm
             class="flex flex-col gap-y-4 py-4"
             @submit="handleSubmit"
             :initial-values
             :resolver
             v-slot="$form"
-
           >
             <CInputText
               name="password"
@@ -58,8 +58,8 @@
               label="Continuar"
             />
           </PForm>
-        </template>
-        <template #footer>
+        </CardContent>
+        <CardFooter class="flex flex-col gap-y-4">
           <div class="flex flex-col gap-y-4">
             <div class="align-center flex">
               <Button
@@ -70,21 +70,28 @@
               />
             </div>
           </div>
-        </template>
-      </CCardAlt>
+        </CardFooter>
+      </Card>
     </div>
   </section>
 </template>
 <script lang="ts" setup>
 import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { FetchError } from 'ofetch'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
-import Button from '~/components/ui/button/Button.vue'
-import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import Button from '~/components/ui/button/Button.vue'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '~/components/ui/card'
 import { resetPassword } from '~/lib/api/auth/main'
-import { FetchError } from 'ofetch'
 
 const route = useRoute()
 if (!route.query.tkn) {

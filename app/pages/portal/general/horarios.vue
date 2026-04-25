@@ -26,6 +26,7 @@
             title="Aviso importante"
             subtitle="Esta versión de los horarios es de prueba (work in progress), por lo que puede contener errores. Si encuentras alguno, reportalo a través de la sección de contacto."
             class="mb-4"
+            variant="warning"
             back-to-route="/portal/extras/about"
             back-to-label="Más información"
             />
