@@ -25,7 +25,7 @@
             to="/"
           >
             <CICSLogo :width="60" fill="var(--p-primary-500)" />
-            <span v-if=" $route.meta.title">⋅</span>
+            <span v-if="$route.meta.title">⋅</span>
             <div class="text-xs font-medium">{{ $route.meta.title }}</div>
           </NuxtLink>
           <Transition name="title-fade">
@@ -56,8 +56,8 @@
                 />
               </form>
             </Transition>
-            <CButton
-            class="px-2!"
+            <Button
+              class="px-2"
               v-Ptooltip.bottom="'Buscar en Ingeniería CUNOC'"
               :icon="
                 searchOpen
@@ -68,12 +68,13 @@
             />
           </div>
 
-          <CButton
+          <Button
             v-if="!searchOpen"
             icon="icon-park-twotone:people"
+            size="small"
             :to="user ? '/dashboard/home' : '/login'"
             :label="user ? displayName : 'Ingresar'"
-            class="max-w-[13ch] min-w-0 !px-2"
+            class="max-w-[13ch] min-w-0"
             pt:label:class="hidden lg:block truncate"
             v-Ptooltip.bottom="`Ir a mi espacio`"
           />
@@ -85,7 +86,7 @@
       v-model:visible="drawer"
       block-scroll
       unstyled
-      class="bg-cics-white h-full w-10/12 shadow-lg md:w-5/12 dark:bg-surface-800"
+      class="bg-cics-white dark:bg-surface-800 h-full w-10/12 shadow-lg md:w-5/12"
       :pt="{
         transition: {
           name: 'slide'
@@ -105,9 +106,9 @@
     <div class="d-flex flex-column">
       <main
         id="appcont"
-          class="mx-auto print:pt-14  min-h-screen"
+        class="mx-auto min-h-screen print:pt-14"
         :class="{
-          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen,
+          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen
         }"
       >
         <NuxtPage @search="toggleSearch({ leaveOpen: true })" keepalive />
@@ -118,7 +119,7 @@
 
 <script lang="ts" setup>
 import CICSLogo from '~/components/partials/CICSLogo.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { useAuthStore } from '~/stores/auth'
 import TopNavDesktopDashboard from '~/components/partials/navigation/TopNavDesktopDashboard.vue'

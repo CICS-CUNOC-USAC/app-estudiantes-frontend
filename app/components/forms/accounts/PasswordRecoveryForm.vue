@@ -18,7 +18,7 @@
           no-borders
           clear-button
         />
-        <CButton
+        <Button
           class="w-full"
           :loading="loading"
           :disabled="!email"
@@ -32,7 +32,7 @@
     <template #footer>
       <div class="flex flex-col gap-y-4">
         <div class="align-center flex">
-          <CButton
+          <Button
             to="/login"
             variant="text"
             icon="icon-park-outline:arrow-left"
@@ -44,7 +44,7 @@
   </CCardAlt>
 </template>
 <script lang="ts" setup>
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 

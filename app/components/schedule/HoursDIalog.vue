@@ -4,7 +4,7 @@
       class="lg:hidden text-sm"
       as-child
     >
-    <CButton variant="tonal" class="h-full" icon="tabler:calendar-week" size="small" label="Periodos" />
+    <Button variant="tonal" class="h-full" icon="tabler:calendar-week" size="small" label="Periodos" />
     </CDialogTrigger>
     <CDialogContent title="" class="p-0 flex justify-center">
       <DisplayModeSelector
@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import {
   CDialog,
   CDialogContent,

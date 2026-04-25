@@ -3,7 +3,7 @@
     <div
       class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr]"
     >
-      <CButton
+      <Button
         label="Nuevo usuario"
         icon="icon-park-outline:plus"
         class="w-fit"
@@ -70,7 +70,7 @@
       <PColumn field="actions" header="Acciones" class="text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
-            <CButton
+            <Button
               :to="`/admin/users/edit/${slotProps.data.id}`"
               icon="icon-park-twotone:edit"
               fluid
@@ -85,7 +85,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { fetchAllStaffs } from '~/lib/api/admin/users'
 

@@ -49,7 +49,7 @@
               "
               :error="$form.confirmPassword?.error?.message"
             />
-            <CButton
+            <Button
               class="w-full"
               :loading="asyncStatus === 'loading'"
               type="submit"
@@ -62,7 +62,7 @@
         <template #footer>
           <div class="flex flex-col gap-y-4">
             <div class="align-center flex">
-              <CButton
+              <Button
                 to="/login"
                 variant="text"
                 icon="icon-park-outline:arrow-left"
@@ -80,7 +80,7 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { resetPassword } from '~/lib/api/auth/main'

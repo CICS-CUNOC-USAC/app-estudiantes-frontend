@@ -1,6 +1,10 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@400;500;600;700&display=swap');
+
 @import 'tailwindcss/theme.css' layer(tailwind-theme);
 @import 'tailwindcss/preflight.css' layer(tailwind-base);
 @import 'tailwindcss/utilities.css' layer(tailwind-utilities);
+@import "tw-animate-css";
 
 @layer tailwind-theme, tailwind-base, primevue, tailwind-utilities;
 /* @config '../../../tailwind.config.js'; */
@@ -140,7 +144,6 @@
     }
   }
 
-
   /* --font-sans: 'Noto Sans', sans-serif; */
   /* --font-heading: var(--font-sans); */
   --color-sidebar-ring: var(--sidebar-ring);
@@ -178,7 +181,6 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-
 
 }
 
@@ -297,4 +299,21 @@
 
     @apply prose-p:my-2.5;
   }
+}
+
+@theme inline {
+  --font-heading: var(--font-sans);
+
+}
+
+@layer base {
+  * {
+    @apply outline-ring/50;
+
+  }
+  body {
+    @apply bg-background text-foreground;
+
+  }
+
 }

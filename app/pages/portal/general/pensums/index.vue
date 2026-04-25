@@ -1,7 +1,7 @@
 <template>
   <main class="relative">
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
@@ -27,7 +27,7 @@
 <script setup lang="ts">
 import HelpDialog from '@/components/dialogs/help/HelpDialog.vue'
 import InfoCard from '@/components/cards/InfoCard.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 
 import { careers, contentHelp } from './(files)/consts'
 

@@ -29,41 +29,23 @@
         </p>
         <!-- {{ data.media?.url }} -->
 
-        <div class="flex items-center gap-4">
-          <CButton
-            v-if="data.media?.url"
-            class="mb-4"
-            :href="data.media.url"
-            target="_blank"
-            variant="tonal"
-            block
-            label="Ver archivo adjunto"
-            icon="icon-park-twotone:book-open"
-          />
+            <div class="flex items-center gap-4">
+              <Button v-if="data.media?.url" class="mb-4" :href="data.media.url" target="_blank" variant="tonal" block
+                label="Ver archivo adjunto" icon="icon-park-twotone:book-open" />
 
-          <CButton
-            v-if="data.source_url"
-            class="mb-4 block"
-            :href="data.source_url"
-            target="_blank"
-            variant="link"
-            label="Más información"
-            icon="icon-park-outline:right-small-up"
-          />
-        </div>
-        <p
-          v-if="!showAllInfo && !data.media"
-          class="dark:text-gray-400"
-          :class="
-            (data.totalAvailable ?? 0 > 0) ? 'text-green-600' : 'text-red-600'
-          "
-        >
-          {{
-            (data.totalAvailable ?? 0) > 0
-              ? 'Disponible en biblioteca'
-              : 'No disponible'
-          }}
-        </p>
+              <Button v-if="data.source_url" class="mb-4 block" :href="data.source_url" target="_blank" variant="link"
+                label="Más información" icon="icon-park-outline:right-small-up" />
+            </div>
+            <p v-if="!showAllInfo && !data.media" class="dark:text-gray-400" :class="data.totalAvailable ?? 0 > 0
+              ? 'text-green-600'
+              : 'text-red-600'
+              ">
+              {{
+              (data.totalAvailable ?? 0) > 0
+                  ? 'Disponible en biblioteca'
+                  : 'No disponible'
+              }}
+            </p>
 
         <template v-else>
           <div class="dark:text-gray-400" v-if="data.library_reference">
@@ -94,7 +76,7 @@
               </h6>
 
               <div class="mb-2 flex justify-end">
-                <CButton
+                <Button
                   icon="icon-park-outline:plus"
                   size="small"
                   label="Agregar existencia"
@@ -161,7 +143,7 @@
             <PColumn field="" header="Acciones" class="w-32 text-center">
               <template #body="slotProps">
                 <div class="flex flex-col items-center justify-center gap-y-2">
-                  <CButton
+                  <Button
                     icon="lucide:hand-helping"
                     size="small"
                     label="Prestamo"
@@ -207,7 +189,7 @@ import { inject, computed } from 'vue'
 import { useAsyncData } from '#app'
 import { useDialog } from 'primevue/usedialog'
 import { getAdminBookByIdAndType, getBookById } from '~/lib/api/books'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import KebabMenu from '../partials/KebabMenu.vue'
 import BookActionDialog from './admin/books/BookActionDialog.vue'
 import LibraryReferenceEditDialog from './admin/books/LibraryReferenceEditDialog.vue'

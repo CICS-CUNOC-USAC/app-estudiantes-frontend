@@ -1,7 +1,7 @@
 <template>
   <main>
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
@@ -38,7 +38,7 @@
 </template>
 <script setup lang="ts">
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import type { Strapi5ResponseMany } from '@nuxtjs/strapi'
 import type { ContentManual } from '~/lib/api/strapi/types'
 

@@ -59,12 +59,12 @@
           </div>
         </div>
         <div class="shrink-0 space-x-2">
-          <CButton
+          <Button
             icon="lucide:layout-dashboard"
             to="/"
             v-Ptooltip.top="'Portal'"
           />
-          <CButton
+          <Button
             icon="lucide:log-out"
             v-Ptooltip.top="'Cerrar sesión'"
             @click="logout"
@@ -77,7 +77,7 @@
 <script lang="ts" setup>
 import { DefaultLayoutItems } from '~/layouts/default.consts'
 import CICSLogo from './CICSLogo.vue'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { DashboardLayoutItems } from '~/layouts/dashboard.consts'
 import AvatarWithMenu from './AvatarWithMenu.vue'
 

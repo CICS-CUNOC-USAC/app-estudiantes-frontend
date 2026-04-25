@@ -1,7 +1,7 @@
 <template>
   <main>
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
@@ -67,7 +67,7 @@
   </main>
 </template>
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import { allThemesPrimaries } from '~/themes/pThemes'
 

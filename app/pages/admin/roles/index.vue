@@ -11,7 +11,7 @@
     </header>
 
     <div class="my-4">
-      <CButton
+      <Button
         label="Nuevo rol"
         icon="icon-park-outline:plus"
         class="w-fit"
@@ -31,7 +31,7 @@
         <div class="bg-surface-300 dark:bg-surface-600 -mx-4.5 my-4 h-px" />
 
         <footer class="mt-2.5 flex gap-x-1.5">
-          <CButton
+          <Button
             variant="tonal"
             label="Editar"
             size="small"
@@ -44,7 +44,7 @@
   </main>
 </template>
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { getAllRoles } from '~/lib/api/admin/roles'
 
 const {

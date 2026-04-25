@@ -31,11 +31,11 @@
           "
           no-borders
         />
-        <CButton
+        <Button
           class="w-full"
           :loading="loading"
           :disabled="!email || !password"
-          :severity="admin ? 'danger' : ''"
+          :severity="admin ? 'danger' : 'default'"
           type="submit"
           label="Iniciar sesión"
         />
@@ -45,17 +45,17 @@
       <div class="flex flex-col gap-y-4">
         <span class="align-center flex gap-2">
           ¿No tienes una cuenta?
-          <CButton to="/sign-up" variant="link" label="Regístrate" />
+          <Button to="/sign-up" variant="link" label="Regístrate" />
           
         </span>
-        <CButton
+        <Button
           class="self-start"
             to="/recover-password"
             variant="link"
             label="¿Olvidaste tu contraseña?"
           />
         <div class="align-center flex">
-          <CButton
+          <Button
             to="/"
             variant="text"
             icon="icon-park-outline:arrow-left"
@@ -67,7 +67,7 @@
   </CCardAlt>
 </template>
 <script lang="ts" setup>
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 

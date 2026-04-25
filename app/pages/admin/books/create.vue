@@ -60,7 +60,7 @@
           <PFileUpload mode="advanced" accept="application/pdf" :multiple="false" pt:root:class="border-none!"
             @select="(e) => (file = e.files[0])">
             <template #header="{ chooseCallback }">
-              <CButton label="Seleccionar archivo" @click="chooseCallback" variant="tonal" />
+              <Button label="Seleccionar archivo" @click="chooseCallback" variant="tonal" />
             </template>
             <template #empty>
               <p class="py-2 text-sm">
@@ -78,10 +78,10 @@
           </PFileUpload>
         </div>
         <div class="flex gap-4">
-          <CButton label="Cancelar" icon="icon-park-outline:arrow-left"
+          <Button label="Cancelar" icon="icon-park-outline:arrow-left"
             :to="bookType === 'digital' ? '/admin/books/digital' : '/admin/books/physical'" severity="secondary"
             class="" />
-          <CButton label="Guardar" icon="icon-park-outline:check" type="submit" class=""
+          <Button label="Guardar" icon="icon-park-outline:check" type="submit" class=""
             :disabled="!file && bookType === 'digital'" :loading />
         </div>
       </PForm>
@@ -92,7 +92,7 @@
 import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'

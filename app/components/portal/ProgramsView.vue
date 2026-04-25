@@ -9,7 +9,7 @@
     <PColumn field="" header="Acciones" class="w-min text-center">
       <template #body="slotProps">
         <div class="flex flex-col items-center justify-center gap-y-2">
-          <CButton
+          <Button
             :to="`/portal/general/cursos/programa/${slotProps.data.id}?fromSearch=${fromSearch}`"
             icon="lucide:eye"
             fluid
@@ -18,7 +18,7 @@
             label="Ver"
           />
 
-          <CButton
+          <Button
             :href="slotProps.data.pdfLink"
             icon="lucide:download"
             fluid
@@ -56,7 +56,7 @@
 </template>
 <script setup lang="ts">
 import type { ScrapedProgram } from '~/utils/server/types/programs'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { FilterMatchMode } from '@primevue/core/api'
 import { DataTable } from 'primevue'
 

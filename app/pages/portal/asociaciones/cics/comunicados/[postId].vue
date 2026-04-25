@@ -4,7 +4,7 @@
       class="flex flex-wrap gap-x-3 print:hidden"
       v-if="data && status === 'success'"
     >
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar a comunicados"
@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import ComunicadoPostComments from '~/components/portal/comunicados/ComunicadoPostComments.vue'
 import ComunicadoPostReactions from '~/components/portal/comunicados/ComunicadoPostReactions.vue'
 import { type Comunicado } from '~/lib/api/strapi/types'

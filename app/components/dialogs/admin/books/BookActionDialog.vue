@@ -41,16 +41,16 @@
       </template>
     </template>
     <div class="mt-4 flex gap-x-4">
-      <CButton label="Cancelar" severity="secondary" icon="icon-park-outline:close" class="w-full"
+      <Button label="Cancelar" severity="secondary" icon="icon-park-outline:close" class="w-full"
         @click="closeDialog" />
-      <CButton label="Confirmar" icon="icon-park-outline:arrow-right" class="w-full" @click="mutate"
+      <Button label="Confirmar" icon="icon-park-outline:arrow-right" class="w-full" @click="mutate"
         :loading="asyncStatus === 'loading'" />
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { loanOrReturn } from '~/lib/api/admin/books'
 
 const dialogRef: any = inject('dialogRef')

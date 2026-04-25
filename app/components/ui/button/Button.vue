@@ -5,6 +5,7 @@ import type { ButtonVariants } from '.'
 import { Primitive } from 'reka-ui'
 import { cn } from '@/lib/utils'
 import { buttonVariants } from '.'
+import { NuxtLink } from '#components'
 
 interface Props extends PrimitiveProps {
   variant?: ButtonVariants['variant']
@@ -19,6 +20,8 @@ interface Props extends PrimitiveProps {
   icon?: string
   label?: string
   class?: HTMLAttributes['class']
+  href?: string
+  to?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -33,6 +36,12 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   disabled: false
 })
+
+const asProp = computed(() => {
+  if (props.href) return 'a'
+  if (props.to) return NuxtLink
+  return 'button'
+})
 </script>
 
 <template>
@@ -41,8 +50,10 @@ const props = withDefaults(defineProps<Props>(), {
     :data-variant="variant"
     :data-size="size"
     :data-severity="severity"
-    :as="as"
+    :as="asProp"
     :as-child="asChild"
+    :to="props.to"
+    :href="props.href"
     :aria-busy="loading"
     :disabled="disabled"
     :class="

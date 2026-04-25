@@ -16,7 +16,7 @@
         <p class="mb-4">
           Aun estamos trabajando en esta sección. Por favor, regresa más tarde.
         </p>
-        <CButton
+        <Button
           variant="link"
           to="/"
           label="Regresar al inicio"
@@ -36,7 +36,7 @@
 
 <script lang="ts" setup>
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 defineProps({
   section: {
     type: String,

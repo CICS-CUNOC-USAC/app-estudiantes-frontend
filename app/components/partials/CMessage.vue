@@ -20,7 +20,7 @@
       <p class="text-amber-600 dark:text-amber-400" v-if="subtitle">
         {{ subtitle }}
       </p>
-      <CButton
+      <Button
         v-if="backToLabel && backToRoute"
         class="mt-2"
         :label="backToLabel"
@@ -32,7 +32,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 
 defineProps<{
   title: string

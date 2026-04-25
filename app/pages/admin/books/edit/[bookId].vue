@@ -76,7 +76,7 @@
           @select="e => (file = e.files[0])"
         >
           <template #header="{ chooseCallback }">
-            <CButton
+            <Button
               label="Seleccionar archivo"
               @click="chooseCallback"
               variant="tonal"
@@ -101,13 +101,13 @@
         </PFileUpload>
 
         <div class="flex gap-4">
-          <CButton
+          <Button
             label="Cancelar"
             icon="icon-park-outline:arrow-left"
             to="/admin/books"
             class="flex-1"
           />
-          <CButton
+          <Button
             label="Guardar"
             icon="icon-park-outline:check"
             type="submit"
@@ -136,7 +136,7 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { z } from 'zod'
 import PdfPreview from '~/components/content/PdfPreview.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
 definePageMeta({

@@ -18,7 +18,7 @@
           :rows="3"
           placeholder="Comparte tu opinión sobre este comunicado"
         />
-        <CButton
+        <Button
           label="Comentar"
           icon="icon-park-outline:send"
           size="small"
@@ -74,7 +74,7 @@
         </p>
 
         <div class="mt-2 flex items-center gap-4">
-          <CButton
+          <Button
             v-if="authenticated"
             variant="tonal"
             size="small"
@@ -83,7 +83,7 @@
             "
             @click="toggleReplyBox(comment.id)"
           />
-          <CButton
+          <Button
             v-if="isCommentOwner(comment.user?.id)"
             variant="tonal"
             size="small"
@@ -104,7 +104,7 @@
             placeholder="Escribe tu respuesta"
           />
           <div class="mt-2 flex justify-end">
-            <CButton
+            <Button
               label="Responder"
               icon="icon-park-outline:send"
               size="small"
@@ -131,7 +131,7 @@
                   {{ formatCommentDate(reply.createdAt) }}
                 </p>
               </div>
-              <CButton
+              <Button
                 v-if="isCommentOwner(reply.user?.id)"
                 variant="tonal"
                 size="small"
@@ -151,13 +151,13 @@
       <CDialogContent title="¿Eliminar este comentario?">
         <p class="text-sm">Esta acción no se puede deshacer.</p>
         <div class="mt-4 flex gap-3">
-          <CButton
+          <Button
             label="Cancelar"
             severity="secondary"
             class="w-full"
             @click="closeDeleteModal"
           />
-          <CButton
+          <Button
             label="Eliminar"
             severity="danger"
             class="w-full"
@@ -176,7 +176,7 @@
 
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { CDialog, CDialogContent } from '~/components/primitives/dialog'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
 import type { StrapiPostComment } from '~/lib/api/strapi/types'

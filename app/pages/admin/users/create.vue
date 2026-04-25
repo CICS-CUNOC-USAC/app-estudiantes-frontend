@@ -100,13 +100,13 @@
         </fieldset>
 
         <div class="mt-4 space-x-4">
-          <CButton
+          <Button
             label="Cancelar"
             icon="icon-park-outline:arrow-left"
             to="/admin/users"
             severity="secondary"
           />
-          <CButton
+          <Button
             label="Guardar"
             icon="icon-park-outline:check"
             type="submit"
@@ -123,7 +123,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { FetchError } from 'ofetch'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { getAllRoles } from '~/lib/api/admin/roles'
 import { createStaff } from '~/lib/api/admin/users'

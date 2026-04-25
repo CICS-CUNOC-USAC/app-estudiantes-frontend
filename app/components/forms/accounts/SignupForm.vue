@@ -27,7 +27,7 @@
           prepend-icon="icon-park-twotone:id-card-h"
           no-borders
         />
-        <CButton
+        <Button
           rounded
           type="submit"
           icon="icon-park-twotone:search"
@@ -133,7 +133,7 @@
           root-class="col-span-1 md:col-span-1"
           :error="$form.confirmPassword?.error?.message"
         />
-        <CButton
+        <Button
           class="mb-3 w-full"
           icon="icon-park-outline:arrow-right"
           label="Continuar"
@@ -146,10 +146,10 @@
       <div class="flex flex-col gap-y-4">
         <span class="align-center flex gap-2">
           ¿Ya tienes una cuenta?
-          <CButton to="/login" variant="link" label="Inicia sesión" />
+          <Button to="/login" variant="link" label="Inicia sesión" />
         </span>
         <div class="align-center flex">
-          <CButton
+          <Button
             to="/"
             variant="text"
             icon="icon-park-outline:arrow-left"
@@ -165,7 +165,7 @@ import type { FormSubmitEvent } from '@primevue/forms'
 import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { type UserSirecaInfoResponse } from '~/lib/api/auth/user'

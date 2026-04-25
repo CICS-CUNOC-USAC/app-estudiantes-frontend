@@ -9,7 +9,7 @@
 
         <DialogClose as-child>
 
-          <CButton
+          <Button
           label="Cancelar"
           severity="secondary"
           @click="dialog = false"
@@ -17,7 +17,7 @@
           class="w-full"
           />
         </DialogClose>
-        <CButton
+        <Button
         label="Eliminar"
         severity="danger"
         @click="confirmAction"
@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import CButton from '../primitives/button/CButton.vue';
+import Button from '~/components/ui/button/Button.vue'
 import { CDialog, CDialogContent, CDialogTrigger } from '../primitives/dialog'
 
 const emit = defineEmits(['confirm'])

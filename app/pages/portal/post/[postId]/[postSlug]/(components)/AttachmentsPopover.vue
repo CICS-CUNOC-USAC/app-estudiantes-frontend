@@ -1,7 +1,7 @@
 <template>
   <PopoverRoot v-if="attachments?.length">
     <PopoverTrigger class="" aria-label="Adjuntos" as-child>
-      <CButton icon="lucide:file" variant="link" label="Ver adjuntos" class="outline-none"/>
+      <Button icon="lucide:file" variant="link" label="Ver adjuntos" class="outline-none"/>
     </PopoverTrigger>
     <PopoverPortal>
       <PopoverContent
@@ -31,7 +31,7 @@
   </PopoverRoot>
 </template>
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue';
+import Button from '~/components/ui/button/Button.vue'
 
 defineProps<{
   attachments: {

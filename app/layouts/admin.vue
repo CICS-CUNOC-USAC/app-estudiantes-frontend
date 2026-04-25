@@ -53,7 +53,7 @@
               </li>
             </ul>
           </section>
-          <CButton
+          <Button
             icon="icon-park-outline:arrow-left"
             variant="link"
             label="Regresar al portal"
@@ -81,12 +81,12 @@
               </div>
             </div>
             <div class="shrink-0 space-x-2">
-              <CButton
+              <Button
                 icon="lucide:layout-dashboard"
                 to="/"
                 v-Ptooltip.top="'Portal'"
               />
-              <CButton
+              <Button
                 icon="lucide:log-out"
                 v-Ptooltip.top="'Cerrar sesión'"
                 @click="logout"
@@ -149,7 +149,7 @@
 
 <script lang="ts" setup>
 import CICSLogo from '~/components/partials/CICSLogo.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { useAuthStore } from '~/stores/auth'
 import { ADMIN_LAYOUT_ITEMS } from './admin.consts'
 import { NuxtLink } from '#components'

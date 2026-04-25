@@ -2,7 +2,7 @@
   <div class="flex flex-col">
     <div class="mb-2 flex gap-2">
       <div class="flex items-center">
-        <CButton
+        <Button
           icon="icon-park-outline:arrow-left"
           outlined
           size="small"
@@ -12,7 +12,7 @@
           >{{ pages === 0 ? '...' : page }} /
           <strong>{{ pages === 0 ? '...' : pages }}</strong></span
         >
-        <CButton
+        <Button
           outlined
           size="small"
           icon="icon-park-outline:arrow-right"
@@ -21,14 +21,14 @@
       </div>
       
       <div v-if="props.showZoom" class="flex items-center">
-        <CButton
+        <Button
           outlined
           size="small"
           icon="lucide:zoom-out"
           @click="scale = scale > 0.5 ? scale - 0.25 : scale"
         />
         <span class="mx-2 font-semibold">{{ scale * 100 }}%</span>
-        <CButton
+        <Button
           outlined
           size="small"
           icon="lucide:zoom-in"
@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import { VuePDF, usePDF } from '@tato30/vue-pdf'
 import '@tato30/vue-pdf/style.css'
-import CButton from '../primitives/button/CButton.vue';
+import Button from '~/components/ui/button/Button.vue'
 const props = withDefaults(
   defineProps<{
     pdfUrl: string

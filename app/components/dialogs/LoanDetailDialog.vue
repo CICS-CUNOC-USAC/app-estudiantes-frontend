@@ -19,7 +19,7 @@
         <DialogTitle class="mb-4 flex items-center justify-between">
           <span class="text-xl font-semibold"> Información del Prestamo </span>
           <div class="flex items-center gap-2">
-            <CButton
+            <Button
               v-if="!isReturned"
               icon="lucide:printer"
               variant="text"
@@ -27,7 +27,7 @@
               @click="handlePrint"
               title="Imprimir recibo"
             />
-            <CButton
+            <Button
               v-else
               icon="lucide:printer"
               variant="text"
@@ -123,7 +123,7 @@
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
 import { getBookById } from '~/lib/api/books'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import type { Loan } from '~/lib/api/admin/loans'
 
 const { loanItem } = defineProps<{

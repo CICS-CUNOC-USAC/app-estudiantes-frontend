@@ -1,14 +1,14 @@
 <template>
   <div>
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
         class="text-muted-color mb-4 lg:mb-2"
         to="/"
       />
-      <CButton
+      <Button
         icon="lucide:layout-dashboard"
         variant="link"
         label="Ir a publicaciones"
@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 
 const route = useRoute()

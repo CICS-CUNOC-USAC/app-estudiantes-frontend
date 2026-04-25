@@ -6,7 +6,7 @@
     <div ref="scrollEnd" class="min-h-2"></div>
     <div class="flex items-center justify-center flex-col gap-4 pb-6">
       <Icon v-if="props.loading" name="svg-spinners:bars-rotate-fade"/>
-      <CButton
+      <Button
         class="w-fit"
         @click="handleLoadMore"
         variant="tonal"
@@ -17,7 +17,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import CButton from '../button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 
 const emit = defineEmits(['loadMore'])
 

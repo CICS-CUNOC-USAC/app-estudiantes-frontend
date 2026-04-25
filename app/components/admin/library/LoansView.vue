@@ -154,27 +154,22 @@
               :loan-item="slotProps.data"
               show-all-info
             >
-              <CButton
+              <Button
                 icon="lucide:receipt-text"
                 size="small"
                 label="Detalle del Prestamo"
                 variant="tonal"
               />
             </LoanDetailDialog>
-            <CButton
-              icon="icon-park-twotone:eyes"
-              size="small"
-              label="Detalle del Libro"
-              variant="tonal"
-              @click="openDetail(slotProps.data.library_reference.book, true)"
-            />
+            <Button icon="icon-park-twotone:eyes" size="small" label="Detalle del Libro" variant="tonal"
+              @click="openDetail(slotProps.data.library_reference.book, true)" />
             <LoanActionDialog
               :book-name="slotProps.data.library_reference.book.name"
               :book-reference-id="slotProps.data.library_reference_id"
               :loan_id="slotProps.data.id"
               @confirm="refresh"
-            >
-              <CButton
+              >
+              <Button
                 icon="lucide:hand-helping"
                 size="small"
                 label="Retornar"
@@ -298,7 +293,7 @@
 import LoanActionDialog from '~/components/dialogs/admin/loans/LoanActionDialog.vue'
 import BookDetailDialog from '~/components/dialogs/BookDetailDialog.vue'
 import LoanDetailDialog from '~/components/dialogs/LoanDetailDialog.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import { getAllCategories } from '~/lib/api/admin/books'

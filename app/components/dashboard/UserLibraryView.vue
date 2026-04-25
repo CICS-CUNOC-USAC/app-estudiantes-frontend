@@ -114,7 +114,7 @@
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
-            <CButton icon="icon-park-twotone:eyes" size="small" label="Detalles" variant="tonal"
+            <Button icon="icon-park-twotone:eyes" size="small" label="Detalles" variant="tonal"
               @click="openDetail(slotProps.data, false)" />
           </div>
         </template>
@@ -124,7 +124,7 @@
 </template>
 <script setup lang="ts">
 import { fetchAllBooks, getAllCategories } from '~/lib/api/books'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '../primitives/form/CInputText.vue'
 import CSelect from '../primitives/form/CSelect.vue';
 import BookDetailDialog from '../dialogs/BookDetailDialog.vue';

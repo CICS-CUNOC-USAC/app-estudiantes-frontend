@@ -106,14 +106,14 @@
           </div>
         </fieldset>
         <div class="mt-4 space-x-4">
-          <CButton
+          <Button
             label="Cancelar"
             icon="icon-park-outline:arrow-left"
             to="/admin/users"
             class=""
             severity="secondary"
           />
-          <CButton
+          <Button
             label="Guardar"
             icon="icon-park-outline:check"
             :disabled="isSameUser || asyncStatus === 'loading'"
@@ -133,7 +133,7 @@ import { toast } from 'vue-sonner'
 import { z } from 'zod'
 import CMessage from '~/components/partials/CMessage.vue'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { getAllRoles } from '~/lib/api/admin/roles'
 import { fetchStaff, updateStaff } from '~/lib/api/admin/users'

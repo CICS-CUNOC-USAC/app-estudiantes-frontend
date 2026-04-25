@@ -102,13 +102,13 @@
         </div>
 
         <div class="flex gap-4 mt-4">
-          <CButton
+          <Button
             label="Cancelar"
             icon="icon-park-outline:arrow-left"
             to="/admin/roles"
             severity="secondary"
           />
-          <CButton
+          <Button
             label="Guardar"
             icon="icon-park-outline:check"
             type="submit"
@@ -126,7 +126,7 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { FetchError } from 'ofetch'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { getAllPermissions } from '~/lib/api/admin/permissions'
 import { createRole } from '~/lib/api/admin/roles'

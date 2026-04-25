@@ -1,14 +1,14 @@
 <template>
   <main>
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
         class="text-muted-color-emphasis mb-4 lg:mb-2"
         to="/"
       />
-      <CButton
+      <Button
         icon="icon-park-outline:paragraph-alphabet"
         variant="link"
         label="Regresar a información de la asociación"
@@ -61,7 +61,7 @@
 <script setup lang="ts">
 import type { Strapi5ResponseMany } from '@nuxtjs/strapi'
 import { toast } from 'vue-sonner'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInfiniteScroll from '~/components/primitives/data/CInfiniteScroll.vue'
 import type { Comunicado } from '~/lib/api/strapi/types'

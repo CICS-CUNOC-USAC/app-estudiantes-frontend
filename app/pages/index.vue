@@ -15,7 +15,7 @@
             />
             Publicaciones oficiales recientes
           </span>
-          <CButton
+          <Button
             variant="link"
             icon="lucide:square-arrow-up-right"
             to="/portal/general/publicaciones"
@@ -37,7 +37,7 @@
             />
             Comunicados recientes del CICS
           </span>
-          <CButton
+          <Button
             variant="link"
             icon="lucide:square-arrow-up-right"
             to="/portal/asociaciones/cics/comunicados"
@@ -100,7 +100,7 @@
 import CICSPostsView from '~/components/portal/CICSPostsView.vue'
 import HomeBanner from '~/components/portal/HomeBanner.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import { sections } from '~/utils/consts/main-page.consts'
 

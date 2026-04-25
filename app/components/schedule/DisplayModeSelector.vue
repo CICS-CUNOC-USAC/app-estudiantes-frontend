@@ -63,7 +63,7 @@
             </ListboxItem>
           </div>
         </ListboxContent>
-        <CButton icon="lucide:eraser" size="small" label="Limpiar" @click="cleanScheduleSelection"/>
+        <Button icon="lucide:eraser" size="small" label="Limpiar" @click="cleanScheduleSelection"/>
       </ListboxRoot>
       <div v-else>
         <ListboxRoot
@@ -106,7 +106,7 @@
 <script setup lang="ts">
 import type { Classroom, Hour } from '~/utils/types/schedule-courses'
 import CInputText from '../primitives/form/CInputText.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 
 let { classrooms, selection } = defineProps<{
   modelValue: 'calendar' | 'classroom'

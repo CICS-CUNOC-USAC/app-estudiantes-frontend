@@ -12,14 +12,14 @@
       </p>
       <div class="mt-4 flex gap-x-4">
         <DialogClose as-child>
-          <CButton
+          <Button
             label="Cancelar"
             severity="secondary"
             icon="icon-park-outline:close"
             class="w-full"
           />
         </DialogClose>
-        <CButton
+        <Button
           label="Confirmar"
           icon="icon-park-outline:arrow-right"
           class="w-full"
@@ -32,7 +32,7 @@
 </template>
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import {
   CDialog,
   CDialogContent,

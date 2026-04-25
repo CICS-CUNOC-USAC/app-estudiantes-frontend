@@ -1,23 +1,10 @@
 <template>
   <section>
-    <div
-      class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr_1fr]"
-    >
-      <CButton
-        label="Nuevo libro"
-        icon="icon-park-outline:plus"
-        class="w-fit"
-        :to="`/admin/books/create?type=${props.type}`"
-      />
-      <CInputText
-        label="Nombre del libro"
-        id="name"
-        class="h-12"
-        prepend-icon="icon-park-twotone:doc-search-two"
-        clear-button
-        no-borders
-        :default-value="$route.query.name"
-        @input="
+    <div class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_1fr_1fr]">
+      <Button label="Nuevo libro" icon="icon-park-outline:plus" class="w-fit"
+        :to="`/admin/books/create?type=${props.type}`" />
+      <CInputText label="Nombre del libro" id="name" class="h-12" prepend-icon="icon-park-twotone:doc-search-two"
+        clear-button no-borders :default-value="$route.query.name" @input="
           ($event: Event) => {
             useDebounceFn(() => {
               $router.push({
@@ -138,20 +125,8 @@
       <PColumn field="" header="Acciones" class="w-32 text-center">
         <template #body="slotProps">
           <div class="flex flex-col items-center justify-center gap-y-2">
-            <CButton
-              icon="icon-park-twotone:eyes"
-              size="small"
-              label="Detalles"
-              variant="tonal"
-              @click="openDetail(slotProps.data, true)"
-            />
-            <CButton
-              icon="icon-park-twotone:edit"
-              size="small"
-              label="Editar"
-              variant="tonal"
-              @click="openEditDialog(slotProps.data)"
-            />
+            <Button icon="icon-park-twotone:eyes" size="small" label="Detalles" variant="tonal"
+              @click="openDetail(slotProps.data, true)" />
           </div>
         </template>
       </PColumn>
@@ -162,7 +137,7 @@
 import BookDetailDialog from '~/components/dialogs/BookDetailDialog.vue'
 import BookEditPhysicalDialog from '~/components/dialogs/admin/books/BookEditPhysicalDialog.vue'
 import BookEditDigitalDialog from '~/components/dialogs/admin/books/BookEditDigitalDialog.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import {

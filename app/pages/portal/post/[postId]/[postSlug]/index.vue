@@ -1,7 +1,7 @@
 <template>
   <main>
     <nav class="flex flex-wrap gap-x-3">
-      <CButton
+      <Button
         v-if="fromSearch"
         icon="icon-park-outline:arrow-left"
         variant="link"
@@ -9,7 +9,7 @@
         class="text-muted-color mb-4 lg:mb-2"
         :to="`/portal/general/busqueda?q=${fromSearch}`"
       />
-      <CButton
+      <Button
         icon="lucide:layout-dashboard"
         variant="link"
         label="Ver todas las publicaciones"
@@ -69,7 +69,7 @@
   </main>
 </template>
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import AttachmentsPopover from './(components)/AttachmentsPopover.vue'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
 import CMessage from '~/components/partials/CMessage.vue'
