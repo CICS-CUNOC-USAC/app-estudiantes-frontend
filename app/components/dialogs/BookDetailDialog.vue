@@ -7,6 +7,7 @@
       <Button
         class="cursor-pointer rounded p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-800"
         @click="dialogRef.close()"
+        variant="text"
       >
         <Icon name="lucide:x" />
         <span class="sr-only">Close</span>
@@ -29,23 +30,41 @@
         </p>
         <!-- {{ data.media?.url }} -->
 
-            <div class="flex items-center gap-4">
-              <Button v-if="data.media?.url" class="mb-4" :href="data.media.url" target="_blank" variant="tonal" block
-                label="Ver archivo adjunto" icon="icon-park-twotone:book-open" />
+        <div class="flex items-center gap-4">
+          <Button
+            v-if="data.media?.url"
+            class="mb-4"
+            :href="data.media.url"
+            target="_blank"
+            variant="tonal"
+            block
+            label="Ver archivo adjunto"
+            icon="icon-park-twotone:book-open"
+          />
 
-              <Button v-if="data.source_url" class="mb-4 block" :href="data.source_url" target="_blank" variant="link"
-                label="Más información" icon="icon-park-outline:right-small-up" />
-            </div>
-            <p v-if="!showAllInfo && !data.media" class="dark:text-gray-400" :class="data.totalAvailable ?? 0 > 0
-              ? 'text-green-600'
-              : 'text-red-600'
-              ">
-              {{
-              (data.totalAvailable ?? 0) > 0
-                  ? 'Disponible en biblioteca'
-                  : 'No disponible'
-              }}
-            </p>
+          <Button
+            v-if="data.source_url"
+            class="mb-4 block"
+            :href="data.source_url"
+            target="_blank"
+            variant="link"
+            label="Más información"
+            icon="icon-park-outline:right-small-up"
+          />
+        </div>
+        <p
+          v-if="!showAllInfo && !data.media"
+          class="dark:text-gray-400"
+          :class="
+            (data.totalAvailable ?? 0 > 0) ? 'text-green-600' : 'text-red-600'
+          "
+        >
+          {{
+            (data.totalAvailable ?? 0) > 0
+              ? 'Disponible en biblioteca'
+              : 'No disponible'
+          }}
+        </p>
 
         <template v-else>
           <div class="dark:text-gray-400" v-if="data.library_reference">
@@ -184,14 +203,17 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import { inject, computed } from 'vue'
 import { useAsyncData } from '#app'
 import { useDialog } from 'primevue/usedialog'
 import { getAdminBookByIdAndType, getBookById } from '~/lib/api/books'
+import type { LibraryReference } from '~/stores/admin-library'
 import Button from '~/components/ui/button/Button.vue'
 import KebabMenu from '../partials/KebabMenu.vue'
 import BookActionDialog from './admin/books/BookActionDialog.vue'
+import DataTable from '~/components/partials/datatable/DataTable.vue'
+import type { ColumnDef } from '@tanstack/vue-table'
 import LibraryReferenceEditDialog from './admin/books/LibraryReferenceEditDialog.vue'
 import LibraryReferenceCreateDialog from './admin/books/LibraryReferenceCreateDialog.vue'
 import LibraryReferenceDeleteDialog from './admin/books/LibraryReferenceDeleteDialog.vue'
@@ -225,6 +247,69 @@ function openActionDialog(bookReferenceId: number | string) {
     data: { bookReferenceId, bookName: data.value?.name }
   })
 }
+
+const columns: ColumnDef<LibraryReference>[] = [
+  {
+    accessorKey: 'id',
+    meta: {
+      displayName: 'Referencia'
+    },
+    header: () => <div class="font-semibold">Referencia</div>,
+    cell: ({ row }) => <div class="">{row.getValue('id')}</div>
+  },
+  {
+    accessorKey: 'location',
+    meta: {
+      displayName: 'Ubicación'
+    },
+    header: () => <div class="font-semibold">Ubicación</div>,
+    cell: ({ row }) => <div class="">{row.getValue('location')}</div>
+  },
+  {
+    accessorKey: 'is_available',
+    meta: {
+      displayName: 'Disponibilidad'
+    },
+    header: () => <div class="font-semibold">Disponibilidad</div>,
+    cell: ({ row }) => (
+      <div class=" ">
+        <strong
+          class={
+            row.getValue('is_available') ? 'text-green-600' : 'text-red-600'
+          }
+        >
+          {row.getValue('is_available') ? 'Disponible' : 'No Disponible'}
+        </strong>
+      </div>
+    )
+  },
+  {
+    accessorKey: 'edition',
+    meta: {
+      displayName: 'Edición'
+    },
+    header: () => <div class="font-semibold">Edición</div>,
+    cell: ({ row }) => <div class=" ">{row.getValue('edition')}</div>
+  },
+  {
+    id: 'actions',
+    meta: {
+      displayName: 'Acciones'
+    },
+    header: () => <div class="font-semibold">Acciones</div>,
+    cell: ({ row }) => (
+      <div class="flex flex-col items-center justify-center gap-y-2">
+        <Button
+          icon="lucide:hand-helping"
+          size="small"
+          label="Prestamo"
+          variant="tonal"
+          onClick={() => openActionDialog(row.original.id)}
+        />
+      </div>
+    )
+  }
+]
 
 function openEditReferenceDialog(referenceItem: any) {
   dialog.open(LibraryReferenceEditDialog, {

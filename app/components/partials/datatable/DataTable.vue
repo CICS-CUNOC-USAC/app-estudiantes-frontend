@@ -33,6 +33,7 @@
       sorting?: SortingState;
       enableSorting?: boolean;
       disablePagination?: boolean;
+      disableColumnVisibility?: boolean;
       tableKeyName?: string;
       paginationState?: {
         pageIndex: number;
@@ -46,6 +47,7 @@
       }),
       sorting: () => [],
       enableSorting: true,
+      disableColumnVisibility: false,
     },
   );
 
@@ -178,7 +180,6 @@
             size="sm"
           >
             <Icon name="lucide:chevron-left" />
-            Anterior
           </Button>
           <Button
             class=""
@@ -188,7 +189,6 @@
             size="sm"
           >
             <Icon name="lucide:chevron-right" />
-            Siguiente
           </Button>
           <Button
             class=""
@@ -200,7 +200,7 @@
             <Icon name="lucide:chevrons-right" />
           </Button>
         </template>
-        <DropdownMenu>
+        <DropdownMenu v-if="!props.disableColumnVisibility">
           <DropdownMenuTrigger as-child>
             <Button variant="tonal" size="sm" class="tracking-normal">
               <Icon

@@ -69,7 +69,9 @@ import CInputText from '~/components/primitives/form/CInputText.vue'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
 
 onMounted(() => {
-  searchRef.value.$input.$el.focus()
+  nextTick(() => {
+    searchRef.value?.focus()
+  })
 })
 
 const router = useRouter()

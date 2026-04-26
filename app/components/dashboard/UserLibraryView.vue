@@ -72,7 +72,11 @@
         prepend-icon="icon-park-twotone:category-management"
         no-borders
         clearable
-        :model-value="$route.query.category_id ? String($route.query.category_id) : undefined"
+        :model-value="
+          $route.query.category_id
+            ? String($route.query.category_id)
+            : undefined
+        "
         option-label="name"
         option-value="id"
         @value-change="
@@ -88,46 +92,37 @@
       />
     </div>
 
-    <PDataTable
-      :value="data?.results"
-      :loading="status === 'pending'"
-      :rows="limit"
-      :first="currentPage"
-      :total-records="data?.meta?.total"
-      :rows-per-page-options="[5, 10, 25, 50]"
-      row-hover
-      lazy
-      paginator
-      @page="
-        ($event) =>
-          $router.push({ query: { ...$route.query, page: $event.page + 1 } })
+    <DataTable
+      :columns
+      :data="data?.results || []"
+      :total-elements="data?.meta?.total"
+      :total-pages="data?.meta?.total_pages"
+      :pagination-state="paginationOptions"
+      :enable-sorting="false"
+      @pagination-change="
+        ($event) => {
+          if (typeof $event === 'function') {
+            paginationOptions = $event(paginationOptions)
+          } else {
+            paginationOptions = {
+              ...paginationOptions,
+              ...$event
+            }
+          }
+        }
       "
-      @update:rows="limit = $event"
-    >
-      <PColumn field="name" header="Nombre" class="text-center"> </PColumn>
-      <PColumn field="author" header="Autor" class="text-center"></PColumn>
-      <PColumn
-        field="description"
-        header="Descripcion"
-        class="text-center"
-      ></PColumn>
-      <PColumn field="" header="Acciones" class="w-32 text-center">
-        <template #body="slotProps">
-          <div class="flex flex-col items-center justify-center gap-y-2">
-            <Button icon="icon-park-twotone:eyes" size="small" label="Detalles" variant="tonal"
-              @click="openDetail(slotProps.data, false)" />
-          </div>
-        </template>
-      </PColumn>
-    </PDataTable>
+    />
   </section>
 </template>
-<script setup lang="ts">
+<script setup lang="tsx">
 import { fetchAllBooks, getAllCategories } from '~/lib/api/books'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '../primitives/form/CInputText.vue'
-import CSelect from '../primitives/form/CSelect.vue';
-import BookDetailDialog from '../dialogs/BookDetailDialog.vue';
+import CSelect from '../primitives/form/CSelect.vue'
+import BookDetailDialog from '../dialogs/BookDetailDialog.vue'
+import DataTable from '~/components/partials/datatable/DataTable.vue'
+import type { ColumnDef } from '@tanstack/vue-table'
+import type { Book } from '~/stores/admin-library'
 
 const route = useRoute()
 
@@ -135,10 +130,23 @@ const props = defineProps<{
   type: 'physical' | 'digital'
 }>()
 
-const limit = ref(10)
-const currentPage = computed(() => {
-  return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
+const paginationOptions = computed({
+  get: () => ({
+    pageIndex: route.query.page ? Number(route.query.page) : 0,
+    pageSize: route.query.limit ? Number(route.query.limit) : 10
+  }),
+  set: (value) => {
+    navigateTo({
+      query: {
+        ...route.query,
+        page: value.pageIndex,
+        limit: value.pageSize
+      }
+    })
+  }
 })
+
+const limit = computed(() => paginationOptions.value.pageSize)
 
 const { data: categories } = useAsyncData('categories', () =>
   getAllCategories()
@@ -166,15 +174,60 @@ function openDetail(bookItem: any, showAllInfo: any) {
   dialog.open(BookDetailDialog, {
     header: 'Información del libro',
     style: {
-      width: '50vw',
+      width: '50vw'
     },
     props: {
       modal: true,
-      dismissableMask: true,
+      dismissableMask: true
     },
     data: { bookItem, showAllInfo },
-    onClose: () => { }
+    onClose: () => {}
   })
 }
+
+const columns: ColumnDef<Book>[] = [
+  {
+    accessorKey: 'name',
+    meta: {
+      displayName: 'Nombre'
+    },
+    header: () => <div class="font-semibold">Nombre</div>,
+    cell: ({ row }) => <div class="">{row.getValue('name')}</div>
+  },
+  {
+    accessorKey: 'author',
+    meta: {
+      displayName: 'Autor'
+    },
+    header: () => <div class="font-semibold">Autor</div>,
+    cell: ({ row }) => <div class="">{row.getValue('author')}</div>
+  },
+  {
+    accessorKey: 'description',
+    meta: {
+      displayName: 'Descripción'
+    },
+    header: () => <div class="font-semibold">Descripción</div>,
+    cell: ({ row }) => <div class="">{row.getValue('description')}</div>
+  },
+  {
+    id: 'actions',
+    meta: {
+      displayName: 'Acciones'
+    },
+    header: () => <div class="w-32 font-semibold">Acciones</div>,
+    cell: ({ row }) => (
+      <div class="flex flex-col items-start justify-center gap-y-2">
+        <Button
+          icon="icon-park-twotone:eyes"
+          size="small"
+          label="Detalles"
+          variant="tonal"
+          onClick={() => openDetail(row.original, false)}
+        />
+      </div>
+    )
+  }
+]
 </script>
 <style lang="postcss" scoped></style>
