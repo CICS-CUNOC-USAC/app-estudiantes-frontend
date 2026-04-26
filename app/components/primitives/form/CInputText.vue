@@ -37,9 +37,33 @@ const hasAppendClick = computed(
 
 const hasPrepend = computed(() => !!props.prependIcon || hasPrependClick.value)
 const hasAppend = computed(() => !!props.appendIcon || hasAppendClick.value)
-const showClear = computed(() => (props.clearable || props.clearButton) && !!vModel.value)
+
+const nativeValue = ref('')
+const isControlled = computed(() => vModel.value !== undefined)
+const showClear = computed(() => {
+  if (!(props.clearable || props.clearButton)) return false
+  return isControlled.value ? !!vModel.value : !!nativeValue.value
+})
+
+const $input = ref<ComponentPublicInstance | null>(null)
+
+function focus() {
+  ($input.value?.$el as HTMLInputElement)?.focus()
+}
+
+function handleClear() {
+  vModel.value = undefined
+  nativeValue.value = ''
+  const el = $input.value?.$el as HTMLInputElement | undefined
+  if (el) {
+    el.value = ''
+    el.dispatchEvent(new Event('input'))
+  }
+  emit('clear')
+}
 
 defineOptions({ inheritAttrs: false })
+defineExpose({ focus })
 </script>
 
 <template>
@@ -84,16 +108,18 @@ defineOptions({ inheritAttrs: false })
         </label>
 
         <Input
+          ref="$input"
           v-bind="attrs"
           v-model="vModel"
           :type="type"
           :disabled="disabled"
+          @input="(e: Event) => nativeValue = (e.target as HTMLInputElement).value"
           :class="cn(
-            'h-full rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 px-0',
+            'h-full rounded-none placeholder:text-sm border-0 bg-transparent shadow-none focus-visible:ring-0',
             label ? 'pt-4' : '',
             showClear ? 'pr-7' : '',
-            !hasPrepend ? 'rounded-l-lg' : '',
-            !hasAppend ? 'rounded-r-lg' : '',
+            !hasPrepend ? 'rounded-l-lg pr-0' : 'pl-2',
+            !hasAppend ? 'rounded-r-lg pl-0' : 'pr-2',
             attrClass,
           )"
         />
@@ -105,7 +131,7 @@ defineOptions({ inheritAttrs: false })
         type="button"
         class="absolute right-2 top-1/2 z-10 flex size-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm text-muted-foreground opacity-0 transition duration-100 hover:bg-neutral-200 group-focus-within:opacity-100 group-hover:opacity-100 dark:hover:bg-neutral-600"
         :class="{ 'right-10': hasAppend }"
-        @click="() => { vModel = ''; emit('clear') }"
+        @click="handleClear"
       >
         <Icon name="icon-park-outline:close-small" class="size-3.5" />
       </button>

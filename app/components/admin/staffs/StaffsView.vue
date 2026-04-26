@@ -36,7 +36,7 @@
             $router.push({
               query: {
                 ...$route.query,
-                name: undefined
+                full_name: undefined
               }
             })
           }
@@ -44,50 +44,37 @@
       />
     </div>
 
-    <PDataTable
-      :value="data?.results"
-      :loading="status === 'pending'"
-      :rows="limit"
-      :first="currentPage"
-      :total-records="data?.meta?.total"
-      :rows-per-page-options="[5, 10, 25, 50]"
-      row-hover
-      lazy
-      paginator
-      @page="
-        ($event) =>
-          $router.push({ query: { ...$route.query, page: $event.page + 1 } })
-      "
-      @update:rows="limit = $event"
-    >
-      <PColumn field="id" header="Id" class="text-center"> </PColumn>
-      <PColumn field="first_name" header="Nombre" class="text-center">
-      </PColumn>
-      <PColumn field="last_name" header="Apellido" class="text-center">
-      </PColumn>
-      <PColumn field="email" header="Correo electrónico" class="text-center">
-      </PColumn>
-      <PColumn field="actions" header="Acciones" class="text-center">
-        <template #body="slotProps">
-          <div class="flex flex-col items-center justify-center gap-y-2">
-            <Button
-              :to="`/admin/users/edit/${slotProps.data.id}`"
-              icon="icon-park-twotone:edit"
-              fluid
-              size="small"
-              variant="tonal"
-              label="Editar"
-            />
-          </div>
-        </template>
-      </PColumn>
-    </PDataTable>
+    <div>
+      <DataTable
+        :columns
+        :data="data?.results || []"
+        :totalElements="data?.meta?.total"
+        :totalPages="data?.meta?.total_pages"
+        :paginationState="paginationOptions"
+        :enable-sorting="false"
+        @pagination-change="
+          ($event) => {
+            if (typeof $event === 'function') {
+              paginationOptions = $event(paginationOptions)
+            } else {
+              paginationOptions = {
+                ...paginationOptions,
+                ...$event
+              }
+            }
+          }
+        "
+      />
+    </div>
   </div>
 </template>
-<script setup lang="ts">
+<script setup lang="tsx">
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { fetchAllStaffs } from '~/lib/api/admin/users'
+import type { ColumnDef } from '@tanstack/vue-table'
+import DataTable from '~/components/partials/datatable/DataTable.vue'
+import { Icon } from '#components'
 
 const route = useRoute()
 
@@ -108,4 +95,84 @@ const { data, refresh, status } = await useLazyAsyncData(
     watch: [limit, () => route.query]
   }
 )
+
+const paginationOptions = computed({
+  get: () => ({
+    pageIndex: route.query.page ? Number(route.query.page) : 0,
+    pageSize: route.query.limit ? Number(route.query.limit) : 10
+  }),
+  set: (value) => {
+    navigateTo({
+      query: {
+        ...route.query,
+        page: value.pageIndex,
+        limit: value.pageSize
+      }
+    })
+  }
+})
+
+const columns: ColumnDef<Staff>[] = [
+  {
+    accessorKey: 'first_name',
+    meta: {
+      displayName: 'Nombre'
+    },
+    header: () => (
+      <div class="text-center font-semibold">
+        {/* <Icon name="lucide:user" class="mr-1 mb-0.5 inline" /> */}
+        Nombres
+      </div>
+    ),
+    cell: ({ row }) => <div class="text-base">{row.getValue('first_name')}</div>
+  },
+  {
+    accessorKey: 'last_name',
+    meta: {
+      displayName: 'Apellido'
+    },
+    header: () => (
+      <div class="text-center font-semibold">
+        {/* <Icon name="lucide:user" class="mr-1 mb-0.5 inline" /> */}
+        Apellidos
+      </div>
+    ),
+    cell: ({ row }) => <div class="text-base">{row.getValue('last_name')}</div>
+  },
+  {
+    accessorKey: 'email',
+    meta: {
+      displayName: 'Correo electrónico'
+    },
+    header: () => (
+      <div class="text-center font-semibold">
+        {/* <Icon name="lucide:mail" class="mr-1 mb-0.5 inline" /> */}
+        Correo electrónico
+      </div>
+    ),
+    cell: ({ row }) => <div class="text-base">{row.getValue('email')}</div>
+  },
+  {
+    id: 'actions',
+    header: () => (
+      <div class="text-center font-semibold">
+        {/* <Icon name="lucide:mouse-pointer-click" class="inline mr-1 mb-0.5" /> */}
+        Acciones
+      </div>
+    ),
+    cell: ({ row }) => (
+      <div class="flex flex-col  gap-y-2">
+        <Button
+          class="w-min"
+          to={`/admin/users/edit/${row.original.id}`}
+          icon="icon-park-twotone:edit"
+          fluid
+          size="small"
+          variant="tonal"
+          label="Editar"
+        />
+      </div>
+    )
+  }
+]
 </script>

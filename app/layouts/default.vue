@@ -56,28 +56,50 @@
                 />
               </form>
             </Transition>
-            <Button
-              class="px-2"
-              v-Ptooltip.bottom="'Buscar en Ingeniería CUNOC'"
-              :icon="
-                searchOpen
-                  ? 'icon-park-twotone:close-one'
-                  : 'icon-park-twotone:search'
-              "
-              @click="toggleSearch"
-            />
+
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger as-child>
+                  <Button
+                    class="px-2"
+                    :icon="
+                      searchOpen
+                        ? 'icon-park-twotone:close-one'
+                        : 'icon-park-twotone:search'
+                    "
+                    @click="toggleSearch"
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Buscar en Ingeniería CUNOC</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
 
-          <Button
-            v-if="!searchOpen"
-            icon="icon-park-twotone:people"
-            size="small"
-            :to="user ? '/dashboard/home' : '/login'"
-            :label="user ? displayName : 'Ingresar'"
-            class="max-w-[13ch] min-w-0"
-            pt:label:class="hidden lg:block truncate"
-            v-Ptooltip.bottom="`Ir a mi espacio`"
-          />
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger as-child>
+                <Button
+                  v-if="!searchOpen"
+                  icon="icon-park-twotone:people"
+                  size="small"
+                  :to="user ? '/dashboard/home' : '/login'"
+                  :label="user ? 'Espacio' : 'Ingresar'"
+                  class="min-w-0"
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  {{
+                    user
+                      ? `Sesión iniciada como ${displayNameFull}`
+                      : 'Iniciar sesión para acceder a tu espacio personal'
+                  }}
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
       </div>
     </nav>
@@ -121,9 +143,17 @@
 import CICSLogo from '~/components/partials/CICSLogo.vue'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+
+type CInputTextInstance = InstanceType<typeof CInputText>
 import { useAuthStore } from '~/stores/auth'
 import TopNavDesktopDashboard from '~/components/partials/navigation/TopNavDesktopDashboard.vue'
 import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
+import {
+  TooltipProvider,
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent
+} from '~/components/ui/tooltip'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
@@ -157,17 +187,17 @@ const currentTrigger = ref('')
 
 const searchOpen = ref(false)
 const search = ref('')
-const $search = ref(null)
+const $search = ref<CInputTextInstance | null>(null)
 const toggleSearch = async ({ leaveOpen = false }: { leaveOpen: boolean }) => {
   if (leaveOpen && searchOpen.value) {
-    $search.value.$input.$el.focus()
+    $search.value?.focus()
     return
   }
   searchOpen.value = !searchOpen.value
   if (searchOpen.value) {
     search.value = ''
     await nextTick()
-    $search.value.$input.$el.focus()
+    $search.value?.focus()
   }
 }
 const handleSearch = () => {
