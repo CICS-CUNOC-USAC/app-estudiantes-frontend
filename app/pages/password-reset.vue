@@ -10,45 +10,53 @@
         </CardHeader>
 
         <CardContent>
-          <PForm
-            class="flex flex-col gap-y-4 py-4"
-            @submit="handleSubmit"
-            :initial-values
-            :resolver
-            v-slot="$form"
-          >
-            <CInputText
-              name="password"
-              label="Nueva contraseña"
-              placeholder="********"
-              prepend-icon="icon-park-twotone:lock"
-              no-borders
-              clear-button
-              :type="showPassword ? 'text' : 'password'"
-              @click:append="showPassword = !showPassword"
-              :append-icon="
-                showPassword
-                  ? 'icon-park-outline:preview-close'
-                  : 'icon-park-twotone:preview-open'
-              "
-              :error="$form.password?.error?.message"
-            />
-            <CInputText
-              name="confirmPassword"
-              label="Confirmar contraseña"
-              placeholder="********"
-              prepend-icon="icon-park-twotone:lock"
-              no-borders
-              clear-button
-              :type="showPassword ? 'text' : 'password'"
-              @click:append="showPassword = !showPassword"
-              :append-icon="
-                showPassword
-                  ? 'icon-park-outline:preview-close'
-                  : 'icon-park-twotone:preview-open'
-              "
-              :error="$form.confirmPassword?.error?.message"
-            />
+          <form class="flex flex-col gap-y-4 py-4" @submit="onSubmit">
+            <FieldGroup>
+              <VeeField v-slot="{ field, errors }" name="password">
+                <Field :data-invalid="!!errors.length">
+                  <CInputText
+                    v-bind="field"
+                    name="password"
+                    label="Nueva contraseña"
+                    placeholder="********"
+                    prepend-icon="icon-park-twotone:lock"
+                    no-borders
+                    clear-button
+                    :type="showPassword ? 'text' : 'password'"
+                    @click:append="showPassword = !showPassword"
+                    :append-icon="
+                      showPassword
+                        ? 'icon-park-outline:preview-close'
+                        : 'icon-park-twotone:preview-open'
+                    "
+                    :error="errors[0]"
+                  />
+                </Field>
+              </VeeField>
+
+              <VeeField v-slot="{ field, errors }" name="confirmPassword">
+                <Field :data-invalid="!!errors.length">
+                  <CInputText
+                    v-bind="field"
+                    name="confirmPassword"
+                    label="Confirmar contraseña"
+                    placeholder="********"
+                    prepend-icon="icon-park-twotone:lock"
+                    no-borders
+                    clear-button
+                    :type="showPassword ? 'text' : 'password'"
+                    @click:append="showPassword = !showPassword"
+                    :append-icon="
+                      showPassword
+                        ? 'icon-park-outline:preview-close'
+                        : 'icon-park-twotone:preview-open'
+                    "
+                    :error="errors[0]"
+                  />
+                </Field>
+              </VeeField>
+            </FieldGroup>
+
             <Button
               class="w-full"
               :loading="asyncStatus === 'loading'"
@@ -57,7 +65,7 @@
               rounded
               label="Continuar"
             />
-          </PForm>
+          </form>
         </CardContent>
         <CardFooter class="flex flex-col gap-y-4">
           <div class="flex flex-col gap-y-4">
@@ -76,9 +84,9 @@
   </section>
 </template>
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '@primevue/forms'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { toTypedSchema } from '@vee-validate/zod'
 import { FetchError } from 'ofetch'
+import { useForm, Field as VeeField } from 'vee-validate'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
 import CInputText from '~/components/primitives/form/CInputText.vue'
@@ -91,6 +99,7 @@ import {
   CardHeader,
   CardTitle
 } from '~/components/ui/card'
+import { Field, FieldGroup } from '~/components/ui/field'
 import { resetPassword } from '~/lib/api/auth/main'
 
 const route = useRoute()
@@ -99,34 +108,39 @@ if (!route.query.tkn) {
 }
 const showPassword = ref(false)
 
-const initialValues = reactive({
-  password: '',
-  confirmPassword: ''
+const formSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, {
+        message: 'La contraseña debe tener al menos 8 caracteres'
+      })
+      .max(100, {
+        message: 'La contraseña no debe exceder los 100 caracteres'
+      }),
+    confirmPassword: z.string()
+  })
+  .refine(
+    (values) => {
+      return values.password === values.confirmPassword
+    },
+    {
+      message: 'Las contraseñas deben coincidir',
+      path: ['confirmPassword']
+    }
+  )
+
+const { handleSubmit, resetForm } = useForm({
+  validationSchema: toTypedSchema(formSchema),
+  initialValues: {
+    password: '',
+    confirmPassword: ''
+  }
 })
 
-const resolver = zodResolver(
-  z
-    .object({
-      password: z
-        .string()
-        .min(8, {
-          message: 'La contraseña debe tener al menos 8 caracteres'
-        })
-        .max(100, {
-          message: 'La contraseña no debe exceder los 100 caracteres'
-        }),
-      confirmPassword: z.string()
-    })
-    .refine(
-      (values) => {
-        return values.password === values.confirmPassword
-      },
-      {
-        message: 'Las contraseñas deben coincidir',
-        path: ['confirmPassword']
-      }
-    )
-)
+const onSubmit = handleSubmit((values) => {
+  mutate({ password: values.password })
+})
 
 const { mutate, asyncStatus } = useMutation({
   mutation: (data: { password: string }) => {
@@ -152,15 +166,6 @@ const { mutate, asyncStatus } = useMutation({
         : toast.error('Ha ocurrido un error inesperado')
   }
 })
-
-const handleSubmit = async (e: FormSubmitEvent) => {
-  if (e.valid) {
-    console.log(e.values)
-    mutate({
-      password: e.values.password
-    })
-  }
-}
 
 definePageMeta({
   layout: 'empty'

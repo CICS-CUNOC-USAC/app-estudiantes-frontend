@@ -187,8 +187,6 @@ const { handleSubmit } = useForm({
 })
 
 const onSubmit = handleSubmit((values) => {
-  // Do something with the form values.
-  console.log(values)
   mutate(values)
 })
 
