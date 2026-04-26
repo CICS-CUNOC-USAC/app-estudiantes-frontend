@@ -36,7 +36,7 @@
             label="Editar"
             size="small"
             icon="icon-park-twotone:edit"
-            disabled
+            :to="`/admin/roles/edit/${role.id}`"
           />
         </footer>
       </div>

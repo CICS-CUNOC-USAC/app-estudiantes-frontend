@@ -19,7 +19,9 @@
 <script setup lang="ts">
 import LibraryView from '@/components/admin/library/LibraryView.vue'
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  subject: ['Book', 'all'],
+  action: ['manage'],
 })
 </script>
 

@@ -6,7 +6,7 @@
     </h1>
 
     <div
-      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
+      class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
     >
       <h2 class="text-2xl font-semibold">Botones</h2>
       <p class="text-primary-emphasis-alt">Botones de la aplicación</p>
@@ -198,7 +198,7 @@
     </div>
 
     <div
-      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
+      class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
     >
       <h2 class="mt-4 text-2xl font-semibold">Tarjetas</h2>
       <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -350,7 +350,7 @@
     </div>
 
     <div
-      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
+      class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
     >
       <h2 class="text-2xl font-semibold">Toast</h2>
       <p class="text-primary-emphasis-alt">Mensajes de notificación</p>
@@ -398,7 +398,7 @@
     </div>
 
     <div
-      class="rounded border border-surface-950/45 bg-surface-50 p-4 lg:p-8 dark:bg-neutral-700"
+      class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
     >
       <h2 class="text-2xl font-semibold">Input</h2>
       <p class="text-primary-emphasis-alt">Input de texto</p>
@@ -462,6 +462,24 @@
         />
       </div>
     </div>
+
+    <div
+      class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
+    >
+      <h2 class="text-2xl font-semibold">Menú</h2>
+      <div class="mt-4 flex items-center gap-4">
+        <KebabMenu>
+          <template #title>
+            <h2 class="mb-2 font-semibold">Opciones</h2>
+          </template>
+          <div class="flex flex-col gap-1">
+            <button class="menu-item">Editar</button>
+            <button class="menu-item">Eliminar</button>
+            <button class="menu-item">Compartir</button>
+          </div>
+        </KebabMenu>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -469,6 +487,7 @@ import CButton from '~/components/primitives/button/CButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import { toast } from 'vue-sonner'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import KebabMenu from '~/components/partials/KebabMenu.vue'
 
 const text = ref('')
 </script>

@@ -98,7 +98,9 @@ import CSelect from '~/components/primitives/form/CSelect.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
 import { createBookItem, createWithoutMedia, getAllCategories } from '~/lib/api/admin/books'
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  subject: ['Book', 'all'],
+  action: ['manage'],
 })
 
 const loading = ref(false)
