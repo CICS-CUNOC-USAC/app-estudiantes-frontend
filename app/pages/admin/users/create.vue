@@ -61,7 +61,7 @@
           <h2 class="mt-4 mb-2 font-medium">Roles y permisos</h2>
 
           <div class="w-full lg:w-1/2">
-            <PMultiSelect
+            <!-- <PMultiSelect
               name="roles_ids"
               fluid
               display="chip"
@@ -86,7 +86,76 @@
                   class: 'text-sm'
                 }
               }"
-            />
+            /> -->
+
+            <!-- <Select multiple v-model="selectedPermissions">
+              <SelectTrigger
+                class="bg-surface-50 dark:border-surface-700 dark:bg-surface-900 h-auto min-h-12 w-full rounded-lg border-black px-3 py-1.5"
+              >
+                <SelectValue placeholder="Selecciona uno o varios permisos">
+                  <template v-if="selectedPermissions.length">
+                    <div class="flex flex-wrap gap-1">
+                      <span
+                        v-if="selectedPermissions.length <= 3"
+                        v-for="id in selectedPermissions"
+                        :key="id"
+                        class="inline-flex items-center gap-1 rounded-md bg-neutral-200 px-2 py-0.5 text-xs font-medium dark:bg-neutral-700"
+                      >
+                        {{
+                          permissions?.results?.find((p) => p.id === id)?.name
+                        }}
+                        <button
+                          type="button"
+                          class="ml-0.5 cursor-pointer opacity-60 hover:opacity-100"
+                          @click.stop="
+                            selectedPermissions = selectedPermissions.filter(
+                              (i) => i !== id
+                            )
+                          "
+                        >
+                          <Icon name="lucide:x" class="size-3" />
+                        </button>
+                      </span>
+                      <span
+                        v-else
+                        class="inline-flex items-center rounded-md bg-neutral-200 px-2 py-0.5 text-xs font-medium dark:bg-neutral-700"
+                      >
+                        {{ selectedPermissions.length }} permisos seleccionados
+                      </span>
+                    </div>
+                  </template>
+                </SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem
+                    v-if="statusPermissions === 'pending'"
+                    value="__loading__"
+                    disabled
+                    class="text-muted-foreground"
+                  >
+                    Cargando permisos...
+                  </SelectItem>
+                  <SelectItem
+                    v-for="permission in permissions?.results"
+                    :key="permission.id"
+                    :value="permission.id"
+                  >
+                    <span class="font-medium">{{ permission.name }}</span>
+                    <span class="text-muted-foreground text-xs">
+                      Acción:
+                      <span class="font-semibold"
+                        >"{{ permission.action }}"</span
+                      >
+                      Sobre:
+                      <span class="font-semibold"
+                        >"{{ permission.subject }}"</span
+                      >
+                    </span>
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select> -->
 
             <div
               v-if="$form.roles_ids?.invalid"
@@ -123,6 +192,14 @@ import { zodResolver } from '@primevue/forms/resolvers/zod'
 import { FetchError } from 'ofetch'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '~/components/ui/select'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import { getAllRoles } from '~/lib/api/admin/roles'

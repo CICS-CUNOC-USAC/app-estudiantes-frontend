@@ -193,7 +193,7 @@
           severity="secondary"
           label="Desactivado"
         />
-        <CButton disabled class="h-min" outlined label="Desactivado" />
+        <Button disabled class="h-min" outlined label="Desactivado" />
       </div>
     </div>
 
@@ -292,13 +292,13 @@
           </template>
           <template #footer>
             <div class="flex items-center gap-x-2 self-end">
-              <CButton
+              <Button
                 label="Ver más"
                 icon="icon-park-outline:arrow-right"
                 variant="text"
                 class="flex-1 text-xs"
               />
-              <CButton
+              <Button
                 label="No me interesa"
                 icon="lucide:circle-x"
                 variant="text"
@@ -332,13 +332,13 @@
           </template>
           <template #footer>
             <div class="flex items-center gap-x-2 self-end">
-              <CButton
+              <Button
                 label="No me interesa"
                 outlined
                 icon="lucide:circle-x"
                 class="flex-1 text-xs"
               />
-              <CButton
+              <Button
                 label="Ver más"
                 icon="icon-park-outline:arrow-right"
                 class="h-full flex-1 text-xs"
@@ -356,38 +356,38 @@
       <p class="text-primary-emphasis-alt">Mensajes de notificación</p>
 
       <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
-        <CButton
+        <Button
           class="h-min"
           label="Iniciar sesión"
           @click="toast('Iniciando sesión...')"
         />
-        <CButton
+        <Button
           class="h-min"
           label="Con botón"
           @click="toast('Iniciando sesión...', { closeButton: true })"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="danger"
           label="Error"
           icon="lucide:octagon-alert"
           @click="toast.error('Error al iniciar sesión')"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="warn"
           label="Warn"
           icon="lucide:triangle-alert"
           @click="toast.warning('Advertencia')"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="info"
           label="Información"
           icon="lucide:info"
           @click="toast.info('Información')"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="success"
           label="Exito"
@@ -580,13 +580,13 @@
           </template>
           <template #footer>
             <div class="flex items-center gap-x-2 self-end">
-              <CButton
+              <Button
                 label="Ver más"
                 icon="icon-park-outline:arrow-right"
                 variant="text"
                 class="flex-1 text-xs"
               />
-              <CButton
+              <Button
                 label="No me interesa"
                 icon="lucide:circle-x"
                 variant="text"
@@ -620,13 +620,13 @@
           </template>
           <template #footer>
             <div class="flex items-center gap-x-2 self-end">
-              <CButton
+              <Button
                 label="No me interesa"
                 outlined
                 icon="lucide:circle-x"
                 class="flex-1 text-xs"
               />
-              <CButton
+              <Button
                 label="Ver más"
                 icon="icon-park-outline:arrow-right"
                 class="h-full flex-1 text-xs"
@@ -636,7 +636,7 @@
         </CCardAlt>
       </div>
     </div>
-    <!-- 
+
     <div
       class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
     >
@@ -644,43 +644,52 @@
       <p class="text-primary-emphasis-alt">Mensajes de notificación</p>
 
       <div class="mt-4 grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
-        <CButton
+        <Button
           class="h-min"
           label="Iniciar sesión"
-          @click=""
+          @click="toast('Iniciando sesión...', {})"
         />
-        <CButton
+        <Button
           class="h-min"
           label="Con botón"
-          @click=""
+          @click="
+            toast('Iniciando sesión...', {
+              action: {
+                label: 'Otra acción',
+                onClick: () => {
+                  toast.info('Acción ejecutada')
+                }
+              }
+            })
+          "
         />
-        <CButton
+        <Button
           class="h-min"
           severity="danger"
           label="Error"
           icon="lucide:octagon-alert"
-          @click=""
+          @click="toast.error('Ocurrió un error al iniciar sesión')"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="warn"
           label="Warn"
           icon="lucide:triangle-alert"
-          @click=""
+          @click="toast.warning('Revisa tu conexión a internet')"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="info"
           label="Información"
           icon="lucide:info"
-          @click=""
+          @click="toast.info('Nueva actualización disponible')"
         />
-        <CButton
+        <Button
           class="h-min"
           severity="success"
           label="Exito"
           icon="lucide:check"
-          @click=""
+          @click="toast.success('¡Operación exitosa!')"
         />
       </div>
     </div>
@@ -749,7 +758,7 @@
           @click:append=""
         />
       </div>
-    </div> -->
+    </div>
     <div
       class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
     >
@@ -770,7 +779,9 @@
   </div>
 </template>
 <script setup lang="ts">
+import { toast } from 'vue-sonner'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import CInputText from '~/components/primitives/form/CInputText.vue'
 import CButton from '~/components/primitives/button/CButton.vue'
 import {
   Card,

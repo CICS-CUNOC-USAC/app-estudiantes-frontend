@@ -1,115 +1,20 @@
-<template>
-  <div class="flex flex-col gap-y-1.5">
-    <PInputGroup
-      unstyled
-      class="group flex h-12 rounded-lg  transition-all duration-200 focus-within:ring-2 focus-within:ring-primary-400/50  focus-within:ring-offset-transparent"
-      :class="[inhAttrs.classAttr]"
-    >
-      <component
-        v-if="hasPrependClick || prependIcon"
-        :is="hasPrependClick ? Button : InputGroupAddon"
-        icon
-        @click="emit('click:prepend')"
-        class="inline-flex w-12 items-center justify-center rounded-bl-lg rounded-tl-lg border border-r-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
-        :class="{
-          'hover:bg-surface-200/80 dark:hover:bg-surface-800': hasPrependClick,
-          'cursor-not-allowed opacity-50': disabled
-        }"
-        unstyled
-        pt:label:class="hidden"
-      >
-        <template #icon v-if="prependIcon && hasPrependClick">
-          <Icon v-if="prependIcon" :name="prependIcon" />
-        </template>
-        <Icon v-if="prependIcon && !hasPrependClick" :name="prependIcon" />
-      </component>
-      <PIftaLabel class="relative size-full" unstyled>
-        <label
-          v-if="props.label"
-          :for="inhAttrs.restAttrs.id as string"
-          class="absolute top-1.5 text-xs text-muted-color select-none"
-        >
-          {{ props.label }}
-        </label>
-
-        <PSelect
-          v-bind="inhAttrs.restAttrs"
-          :modelValue="modelValue"
-          class="z-10 flex size-full items-center gap-x-2 rounded-lg border border-black bg-surface-50 text-sm transition focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 dark:border-surface-700 dark:bg-surface-900"
-          :class="{
-            'pt-4': props.label,
-            'pl-3': !prependUsed || !noBorders,
-            'pr-3': !appendUsed || !noBorders,
-            'rounded-bl-none rounded-tl-none': hasPrependClick || prependIcon,
-            'rounded-br-none rounded-tr-none': hasAppendClick || appendIcon,
-            'border-l-0': noBorders && (hasPrependClick || prependIcon),
-            'border-r-0': noBorders && (hasAppendClick || appendIcon)
-          }"
-          unstyled
-          :option-label
-          :option-value
-          :show-clear="clearable"
-          :options="items"
-          :pt="{
-            clearIcon: `cursor-pointer text-muted-color hover:text-color ${
-              props.label ? '-mt-4' : ''
-            }`,
-            option:
-              'flex gap-2 items-center cursor-pointer hover:bg-surface-200/80  dark:hover:bg-surface-800 px-3 py-1.5 rounded-lg data-[p-focused=true]:bg-surface-200/80 dark:data-[p-focused=true]:bg-surface-800',
-            listContainer: 'py-2 px-1.5 overflow-y-auto',
-            overlay:
-              'bg-surface-50 dark:bg-surface-900 shadow-lg rounded-xl border border-black dark:border-surface-700 overflow-hidden',
-            label: ({ instance, props }) => ({
-              class: [
-                'flex-1 cursor-pointer focus:outline-none truncate',
-                
-                instance.label === props.placeholder
-                  ? 'text-muted-color select-none'
-                  : 'text-color'
-              ]
-            }),
-            dropdown: {
-              class: `flex items-center cursor-pointer text-muted-color hover:text-color h-full ${
-                props.label ? '-mt-4' : ''
-              }`
-            }
-          }"
-        />
-      </PIftaLabel>
-      <!-- pt:label:class="flex-1 placeholder:text-muted-color/70"
-        pt:dropdown:class="flex items-center " -->
-      <component
-        v-if="hasAppendClick || appendIcon"
-        :is="hasAppendClick ? Button : InputGroupAddon"
-        @click="emit('click:append')"
-        class="inline-flex w-12 items-center justify-center rounded-br-lg rounded-tr-lg border border-l-0 border-black bg-surface-50 p-0 transition text-color dark:border-surface-700 dark:bg-surface-900"
-        :class="{
-          'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800':
-            hasAppendClick,
-          'cursor-not-allowed opacity-50': disabled
-        }"
-        unstyled
-        pt:label:class="hidden"
-      >
-        <template #icon v-if="appendIcon">
-          <Icon v-if="appendIcon" :name="appendIcon" />
-        </template>
-        <Icon v-if="appendIcon && !hasAppendClick" :name="appendIcon" />
-      </component>
-    </PInputGroup>
-    <div v-if="message" class="text-muted-color/70 text-xs font-medium">
-      {{ message }}
-    </div>
-    <div v-if="error" class="text-xs font-medium text-red-500">
-      {{ error }}
-    </div>
-  </div>
-</template>
 <script setup lang="ts">
-import { Button, InputGroupAddon } from 'primevue'
-const vModel = defineModel({ type: String, required: false })
+import type { AcceptableValue } from 'reka-ui'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
+import { cn } from '@/lib/utils'
+
+type Item = string | number | Record<string, any>
+
 const props = defineProps<{
-  items: any[]
+  items: Item[]
+  modelValue?: any
+  defaultValue?: any
   message?: string
   error?: string
   disabled?: boolean
@@ -119,30 +24,145 @@ const props = defineProps<{
   optionLabel?: string
   optionValue?: string
   clearable?: boolean
-  modelValue?: any
   label?: string
+  placeholder?: string
+}>()
+
+const emit = defineEmits<{
+  'update:modelValue': [value: any]
+  'valueChange': [value: any]
+  'click:prepend': []
+  'click:append': []
 }>()
 
 const rawAttrs = useAttrs()
-const inhAttrs = computed(() => {
-  const { class: classAttr, ...restAttrs } = rawAttrs
-  return { classAttr, restAttrs }
-})
-
-const emit = defineEmits(['click:prepend', 'click:append'])
+const attrClass = computed(() => (rawAttrs.class as string) ?? '')
 
 const hasPrependClick = computed(
-  () => !!getCurrentInstance()?.vnode?.props['onClick:prepend']
+  () => !!getCurrentInstance()?.vnode?.props?.['onClick:prepend']
 )
 const hasAppendClick = computed(
-  () => !!getCurrentInstance()?.vnode?.props['onClick:append']
+  () => !!getCurrentInstance()?.vnode?.props?.['onClick:append']
 )
+const hasPrepend = computed(() => !!props.prependIcon || hasPrependClick.value)
+const hasAppend = computed(() => !!props.appendIcon || hasAppendClick.value)
 
-const prependUsed = computed(() => !!props.prependIcon || hasPrependClick.value)
-const appendUsed = computed(() => !!props.appendIcon || hasAppendClick.value)
+function itemValue(item: Item): string {
+  if (typeof item === 'object' && props.optionValue) return String(item[props.optionValue])
+  return String(item)
+}
 
-defineOptions({
-  inheritAttrs: false
-})
+function itemLabel(item: Item): string {
+  if (typeof item === 'object' && props.optionLabel) return String(item[props.optionLabel])
+  return String(item)
+}
+
+function handleUpdate(val: AcceptableValue) {
+  if (val === '__clear__') {
+    emit('update:modelValue', null)
+    emit('valueChange', null)
+    return
+  }
+  emit('update:modelValue', val)
+  emit('valueChange', val)
+}
+
+defineOptions({ inheritAttrs: false })
 </script>
+
+<template>
+  <div class="flex flex-col gap-y-1.5">
+    <div
+      :class="cn(
+        'group relative flex h-12 w-full rounded-lg border border-black bg-surface-50 transition-all duration-200 focus-within:ring-2 focus-within:ring-primary-400/50 dark:border-surface-700 dark:bg-surface-900',
+        disabled ? 'pointer-events-none opacity-60' : '',
+        attrClass,
+      )"
+    >
+      <!-- prepend -->
+      <button
+        v-if="hasPrepend"
+        type="button"
+        :class="cn(
+          'inline-flex w-10 shrink-0 items-center justify-center rounded-l-lg text-muted-foreground transition',
+          noBorders ? 'border-r-0' : 'border-r border-r-black dark:border-r-surface-700',
+          hasPrependClick ? 'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800' : 'cursor-default',
+        )"
+        :tabindex="hasPrependClick ? 0 : -1"
+        @click="hasPrependClick && emit('click:prepend')"
+      >
+        <Icon v-if="prependIcon" :name="prependIcon" class="size-4" />
+      </button>
+
+      <!-- select root -->
+      <Select
+        :model-value="modelValue"
+        :default-value="defaultValue"
+        :disabled="disabled"
+        @update:model-value="handleUpdate"
+      >
+        <SelectTrigger
+          :class="cn(
+            'h-full flex-1 relative rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:border-0 pl-0 pr-4',
+            label ? 'pb-1 items-end' : '',
+            hasPrepend ? 'pl-0' : 'pl-4',
+            hasAppend ? 'pr-10' : 'pr-4',
+          )"
+        >
+          <!-- floating label -->
+          <label
+            v-if="label"
+            class="pointer-events-none absolute left-0 top-1 z-10 text-xs text-muted-foreground select-none"
+          >
+            {{ label }}
+          </label>
+          <SelectValue :placeholder="placeholder ?? ''" />
+        </SelectTrigger>
+
+        <SelectContent>
+          <SelectItem
+            v-for="item in items"
+            :key="itemValue(item)"
+            :value="itemValue(item)"
+          >
+            {{ itemLabel(item) }}
+          </SelectItem>
+        </SelectContent>
+      </Select>
+
+      <!-- clear button -->
+      <button
+        v-if="clearable && modelValue"
+        type="button"
+        class="absolute right-10 top-1/2 z-20 flex size-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm text-muted-foreground opacity-0 transition duration-100 hover:bg-neutral-200 group-hover:opacity-100 group-focus-within:opacity-100 dark:hover:bg-neutral-600"
+        @click.stop="() => { emit('update:modelValue', null); emit('valueChange', null) }"
+      >
+        <Icon name="icon-park-outline:close-small" class="size-3.5" />
+      </button>
+
+      <!-- append -->
+      <button
+        v-if="hasAppend"
+        type="button"
+        :class="cn(
+          'inline-flex w-10 shrink-0 items-center justify-center rounded-r-lg text-muted-foreground transition',
+          noBorders ? 'border-l-0' : 'border-l border-l-black dark:border-l-surface-700',
+          hasAppendClick ? 'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800' : 'cursor-default',
+        )"
+        :tabindex="hasAppendClick ? 0 : -1"
+        @click="hasAppendClick && emit('click:append')"
+      >
+        <Icon v-if="appendIcon" :name="appendIcon" class="size-4" />
+      </button>
+    </div>
+
+    <div v-if="message" class="text-xs font-medium text-muted-foreground/70">
+      {{ message }}
+    </div>
+    <div v-if="error" class="text-xs font-medium text-red-500">
+      {{ error }}
+    </div>
+  </div>
+</template>
+
 <style lang="postcss" scoped></style>

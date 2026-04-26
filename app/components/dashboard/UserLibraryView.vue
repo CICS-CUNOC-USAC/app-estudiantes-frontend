@@ -72,7 +72,7 @@
         prepend-icon="icon-park-twotone:category-management"
         no-borders
         clearable
-        checkmark
+        :model-value="$route.query.category_id ? String($route.query.category_id) : undefined"
         option-label="name"
         option-value="id"
         @value-change="

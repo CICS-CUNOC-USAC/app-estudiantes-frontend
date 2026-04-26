@@ -56,20 +56,13 @@
               }
             })
           }
-        "
-      />
-      <CSelect
-        :items="categories?.results || []"
-        label="Categoria"
-        id="category"
-        prepend-icon="icon-park-twotone:category-management"
-        no-borders
-        clearable
-        checkmark
-        option-label="name"
+        " />
+      <CSelect :items="categories?.results || []" label="Categoria" id="category"
+        prepend-icon="icon-park-twotone:category-management" no-borders clearable option-label="name"
         option-value="id"
+        :model-value="$route.query.category_id ? String($route.query.category_id) : undefined"
         @value-change="
-          ($event: number | null) => {
+          ($event: string | null) => {
             $router.push({
               query: {
                 ...$route.query,

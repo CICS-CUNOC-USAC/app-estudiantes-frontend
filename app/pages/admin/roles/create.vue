@@ -47,57 +47,67 @@
         <h2 class="mt-4 mb-2 font-medium">Permisos</h2>
 
         <div class="w-full lg:w-1/2">
-          <PMultiSelect
-            name="permissions_ids"
-            fluid
-            display="chip"
-            selected-items-label="{0} permisos seleccionados"
-            placeholder="Selecciona uno o varios permisos"
-            :options="permissions?.results"
-            :loading="statusPermissions === 'pending'"
-            option-value="id"
-            option-label="name"
-            :maxSelectedLabels="3"
-            show-clear
-            :show-toggle-all="false"
-            :pt="{
-              pcChip: {
-                root: {
-                  class: 'bg-neutral-200! dark:bg-neutral-700!'
-                }
-              },
-              label: {
-                class: 'text-sm'
-              },
-              optionLabel: {
-                class: 'text-sm'
-              }
-            }"
-          >
-            <template #option="{ option }">
-              <div class="flex items-center gap-2">
-                <span class="font-medium">{{ option.name }}</span>
-                <span class="text-sm"
-                  ><span class="text-muted-color">Acción:</span>
-                  <span class="font-medium italic">"{{ option.action }}"</span>
-                </span>
-                <span class="text-sm"
-                  ><span class="text-muted-color">Sobre:</span>
-                  <span class="font-medium italic"
-                    >"{{ option.subject }}"</span
-                  ></span
+          <Select multiple v-model="selectedPermissions">
+            <SelectTrigger
+              class="h-auto min-h-12 w-full rounded-lg border-black bg-surface-50 px-3 py-1.5 dark:border-surface-700 dark:bg-surface-900"
+            >
+              <SelectValue placeholder="Selecciona uno o varios permisos">
+                <template v-if="selectedPermissions.length">
+                  <div class="flex flex-wrap gap-1">
+                    <span
+                      v-if="selectedPermissions.length <= 3"
+                      v-for="id in selectedPermissions"
+                      :key="id"
+                      class="inline-flex items-center gap-1 rounded-md bg-neutral-200 px-2 py-0.5 text-xs font-medium dark:bg-neutral-700"
+                    >
+                      {{ permissions?.results?.find(p => p.id === id)?.name }}
+                      <button
+                        type="button"
+                        class="ml-0.5 cursor-pointer opacity-60 hover:opacity-100"
+                        @click.stop="selectedPermissions = selectedPermissions.filter(i => i !== id)"
+                      >
+                        <Icon name="lucide:x" class="size-3" />
+                      </button>
+                    </span>
+                    <span
+                      v-else
+                      class="inline-flex items-center rounded-md bg-neutral-200 px-2 py-0.5 text-xs font-medium dark:bg-neutral-700"
+                    >
+                      {{ selectedPermissions.length }} permisos seleccionados
+                    </span>
+                  </div>
+                </template>
+              </SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem
+                  v-if="statusPermissions === 'pending'"
+                  value="__loading__"
+                  disabled
+                  class="text-muted-foreground"
                 >
-              </div>
-            </template>
-          </PMultiSelect>
+                  Cargando permisos...
+                </SelectItem>
+                <SelectItem
+                  v-for="permission in permissions?.results"
+                  :key="permission.id"
+                  :value="permission.id"
+                >
+                  <span class="font-medium">{{ permission.name }}</span>
+                  <span class="text-muted-foreground text-xs">
+                    Acción: <span class="font-semibold">"{{ permission.action }}"</span> Sobre: <span class="font-semibold">"{{ permission.subject }}"</span>
+                  </span>
+                </SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
 
           <div
-            v-if="$form.permissions_ids?.invalid"
-            severity="error"
-            variant="simple"
+            v-if="permissionsError"
             class="mt-1.5 text-xs font-medium text-red-500"
           >
-            {{ $form.permissions_ids?.error?.message }}
+            {{ permissionsError }}
           </div>
         </div>
 
@@ -128,14 +138,24 @@ import { toast } from 'vue-sonner'
 import { z } from 'zod'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '~/components/ui/select'
 import { getAllPermissions } from '~/lib/api/admin/permissions'
 import { createRole } from '~/lib/api/admin/roles'
+
+const selectedPermissions = ref<number[]>([])
+const permissionsError = ref('')
 
 const initialValues = reactive({
   name: '',
   alias: '',
   description: '',
-  permissions_ids: []
 })
 
 const resolver = zodResolver(
@@ -143,7 +163,6 @@ const resolver = zodResolver(
     name: z.string().nonempty('El nombre es requerido'),
     alias: z.string().nonempty('El alias es requerido'),
     description: z.string().nonempty('La descripción es requerida'),
-    permissions_ids: z.array(z.number()).nonempty('Debes seleccionar al menos un permiso')
   })
 )
 
@@ -172,8 +191,11 @@ const {
 })
 
 const saveRole = async (e: FormSubmitEvent) => {
-  if (e.valid) {
-    mutate(e.values as Role)
+  permissionsError.value = selectedPermissions.value.length === 0
+    ? 'Debes seleccionar al menos un permiso'
+    : ''
+  if (e.valid && !permissionsError.value) {
+    mutate({ ...e.values, permissions_ids: selectedPermissions.value })
   }
 }
 

@@ -20,7 +20,20 @@
     </div>
 
     <section class="mt-2 mb-6 grid grid-cols-1 gap-x-8 gap-y-4 lg:grid-cols-2">
-      <div
+      <CCardAlt v-for="role in roles?.results" :key="role.id" :title="role.name" :description="role.description">
+        <template #footer>
+          <Button
+            variant="tonal"
+            severity="default"
+            label="Editar"
+            size="small"
+            icon="icon-park-twotone:edit"
+            :to="`/admin/roles/${role.id}/edit`"
+          />
+        </template>
+        
+      </CCardAlt>
+      <!-- <div
         v-for="role in roles?.results"
         :key="role.id"
         class="dark:bg-surface-800 rounded-lg border border-black/70 bg-white px-4.5 py-4 dark:border-neutral-700"
@@ -39,20 +52,20 @@
             :to="`/admin/roles/edit/${role.id}`"
           />
         </footer>
-      </div>
+      </div> -->
     </section>
   </main>
 </template>
 <script setup lang="ts">
+import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import Button from '~/components/ui/button/Button.vue'
 import { getAllRoles } from '~/lib/api/admin/roles'
 
 const {
   data: roles,
   status,
-  error,
-} = await useAsyncData('roles', () => getAllRoles(), {
-})
+  error
+} = await useAsyncData('roles', () => getAllRoles(), {})
 
 definePageMeta({
   layout: 'admin',

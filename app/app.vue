@@ -13,6 +13,8 @@
         unstyled: true,
         duration: 3000,
         classes: {
+          actionButton:
+            'bg-transparent text-sm text-primary-600 hover:text-primary-700 rounded-md hover:underline',
           toast:
             'w-full py-2 text-sm px-3 border border-black/85 rounded-lg text-current font-sans flex items-center gap-3 shadow-lg',
           default: 'dark:bg-surface-800 bg-surface-50',
