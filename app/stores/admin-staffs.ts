@@ -15,7 +15,7 @@ export type StaffPayload = {
   last_name: string
   first_name: string
   email: string
-  password: string
+  password?: string
 }
 
 export const useAdminStaffsStore = defineStore('admin-staffs', () => {

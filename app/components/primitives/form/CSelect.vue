@@ -36,7 +36,6 @@ const emit = defineEmits<{
 }>()
 
 const rawAttrs = useAttrs()
-console.log('rawAttrs', rawAttrs)
 const attrClass = computed(() => (rawAttrs.class as string) ?? '')
 
 const hasPrependClick = computed(

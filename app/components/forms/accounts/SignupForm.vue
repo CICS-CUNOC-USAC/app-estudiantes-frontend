@@ -184,7 +184,7 @@
 </template>
 <script lang="ts" setup>
 import { toTypedSchema } from '@vee-validate/zod'
-import { useForm, Field as VeeField, FieldGroup } from 'vee-validate'
+import { useForm, Field as VeeField } from 'vee-validate'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
 import CInputText from '~/components/primitives/form/CInputText.vue'
@@ -197,7 +197,7 @@ import {
   CardHeader,
   CardTitle
 } from '~/components/ui/card'
-import { Field } from '~/components/ui/field'
+import { Field, FieldGroup } from '~/components/ui/field'
 import { type UserSirecaInfoResponse } from '~/lib/api/auth/user'
 
 const regularAuthStore = useRegularAuthStore()

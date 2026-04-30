@@ -25,17 +25,16 @@
     <section class="mt-4" v-if="user">
       <form id="form-user-edit" @submit="onSubmit">
         <h2 class="my-2 font-medium">Información del usuario</h2>
-        <fieldset
+        <FieldGroup
           :disabled="asyncStatus === 'loading' || isSameUser"
-          class="disabled:opacity-60"
+          class="disabled:opacity-60 gap-4"
         >
           <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <VeeField v-slot="{ field, errors }" name="first_name">
+            <VeeField v-slot="{ componentField, errors }" name="first_name">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Nombres"
-                  name="first_name"
                   id="first_name"
                   no-borders
                   prepend-icon="icon-park-twotone:people"
@@ -44,10 +43,10 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="last_name">
+            <VeeField v-slot="{ componentField, errors }" name="last_name">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Apellidos"
                   name="last_name"
                   id="last_name"
@@ -58,10 +57,10 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="email">
+            <VeeField v-slot="{ componentField, errors }" name="email">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Correo electrónico"
                   name="email"
                   id="email"
@@ -72,10 +71,10 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="password">
+            <VeeField v-slot="{ componentField, errors }" name="password">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Nueva contraseña inicial"
                   name="password"
                   id="password"
@@ -87,10 +86,9 @@
               </Field>
             </VeeField>
           </div>
-          <h2 class="mt-4 mb-2 font-medium">Roles y permisos asignados</h2>
+          <h2 class=" font-medium">Roles y permisos asignados</h2>
 
           <div class="w-full lg:w-1/2">
-            <!-- NOTE: Campo de roles usar shadcn Select multiple - similar a create.vue -->
             <VeeField v-slot="{ field, errors }" name="roles_ids">
               <Field :data-invalid="!!errors.length">
                 <Select
@@ -147,7 +145,7 @@
               </Field>
             </VeeField>
           </div>
-        </fieldset>
+        </FieldGroup>
         <div class="mt-4 space-x-4">
           <Button
             label="Cancelar"
@@ -160,6 +158,7 @@
             label="Guardar"
             icon="icon-park-outline:check"
             :disabled="isSameUser || asyncStatus === 'loading'"
+            :loading="asyncStatus === 'loading'"
             type="submit"
             class=""
           />
@@ -191,13 +190,25 @@ import { getAllRoles } from '~/lib/api/admin/roles'
 import { fetchStaff, updateStaff } from '~/lib/api/admin/users'
 
 const { params } = useRoute()
-const { data: user, status } = await useAsyncData('edit-user', () =>
-  fetchStaff(+params.userId)
+const { data: user, status } = await useAsyncData(
+  `edit-user-${params.userId}`,
+  () => fetchStaff(+params.userId)
 )
 
 const { user: userLoggedIn } = useAuthStore()
 
 const isSameUser = computed(() => userLoggedIn?.id === user.value?.id)
+
+const initialValues = computed(() => {
+  if (!user.value) return {}
+  return {
+    first_name: user.value.first_name,
+    last_name: user.value.last_name,
+    email: user.value.email,
+    password: '',
+    roles_ids: user.value.roles.map((role) => role.id)
+  }
+})
 
 const formSchema = z.object({
   first_name: z.string().nonempty('El nombre es requerido'),
@@ -207,25 +218,9 @@ const formSchema = z.object({
   roles_ids: z.array(z.number()).min(1, 'Al menos un rol es requerido')
 })
 
-const { handleSubmit, setFieldValue } = useForm({
+const { handleSubmit, values } = useForm({
   validationSchema: toTypedSchema(formSchema),
-  initialValues: {
-    first_name: user.value?.first_name || '',
-    last_name: user.value?.last_name || '',
-    email: user.value?.email || '',
-    password: '',
-    roles_ids: user.value?.roles.map((role) => role.id) || []
-  }
-})
-
-// Set roles_ids after initial values are set
-watchEffect(() => {
-  if (user.value?.roles) {
-    setFieldValue(
-      'roles_ids',
-      user.value.roles.map((role) => role.id)
-    )
-  }
+  initialValues: initialValues.value
 })
 
 const onSubmit = handleSubmit((values) => {
@@ -241,8 +236,8 @@ const { mutate, asyncStatus } = useMutation({
   onError(error) {
     toast.error('Ocurrió un error al actualizar el usuario', {
       description: `
-      Parece que los datos no son válidos:
-      ${(error as FetchError).data.message.join(', ')}
+        Parece que los datos no son válidos:
+        ${(error as FetchError).data.message.join(', ')}
       `
     })
   },

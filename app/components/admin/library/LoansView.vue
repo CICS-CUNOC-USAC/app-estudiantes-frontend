@@ -72,7 +72,11 @@
         prepend-icon="icon-park-twotone:category-management"
         no-borders
         clearable
-        :model-value="$route.query.category_id ? String($route.query.category_id) : undefined"
+        :model-value="
+          $route.query.category_id
+            ? String($route.query.category_id)
+            : undefined
+        "
         option-label="name"
         option-value="id"
         @value-change="
@@ -93,6 +97,8 @@
       :data="data || []"
       :total-elements="data?.length"
       :pagination-state="paginationOptions"
+      :enable-sorting="false"
+      disable-pagination
       @pagination-change="
         ($event) => {
           if (typeof $event === 'function') {
@@ -194,7 +200,7 @@ function openDetail(bookItem: any, showAllInfo: any) {
       dismissableMask: true
     },
     data: { bookItem, showAllInfo },
-    onClose: () => { }
+    onClose: () => {}
   })
 }
 
@@ -204,47 +210,51 @@ const columns: ColumnDef<Loan>[] = [
     meta: {
       displayName: 'Referencia'
     },
-    header: () => <div class="text-center font-semibold w-52">Referencia</div>,
-    cell: ({ row }) => <div class="text-center w-52">{row.getValue('library_reference_id')}</div>
+    header: () => <div class="font-semibold">Referencia</div>,
+    cell: ({ row }) => (
+      <div class=" ">{row.getValue('library_reference_id')}</div>
+    )
   },
   {
     accessorKey: 'library_reference.book.name',
     meta: {
       displayName: 'Nombre'
     },
-    header: () => <div class="text-center font-semibold w-52">Nombre</div>,
-    cell: ({ row }) => <div class="text-center w-52">{(row.original.library_reference as any).book?.name}</div>
+    header: () => <div class="font-semibold">Nombre</div>,
+    cell: ({ row }) => (
+      <div class=" ">{(row.original.library_reference as any).book?.name}</div>
+    )
   },
   {
     accessorKey: 'library_reference.book.author',
     meta: {
       displayName: 'Autor'
     },
-    header: () => <div class="text-center font-semibold w-60">Autor</div>,
-    cell: ({ row }) => <div class="text-center w-60">{(row.original.library_reference as any).book?.author}</div>
+    header: () => <div class="font-semibold">Autor</div>,
+    cell: ({ row }) => (
+      <div class="">{(row.original.library_reference as any).book?.author}</div>
+    )
   },
   {
     accessorKey: 'place',
     meta: {
       displayName: 'Lugar'
     },
-    header: () => <div class="text-center font-semibold w-60">Lugar</div>,
-    cell: ({ row }) => <div class="text-center w-60">{row.getValue('place')}</div>
+    header: () => <div class="font-semibold">Lugar</div>,
+    cell: ({ row }) => <div class="">{row.getValue('place')}</div>
   },
   {
     accessorKey: 'id',
     meta: {
       displayName: 'Identificación'
     },
-    header: () => <div class="text-center font-semibold truncate max-w-0">Identificación</div>,
+    header: () => (
+      <div class="font-semibold">Identificación</div>
+    ),
     cell: ({ row }) => (
       <p class="truncate text-sm">
-            {
-              (row.getValue('ra')?.length ?? 0 > 0)
-                ? row.getValue('ra')
-                : row.getValue('personal_id')
-            }
-          </p>
+        {row.original.ra ? `RA: ${row.original.ra}` : `ID: ${row.original.personal_id}`}
+      </p>
     )
   },
   {
@@ -252,11 +262,11 @@ const columns: ColumnDef<Loan>[] = [
     meta: {
       displayName: 'Acciones'
     },
-    header: () => <div class="text-center font-semibold w-32">Acciones</div>,
+    header: () => <div class="font-semibold">Acciones</div>,
     cell: ({ row }) => (
       <div class="flex flex-col items-center justify-center gap-y-2">
         <LoanDetailDialog
-          title={row.original.name}
+          title={row.original.library_reference.book.name}
           loanItem={row.original}
           showAllInfo
         >
@@ -265,10 +275,19 @@ const columns: ColumnDef<Loan>[] = [
             size="small"
             label="Detalle del Prestamo"
             variant="tonal"
+            class="w-full"
           />
         </LoanDetailDialog>
-        <Button icon="icon-park-twotone:eyes" size="small" label="Detalle del Libro" variant="tonal"
-          onClick={() => openDetail((row.original.library_reference as any).book, true)} />
+        <Button
+          icon="icon-park-twotone:eyes"
+          size="small"
+          label="Detalle del Libro"
+          variant="tonal"
+          class="w-full"
+          onClick={() =>
+            openDetail((row.original.library_reference as any).book, true)
+          }
+        />
         <LoanActionDialog
           bookName={(row.original.library_reference as any).book.name}
           bookReferenceId={row.original.library_reference_id}
@@ -280,6 +299,7 @@ const columns: ColumnDef<Loan>[] = [
             size="small"
             label="Retornar"
             variant="tonal"
+            class="w-full"
           />
         </LoanActionDialog>
       </div>
