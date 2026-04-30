@@ -12,46 +12,58 @@
         <span class="sr-only">Close</span>
       </Button>
     </div>
-    <PForm
-      :initial-values="initialValues"
-      :resolver="resolver"
-      v-slot="$form"
-      @submit="saveReference"
-      class="space-y-4"
-    >
-      <CInputText
-        label="ID de referencia"
-        name="reference_id"
-        id="reference_id"
-        no-borders
-        prepend-icon="icon-park-twotone:tag"
-        :error="$form.reference_id?.error?.message"
-      />
-      <CInputText
-        label="Edición"
-        name="edition"
-        id="edition"
-        no-borders
-        prepend-icon="icon-park-twotone:bookshelf"
-        :error="$form.edition?.error?.message"
-      />
-      <CInputText
-        label="Ubicación"
-        name="location"
-        id="location"
-        no-borders
-        prepend-icon="icon-park-twotone:local"
-        :error="$form.location?.error?.message"
-      />
+    <form class="space-y-4" @submit="onSubmit">
+      <FieldGroup class="gap-4">
+        <VeeField v-slot="{ field, errors }" name="reference_id">
+          <Field :data-invalid="!!errors.length">
+            <CInputText
+              v-bind="field"
+              label="ID de referencia"
+              id="reference_id"
+              no-borders
+              prepend-icon="icon-park-twotone:tag"
+              :error="errors[0]"
+            />
+          </Field>
+        </VeeField>
+
+        <VeeField v-slot="{ field, errors }" name="edition">
+          <Field :data-invalid="!!errors.length">
+            <CInputText
+              v-bind="field"
+              label="Edición"
+              id="edition"
+              no-borders
+              prepend-icon="icon-park-twotone:bookshelf"
+              :error="errors[0]"
+            />
+          </Field>
+        </VeeField>
+
+        <VeeField v-slot="{ field, errors }" name="location">
+          <Field :data-invalid="!!errors.length">
+            <CInputText
+              v-bind="field"
+              label="Ubicación"
+              id="location"
+              no-borders
+              prepend-icon="icon-park-twotone:local"
+              :error="errors[0]"
+            />
+          </Field>
+        </VeeField>
+      </FieldGroup>
+
       <div class="flex gap-4 pt-2">
-        <CButton
+        <Button
           label="Cancelar"
           icon="icon-park-outline:arrow-left"
-          severity="secondary"
+          type="button"
+          variant="tonal"
           class="flex-1"
           @click="dialogRef.close()"
         />
-        <CButton
+        <Button
           label="Guardar"
           icon="icon-park-outline:check"
           type="submit"
@@ -59,44 +71,50 @@
           :loading="saving"
         />
       </div>
-    </PForm>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
 import { inject } from 'vue'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm, Field as VeeField } from 'vee-validate'
 import { z } from 'zod'
 import { createLibraryReference } from '~/lib/api/admin/books'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import { Field, FieldGroup } from '~/components/ui/field'
 
 const dialogRef: any = inject('dialogRef')
 const { bookId } = dialogRef.value.data
 
 const saving = ref(false)
 
-const initialValues = reactive({
-  reference_id: '',
-  edition: '',
-  location: ''
+const formSchema = z.object({
+  reference_id: z.string().nonempty('El ID de referencia es requerido'),
+  edition: z.string().nonempty('La edición es requerida'),
+  location: z.string().nonempty('La ubicación es requerida')
 })
 
-const resolver = zodResolver(
-  z.object({
-    reference_id: z.string().nonempty('El ID de referencia es requerido'),
-    edition: z.string().nonempty('La edición es requerida'),
-    location: z.string().nonempty('La ubicación es requerida')
-  })
-)
-
-const saveReference = async (e: any) => {
-  if (e.valid) {
-    saving.value = true
-    const { reference_id, ...rest } = e.values
-    await createLibraryReference(bookId, reference_id, rest)
-    saving.value = false
-    dialogRef.value.close({ success: true })
+const { handleSubmit } = useForm({
+  validationSchema: toTypedSchema(formSchema),
+  initialValues: {
+    reference_id: '',
+    edition: '',
+    location: ''
   }
-}
+})
+
+const onSubmit = handleSubmit(async (values) => {
+  saving.value = true
+  try {
+    const { reference_id, ...rest } = values
+    const result = await createLibraryReference(bookId, reference_id, rest)
+    if (!(result as any)?.error) {
+    dialogRef.value.close({ success: true })
+    }
+  } finally {
+    saving.value = false
+  }
+})
 </script>

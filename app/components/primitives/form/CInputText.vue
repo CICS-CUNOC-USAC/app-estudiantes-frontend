@@ -90,7 +90,7 @@ defineExpose({ focus })
         :class="cn(
           'inline-flex w-10 shrink-0 items-center justify-center rounded-l-lg border-r text-muted-foreground transition',
           noBorders ? 'border-r-0' : 'border-r-black dark:border-r-surface-700',
-          hasPrependClick ? 'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800' : 'cursor-default',
+          hasPrependClick ? 'cursor-pointer' : 'cursor-default',
         )"
         :tabindex="hasPrependClick ? 0 : -1"
         @click="hasPrependClick && emit('click:prepend')"
@@ -143,7 +143,7 @@ defineExpose({ focus })
         :class="cn(
           'inline-flex w-10 shrink-0 items-center justify-center rounded-r-lg border-l text-muted-foreground transition',
           noBorders ? 'border-l-0' : 'border-l-black dark:border-l-surface-700',
-          hasAppendClick ? 'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800' : 'cursor-default',
+          hasAppendClick ? 'cursor-pointer' : 'cursor-default',
         )"
         :tabindex="hasAppendClick ? 0 : -1"
         @click="hasAppendClick && emit('click:append')"

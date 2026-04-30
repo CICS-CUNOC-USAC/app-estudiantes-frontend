@@ -107,96 +107,27 @@
           </div>
         </template>
         <template v-if="showAllInfo && data.library_reference">
-          <PDataTable
-            size="small"
-            :value="data.library_reference"
-            :loading="status === 'pending'"
-            :rows="rows"
-            :first="first"
-            :total-records="data.library_reference.length"
-            row-hover
-            paginator
-            paginatorTemplate="PrevPageLink CurrentPageReport NextPageLink"
-            currentPageReportTemplate="{currentPage} de {totalPages}"
-          >
-            <PColumn
-              field="id"
-              header="Referencia"
-              class="text-center"
-              body-class="w-52"
-            >
-            </PColumn>
-            <PColumn
-              field="location"
-              header="Ubicacion"
-              class="text-center"
-              body-class="w-52"
-            >
-            </PColumn>
-            <PColumn
-              field="is_available"
-              header="Disponibilidad"
-              class="text-center"
-              body-class="truncate max-w-0"
-            >
-              <template #body="slotProps">
-                <strong
-                  :class="
-                    slotProps.data.is_available
-                      ? 'text-green-600'
-                      : 'text-red-600'
-                  "
-                >
-                  {{
-                    slotProps.data.is_available ? 'Disponible' : 'No Disponible'
-                  }}
-                </strong>
-              </template>
-            </PColumn>
-            <PColumn
-              field="edition"
-              header="Edicion"
-              class="text-center text-sm"
-              body-class="w-60"
-            ></PColumn>
-            <PColumn field="" header="Acciones" class="w-32 text-center">
-              <template #body="slotProps">
-                <div class="flex flex-col items-center justify-center gap-y-2">
-                  <Button
-                    icon="lucide:hand-helping"
-                    size="small"
-                    label="Prestamo"
-                    variant="tonal"
-                    @click="openActionDialog(slotProps.data.id)"
-                  />
-                  <KebabMenu>
-                    <div class="flex flex-col">
-                      <button
-                        class="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-800"
-                        @click="openEditReferenceDialog(slotProps.data)"
-                      >
-                        <Icon
-                          name="icon-park-twotone:edit"
-                          class="text-gray-500 dark:text-gray-400"
-                        />
-                        <span>Editar</span>
-                      </button>
-                      <button
-                        class="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
-                        @click="openDeleteReferenceDialog(slotProps.data)"
-                      >
-                        <Icon
-                          name="icon-park-outline:delete"
-                          class="text-red-500"
-                        />
-                        <span>Eliminar</span>
-                      </button>
-                    </div>
-                  </KebabMenu>
-                </div>
-              </template>
-            </PColumn>
-          </PDataTable>
+          <DataTable
+            :columns
+            :data="paginatedReferences"
+            :total-elements="totalReferences"
+            :total-pages="totalReferencePages"
+            :pagination-state="referencesPagination"
+            :enable-sorting="false"
+            :disable-column-visibility="true"
+            @pagination-change="
+              ($event) => {
+                if (typeof $event === 'function') {
+                  referencesPagination = $event(referencesPagination)
+                } else {
+                  referencesPagination = {
+                    ...referencesPagination,
+                    ...$event
+                  }
+                }
+              }
+            "
+          />
         </template>
       </div>
     </div>
@@ -204,7 +135,7 @@
 </template>
 
 <script setup lang="tsx">
-import { inject, computed } from 'vue'
+import { inject, computed, ref, watch } from 'vue'
 import { useAsyncData } from '#app'
 import { useDialog } from 'primevue/usedialog'
 import { getAdminBookByIdAndType, getBookById } from '~/lib/api/books'
@@ -220,14 +151,9 @@ import LibraryReferenceDeleteDialog from './admin/books/LibraryReferenceDeleteDi
 
 const dialogRef: any = inject('dialogRef')
 
-const currentPage = ref(0)
-const rows = ref(5)
-
-const first = computed(() => currentPage.value * rows.value)
-
 const { bookItem, showAllInfo } = dialogRef.value.data
 
-const { data, status, refresh } = await useAsyncData<Book>(
+const { data, refresh } = await useAsyncData<Book>(
   `book-detail-${bookItem.id}`,
   () =>
     showAllInfo
@@ -247,6 +173,36 @@ function openActionDialog(bookReferenceId: number | string) {
     data: { bookReferenceId, bookName: data.value?.name }
   })
 }
+
+const referencesPagination = ref({
+  pageIndex: 0,
+  pageSize: 5
+})
+
+const totalReferences = computed(
+  () => data.value?.library_reference?.length ?? 0
+)
+
+const totalReferencePages = computed(() =>
+  Math.max(1, Math.ceil(totalReferences.value / referencesPagination.value.pageSize))
+)
+
+const paginatedReferences = computed(() => {
+  const references = data.value?.library_reference ?? []
+  const start = referencesPagination.value.pageIndex * referencesPagination.value.pageSize
+  const end = start + referencesPagination.value.pageSize
+  return references.slice(start, end)
+})
+
+watch([totalReferences, () => referencesPagination.value.pageSize], () => {
+  const maxPage = Math.max(0, totalReferencePages.value - 1)
+  if (referencesPagination.value.pageIndex > maxPage) {
+    referencesPagination.value = {
+      ...referencesPagination.value,
+      pageIndex: maxPage
+    }
+  }
+})
 
 const columns: ColumnDef<LibraryReference>[] = [
   {
@@ -299,13 +255,30 @@ const columns: ColumnDef<LibraryReference>[] = [
     header: () => <div class="font-semibold">Acciones</div>,
     cell: ({ row }) => (
       <div class="flex flex-col items-center justify-center gap-y-2">
-        <Button
-          icon="lucide:hand-helping"
-          size="small"
-          label="Prestamo"
-          variant="tonal"
-          onClick={() => openActionDialog(row.original.id)}
-        />
+        <div onClick={() => openActionDialog(row.original.id)}>
+          <Button
+            icon="lucide:hand-helping"
+            size="small"
+            label="Prestamo"
+            variant="tonal"
+          />
+        </div>
+        <KebabMenu>
+          <div class="flex flex-col">
+            <button
+              class="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-neutral-800"
+              onClick={() => openEditReferenceDialog(row.original)}
+            >
+              <span>Editar</span>
+            </button>
+            <button
+              class="flex cursor-pointer items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 transition-colors hover:bg-red-50 dark:hover:bg-red-900/20"
+              onClick={() => openDeleteReferenceDialog(row.original)}
+            >
+              <span>Eliminar</span>
+            </button>
+          </div>
+        </KebabMenu>
       </div>
     )
   }

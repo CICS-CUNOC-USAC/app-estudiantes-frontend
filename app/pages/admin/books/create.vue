@@ -171,7 +171,15 @@
             <VeeField v-slot="{ field, errors }" name="category_id">
               <Field :data-invalid="!!errors.length">
                 <CSelect
-                  v-bind="field"
+                  :model-value="
+                    field.value !== null && field.value !== undefined
+                      ? String(field.value)
+                      : undefined
+                  "
+                  @update:model-value="
+                    (value) => field.onChange(value ? Number(value) : null)
+                  "
+                  @blur="field.onBlur"
                   label="Categoría"
                   name="category_id"
                   id="category_id"
@@ -335,7 +343,7 @@ const { handleSubmit } = useForm({
     location: '',
     author: '',
     source_url: '',
-    category_id: null
+    category_id: undefined
   }
 })
 

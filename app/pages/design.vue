@@ -782,18 +782,6 @@
 import { toast } from 'vue-sonner'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from '~/components/ui/card'
-import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import { toast } from 'vue-sonner'
-import CInputText from '~/components/primitives/form/CInputText.vue'
 import KebabMenu from '~/components/partials/KebabMenu.vue'
 
 const text = ref('')

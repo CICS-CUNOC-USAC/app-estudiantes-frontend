@@ -5,7 +5,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '~/components/ui/select'
 import { cn } from '@/lib/utils'
 
@@ -30,12 +30,13 @@ const props = defineProps<{
 
 const emit = defineEmits<{
   'update:modelValue': [value: any]
-  'valueChange': [value: any]
+  valueChange: [value: any]
   'click:prepend': []
   'click:append': []
 }>()
 
 const rawAttrs = useAttrs()
+console.log('rawAttrs', rawAttrs)
 const attrClass = computed(() => (rawAttrs.class as string) ?? '')
 
 const hasPrependClick = computed(
@@ -48,12 +49,14 @@ const hasPrepend = computed(() => !!props.prependIcon || hasPrependClick.value)
 const hasAppend = computed(() => !!props.appendIcon || hasAppendClick.value)
 
 function itemValue(item: Item): string {
-  if (typeof item === 'object' && props.optionValue) return String(item[props.optionValue])
+  if (typeof item === 'object' && props.optionValue)
+    return String(item[props.optionValue])
   return String(item)
 }
 
 function itemLabel(item: Item): string {
-  if (typeof item === 'object' && props.optionLabel) return String(item[props.optionLabel])
+  if (typeof item === 'object' && props.optionLabel)
+    return String(item[props.optionLabel])
   return String(item)
 }
 
@@ -73,21 +76,29 @@ defineOptions({ inheritAttrs: false })
 <template>
   <div class="flex flex-col gap-y-1.5">
     <div
-      :class="cn(
-        'group relative flex h-12 w-full rounded-lg border border-black bg-surface-50 transition-all duration-200 focus-within:ring-2 focus-within:ring-primary-400/50 dark:border-surface-700 dark:bg-surface-900',
-        disabled ? 'pointer-events-none opacity-60' : '',
-        attrClass,
-      )"
+      :class="
+        cn(
+          'group bg-surface-50 focus-within:ring-primary-400/50 dark:border-surface-700 dark:bg-surface-900 relative flex h-12 w-full rounded-lg border border-black transition-all duration-200 focus-within:ring-2',
+          disabled ? 'pointer-events-none opacity-60' : '',
+          attrClass
+        )
+      "
     >
       <!-- prepend -->
       <button
         v-if="hasPrepend"
         type="button"
-        :class="cn(
-          'inline-flex w-10 shrink-0 items-center justify-center rounded-l-lg text-muted-foreground transition',
-          noBorders ? 'border-r-0' : 'border-r border-r-black dark:border-r-surface-700',
-          hasPrependClick ? 'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800' : 'cursor-default',
-        )"
+        :class="
+          cn(
+            'text-muted-foreground inline-flex w-10 shrink-0 items-center justify-center rounded-l-lg transition',
+            noBorders
+              ? 'border-r-0'
+              : 'dark:border-r-surface-700 border-r border-r-black',
+            hasPrependClick
+              ? 'hover:bg-surface-200/80 dark:hover:bg-surface-800 cursor-pointer'
+              : 'cursor-default'
+          )
+        "
         :tabindex="hasPrependClick ? 0 : -1"
         @click="hasPrependClick && emit('click:prepend')"
       >
@@ -96,23 +107,26 @@ defineOptions({ inheritAttrs: false })
 
       <!-- select root -->
       <Select
+        v-bind="$attrs"
         :model-value="modelValue"
         :default-value="defaultValue"
         :disabled="disabled"
         @update:model-value="handleUpdate"
       >
         <SelectTrigger
-          :class="cn(
-            'h-full flex-1 relative rounded-none border-0 bg-transparent shadow-none focus-visible:ring-0 focus-visible:border-0 pl-0 pr-4',
-            label ? 'pb-1 items-end' : '',
-            hasPrepend ? 'pl-0' : 'pl-4',
-            hasAppend ? 'pr-10' : 'pr-4',
-          )"
+          :class="
+            cn(
+              'relative h-full flex-1 rounded-none border-0 bg-transparent pr-4 pl-0 shadow-none focus-visible:border-0 focus-visible:ring-0',
+              label ? 'items-end pb-1' : '',
+              hasPrepend ? 'pl-0' : 'pl-4',
+              hasAppend ? 'pr-10' : 'pr-4'
+            )
+          "
         >
           <!-- floating label -->
           <label
             v-if="label"
-            class="pointer-events-none absolute left-0 top-1 z-10 text-xs text-muted-foreground select-none"
+            class="text-muted-foreground pointer-events-none absolute top-1 left-0 z-10 text-xs select-none"
           >
             {{ label }}
           </label>
@@ -134,8 +148,13 @@ defineOptions({ inheritAttrs: false })
       <button
         v-if="clearable && modelValue"
         type="button"
-        class="absolute right-10 top-1/2 z-20 flex size-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm text-muted-foreground opacity-0 transition duration-100 hover:bg-neutral-200 group-hover:opacity-100 group-focus-within:opacity-100 dark:hover:bg-neutral-600"
-        @click.stop="() => { emit('update:modelValue', null); emit('valueChange', null) }"
+        class="text-muted-foreground absolute top-1/2 right-10 z-20 flex size-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm opacity-0 transition duration-100 group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+        @click.stop="
+          () => {
+            emit('update:modelValue', null)
+            emit('valueChange', null)
+          }
+        "
       >
         <Icon name="icon-park-outline:close-small" class="size-3.5" />
       </button>
@@ -144,11 +163,17 @@ defineOptions({ inheritAttrs: false })
       <button
         v-if="hasAppend"
         type="button"
-        :class="cn(
-          'inline-flex w-10 shrink-0 items-center justify-center rounded-r-lg text-muted-foreground transition',
-          noBorders ? 'border-l-0' : 'border-l border-l-black dark:border-l-surface-700',
-          hasAppendClick ? 'cursor-pointer hover:bg-surface-200/80 dark:hover:bg-surface-800' : 'cursor-default',
-        )"
+        :class="
+          cn(
+            'text-muted-foreground inline-flex w-10 shrink-0 items-center justify-center rounded-r-lg transition',
+            noBorders
+              ? 'border-l-0'
+              : 'dark:border-l-surface-700 border-l border-l-black',
+            hasAppendClick
+              ? 'hover:bg-surface-200/80 dark:hover:bg-surface-800 cursor-pointer'
+              : 'cursor-default'
+          )
+        "
         :tabindex="hasAppendClick ? 0 : -1"
         @click="hasAppendClick && emit('click:append')"
       >
@@ -156,7 +181,7 @@ defineOptions({ inheritAttrs: false })
       </button>
     </div>
 
-    <div v-if="message" class="text-xs font-medium text-muted-foreground/70">
+    <div v-if="message" class="text-muted-foreground/70 text-xs font-medium">
       {{ message }}
     </div>
     <div v-if="error" class="text-xs font-medium text-red-500">
