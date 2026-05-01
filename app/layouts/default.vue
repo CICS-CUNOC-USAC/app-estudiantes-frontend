@@ -1,110 +1,119 @@
 <template>
-  <div>
-    <nav
-      class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
-      :class="{
-        'border-transparent': !hasScrolled,
-        'border-neutral-200 shadow-md dark:border-neutral-700/75': hasScrolled,
-        'dark:bg-surface-950/75 bg-white/80': !$route.meta.menuClass,
-        [$route.meta.menuClass as string]: $route.meta.menuClass
-      }"
-    >
-      <div
-        class="mx-auto flex h-full max-w-screen-2xl items-center justify-between px-4 py-2.5"
+  <SidebarProvider :default-open="false">
+    <DefaultSidebar />
+    <div class="w-full">
+      <nav
+        class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
+        :class="{
+          'border-transparent': !hasScrolled,
+          'border-neutral-200 shadow-md dark:border-neutral-700/75':
+            hasScrolled,
+          'dark:bg-surface-950/75 bg-white/80': !$route.meta.menuClass,
+          [$route.meta.menuClass as string]: $route.meta.menuClass
+        }"
       >
-        <div class="flex grow basis-0 items-center gap-x-3">
-          <button
-            @click="drawer = !drawer"
-            type="button"
-            class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 focus:ring-2 focus:ring-neutral-200 focus:outline-none lg:hidden dark:text-neutral-400 dark:focus:ring-neutral-600"
-          >
-            <Icon name="tabler:layout-sidebar-filled" />
-          </button>
-          <NuxtLink
-            class="hidden items-center space-x-2 transition hover:opacity-80 lg:flex"
-            to="/"
-          >
-            <CICSLogo :width="60" fill="var(--p-primary-500)" />
-            <span v-if="$route.meta.title">⋅</span>
-            <div class="text-xs font-medium">{{ $route.meta.title }}</div>
-          </NuxtLink>
-          <Transition name="title-fade">
-            <NuxtLink class="block text-sm lg:hidden" to="/" v-if="!searchOpen">
-              <strong>CICS App</strong> ⋅ Portal
+        <div
+          class="mx-auto flex h-full max-w-screen-2xl items-center justify-between px-4 py-2.5"
+        >
+          <div class="flex grow basis-0 items-center gap-x-3">
+            <SidebarTrigger class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm focus:ring-2 focus:ring-neutral-200 focus:outline-none lg:hidden  dark:focus:ring-neutral-600">
+              <Icon name="tabler:layout-sidebar-filled" />
+            </SidebarTrigger>
+            <!-- <button
+              type="button"
+              class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 focus:ring-2 focus:ring-neutral-200 focus:outline-none lg:hidden dark:text-neutral-400 dark:focus:ring-neutral-600"
+            >
+              <Icon name="tabler:layout-sidebar-filled" />
+            </button> -->
+            <NuxtLink
+              class="hidden items-center space-x-2 transition hover:opacity-80 lg:flex"
+              to="/"
+            >
+              <CICSLogo :width="60" fill="var(--p-primary-500)" />
+              <span v-if="$route.meta.title">⋅</span>
               <div class="text-xs font-medium">{{ $route.meta.title }}</div>
             </NuxtLink>
-          </Transition>
-        </div>
-
-        <TopNavDesktopDashboard v-model="currentTrigger" />
-
-        <div class="relative flex grow basis-0 justify-end gap-x-1">
-          <div class="flex items-center">
-            <Transition name="fade-slide">
-              <form
-                v-if="searchOpen"
-                class="mr-2 h-full w-64 md:max-xl:w-44"
-                @submit.prevent="handleSearch"
+            <Transition name="title-fade">
+              <NuxtLink
+                class="block text-sm lg:hidden"
+                to="/"
+                v-if="!searchOpen"
               >
-                <CInputText
-                  :clear-button="true"
-                  v-model="search"
-                  type="search"
-                  ref="$search"
-                  placeholder="Buscar en Ingeniería CUNOC"
-                  fill-height
-                />
-              </form>
+                <strong>CICS App</strong> ⋅ Portal
+                <div class="text-xs font-medium">{{ $route.meta.title }}</div>
+              </NuxtLink>
             </Transition>
+          </div>
+
+          <TopNavDesktopDashboard v-model="currentTrigger" />
+
+          <div class="relative flex grow basis-0 justify-end gap-x-1">
+            <div class="flex items-center">
+              <Transition name="fade-slide">
+                <form
+                  v-if="searchOpen"
+                  class="mr-2 h-full w-64 md:max-xl:w-44"
+                  @submit.prevent="handleSearch"
+                >
+                  <CInputText
+                    :clear-button="true"
+                    v-model="search"
+                    type="search"
+                    ref="$search"
+                    placeholder="Buscar en Ingeniería CUNOC"
+                    fill-height
+                  />
+                </form>
+              </Transition>
+
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger as-child>
+                    <Button
+                      class="px-2"
+                      :icon="
+                        searchOpen
+                          ? 'icon-park-twotone:close-one'
+                          : 'icon-park-twotone:search'
+                      "
+                      @click="toggleSearch"
+                    />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Buscar en Ingeniería CUNOC</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
 
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger as-child>
                   <Button
-                    class="px-2"
-                    :icon="
-                      searchOpen
-                        ? 'icon-park-twotone:close-one'
-                        : 'icon-park-twotone:search'
-                    "
-                    @click="toggleSearch"
+                    v-if="!searchOpen"
+                    icon="icon-park-twotone:people"
+                    size="small"
+                    :to="user ? '/dashboard/home' : '/login'"
+                    :label="user ? 'Espacio' : 'Ingresar'"
+                    class="min-w-0"
                   />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Buscar en Ingeniería CUNOC</p>
+                  <p>
+                    {{
+                      user
+                        ? `Sesión iniciada como ${displayNameFull}`
+                        : 'Iniciar sesión para acceder a tu espacio personal'
+                    }}
+                  </p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
           </div>
-
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger as-child>
-                <Button
-                  v-if="!searchOpen"
-                  icon="icon-park-twotone:people"
-                  size="small"
-                  :to="user ? '/dashboard/home' : '/login'"
-                  :label="user ? 'Espacio' : 'Ingresar'"
-                  class="min-w-0"
-                />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  {{
-                    user
-                      ? `Sesión iniciada como ${displayNameFull}`
-                      : 'Iniciar sesión para acceder a tu espacio personal'
-                  }}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
         </div>
-      </div>
-    </nav>
+      </nav>
 
-    <PDrawer
+      <!-- <PDrawer
       v-model:visible="drawer"
       block-scroll
       unstyled
@@ -123,20 +132,21 @@
       <template #container="{ closeCallback }">
         <SidebarNavigator @close="closeCallback" />
       </template>
-    </PDrawer>
+    </PDrawer> -->
 
-    <div class="d-flex flex-column">
-      <main
-        id="appcont"
-        class="mx-auto min-h-screen print:pt-14"
-        :class="{
-          'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen
-        }"
-      >
-        <NuxtPage @search="toggleSearch({ leaveOpen: true })" keepalive />
-      </main>
+      <div class="d-flex flex-column">
+        <main
+          id="appcont"
+          class="mx-auto min-h-screen print:pt-14"
+          :class="{
+            'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen
+          }"
+        >
+          <NuxtPage @search="toggleSearch({ leaveOpen: true })" keepalive />
+        </main>
+      </div>
     </div>
-  </div>
+  </SidebarProvider>
 </template>
 
 <script lang="ts" setup>
@@ -154,6 +164,8 @@ import {
   TooltipTrigger,
   TooltipContent
 } from '~/components/ui/tooltip'
+import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
+import DefaultSidebar from '~/components/partials/navigation/DefaultSidebar.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())

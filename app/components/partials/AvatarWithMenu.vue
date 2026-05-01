@@ -1,5 +1,5 @@
 <template>
-  <PopoverRoot>
+  <Popover>
     <PopoverTrigger as-child
       ><AvatarRoot
         class="group relative flex h-full w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full"
@@ -15,48 +15,46 @@
           <Icon name="icon-park-outline:more" />
         </AvatarFallback> </AvatarRoot
     ></PopoverTrigger>
-    <PopoverPortal>
-      <PopoverContent
-        side="top"
-        :side-offset="16"
-        class="data-[state=open]:animate-contentShow bg-cics-white z-[9999] ml-4 w-72 rounded-xl border border-black/80 p-3.5 shadow-lg shadow-black/10 dark:border-neutral-700 dark:bg-neutral-900"
-      >
-        <h2 class="font-semibold mb-2">Otras opciones</h2>
-        <h3 class="mb-1.5 inline-flex items-center gap-2 text-sm font-medium">
-          Sesión iniciada como:
-        </h3>
-        <p class="mb-2">
-          {{ displayName }}
-        </p>
+    <PopoverContent
+      side="top"
+      :side-offset="16"
+      class="data-[state=open]:animate-contentShow bg-cics-white z-[9999] ml-4 w-72 rounded-xl border border-black/80 p-3.5 shadow-lg shadow-black/10 dark:border-neutral-700 dark:bg-neutral-900"
+    >
+      <h2 class="mb-2 font-semibold">Otras opciones</h2>
+      <h3 class="mb-1.5 inline-flex items-center gap-2 text-sm font-medium">
+        Sesión iniciada como:
+      </h3>
+      <p class="mb-2">
+        {{ displayName }}
+      </p>
 
-
-        <h3 class="mb-1.5 inline-flex items-center gap-2 text-sm font-medium">
-          Tema
-        </h3>
-        <ColorScheme placeholder="..." tag="div">
-          <ToggleGroupRoot
-            class="flex items-center gap-2.5"
-            :model-value="$colorMode.preference"
-            @update:model-value="
-              (val) => {
-                if (val) $colorMode.preference = val as string
-              }
-            "
+      <h3 class="mb-1.5 inline-flex items-center gap-2 text-sm font-medium">
+        Tema
+      </h3>
+      <ColorScheme placeholder="..." tag="div">
+        <ToggleGroupRoot
+          class="flex items-center gap-2.5"
+          :model-value="$colorMode.preference"
+          @update:model-value="
+            (val) => {
+              if (val) $colorMode.preference = val as string
+            }
+          "
+        >
+          <ToggleGroupItem
+            v-for="(option, index) in schemeOptions"
+            class="group hover:bg-primary/10 active:bg-primary/15 data-[state=on]:bg-primary-600 flex items-center gap-2 rounded-lg border-2 border-transparent px-2 py-1 transition duration-[50ms] data-[state=on]:border-black data-[state=on]:text-white dark:data-[state=on]:border-white"
+            :value="option.value"
           >
-            <ToggleGroupItem
-              v-for="(option, index) in schemeOptions"
-              class="group hover:bg-primary/10 active:bg-primary/15 data-[state=on]:bg-primary-600 flex items-center gap-2 rounded-lg border-2 border-transparent px-2 py-1 transition duration-[50ms] data-[state=on]:border-black data-[state=on]:text-white dark:data-[state=on]:border-white"
-              :value="option.value"
-            >
-              <Icon :name="option.icon" :class="option.iconClass" />
-            </ToggleGroupItem>
-          </ToggleGroupRoot>
-        </ColorScheme>
-      </PopoverContent>
-    </PopoverPortal>
-  </PopoverRoot>
+            <Icon :name="option.icon" :class="option.iconClass" />
+          </ToggleGroupItem>
+        </ToggleGroupRoot>
+      </ColorScheme>
+    </PopoverContent>
+  </Popover>
 </template>
 <script setup lang="ts">
+import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover'
 defineProps<{
   displayName?: string
 }>()

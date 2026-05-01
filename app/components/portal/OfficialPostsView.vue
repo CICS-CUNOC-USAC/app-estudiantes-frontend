@@ -7,7 +7,7 @@
     </div>
   </template>
   <template v-if="data && status === 'success'">
-    <section class="mt-4 grid grid-cols-1 gap-6 lg:grid-cols-3">
+    <section class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="(item, index) in data" :key="index" class="col-span-1">
         <CCardAlt
           class="group hover:bg-primary-100/75 dark:hover:bg-primary-900/30"

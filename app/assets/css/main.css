@@ -328,19 +328,7 @@
   }
 }
 
-@layer base {
-  * {
-    @apply outline-ring/50;
-
-  }
-  body {
-    @apply bg-background text-foreground;
-
-  }
-
-}
-
-@theme inline {
+/* @theme inline {
   --font-heading:  var(--font-sans);
 
-}
+} */
