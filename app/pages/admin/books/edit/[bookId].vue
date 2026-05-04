@@ -73,49 +73,19 @@
         </VeeField>
 
         <div class="flex items-center gap-2">
-          <!-- NOTE: PToggleSwitch - mantener PrimeVue por complejidad -->
-          <PToggleSwitch
-            v-model="enableBookEdit"
-            :pt="{
-              input: {
-                id: 'enableBookEdit'
-              }
-            }"
-          />
-          <label for="enableBookEdit" class="text-sm select-none">
+          <Switch id="enableBookEdit" v-model="enableBookEdit" />
+          <label for="enableBookEdit" class="text-sm select-none cursor-pointer">
             Actualizar archivo
           </label>
         </div>
-        <!-- NOTE: PFileUpload - mantener PrimeVue por complejidad -->
-        <PFileUpload
-          v-if="enableBookEdit"
-          mode="advanced"
-          accept="application/pdf"
-          :multiple="false"
-          pt:root:class="border-none!"
-          @select="(e) => (file = e.files[0])"
-        >
-          <template #header="{ chooseCallback }">
-            <Button
-              label="Seleccionar archivo"
-              @click="chooseCallback"
-              variant="tonal"
-            />
-          </template>
-          <template #empty>
-            <p class="py-2 text-sm">
-              O arrastra el archivo <span class="font-medium">aquí</span>
-            </p>
-          </template>
-          <template #content="{ files, removeFileCallback }">
-            <div v-if="files.length > 0" class="py-2 text-sm">
-              <div class="flex items-center gap-2">
-                <Icon name="lucide:file" />
-                <span>{{ files[0].name }}</span>
-              </div>
-            </div>
-          </template>
-        </PFileUpload>
+        <div v-if="enableBookEdit">
+          <Input
+            type="file"
+            accept="application/pdf"
+            class="cursor-pointer"
+            @change="(e: Event) => (file = (e.target as HTMLInputElement).files?.[0])"
+          />
+        </div>
 
         <div class="flex gap-4">
           <Button
@@ -157,6 +127,8 @@ import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
 import { Field, FieldGroup } from '~/components/ui/field'
+import { Switch } from '~/components/ui/switch'
+import { Input } from '~/components/ui/input'
 
 definePageMeta({
   layout: 'admin',
@@ -176,7 +148,7 @@ const {
   refresh
 } = await useAsyncData('edit-book', () => fetchBookById(+route.params.bookId))
 
-const file = ref(undefined)
+const file = ref<File | undefined>(undefined)
 
 const formSchema = z.object({
   name: z.string().nonempty('El nombre del libro es requerido'),

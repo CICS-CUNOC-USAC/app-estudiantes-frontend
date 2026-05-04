@@ -222,35 +222,12 @@
 
           <div v-if="bookType === 'digital'" class="mb-4">
             <h5 class="my-2 font-medium">Archivo del libro</h5>
-            <!-- NOTE: PFileUpload - mantener PrimeVue por ahora, es muy complejo migrar -->
-            <PFileUpload
-              mode="advanced"
+            <Input
+              type="file"
               accept="application/pdf"
-              :multiple="false"
-              pt:root:class="border-none!"
-              @select="(e) => (file = e.files[0])"
-            >
-              <template #header="{ chooseCallback }">
-                <Button
-                  label="Seleccionar archivo"
-                  @click="chooseCallback"
-                  variant="tonal"
-                />
-              </template>
-              <template #empty>
-                <p class="py-2 text-sm">
-                  O arrastra el archivo <span class="font-medium">aquí</span>
-                </p>
-              </template>
-              <template #content="{ files, removeFileCallback }">
-                <div v-if="files.length > 0" class="py-2 text-sm">
-                  <div class="flex items-center gap-2">
-                    <Icon name="lucide:file" />
-                    <span>{{ files[0].name }}</span>
-                  </div>
-                </div>
-              </template>
-            </PFileUpload>
+              class="cursor-pointer"
+              @change="(e: Event) => (file = (e.target as HTMLInputElement).files?.[0])"
+            />
           </div>
           <div class="flex gap-4">
             <Button
@@ -281,6 +258,7 @@ import { toTypedSchema } from '@vee-validate/zod'
 import { useForm, Field as VeeField } from 'vee-validate'
 import { z } from 'zod'
 import Button from '~/components/ui/button/Button.vue'
+import { Input } from '~/components/ui/input'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
@@ -372,7 +350,7 @@ const onSubmit = handleSubmit(async (values) => {
           {
             ...values,
             is_available: isAvailable.value
-          } as Omit<BookPayload, 'file'>,
+          } as unknown as Omit<BookPayload, 'file'>,
           bookType.value
         )
 
