@@ -169,21 +169,6 @@ const { data, status } = await useAsyncData(
   }
 )
 
-const dialog = useDialog()
-function openDetail(bookItem: any, showAllInfo: any) {
-  dialog.open(BookDetailDialog, {
-    header: 'Información del libro',
-    style: {
-      width: '50vw'
-    },
-    props: {
-      modal: true,
-      dismissableMask: true
-    },
-    data: { bookItem, showAllInfo },
-    onClose: () => {}
-  })
-}
 
 const columns: ColumnDef<Book>[] = [
   {
@@ -218,13 +203,14 @@ const columns: ColumnDef<Book>[] = [
     header: () => <div class="w-32 font-semibold">Acciones</div>,
     cell: ({ row }) => (
       <div class="flex flex-col items-start justify-center gap-y-2">
-        <Button
-          icon="icon-park-twotone:eyes"
-          size="small"
-          label="Detalles"
-          variant="tonal"
-          onClick={() => openDetail(row.original, false)}
-        />
+        <BookDetailDialog bookItem={row.original} showAllInfo={false}>
+          <Button
+            icon="icon-park-twotone:eyes"
+            size="small"
+            label="Detalles"
+            variant="tonal"
+          />
+        </BookDetailDialog>
       </div>
     )
   }

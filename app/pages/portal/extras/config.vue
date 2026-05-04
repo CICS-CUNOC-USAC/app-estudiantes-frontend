@@ -5,14 +5,14 @@
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
-        class="mb-5 text-muted-color-emphasis lg:mb-2"
+        class="text-muted-color-emphasis mb-5 lg:mb-2"
         to="/"
       />
     </nav>
     <h1 class="text-xl font-semibold">
       <Icon
         name="icon-park-twotone:setting-two"
-        class="mb-1 mr-1.5 inline-block"
+        class="mr-1.5 mb-1 inline-block"
       />
       Configuración de la aplicación
     </h1>
@@ -33,8 +33,8 @@
         </h3>
 
         <ColorScheme placeholder="..." tag="div">
-          <ToggleGroupRoot
-            class="flex items-center gap-2.5 py-2.5"
+          <ToggleGroup
+            class="my-2"
             :model-value="$colorMode.preference"
             @update:model-value="
               (val) => {
@@ -44,13 +44,13 @@
           >
             <ToggleGroupItem
               v-for="(option, index) in schemeOptions"
-              class="group flex items-center gap-2 rounded-lg border-2 border-transparent px-2 py-1 transition duration-[50ms] hover:bg-primary/10 active:bg-primary/15 data-[state=on]:border-black data-[state=on]:bg-primary-600 data-[state=on]:text-white dark:data-[state=on]:border-white"
+              class="group hover:bg-primary/10 active:bg-primary/15 data-[state=on]:bg-primary-600 flex items-center gap-2 rounded-lg px-2 py-1 transition duration-50"
               :value="option.value"
             >
               <Icon :name="option.icon" :class="option.iconClass" />
               <span class="text-sm">{{ option.name }}</span>
             </ToggleGroupItem>
-          </ToggleGroupRoot>
+          </ToggleGroup>
         </ColorScheme>
         <h3 class="inline-flex items-center gap-2 text-sm font-medium">
           Color de acento
@@ -70,6 +70,7 @@
 import Button from '~/components/ui/button/Button.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import { allThemes } from '~/themes/themes'
+import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
 
 const schemeOptions = [
   {

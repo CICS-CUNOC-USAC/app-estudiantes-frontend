@@ -7,7 +7,26 @@
       </h1>
     </header>
     <h2 class="my-2 font-medium">Tipo de libro</h2>
-    <div class="my-4 grid grid-cols-2 gap-2 lg:flex">
+    <ToggleGroup
+      class="dark:border-surface-700 border-black"
+      variant="outline"
+      type="single"
+      :default-value="bookType"
+      @update:model-value="
+        (value) => {
+          if (!value) return
+          bookType = value
+        }
+      "
+    >
+      <ToggleGroupItem value="digital" aria-label="Toggle bold">
+        Digital
+      </ToggleGroupItem>
+      <ToggleGroupItem value="physical" aria-label="Toggle italic">
+        Físico
+      </ToggleGroupItem>
+    </ToggleGroup>
+    <!-- <div class="my-4 grid grid-cols-2 gap-2 lg:flex">
       <button
         type="button"
         :class="[
@@ -32,18 +51,17 @@
       >
         Físico
       </button>
-    </div>
+    </div> -->
     <section class="mt-4">
       <h2 class="mb-2 font-medium">Información del libro</h2>
       <form id="form-book-create" @submit="onSubmit">
         <FieldGroup class="gap-4">
           <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <VeeField v-slot="{ field, errors }" name="name">
+            <VeeField v-slot="{ componentField, errors }" name="name">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Nombre"
-                  name="name"
                   id="name"
                   no-borders
                   prepend-icon="icon-park-twotone:book"
@@ -52,12 +70,11 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="isbn">
+            <VeeField v-slot="{ componentField, errors }" name="isbn">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="ISBN"
-                  name="isbn"
                   id="isbn"
                   no-borders
                   prepend-icon="icon-park-twotone:hashtag-key"
@@ -66,12 +83,11 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="description">
+            <VeeField v-slot="{ componentField, errors }" name="description">
               <Field :data-invalid="!!errors.length">
                 <CTextarea
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Descripción"
-                  name="description"
                   id="description"
                   no-borders
                   :rows="3"
@@ -83,14 +99,13 @@
 
             <VeeField
               v-if="bookType === 'physical'"
-              v-slot="{ field, errors }"
+              v-slot="{ componentField, errors }"
               name="reference_id"
             >
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Identificador de referencia"
-                  name="reference_id"
                   id="reference_id"
                   no-borders
                   prepend-icon="icon-park-twotone:bank-card-two"
@@ -99,12 +114,11 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="author">
+            <VeeField v-slot="{ componentField, errors }" name="author">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Autor"
-                  name="author"
                   id="author"
                   no-borders
                   prepend-icon="icon-park-twotone:people"
@@ -115,14 +129,13 @@
 
             <VeeField
               v-if="bookType === 'digital'"
-              v-slot="{ field, errors }"
+              v-slot="{ componentField, errors }"
               name="source_url"
             >
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="URL de fuente"
-                  name="source_url"
                   id="source_url"
                   no-borders
                   prepend-icon="icon-park-outline:link-one"
@@ -133,14 +146,13 @@
 
             <VeeField
               v-if="bookType === 'physical'"
-              v-slot="{ field, errors }"
+              v-slot="{ componentField, errors }"
               name="edition"
             >
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Edición"
-                  name="edition"
                   id="edition"
                   no-borders
                   prepend-icon="icon-park-twotone:bookshelf"
@@ -151,14 +163,13 @@
 
             <VeeField
               v-if="bookType === 'physical'"
-              v-slot="{ field, errors }"
+              v-slot="{ componentField, errors }"
               name="location"
             >
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Ubicación"
-                  name="location"
                   placeholder="Ejemplo: Estante 2, Repisa 5"
                   id="location"
                   no-borders
@@ -196,18 +207,17 @@
 
           <div v-if="bookType === 'physical'" class="mb-4">
             <h5 class="my-3 font-medium">Disponibilidad</h5>
-            <section class="grid grid-cols-2 gap-4">
-              <div class="flex items-center gap-2">
-                <!-- NOTE: PCheckbox - mantener PrimeVue por complejidad -->
-                <input
+            <VeeField v-slot="{ field, errors }" name="is_available">
+              <Field orientation="horizontal" :data-invalid="!!errors.length">
+                <Checkbox
                   id="is_available"
-                  type="checkbox"
-                  v-model="isAvailable"
-                  class="size-4 rounded border-gray-300"
+                  :model-value="field.value"
+                  :aria-invalid="!!errors.length"
+                  @update:model-value="field.onChange"
                 />
-                <span class="font-medium">Esta Disponible</span>
-              </div>
-            </section>
+                <FieldLabel for="is_available"> Esta Disponible </FieldLabel>
+              </Field>
+            </VeeField>
           </div>
 
           <div v-if="bookType === 'digital'" class="mb-4">
@@ -252,13 +262,11 @@
                   : '/admin/books/physical'
               "
               severity="secondary"
-              class=""
             />
             <Button
               label="Guardar"
               icon="icon-park-outline:check"
               type="submit"
-              class=""
               :disabled="!file && bookType === 'digital'"
               :loading
             />
@@ -276,7 +284,9 @@ import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
-import { Field, FieldGroup } from '~/components/ui/field'
+import { Checkbox } from '~/components/ui/checkbox'
+import { Field, FieldGroup, FieldLabel } from '~/components/ui/field'
+import { ToggleGroup, ToggleGroupItem } from '~/components/ui/toggle-group'
 import {
   createBookItem,
   createWithoutMedia,
@@ -286,7 +296,7 @@ import {
 definePageMeta({
   layout: 'admin',
   subject: ['Book', 'all'],
-  action: ['manage'],
+  action: ['manage']
 })
 
 const loading = ref(false)

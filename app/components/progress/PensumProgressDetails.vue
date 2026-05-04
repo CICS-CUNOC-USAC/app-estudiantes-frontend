@@ -4,6 +4,7 @@
     :class="{
       'shadow-lg dark:shadow-xl': hasScrolled
     }"
+    title="Resumen de créditos"
   >
     <template #content>
       <div
@@ -14,14 +15,14 @@
       </div>
       <section class="relative flex justify-center  sm:gap-x-4 lg:gap-x-10">
         <div>
-          <h6 class="pensum-count">Créditos acumulados:</h6>
+          <h6 class="pensum-count">Acumulados:</h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.total_credits
           }}</strong>
         </div>
         <div>
           <h6 class="pensum-count">
-            Créditos obligatorios:
+            Obligatorios:
           </h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.mandatory_credits
@@ -33,7 +34,7 @@
         </div>
         <div>
           <h6 class="pensum-count">
-            Créditos optativos:
+            Optativos:
           </h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.not_mandatory_credits
@@ -45,7 +46,7 @@
         </div>
         <div>
           <h6 class="pensum-count">
-            Créditos disponibles:
+            Disponibles:
           </h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.total_credits

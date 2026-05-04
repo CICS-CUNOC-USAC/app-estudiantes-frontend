@@ -2,7 +2,7 @@
   <Popover>
     <PopoverTrigger as-child
       ><AvatarRoot
-        class="group relative flex h-full w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full"
+        class="group/avatartrigger relative flex h-full w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full"
       >
         <AvatarFallback
           class="text-muted-color bg-surface-200 flex size-full items-center justify-center overflow-hidden select-none"
@@ -10,7 +10,7 @@
           {{ `${displayName?.charAt(0)}` }}
         </AvatarFallback>
         <AvatarFallback
-          class="bg-surface-700/80 absolute inset-0 flex items-center justify-center tracking-widest text-white opacity-0 transition-opacity duration-200 select-none group-hover:opacity-100"
+          class="bg-surface-700/80 absolute inset-0 flex items-center justify-center tracking-widest text-white opacity-0 transition-opacity duration-200 select-none group-hover/avatartrigger:opacity-100"
         >
           <Icon name="icon-park-outline:more" />
         </AvatarFallback> </AvatarRoot
@@ -32,8 +32,7 @@
         Tema
       </h3>
       <ColorScheme placeholder="..." tag="div">
-        <ToggleGroupRoot
-          class="flex items-center gap-2.5"
+        <ToggleGroup
           :model-value="$colorMode.preference"
           @update:model-value="
             (val) => {
@@ -43,18 +42,19 @@
         >
           <ToggleGroupItem
             v-for="(option, index) in schemeOptions"
-            class="group hover:bg-primary/10 active:bg-primary/15 data-[state=on]:bg-primary-600 flex items-center gap-2 rounded-lg border-2 border-transparent px-2 py-1 transition duration-[50ms] data-[state=on]:border-black data-[state=on]:text-white dark:data-[state=on]:border-white"
+            class="group flex items-center"
             :value="option.value"
           >
             <Icon :name="option.icon" :class="option.iconClass" />
           </ToggleGroupItem>
-        </ToggleGroupRoot>
+        </ToggleGroup>
       </ColorScheme>
     </PopoverContent>
   </Popover>
 </template>
 <script setup lang="ts">
 import { Popover, PopoverTrigger, PopoverContent } from '../ui/popover'
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group'
 defineProps<{
   displayName?: string
 }>()

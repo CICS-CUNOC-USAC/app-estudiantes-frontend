@@ -14,12 +14,11 @@
       <form id="form-role" @submit="onSubmit">
         <FieldGroup class="gap-4">
           <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <VeeField v-slot="{ field, errors }" name="name">
+            <VeeField v-slot="{ componentField, errors }" name="name">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Nombre"
-                  name="name"
                   id="name"
                   no-borders
                   prepend-icon="icon-park-twotone:tag"
@@ -28,12 +27,11 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="alias">
+            <VeeField v-slot="{ componentField, errors }" name="alias">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Alias"
-                  name="alias"
                   id="alias"
                   no-borders
                   prepend-icon="icon-park-twotone:tag"
@@ -42,12 +40,11 @@
               </Field>
             </VeeField>
 
-            <VeeField v-slot="{ field, errors }" name="description">
+            <VeeField v-slot="{ componentField, errors }" name="description">
               <Field :data-invalid="!!errors.length">
                 <CInputText
-                  v-bind="field"
+                  v-bind="componentField"
                   label="Descripción"
-                  name="description"
                   id="description"
                   no-borders
                   prepend-icon="icon-park-twotone:file-text"
@@ -149,7 +146,6 @@
               label="Guardar"
               icon="icon-park-outline:check"
               type="submit"
-              class=""
               :loading="asyncStatus === 'loading'"
             />
           </div>

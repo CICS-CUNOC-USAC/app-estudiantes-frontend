@@ -1,15 +1,11 @@
 <template>
   <CCardAlt :title="`Semestre ${semesterProgress.semester}`" class="gap-3">
     <template #content>
-      <div class="mb-2">
+      <div class="mb-2 space-y-2">
         <span class="block text-sm"> Filtrar por: </span>
-        <CChipButton
-          label="Solo obligatorios"
-          filter
-          icon="lucide:check"
-          v-model="onlyMandatory"
-          class="my-1.5"
-        ></CChipButton>
+        <Toggle v-model="onlyMandatory" size="sm" with-indicator>
+          Solo obligatorios
+        </Toggle>
       </div>
       <TransitionGroup
         name="course-transition"
@@ -36,6 +32,7 @@ import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CourseCardProgress from './CourseCardProgress.vue'
 import type { SemesterProgress } from '~/lib/api/dashboard/career-progress'
+import Toggle from '../ui/toggle/Toggle.vue'
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterProgress: SemesterProgress

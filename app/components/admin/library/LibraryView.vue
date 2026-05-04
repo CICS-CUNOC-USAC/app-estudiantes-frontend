@@ -122,8 +122,6 @@
 </template>
 <script setup lang="tsx">
 import BookDetailDialog from '~/components/dialogs/BookDetailDialog.vue'
-import BookEditPhysicalDialog from '~/components/dialogs/admin/books/BookEditPhysicalDialog.vue'
-import BookEditDigitalDialog from '~/components/dialogs/admin/books/BookEditDigitalDialog.vue'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
@@ -187,44 +185,6 @@ const handleDelete = async (id: number) => {
   refresh()
 }
 
-const dialog = useDialog()
-function openDetail(bookItem: any, showAllInfo: any) {
-  dialog.open(BookDetailDialog, {
-    header: 'Información del libro',
-    style: {
-      width: '50vw'
-    },
-    props: {
-      modal: true,
-      dismissableMask: true
-    },
-    data: { bookItem, showAllInfo },
-    onClose: () => {}
-  })
-}
-
-function openEditDialog(bookItem: any) {
-  const EditDialog =
-    props.type === 'physical' ? BookEditPhysicalDialog : BookEditDigitalDialog
-  dialog.open(EditDialog, {
-    header:
-      props.type === 'physical'
-        ? 'Editar libro físico'
-        : 'Editar libro digital',
-    style: {
-      width: '50vw'
-    },
-    props: {
-      modal: true,
-      dismissableMask: true
-    },
-    data: { bookItem },
-    onClose: () => {
-      refresh()
-    }
-  })
-}
-
 const columns: ColumnDef<Book>[] = [
   {
     accessorKey: 'name',
@@ -260,13 +220,14 @@ const columns: ColumnDef<Book>[] = [
     header: () => <div class="font-semibold">Acciones</div>,
     cell: ({ row }) => (
       <div class="flex flex-col items-center justify-center gap-y-2">
-        <Button
-          icon="icon-park-twotone:eyes"
-          size="small"
-          label="Detalles"
-          variant="tonal"
-          onClick={() => openDetail(row.original, true)}
-        />
+        <BookDetailDialog bookItem={row.original} showAllInfo={true}>
+          <Button
+            icon="icon-park-twotone:eyes"
+            size="small"
+            label="Detalles"
+            variant="tonal"
+          />
+        </BookDetailDialog>
       </div>
     )
   }

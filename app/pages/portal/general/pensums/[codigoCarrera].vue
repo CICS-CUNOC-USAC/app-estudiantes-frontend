@@ -11,7 +11,7 @@
     </nav>
     <h1 class="mt-4 mb-8 text-xl font-semibold">
       <template v-if="status === 'pending'">
-        <PSkeleton height="1.7rem" width="28rem"></PSkeleton>
+        <Skeleton height="1.7rem" width="28rem"></Skeleton>
       </template>
       <template v-if="careerCourses && status === 'success'">
         <Icon
@@ -46,6 +46,7 @@ import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
 import PensumPublicView from '~/components/portal/pensums/PensumPublicView.vue'
 import Button from '~/components/ui/button/Button.vue'
+import { Skeleton } from '~/components/ui/skeleton'
 import type { CareerCoursesResponse } from '~/utils/types/career-courses'
 
 const route = useRoute()

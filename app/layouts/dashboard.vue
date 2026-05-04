@@ -1,7 +1,19 @@
 <template>
-  <div class="min-h-screen lg:bg-cics-white dark:bg-surface-900 lg:dark:bg-surface-900">
+  <SidebarProvider :default-open="true">
+    <DashboardSidebar />
+    <div class="dark:bg-surface-800 w-full bg-white">
+      <div class="mx-auto w-full max-w-7xl rounded-xl px-6 py-4">
+        <SidebarTrigger>
+          <Icon name="lucide:menu" />
+        </SidebarTrigger>
+        <NuxtPage />
+      </div>
+    </div>
+  </SidebarProvider>
+
+  <!-- <div class="min-h-screen lg:bg-cics-white dark:bg-surface-900 lg:dark:bg-surface-900">
     <div class="flex gap-x-1">
-      <!-- Desktop -->
+
       <nav
         class="hidden w-[22rem] shrink-0 flex-col self-start bg-cics-white py-5 lg:sticky lg:top-0 lg:flex lg:h-screen dark:bg-surface-900"
       >
@@ -16,7 +28,7 @@
           Dashboard
         </h4>
 
-        <!-- new menu -->
+
         <div class="mt-4 flex-1 space-y-4 pl-8 pr-6">
           <NuxtLink
             to="/dashboard/home"
@@ -90,7 +102,7 @@
         </footer>
       </nav>
 
-      <!-- Mobile -->
+
       <nav
         class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 px-4 py-2.5 backdrop-blur-sm transition lg:hidden dark:border-surface-700 dark:bg-surface-800/80"
       >
@@ -110,7 +122,7 @@
         </div>
       </nav>
 
-      
+
       <div
         class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-surface-800"
       >
@@ -119,58 +131,21 @@
         </div>
       </div>
 
-      <PDrawer
-        v-model:visible="drawer"
-        block-scroll
-        unstyled
-        class="h-full w-10/12 bg-cics-white shadow-lg md:w-5/12 dark:bg-surface-800"
-        :pt="{
-          transition: {
-            name: 'slide'
-          },
-          mask(options) {
-            return {
-              class: `bg-primary-950/40 transition-all duration-500 ${options.props.visible ? 'mask-enter' : 'mask-leave'}`
-            }
-          }
-        }"
-      >
-        <template #container="{ closeCallback }">
-          <!-- <SidebarNavigator @close="closeCallback" /> -->
-          <!-- mobile menu -->
-          <DashboardNavigator @close="closeCallback" />
-        </template>
-      </PDrawer>
     </div>
-  </div>
+  </div> -->
 </template>
-
 <script lang="ts" setup>
-import { useAuthStore } from '~/stores/auth'
-import CICSLogo from '~/components/partials/CICSLogo.vue'
-import Button from '~/components/ui/button/Button.vue'
-import DashboardNavigator from '~/components/partials/DashboardNavigator.vue'
-import { DashboardLayoutItems } from './dashboard.consts'
-import AvatarWithMenu from '~/components/partials/AvatarWithMenu.vue'
-
-const { user, displayName, displayNameFull, getRole } =
-  storeToRefs(useAuthStore())
-
-const { logout } = useAuthStore()
-
-const drawer = ref(false)
+import DashboardSidebar from '~/components/partials/navigation/DashboardSidebar.vue'
+import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
 </script>
 <style scoped>
 @reference '~/assets/css/main.css';
 
 .menu-item {
-  @apply relative flex items-center gap-x-2 rounded-lg py-2 pl-8 pr-2 font-medium outline outline-transparent transition-all duration-200 text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700  dark:hover:text-primary-300 hover:before:dark:bg-primary-200
-  before:absolute before:left-4 before:top-1/2 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:bg-surface-300 dark:before:bg-surface-700;
+  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 hover:before:dark:bg-primary-200 before:bg-surface-300 dark:before:bg-surface-700 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium outline outline-transparent transition-all duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2;
 }
 
 .active-menu {
-  @apply z-50 text-primary-700 shadow-md outline-1 outline-gray-600 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-surface-600
-  before:absolute before:left-4 before:top-1/2 before:h-2/4 before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-primary-700 before:dark:bg-primary-400
-  ;
+  @apply text-primary-700 focus:text-primary-500 active:text-primary-500 dark:text-primary-500 dark:outline-surface-600 before:bg-primary-700 before:dark:bg-primary-400 z-50 shadow-md outline-1 outline-gray-600 before:absolute before:top-1/2 before:left-4 before:h-2/4 before:w-0.5 before:-translate-y-1/2 before:rounded;
 }
 </style>

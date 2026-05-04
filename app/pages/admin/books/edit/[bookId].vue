@@ -185,23 +185,19 @@ const formSchema = z.object({
   source_url: z.string().url('La URL de la fuente no es válida')
 })
 
-const { handleSubmit, setFieldValue } = useForm({
-  validationSchema: toTypedSchema(formSchema),
-  initialValues: {
-    name: book.value?.name || '',
-    description: book.value?.description || '',
-    author: book.value?.author || '',
-    source_url: book.value?.source_url || ''
+const initialValues = computed(() => {
+  if (!book.value) return {}
+  return {
+    name: book.value.name,
+    description: book.value.description,
+    author: book.value.author,
+    source_url: book.value.source_url ?? ''
   }
 })
 
-watchEffect(() => {
-  if (book.value) {
-    setFieldValue('name', book.value.name)
-    setFieldValue('description', book.value.description)
-    setFieldValue('author', book.value.author)
-    setFieldValue('source_url', book.value.source_url)
-  }
+const { handleSubmit } = useForm({
+  validationSchema: toTypedSchema(formSchema),
+  initialValues: initialValues.value
 })
 
 const onSubmit = handleSubmit(async (values) => {

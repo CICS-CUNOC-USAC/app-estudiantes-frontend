@@ -1,26 +1,15 @@
 <template>
-  <nav class="flex w-80 flex-col gap-0 self-start justify-self-start px-4 pt-4">
-    <ToggleGroupRoot
+  <nav class="flex w-80 flex-col gap-0 items-center self-center justify-self-center px-4 pt-4">
+    <ToggleGroup
+      variant="outline"
       :model-value="modelValue"
       @update:model-value="
         ($event) => emit('update:modelValue', $event as string)
       "
-      class="flex justify-center gap-2"
     >
-      <ToggleGroupItem
-        disabled
-        value="calendar"
-        class="data-[state=on]:bg-primary-500 cursor-not-allowed rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[disabled]:bg-zinc-300/60 data-[disabled]:opacity-50 data-[disabled]:active:translate-x-0 data-[disabled]:active:translate-y-0 data-[state=on]:border-black data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-      >
-        Calendario</ToggleGroupItem
-      >
-      <ToggleGroupItem
-        value="classroom"
-        class="data-[state=on]:bg-primary-500 rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-      >
-        Salón</ToggleGroupItem
-      >
-    </ToggleGroupRoot>
+      <ToggleGroupItem disabled value="calendar"> Calendario</ToggleGroupItem>
+      <ToggleGroupItem value="classroom"> Salón</ToggleGroupItem>
+    </ToggleGroup>
     <Transition name="slide-view" mode="out-in">
       <ListboxRoot
         v-if="modelValue === 'classroom'"
@@ -38,7 +27,7 @@
       >
         <ListboxContent class="w-full overflow-auto px-2.5 py-4">
           <div
-            class="max-h-96 overflow-auto rounded-xl border border-gray-200 bg-white p-4 dark:bg-surface-800"
+            class="dark:bg-surface-800 max-h-96 overflow-auto rounded-xl border border-gray-200 bg-white p-4"
           >
             <Icon name="icon-park-twotone:alarm-clock" class="mx-auto mb-1.5" />
             <p class="pb-4 text-center text-sm">
@@ -63,7 +52,12 @@
             </ListboxItem>
           </div>
         </ListboxContent>
-        <Button icon="lucide:eraser" size="small" label="Limpiar" @click="cleanScheduleSelection"/>
+        <Button
+          icon="lucide:eraser"
+          size="small"
+          label="Limpiar"
+          @click="cleanScheduleSelection"
+        />
       </ListboxRoot>
       <div v-else>
         <ListboxRoot
@@ -107,6 +101,7 @@
 import type { Classroom, Hour } from '~/utils/types/schedule-courses'
 import CInputText from '../primitives/form/CInputText.vue'
 import Button from '~/components/ui/button/Button.vue'
+import { ToggleGroup, ToggleGroupItem } from '../ui/toggle-group'
 
 let { classrooms, selection } = defineProps<{
   modelValue: 'calendar' | 'classroom'
@@ -123,8 +118,8 @@ const filteredClassrooms = computed(() =>
 )
 
 function cleanScheduleSelection() {
-    selectedPeriods.value = []
-    emit('update:selectedPeriods', selectedPeriods.value)
+  selectedPeriods.value = []
+  emit('update:selectedPeriods', selectedPeriods.value)
 }
 
 const selectedPeriods = ref<any>(selection || [])
@@ -132,7 +127,6 @@ const emit = defineEmits<{
   'update:modelValue': [value: string]
   'update:selectedPeriods': [value: any]
 }>()
-
 </script>
 <style scoped>
 @reference '~/assets/css/main.css';

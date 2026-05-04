@@ -1,7 +1,7 @@
 <template>
   <div class="flex pt-14">
     <div
-      class="bg-cics-silver-pale hidden min-h-screen lg:block dark:bg-surface-800"
+      class="bg-cics-silver-pale dark:bg-surface-800 hidden min-h-screen lg:block"
     >
       <DisplayModeSelector
         :model-value="scheduleType"
@@ -19,19 +19,20 @@
         "
       />
     </div>
-    <div class="px-4 pt-4 dark:bg-surface-950/45">
+    <div class="dark:bg-surface-950/45 px-4 pt-4">
       <div class="grid grid-cols-1">
         <!-- <div class="mb-4 lg:flex lg:flex-row lg:justify-between sm:grid sm:grid-cols-2 flex flex-col items-center content-around"> -->
-          <CMessage
-            title="Aviso importante"
-            subtitle="Esta versión de los horarios es de prueba (work in progress), por lo que puede contener errores. Si encuentras alguno, reportalo a través de la sección de contacto."
-            class="mb-4"
-            variant="warning"
-            back-to-route="/portal/extras/about"
-            back-to-label="Más información"
-            />
-        <div class="mb-4 flex flex-col lg:flex-row  justify-between items-center gap-2.5">
-          
+        <CMessage
+          title="Aviso importante"
+          subtitle="Esta versión de los horarios es de prueba (work in progress), por lo que puede contener errores. Si encuentras alguno, reportalo a través de la sección de contacto."
+          class="mb-4"
+          variant="warning"
+          back-to-route="/portal/extras/about"
+          back-to-label="Más información"
+        />
+        <div
+          class="mb-4 flex flex-col items-center justify-between gap-2.5 lg:flex-row"
+        >
           <!-- <div class="md:hidden">
             <HoursDialog
               :schedule-type="scheduleType"
@@ -84,31 +85,22 @@
             ></ArrowedCombobox>
           </div>
           <div class="">
-            <ToggleGroupRoot
+            <ToggleGroup
               :model-value="coursesMode"
               @update:model-value="
                 (val) => {
                   if (val) coursesMode = val as 'lectures' | 'laboratories'
                 }
               "
-              class="flex justify-center gap-1"
             >
-              <ToggleGroupItem
-                value="lectures"
-                class="data-[state=on]:bg-primary-500 dark:bg-surface-800 rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-              >
-                Clases</ToggleGroupItem
-              >
-              <ToggleGroupItem
-                value="laboratories"
-                class="data-[state=on]:bg-primary-500 dark:bg-surface-800 rounded-lg border-2 border-transparent px-2.5 py-0.5 transition active:translate-x-0.5 active:translate-y-0.5 data-[state=on]:border-black data-[state=on]:font-medium data-[state=on]:text-white data-[state=on]:shadow-[1px_1px_0_0_rgba(0,0,0,1)]"
-              >
+              <ToggleGroupItem value="lectures"> Clases</ToggleGroupItem>
+              <ToggleGroupItem value="laboratories">
                 Laboratorios</ToggleGroupItem
               >
-            </ToggleGroupRoot>
+            </ToggleGroup>
           </div>
-          <div class="flex w-full lg:w-auto gap-1.5">
-            <div class="w-full lg:w-auto flex-1 lg:flex-initial">
+          <div class="flex w-full gap-1.5 lg:w-auto">
+            <div class="w-full flex-1 lg:w-auto lg:flex-initial">
               <CInputText
                 class="h-10!"
                 v-model="search"
@@ -126,20 +118,20 @@
               />
             </div>
 
-            <PButton
+            <Button
               class="search-button rounded-l-lg"
               @click="focusPrevCourse"
-              unstyled
+              variant="text"
             >
               <Icon class="shrink-0" icon="radix-icons:chevron-left" />
-            </PButton>
-            <PButton
+            </Button>
+            <Button
               class="search-button rounded-r-lg"
               @click="focusNextCourse"
-              unstyled
+              variant="text"
             >
               <Icon class="shrink-0" icon="radix-icons:chevron-right" />
-            </PButton>
+            </Button>
           </div>
         </div>
 
@@ -167,7 +159,7 @@
 </template>
 
 <script setup lang="ts">
-import { ToggleGroupItem, ToggleGroupRoot } from 'radix-vue'
+import { ToggleGroupItem, ToggleGroup } from '~/components/ui/toggle-group'
 import ClassScheduleV1 from '~/components/portal/horarios/ClassScheduleV1.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import ArrowedCombobox from '~/components/schedule/ArrowedSelector.vue'
@@ -177,6 +169,14 @@ import { Icon } from '@iconify/vue'
 import CMessage from '~/components/partials/CMessage.vue'
 import type { Career } from '~/utils/types/career-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
+import { Button } from '~/components/ui/button'
+import {
+  ScrollAreaRoot,
+  ScrollAreaViewport,
+  ScrollAreaScrollbar,
+  ScrollAreaThumb,
+  ScrollAreaCorner
+} from 'reka-ui'
 
 const schedulesKey = computed(() => {
   return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
@@ -388,7 +388,7 @@ definePageMeta({
   layout: 'default',
   extendScreen: true,
   menuClass: 'bg-cics-silver-pale dark:bg-transparent',
-  title: 'Horarios',
+  title: 'Horarios'
 })
 const search = ref('')
 await $api<Hour[]>('/hours').then((response) => {
@@ -406,6 +406,6 @@ await $api<Career[]>('/careers').then((response) => {
 }
 
 .search-button {
-  @apply focus-visible:ring-primary-500 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 inline-flex min-w-6 cursor-pointer items-center justify-center border border-black bg-transparent dark:bg-surface-800 text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
+  @apply focus-visible:ring-primary-500 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 dark:bg-surface-800 inline-flex min-w-6 cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
 }
 </style>

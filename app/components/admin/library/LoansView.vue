@@ -188,21 +188,6 @@ const { data: categories } = useAsyncData('categories', () =>
   getAllCategories()
 )
 
-const dialog = useDialog()
-function openDetail(bookItem: any, showAllInfo: any) {
-  dialog.open(BookDetailDialog, {
-    header: 'Información del libro',
-    style: {
-      width: '50vw'
-    },
-    props: {
-      modal: true,
-      dismissableMask: true
-    },
-    data: { bookItem, showAllInfo },
-    onClose: () => {}
-  })
-}
 
 const columns: ColumnDef<Loan>[] = [
   {
@@ -278,16 +263,18 @@ const columns: ColumnDef<Loan>[] = [
             class="w-full"
           />
         </LoanDetailDialog>
-        <Button
-          icon="icon-park-twotone:eyes"
-          size="small"
-          label="Detalle del Libro"
-          variant="tonal"
-          class="w-full"
-          onClick={() =>
-            openDetail((row.original.library_reference as any).book, true)
-          }
-        />
+        <BookDetailDialog
+          bookItem={(row.original.library_reference as any).book}
+          showAllInfo={true}
+        >
+          <Button
+            icon="icon-park-twotone:eyes"
+            size="small"
+            label="Detalle del Libro"
+            variant="tonal"
+            class="w-full"
+          />
+        </BookDetailDialog>
         <LoanActionDialog
           bookName={(row.original.library_reference as any).book.name}
           bookReferenceId={row.original.library_reference_id}

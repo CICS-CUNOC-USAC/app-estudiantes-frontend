@@ -102,7 +102,7 @@
             <p class="text-gray-600 dark:text-gray-400">
               En <strong>{{ loanItem.place }}</strong>
             </p>
-            <PDivider />
+            <Separator />
             <template v-if="showAllInfo && data.library_reference">
               <p class="text-gray-600 dark:text-gray-400">
                 <span class="font-medium">Identificador en biblioteca:</span>
@@ -125,6 +125,7 @@ import { toast } from 'vue-sonner'
 import { getBookById } from '~/lib/api/books'
 import Button from '~/components/ui/button/Button.vue'
 import type { Loan } from '~/lib/api/admin/loans'
+import Separator from '../ui/separator/Separator.vue';
 
 const { loanItem } = defineProps<{
   title: string

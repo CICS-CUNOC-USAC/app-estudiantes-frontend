@@ -19,8 +19,8 @@
     </nav>
     <header class="mx-auto mt-2 max-w-3xl">
       <template v-if="status === 'pending'">
-        <PSkeleton class="mt-1.5 mb-5"></PSkeleton>
-        <PSkeleton height="2.3rem" class=""></PSkeleton>
+        <Skeleton class="mt-1.5 mb-5"></Skeleton>
+        <Skeleton height="2.3rem" class=""></Skeleton>
       </template>
       <template v-else-if="status === 'success' && data">
         <small class="text-muted-color-emphasis block pb-5 text-sm">{{
@@ -39,9 +39,9 @@
     </header>
     <template v-if="status === 'pending'">
       <div class="mx-auto mt-5 max-w-3xl">
-        <PSkeleton width="100%"></PSkeleton>
-        <PSkeleton width="60%" class="mt-2"></PSkeleton>
-        <PSkeleton width="80%" class="mt-4"></PSkeleton>
+        <Skeleton width="100%"></Skeleton>
+        <Skeleton width="60%" class="mt-2"></Skeleton>
+        <Skeleton width="80%" class="mt-4"></Skeleton>
       </div>
     </template>
     <template v-else-if="status === 'success' && data">
@@ -73,6 +73,7 @@ import Button from '~/components/ui/button/Button.vue'
 import AttachmentsPopover from './(components)/AttachmentsPopover.vue'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
 import CMessage from '~/components/partials/CMessage.vue'
+import { Skeleton } from '~/components/ui/skeleton'
 
 const route = useRoute()
 const postId = route.params.postId
