@@ -237,7 +237,7 @@ const table = useVueTable({
         </DropdownMenu>
       </div>
     </div>
-    <div class="w-full min-w-0 overflow-hidden rounded-xl border border-surface-950/75 dark:border-surface-700/50 max-w-full">
+    <div class="w-full min-w-0 overflow-hidden rounded-xl border border-surface-950/75 dark:border-surface-600/50 max-w-full">
     <Table>
       <TableHeader>
         <TableRow

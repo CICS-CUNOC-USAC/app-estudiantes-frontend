@@ -8,14 +8,10 @@
 
     <template #content>
       <div class="mb-2">
-        <span class="block"> Filtrar por: </span>
-        <CChipButton
-          label="Solo obligatorios"
-          filter
-          icon="lucide:check"
-          v-model="onlyMandatory"
-          class="my-1.5"
-        ></CChipButton>
+        <span class="block text-sm"> Filtrar por: </span>
+        <Toggle v-model="onlyMandatory" size="sm" with-indicator>
+          Solo obligatorios
+        </Toggle>
       </div>
       <TransitionGroup
         name="course-transition"
@@ -36,6 +32,7 @@ import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import type { CareerCourses } from '~/utils/types/career-courses'
 import CourseCard from './CourseCard.vue'
+import { Toggle } from '~/components/ui/toggle'
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterCourses: CareerCourses

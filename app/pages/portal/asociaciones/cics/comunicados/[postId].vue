@@ -1,5 +1,5 @@
 <template>
-  <main class="">
+  <main class="pb-8">
     <nav
       class="flex flex-wrap gap-x-3 print:hidden"
       v-if="data && status === 'success'"
@@ -29,12 +29,13 @@
 
       <ComunicadoPostComments :post-id="String(data.data.id)" />
     </main>
-    <ElementNotFound
+    <CMessage
       v-else-if="status === 'error' && !data"
       title="Comunicado no encontrado"
       subtitle="Parece que el comunicado que buscas no existe o no está disponible."
       back-to-label="Regresar a comunicados"
       back-to-route="/portal/asociaciones/cics/comunicados"
+      variant="destructive"
     />
   </main>
 </template>
@@ -45,6 +46,7 @@ import Button from '~/components/ui/button/Button.vue'
 import ComunicadoPostComments from '~/components/portal/comunicados/ComunicadoPostComments.vue'
 import ComunicadoPostReactions from '~/components/portal/comunicados/ComunicadoPostReactions.vue'
 import { type Comunicado } from '~/lib/api/strapi/types'
+import CMessage from '~/components/partials/CMessage.vue'
 
 const route = useRoute()
 const postId = route.params.postId as string

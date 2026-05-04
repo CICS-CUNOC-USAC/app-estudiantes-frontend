@@ -2,141 +2,33 @@
   <SidebarProvider :default-open="true">
     <DashboardSidebar />
     <div class="dark:bg-surface-800 w-full bg-white">
-      <div class="mx-auto w-full max-w-7xl rounded-xl px-6 py-4">
-        <SidebarTrigger>
-          <Icon name="lucide:menu" />
-        </SidebarTrigger>
+      <nav
+        class="fixed top-0 z-20 h-14 w-full px-4 py-2.5 backdrop-blur-sm transition-shadow lg:hidden dark:bg-surface-800/80 bg-white/80"
+        :class="{
+          'border-b border-transparent': !hasScrolled,
+          'border-b border-neutral-200 shadow-md dark:border-neutral-700/75': hasScrolled
+        }"
+      >
+        <div class="flex grow basis-0 items-center gap-x-3">
+          <SidebarTrigger class="py-2"> </SidebarTrigger>
+
+          <NuxtLink class="block text-sm lg:hidden" to="/dashboard/home">
+            <strong>CICS App</strong> ⋅ Dashboard
+          </NuxtLink>
+        </div>
+      </nav>
+
+      <div class="mx-auto w-full max-w-7xl rounded-xl px-6 pb-4 pt-16 lg:pt-4">
         <NuxtPage />
       </div>
     </div>
   </SidebarProvider>
-
-  <!-- <div class="min-h-screen lg:bg-cics-white dark:bg-surface-900 lg:dark:bg-surface-900">
-    <div class="flex gap-x-1">
-
-      <nav
-        class="hidden w-[22rem] shrink-0 flex-col self-start bg-cics-white py-5 lg:sticky lg:top-0 lg:flex lg:h-screen dark:bg-surface-900"
-      >
-        <h4
-          class="flex select-none items-center gap-x-4 px-8 text-lg font-medium"
-        >
-          <CICSLogo
-            :width="60"
-            class="inline-block"
-            fill="var(--p-primary-500)"
-          />
-          Dashboard
-        </h4>
-
-
-        <div class="mt-4 flex-1 space-y-4 pl-8 pr-6">
-          <NuxtLink
-            to="/dashboard/home"
-            class="flex items-center gap-x-2 text-lg rounded-lg p-2 font-medium transition duration-200 hover:text-primary-700 dark:hover:text-primary-200"
-            active-class="  text-primary-700 shadow-md outline  outline-black dark:text-primary-300 dark:outline-surface-700"
-            @click="$emit('close')"
-          >
-            <Icon name="lucide:house" />
-            Inicio</NuxtLink
-          >
-
-          <section v-for="item in DashboardLayoutItems" :key="item.sectionName">
-            <h3
-              class="mb-4 flex select-none items-center gap-x-2 text-sm font-medium text-muted-color-emphasis md:text-sm"
-            >
-              {{ item.sectionName }}
-            </h3>
-            <ul class="flex flex-col gap-1">
-              <li v-for="subItem in item.items" :key="subItem.itemName">
-                <NuxtLink
-                  @click="$emit('close')"
-                  :to="subItem.itemLink"
-                  active-class="active-menu"
-                  class="menu-item"
-                >
-                  <Icon :name="subItem.itemIcon" />
-                  {{ subItem.itemName }}</NuxtLink
-                >
-              </li>
-            </ul>
-          </section>
-          <Button
-            icon="icon-park-outline:arrow-left"
-            variant="link"
-            label="Regresar al portal"
-            class="mb-4 text-muted-color-emphasis lg:mb-2"
-            to="/"
-          />
-        </div>
-
-        <footer
-          class="flex w-full items-center justify-between gap-2 px-4 py-2.5"
-        >
-          <template v-if="user">
-            <div class="flex min-w-0 h-full items-center">
-              <AvatarWithMenu :display-name="displayNameFull" />
-              <div class="ml-2 flex  min-w-0 flex-col items-start">
-                <span
-                  class="w-full truncate text-sm font-medium"
-                  :title="displayNameFull"
-                  >{{ displayNameFull }}</span
-                >
-                <span class="text-xs text-muted-color-emphasis">
-                  {{ getRole === 'regular' ? 'Estudiante' : 'Admin' }}
-                </span>
-              </div>
-            </div>
-            <div class="shrink-0 space-x-2">
-              <Button
-                icon="lucide:layout-dashboard"
-                to="/"
-                v-Ptooltip.top="'Portal'"
-              />
-              <Button
-                icon="lucide:log-out"
-                v-Ptooltip.top="'Cerrar sesión'"
-                @click="logout"
-              />
-            </div>
-          </template>
-        </footer>
-      </nav>
-
-
-      <nav
-        class="fixed top-0 z-20 h-14 w-full border-surface-300 bg-white/80 px-4 py-2.5 backdrop-blur-sm transition lg:hidden dark:border-surface-700 dark:bg-surface-800/80"
-      >
-        <div class="flex grow basis-0 items-center gap-x-3">
-          <button
-            @click="drawer = !drawer"
-            type="button"
-            class="inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 hover:bg-primary-100 focus:outline-none focus:ring-2 focus:ring-surface-200 lg:hidden dark:text-surface-400 dark:hover:bg-primary-900/70 dark:focus:ring-surface-600"
-          >
-            <Icon name="lucide:menu" />
-          </button>
-          <Transition name="title-fade">
-            <NuxtLink class="block text-sm lg:hidden" to="/dashboard/home">
-              <strong>CICS App</strong> ⋅ Dashboard
-            </NuxtLink>
-          </Transition>
-        </div>
-      </nav>
-
-
-      <div
-        class="w-full rounded-xl bg-white px-6 pt-16 lg:my-2.5 lg:mr-2.5 lg:pr-6 lg:pt-6 dark:bg-surface-800"
-      >
-        <div class="mx-auto  max-w-screen-xl">
-          <NuxtPage />
-        </div>
-      </div>
-
-    </div>
-  </div> -->
 </template>
 <script lang="ts" setup>
 import DashboardSidebar from '~/components/partials/navigation/DashboardSidebar.vue'
 import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
+
+const { hasScrolled } = useNavScrollShadow()
 </script>
 <style scoped>
 @reference '~/assets/css/main.css';

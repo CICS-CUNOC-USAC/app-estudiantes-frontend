@@ -7,7 +7,7 @@
         interactive,
       'cursor-pointer': to,
       'shadow-[2px_2px_0_0_rgba(0,0,0,1)]': elevated || interactive,
-      'dark:hover:shadow-surface-700/50 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:-translate-x-0 active:-translate-y-0 dark:hover:shadow-[2px_2px_0_0]':
+      'dark:hover:shadow-surface-700 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:-translate-x-0 active:-translate-y-0 dark:hover:shadow-[2px_2px_0_0]':
         interactiveInverse
     }"
   >

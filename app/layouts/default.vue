@@ -8,17 +8,17 @@
           'border-transparent': !hasScrolled,
           'border-neutral-200 shadow-md dark:border-neutral-700/75':
             hasScrolled,
-          'dark:bg-surface-950/75 bg-white/80': !$route.meta.menuClass,
+          'dark:bg-surface-800/75 bg-white/80': !$route.meta.menuClass,
           [$route.meta.menuClass as string]: $route.meta.menuClass
         }"
       >
         <div
-          class="mx-auto flex h-full max-w-screen-2xl items-center justify-between px-4 py-2.5"
+          class="mx-auto flex h-full max-w-screen-2xl items-center justify-between px-4 py-3"
         >
           <div class="flex grow basis-0 items-center gap-x-3">
-            <SidebarTrigger class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm focus:ring-2 focus:ring-neutral-200 focus:outline-none lg:hidden  dark:focus:ring-neutral-600">
-              <Icon name="tabler:layout-sidebar-filled" />
-            </SidebarTrigger>
+            <div class="inline-flex lg:hidden">
+              <SidebarTrigger class="px-2"> </SidebarTrigger>
+            </div>
             <!-- <button
               type="button"
               class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-9 items-center justify-center rounded-lg p-1 text-sm text-gray-500 focus:ring-2 focus:ring-neutral-200 focus:outline-none lg:hidden dark:text-neutral-400 dark:focus:ring-neutral-600"
@@ -157,7 +157,6 @@ import CInputText from '~/components/primitives/form/CInputText.vue'
 type CInputTextInstance = InstanceType<typeof CInputText>
 import { useAuthStore } from '~/stores/auth'
 import TopNavDesktopDashboard from '~/components/partials/navigation/TopNavDesktopDashboard.vue'
-import SidebarNavigator from '~/components/partials/SidebarNavigator.vue'
 import {
   TooltipProvider,
   Tooltip,
@@ -174,18 +173,7 @@ const { user, displayName, displayNameFull, getRole } =
 
 const drawer = ref(false)
 
-const hasScrolled = ref(false)
-onMounted(() => {
-  window.addEventListener('scroll', () => {
-    hasScrolled.value = window.scrollY > 30
-  })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('scroll', () => {
-    hasScrolled.value = window.scrollY > 30
-  })
-})
+const { hasScrolled } = useNavScrollShadow()
 
 const { meta, k, control } = useMagicKeys()
 

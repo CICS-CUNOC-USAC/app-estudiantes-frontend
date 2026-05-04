@@ -6,11 +6,17 @@ import {
   SidebarHeader,
   useSidebar
 } from '@/components/ui/sidebar'
-import { DefaultLayoutItems } from '~/layouts/default.consts'
-import CICSLogo from '../CICSLogo.vue'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '~/components/ui/tooltip'
+import { ADMIN_LAYOUT_ITEMS } from '~/layouts/admin.consts'
 import AvatarWithMenu from '../AvatarWithMenu.vue'
+import CICSLogo from '../CICSLogo.vue'
 
-const { toggleSidebar } = useSidebar()
+const { toggleSidebar, isMobile } = useSidebar()
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
@@ -20,41 +26,46 @@ const { logout } = useAuthStore()
 
 <template>
   <Sidebar
-    class="bg-cics-white dark:bg-surface-800 border-surface-950/75 dark:border-surface-700/50"
+    class="bg-cics-white dark:bg-surface-900 border-surface-950/75 dark:border-surface-700/50"
   >
     <SidebarHeader class="flex items-center justify-between gap-4 px-4 py-3">
-      <CICSLogo :width="68" fill="var(--color-primary-500)" />
-      <button
-        @click="toggleSidebar"
-        class="hover:bg-primary-100 dark:hover:bg-primary-900/70 inline-flex size-8 items-center justify-center rounded-lg p-2 text-sm text-neutral-500"
-      >
-        <Icon name="lucide:x" />
-      </button>
+      <h4 class="flex items-center gap-x-4  font-medium select-none">
+        <CICSLogo
+          :width="60"
+          class="inline-block"
+          fill="var(--color-primary-500)"
+        />
+        Administración
+      </h4>
     </SidebarHeader>
     <SidebarContent>
       <nav
         class="flex max-h-full w-full flex-1 flex-col gap-y-4 overflow-y-auto px-5 pt-4 pb-6"
       >
         <NuxtLink
-          to="/"
-          class="hover:text-primary-700 dark:hover:text-primary-200 dark:bg-surface-800 flex items-center gap-x-2 rounded-lg p-2 transition duration-200"
-          active-class="text-primary-700 shadow-lg outline outline-black dark:text-primary-300 dark:outline-neutral-700"
+          to="/dashboard/home"
+          class="hover:text-primary-700 dark:bg-surface-900 dark:hover:text-primary-200 flex items-center gap-x-2 rounded-lg p-2 transition duration-200"
+          active-class="  text-primary-700 shadow-lg outline outline-black dark:text-primary-300 dark:outline-surface-700"
           @click="$emit('close')"
         >
           <Icon name="lucide:house" />
           Inicio</NuxtLink
         >
 
-        <section v-for="item in DefaultLayoutItems" :key="item.sectionName">
+        <section v-for="item in ADMIN_LAYOUT_ITEMS" :key="item.sectionName">
           <h3
-            class="text-muted-color-emphasis mb-4 flex items-center gap-x-2 text-sm select-none md:text-sm"
+            class="text-muted-color-emphasis mb-4 flex items-center gap-x-2 text-sm font-medium select-none md:text-sm"
           >
             {{ item.sectionName }}
           </h3>
           <ul class="flex flex-col gap-1">
             <li v-for="subItem in item.items" :key="subItem.itemName">
               <NuxtLink
-                @click="toggleSidebar"
+                 @click="
+                  () => {
+                    isMobile ? toggleSidebar() : null
+                  }
+                "
                 :to="subItem.itemLink"
                 active-class="active-menu"
                 class="menu-item"
@@ -88,12 +99,9 @@ const { logout } = useAuthStore()
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger as-child>
-                <Button
-                  icon="icon-park-outline:grid-three"
-                  to="/login"
-                />
+                <Button icon="icon-park-outline:grid-three" to="/" />
               </TooltipTrigger>
-              <TooltipContent> Dashboard </TooltipContent>
+              <TooltipContent> Portal </TooltipContent>
             </Tooltip>
           </TooltipProvider>
 
@@ -114,7 +122,7 @@ const { logout } = useAuthStore()
 @reference '~/assets/css/main.css';
 
 .menu-item {
-  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 dark:bg-surface-800 dark:before:bg-surface-700 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium ring inset-ring ring-transparent inset-ring-transparent transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 before:transition;
+  @apply text-muted-color-emphasis hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 dark:bg-surface-900 dark:before:bg-surface-700 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium ring inset-ring ring-transparent inset-ring-transparent transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 before:transition;
 }
 
 .active-menu {
