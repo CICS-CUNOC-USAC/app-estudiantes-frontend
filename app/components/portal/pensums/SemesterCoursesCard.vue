@@ -7,7 +7,7 @@
     </template> -->
 
     <template #content>
-      <div class="mb-2">
+      <div class="mb-2 space-y-2">
         <span class="block text-sm"> Filtrar por: </span>
         <Toggle v-model="onlyMandatory" size="sm" with-indicator>
           Solo obligatorios
@@ -28,11 +28,10 @@
   </CCardAlt>
 </template>
 <script setup lang="ts">
-import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import { Toggle } from '~/components/ui/toggle'
 import type { CareerCourses } from '~/utils/types/career-courses'
 import CourseCard from './CourseCard.vue'
-import { Toggle } from '~/components/ui/toggle'
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterCourses: CareerCourses

@@ -14,6 +14,15 @@ export default defineEventHandler(async (event) => {
       body: `curso=${search}&buscar=1`
     }
   )
+
+  if (!res.ok) {
+    throw createError({
+      status: 503,
+      statusMessage: 'Failed to fetch data from the source',
+      message: 'No se pudo obtener los datos del servidor, por favor intenta de nuevo más tarde.'
+    })
+  }
+
   const html = await res.text()
 
   const doc = new JSDOM(html).window.document

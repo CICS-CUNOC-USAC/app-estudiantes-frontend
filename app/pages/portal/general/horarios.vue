@@ -135,24 +135,16 @@
           </div>
         </div>
 
-        <ScrollAreaRoot ref="scrollerSchedules">
-          <ScrollAreaViewport class="max-h-[80vh]">
-            <ClassScheduleV1
-              v-if="classrooms && schedules && hours"
-              :key="schedulesKey"
-              :hours="hours"
-              :classrooms="classrooms"
-              :schedules="schedules"
-            />
-          </ScrollAreaViewport>
-          <ScrollAreaScrollbar orientation="horizontal">
-            <ScrollAreaThumb />
-          </ScrollAreaScrollbar>
-          <ScrollAreaScrollbar orientation="vertical">
-            <ScrollAreaThumb />
-          </ScrollAreaScrollbar>
-          <ScrollAreaCorner />
-        </ScrollAreaRoot>
+        <ScrollArea ref="scrollerSchedules" class="max-h-[80vh]">
+          <ClassScheduleV1
+            v-if="classrooms && schedules && hours"
+            :key="schedulesKey"
+            :hours="hours"
+            :classrooms="classrooms"
+            :schedules="schedules"
+          />
+          <ScrollBar orientation="horizontal" />
+        </ScrollArea>
       </div>
     </div>
   </div>
@@ -170,13 +162,7 @@ import CMessage from '~/components/partials/CMessage.vue'
 import type { Career } from '~/utils/types/career-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 import { Button } from '~/components/ui/button'
-import {
-  ScrollAreaRoot,
-  ScrollAreaViewport,
-  ScrollAreaScrollbar,
-  ScrollAreaThumb,
-  ScrollAreaCorner
-} from 'reka-ui'
+import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area'
 
 const schedulesKey = computed(() => {
   return `${JSON.stringify(schedules.value)}${JSON.stringify(hours.value)}`
@@ -406,6 +392,6 @@ await $api<Career[]>('/careers').then((response) => {
 }
 
 .search-button {
-  @apply focus-visible:ring-primary-500 text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 dark:bg-surface-800 inline-flex min-w-6 cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
+  @apply focus-visible:ring-primary-500 text-muted-foreground focus:bg-surface-50/20 dark:focus:bg-surface-600/40 dark:bg-surface-800 inline-flex min-w-6 cursor-pointer items-center justify-center border border-black bg-transparent text-sm font-semibold transition duration-75 ease-out select-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-x-0.5 active:translate-y-0.5 active:shadow-none;
 }
 </style>

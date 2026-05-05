@@ -1,20 +1,21 @@
 <template>
   <Popover>
-    <PopoverTrigger as-child
-      ><AvatarRoot
-        class="group/avatartrigger relative flex h-full w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full"
+    <PopoverTrigger as-child>
+      <div
+        class="group/avatartrigger relative flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center overflow-hidden rounded-full"
       >
-        <AvatarFallback
-          class="text-muted-color bg-surface-200 flex size-full items-center justify-center overflow-hidden select-none"
+        <span
+          class="text-muted-foreground bg-surface-200 flex size-full items-center justify-center overflow-hidden select-none"
         >
           {{ `${displayName?.charAt(0)}` }}
-        </AvatarFallback>
-        <AvatarFallback
+        </span>
+        <span
           class="bg-surface-700/80 absolute inset-0 flex items-center justify-center tracking-widest text-white opacity-0 transition-opacity duration-200 select-none group-hover/avatartrigger:opacity-100"
         >
           <Icon name="icon-park-outline:more" />
-        </AvatarFallback> </AvatarRoot
-    ></PopoverTrigger>
+        </span>
+      </div>
+    </PopoverTrigger>
     <PopoverContent
       side="top"
       :side-offset="16"

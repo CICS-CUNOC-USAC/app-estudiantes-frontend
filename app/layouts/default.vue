@@ -29,7 +29,7 @@
               class="hidden items-center space-x-2 transition hover:opacity-80 lg:flex"
               to="/"
             >
-              <CICSLogo :width="60" fill="var(--p-primary-500)" />
+              <CICSLogo :width="60" fill="var(--color-primary-500)" />
               <span v-if="$route.meta.title">⋅</span>
               <div class="text-xs font-medium">{{ $route.meta.title }}</div>
             </NuxtLink>
@@ -45,7 +45,7 @@
             </Transition>
           </div>
 
-          <TopNavDesktopDashboard v-model="currentTrigger" />
+          <TopNavDesktopDashboard v-model="currentTrigger" class="hidden lg:flex" />
 
           <div class="relative flex grow basis-0 justify-end gap-x-1">
             <div class="flex items-center">

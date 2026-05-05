@@ -98,6 +98,7 @@
   </nav>
 </template>
 <script setup lang="ts">
+import { ListboxRoot, ListboxContent, ListboxItem } from 'reka-ui'
 import type { Classroom, Hour } from '~/utils/types/schedule-courses'
 import CInputText from '../primitives/form/CInputText.vue'
 import Button from '~/components/ui/button/Button.vue'
