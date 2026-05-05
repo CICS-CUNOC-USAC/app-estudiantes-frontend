@@ -28,11 +28,10 @@
   </CCardAlt>
 </template>
 <script setup lang="ts">
-import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import CourseCardProgress from './CourseCardProgress.vue'
 import type { SemesterProgress } from '~/lib/api/dashboard/career-progress'
 import Toggle from '../ui/toggle/Toggle.vue'
+import CourseCardProgress from './CourseCardProgress.vue'
 const onlyMandatory = ref()
 const props = defineProps<{
   semesterProgress: SemesterProgress

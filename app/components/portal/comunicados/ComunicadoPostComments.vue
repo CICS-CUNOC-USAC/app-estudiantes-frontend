@@ -29,7 +29,7 @@
         />
       </div>
 
-      <p class="text-muted-color text-xs">
+      <p class="text-muted-color text-xs py-1.5">
         {{
           authenticated
             ? ''
