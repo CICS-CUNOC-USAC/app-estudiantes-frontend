@@ -60,7 +60,7 @@ import { DefaultLayoutItems } from '~/layouts/default.consts'
 @reference '~/assets/css/main.css';
 
 .menu-item {
-  @apply text-white/70 hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 dark:bg-surface-900 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium ring inset-ring ring-transparent inset-ring-transparent transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 before:transition dark:before:bg-neutral-700;
+  @apply text-muted-color hover:text-primary-700 hover:before:bg-primary-700 dark:hover:text-primary-300 dark:hover:before:bg-primary-200 dark:bg-surface-900 relative flex items-center gap-x-2 rounded-lg py-2 pr-2 pl-8 font-medium ring inset-ring ring-transparent inset-ring-transparent transition duration-200 before:absolute before:top-1/2 before:left-4 before:h-[calc(100%+4px)] before:w-0.5 before:-translate-y-1/2 before:rounded before:bg-gray-300 before:transition dark:before:bg-neutral-700;
 }
 
 .active-menu {
