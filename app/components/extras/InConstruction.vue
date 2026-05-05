@@ -1,6 +1,6 @@
 <template>
   <CCardAlt class="mx-auto max-w-md">
-    <template #title>
+    <template #content>
       <header class="flex flex-col items-center justify-center gap-y-4 pb-6">
         <Icon
           name="icon-park-twotone:tool"
@@ -10,25 +10,16 @@
         <span class="text-muted-color block">{{ section }}</span>
         <h1 class="text-xl font-bold">En construcción...</h1>
       </header>
-    </template>
-    <template #content>
       <div class="text-center">
         <p class="mb-4">
           Aun estamos trabajando en esta sección. Por favor, regresa más tarde.
         </p>
-        <CButton
+        <Button
           variant="link"
           to="/"
           label="Regresar al inicio"
           icon="icon-park-outline:arrow-left"
         />
-        <!-- <NuxtLink
-          to="/"
-          class=" inline text-primary-400 transition border-b hover:border-b-2 border-primary-400 hover:border-primary-500 hover:text-primary-500"
-          >
-          <Icon class="mb-1 mr-1 inline" name="icon-park-outline:arrow-left" />
-          <strong>Regresar al inicio</strong>
-        </NuxtLink> -->
       </div>
     </template>
   </CCardAlt>
@@ -36,7 +27,7 @@
 
 <script lang="ts" setup>
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 defineProps({
   section: {
     type: String,

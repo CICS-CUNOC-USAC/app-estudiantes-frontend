@@ -1,7 +1,7 @@
 <template>
   <main>
     <nav class="space-x-4">
-      <CButton
+      <Button
           icon="icon-park-outline:arrow-left"
           variant="link"
           label="Regresar al inicio"

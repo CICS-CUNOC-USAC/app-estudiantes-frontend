@@ -1,29 +1,26 @@
 <template>
   <CCardAlt
-    unstyled
-    no-spacing
-    class="sticky top-16 z-20 mb-4 text-center lg:top-4"
+    class="mb-4 relative overflow-hidden"
     :class="{
       'shadow-lg dark:shadow-xl': hasScrolled
     }"
+    title="Resumen de créditos"
   >
     <template #content>
-      <div
-        class="absolute bottom-0 left-0 right-0 text-sm top-0 z-10 flex items-center justify-center bg-black/50 text-white"
-        v-if="loading"
+      <section class="relative transition grid grid-cols-2 gap-0 md:grid-cols-3 lg:grid-cols-4"
+      :class="{
+        'pointer-events-none opacity-50': loading
+      }"
       >
-        Guardando...
-      </div>
-      <section class="relative flex justify-center py-4 sm:gap-x-4 lg:gap-x-10">
         <div>
-          <h6 class="pensum-count">Créditos acumulados:</h6>
+          <h6 class="pensum-count">Acumulados:</h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.total_credits
           }}</strong>
         </div>
         <div>
           <h6 class="pensum-count">
-            Créditos obligatorios:
+            Obligatorios:
           </h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.mandatory_credits
@@ -35,7 +32,7 @@
         </div>
         <div>
           <h6 class="pensum-count">
-            Créditos optativos:
+            Optativos:
           </h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.not_mandatory_credits
@@ -47,7 +44,7 @@
         </div>
         <div>
           <h6 class="pensum-count">
-            Créditos disponibles:
+            Disponibles:
           </h6>
           <strong class="text-muted-color-emphasis">{{
             careerProgress?.current_credits.total_credits

@@ -28,12 +28,38 @@
       ></div>
     </div>
   </div>
-  <CInfiniteScroll @load-more="load" v-if="data" :loading="status === 'pending'">
+  <CInfiniteScroll
+    @load-more="load"
+    v-if="data"
+    :loading="status === 'pending'"
+  >
     <div
       class="grid grid-cols-1 gap-6 pb-12 transition md:grid-cols-2 lg:grid-cols-2"
       :class="{ 'opacity-50': status === 'pending' }"
     >
-      <NuxtLink
+      <CCardAlt
+        v-for="(item, index) in data"
+        :key="index"
+        class="group hover:bg-primary-100/75 dark:hover:bg-primary-900/30"
+        interactive-inverse
+        :title="item.title"
+        :description="item.description"
+        :to="`/portal/post/${item.link}`"
+        :small="item.posted_since"
+      >
+        <template #footer>
+          <span
+            class="up text-primary-800 dark:text-primary-300 inline-flex items-center gap-x-2 text-xs font-medium tracking-tight"
+          >
+            Ver publicación
+            <Icon
+              name="icon-park-outline:arrow-right"
+              class="transition group-hover:translate-x-1"
+            />
+          </span>
+        </template>
+      </CCardAlt>
+      <!-- <NuxtLink
         v-for="(item, index) in data"
         :key="index"
         class="group bg-surface-50 hover:bg-primary-50 flex flex-col gap-2 rounded-xl border border-black p-5 transition active:translate-x-1 active:translate-y-1 dark:bg-neutral-900 dark:hover:bg-zinc-700/60"
@@ -51,12 +77,13 @@
             class="mb-0.5 inline-block transition-transform group-hover:translate-x-1"
           />
         </span>
-      </NuxtLink>
+      </NuxtLink> -->
     </div>
   </CInfiniteScroll>
 </template>
 <script setup lang="ts">
 import CMessage from '../partials/CMessage.vue'
+import CCardAlt from '../primitives/card/CCardAlt.vue'
 import CInfiniteScroll from '../primitives/data/CInfiniteScroll.vue'
 
 const page = ref(1)

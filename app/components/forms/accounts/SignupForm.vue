@@ -1,13 +1,13 @@
 <template>
-  <CCardAlt class="w-full p-8 md:max-w-3xl" no-spacing>
-    <template #title>
-      <h2 class="pb-4 text-center text-2xl font-semibold">Regístrate</h2>
-    </template>
-    <template #content>
-      <p class="text-center">
+  <Card class="gap-4 px-4 py-8">
+    <CardHeader>
+      <CardTitle class="text-lg">Regístrate</CardTitle>
+      <CardDescription class="">
         Ingresa tu registro académico y buscaremos tu información en el sistema
         de Registro automáticamente.
-      </p>
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
       <div class="my-3 grid grid-cols-2 gap-4 md:grid-cols-3">
         <CInputText
           v-model="searchValues.ra"
@@ -27,7 +27,7 @@
           prepend-icon="icon-park-twotone:id-card-h"
           no-borders
         />
-        <CButton
+        <Button
           rounded
           type="submit"
           icon="icon-park-twotone:search"
@@ -46,6 +46,7 @@
       >
         {{ status }}
       </div>
+      <!-- NOTE: Información del estudiante mostrada en modo solo lectura -->
       <fieldset
         class="my-4 grid max-h-80 grid-cols-2 gap-x-4 gap-y-3 overflow-visible lg:max-h-none lg:grid-cols-2"
         v-if="success"
@@ -96,60 +97,81 @@
           :defaultValue="studentValues.email"
         />
       </fieldset>
-      <PForm
-        :initial-values
-        :resolver
-        v-slot="$form"
-        @submit="signUpMutation"
+      <!-- NOTE: Formulario de registro migrado a vee-validate -->
+      <form
+        id="form-signup"
+        @submit="onSubmit"
         class="my-2 grid grid-cols-2 gap-2 md:grid-cols-3"
         v-if="success"
       >
-        <CInputText
-          name="username"
-          id="username"
-          label="Nombre de usuario"
-          prepend-icon="icon-park-twotone:people"
-          no-borders
-          root-class="col-span-2 md:col-span-1"
-          :error="$form.username?.error?.message"
-        />
-        <CInputText
-          name="password"
-          id="password"
-          label="Contraseña"
-          type="password"
-          prepend-icon="icon-park-twotone:lock"
-          no-borders
-          root-class="col-span-1 md:col-span-1"
-          :error="$form.password?.error?.message"
-        />
-        <CInputText
-          name="confirmPassword"
-          id="confirmPassword"
-          label="Confirmar contraseña"
-          type="password"
-          prepend-icon="icon-park-twotone:lock"
-          no-borders
-          root-class="col-span-1 md:col-span-1"
-          :error="$form.confirmPassword?.error?.message"
-        />
-        <CButton
-          class="mb-3 w-full"
-          icon="icon-park-outline:arrow-right"
-          label="Continuar"
-          type="submit"
-          :loading="asyncStatus === 'loading'"
-        />
-      </PForm>
-    </template>
-    <template #footer>
+        <FieldGroup class="col-span-2 md:col-span-3">
+          <div class="grid grid-cols-2 gap-2 md:grid-cols-3">
+            <VeeField v-slot="{ field, errors }" name="username">
+              <Field :data-invalid="!!errors.length">
+                <CInputText
+                  v-bind="field"
+                  name="username"
+                  id="username"
+                  label="Nombre de usuario"
+                  prepend-icon="icon-park-twotone:people"
+                  no-borders
+                  root-class="col-span-2 md:col-span-1"
+                  :error="errors[0]"
+                />
+              </Field>
+            </VeeField>
+
+            <VeeField v-slot="{ field, errors }" name="password">
+              <Field :data-invalid="!!errors.length">
+                <CInputText
+                  v-bind="field"
+                  name="password"
+                  id="password"
+                  label="Contraseña"
+                  type="password"
+                  prepend-icon="icon-park-twotone:lock"
+                  no-borders
+                  root-class="col-span-1 md:col-span-1"
+                  :error="errors[0]"
+                />
+              </Field>
+            </VeeField>
+
+            <VeeField v-slot="{ field, errors }" name="confirmPassword">
+              <Field :data-invalid="!!errors.length">
+                <CInputText
+                  v-bind="field"
+                  name="confirmPassword"
+                  id="confirmPassword"
+                  label="Confirmar contraseña"
+                  type="password"
+                  prepend-icon="icon-park-twotone:lock"
+                  no-borders
+                  root-class="col-span-1 md:col-span-1"
+                  :error="errors[0]"
+                />
+              </Field>
+            </VeeField>
+          </div>
+
+          <Button
+            class="mb-3 w-full"
+            icon="icon-park-outline:arrow-right"
+            label="Continuar"
+            type="submit"
+            :loading="asyncStatus === 'loading'"
+          />
+        </FieldGroup>
+      </form>
+    </CardContent>
+    <CardFooter>
       <div class="flex flex-col gap-y-4">
         <span class="align-center flex gap-2">
           ¿Ya tienes una cuenta?
-          <CButton to="/login" variant="link" label="Inicia sesión" />
+          <Button to="/login" variant="link" label="Inicia sesión" />
         </span>
         <div class="align-center flex">
-          <CButton
+          <Button
             to="/"
             variant="text"
             icon="icon-park-outline:arrow-left"
@@ -157,17 +179,25 @@
           />
         </div>
       </div>
-    </template>
-  </CCardAlt>
+    </CardFooter>
+  </Card>
 </template>
 <script lang="ts" setup>
-import type { FormSubmitEvent } from '@primevue/forms'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm, Field as VeeField } from 'vee-validate'
 import { toast } from 'vue-sonner'
 import { z } from 'zod'
-import CButton from '~/components/primitives/button/CButton.vue'
-import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import Button from '~/components/ui/button/Button.vue'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '~/components/ui/card'
+import { Field, FieldGroup } from '~/components/ui/field'
 import { type UserSirecaInfoResponse } from '~/lib/api/auth/user'
 
 const regularAuthStore = useRegularAuthStore()
@@ -184,41 +214,54 @@ defineProps({
   }
 })
 
-// start - mocking new sign up flow
-
 const loading = ref(false)
 const success = ref(false)
 const status = ref('')
 
-const initialValues = reactive({
-  username: '',
-  password: '',
-  confirmPassword: ''
+const formSchema = z
+  .object({
+    username: z
+      .string()
+      .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
+      .max(20, 'El nombre de usuario no puede tener más de 20 caracteres'),
+    password: z
+      .string()
+      .min(6, 'La contraseña debe tener al menos 6 caracteres')
+      .max(20, 'La contraseña no puede tener más de 20 caracteres'),
+    confirmPassword: z.string()
+  })
+  .refine(
+    (values) => {
+      return values.password === values.confirmPassword
+    },
+    {
+      message: 'Las contraseñas deben coincidir',
+      path: ['confirmPassword']
+    }
+  )
+
+const { handleSubmit } = useForm({
+  validationSchema: toTypedSchema(formSchema),
+  initialValues: {
+    username: '',
+    password: '',
+    confirmPassword: ''
+  }
 })
 
-const resolver = zodResolver(
-  z
-    .object({
-      username: z
-        .string()
-        .min(3, 'El nombre de usuario debe tener al menos 3 caracteres')
-        .max(20, 'El nombre de usuario no puede tener más de 20 caracteres'),
-      password: z
-        .string()
-        .min(6, 'La contraseña debe tener al menos 6 caracteres')
-        .max(20, 'La contraseña no puede tener más de 20 caracteres'),
-      confirmPassword: z.string()
-    })
-    .refine(
-      (values) => {
-        return values.password === values.confirmPassword
-      },
-      {
-        message: 'Las contraseñas deben coincidir',
-        path: ['confirmPassword']
-      }
-    )
-)
+const onSubmit = handleSubmit((values) => {
+  signUpMutation({
+    first_name: studentValues.value.firstName,
+    last_name: studentValues.value.lastName,
+    user: {
+      email: studentValues.value.email,
+      career_code: Number(studentValues.value.careerCode.slice(-2)),
+      ra: searchValues.value.ra,
+      username: values.username,
+      password: values.password
+    }
+  })
+})
 
 const searchValues = ref({
   ra: '',
@@ -235,37 +278,18 @@ const studentValues = ref({
   password: ''
 })
 
-/*
-const { mutate: sirecaInfoMutation, asyncStatus } = useMutation({
-  mutation: (userCreds: { ra: string; pin: string }) =>
-    getUserInfoBySirecaCredentials(searchValues.value),
-  onSuccess: (response) => {
-  },
-  onError: (error) => {
-  }
-})
-*/
-
 const { mutate: signUpMutation, asyncStatus } = useMutation({
-  mutation: (formEvent: FormSubmitEvent) => {
-    const { valid, values } = formEvent
-    if (!valid) {
-      toast.error('Por favor, completa todos los campos correctamente.')
-      return Promise.reject('Form is not valid')
+  mutation: (data: {
+    first_name: string
+    last_name: string
+    user: {
+      email: string
+      career_code: number
+      ra: string
+      username: string
+      password: string
     }
-
-    return signupUser({
-      first_name: studentValues.value.firstName,
-      last_name: studentValues.value.lastName,
-      user: {
-        email: studentValues.value.email,
-        career_code: Number(studentValues.value.careerCode.slice(-2)),
-        ra: searchValues.value.ra,
-        username: values.username,
-        password: values.password
-      }
-    })
-  },
+  }) => signupUser(data),
   onSuccess: (response) => {},
   onError: (error) => {}
 })
@@ -281,11 +305,6 @@ const { mutate: getStudentInfo, asyncStatus: studentAsyncStatus } = useMutation(
       status.value = error.data?.message
         ? `No hemos podido obtener tu información: ${error.data?.message}`
         : 'No se ha podido consultar SIRECA, por favor intenta más tarde'
-      // toast.error('Error al Consultar', {
-      //   description:
-      //     error.data?.message ??
-      //     'No se ha podido consultar SIRECA, por favor intenta más tarde'
-      // })
       success.value = false
     },
     onSuccess: (response) => {
@@ -303,36 +322,5 @@ const { mutate: getStudentInfo, asyncStatus: studentAsyncStatus } = useMutation(
     }
   }
 )
-
-// const { execute } = useCustomFetch<UserSirecaInfoResponse>(
-//   '/auth/student-info',
-//   {
-//     immediate: false,
-//     query: searchValues,
-//     watch: false,
-//     onRequest: (data) => {
-//       console.log('Fetching user info...', data.response?._data)
-//     },
-//     onResponse: (response) => {
-//       const studentData = response.response._data.estudiante
-//       const careerData = response.response._data.inscrito
-//       studentValues.value.firstName = studentData.nombres
-//       studentValues.value.lastName = studentData.apellidos
-//       studentValues.value.email = studentData.correo
-//       studentValues.value.careerCode = careerData.codigo
-//       studentValues.value.careerName = careerData.carrera
-
-//       toast.success('Informacion obtenida exitosamente')
-//       success.value = true
-//     },
-//     onResponseError: (error) => {
-//       toast.error('Error al Consultar', {
-//         description:
-//           error.response ??
-//           'No se ha podido consultar SIRECA, por favor intenta mas tarde'
-//       })
-//     }
-//   }
-// )
 </script>
 <style scoped lang="postcss"></style>

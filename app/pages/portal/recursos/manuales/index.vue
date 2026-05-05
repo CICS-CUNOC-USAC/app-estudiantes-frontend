@@ -1,7 +1,7 @@
 <template>
   <main>
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
@@ -21,24 +21,19 @@
       <CCardAlt
         v-for="manual in data.data"
         :to="`/portal/recursos/manuales/${manual.slug}`"
+        :title="manual.name"
+        header-icon="lucide:book"
+        :description="manual.description"
         class="hover:bg-primary-200 dark:hover:bg-primary-900/50"
         interactive-inverse
         :key="manual.documentId"
-      >
-        <template #title>
-          <Icon name="lucide:book" class="mr-1.5 mb-1 inline-block" />
-          <h3 class="py-2 text-lg font-semibold">{{ manual.name }}</h3>
-        </template>
-        <template #content>
-          <p class="truncate text-sm">{{ manual.description }}</p>
-        </template>
-      </CCardAlt>
+      />
     </div>
   </main>
 </template>
 <script setup lang="ts">
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import type { Strapi5ResponseMany } from '@nuxtjs/strapi'
 import type { ContentManual } from '~/lib/api/strapi/types'
 

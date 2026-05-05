@@ -12,74 +12,100 @@
         <span class="sr-only">Close</span>
       </Button>
     </div>
-    <PForm
-      :initial-values="initialValues"
-      :resolver="resolver"
-      v-slot="$form"
-      @submit="saveBook"
-      class="space-y-4"
-    >
-      <CInputText
-        label="Nombre"
-        name="name"
-        id="name"
-        no-borders
-        prepend-icon="icon-park-twotone:book"
-        :error="$form.name?.error?.message"
-      />
-      <CTextarea
-        label="Descripción"
-        name="description"
-        id="description"
-        no-borders
-        :rows="3"
-        prepend-icon="icon-park-twotone:text"
-        :error="$form.description?.error?.message"
-      />
-      <CInputText
-        label="ISBN"
-        name="isbn"
-        id="isbn"
-        no-borders
-        prepend-icon="icon-park-twotone:hashtag-key"
-        :error="$form.isbn?.error?.message"
-      />
-      <CInputText
-        label="Autor"
-        name="author"
-        id="author"
-        no-borders
-        prepend-icon="icon-park-twotone:people"
-        :error="$form.author?.error?.message"
-      />
-      <CInputText
-        label="URL de fuente"
-        name="source_url"
-        id="source_url"
-        no-borders
-        prepend-icon="icon-park-outline:link-one"
-        :error="$form.source_url?.error?.message"
-      />
-      <CSelect
-        label="Categoría"
-        name="category_id"
-        id="category_id"
-        :items="categories?.results || []"
-        option-label="name"
-        option-value="id"
-        no-borders
-        prepend-icon="icon-park-twotone:tree-list"
-        :error="$form.category_id?.error?.message"
-      />
+    <form @submit="onSubmit" class="space-y-4">
+      <VeeField v-slot="{ componentField, errors }" name="name">
+        <Field :data-invalid="!!errors.length">
+          <CInputText
+            v-bind="componentField"
+            label="Nombre"
+            id="name"
+            no-borders
+            prepend-icon="icon-park-twotone:book"
+            :error="errors[0]"
+          />
+        </Field>
+      </VeeField>
+
+      <VeeField v-slot="{ componentField, errors }" name="description">
+        <Field :data-invalid="!!errors.length">
+          <CTextarea
+            v-bind="componentField"
+            label="Descripción"
+            id="description"
+            no-borders
+            :rows="3"
+            prepend-icon="icon-park-twotone:text"
+            :error="errors[0]"
+          />
+        </Field>
+      </VeeField>
+
+      <VeeField v-slot="{ componentField, errors }" name="isbn">
+        <Field :data-invalid="!!errors.length">
+          <CInputText
+            v-bind="componentField"
+            label="ISBN"
+            id="isbn"
+            no-borders
+            prepend-icon="icon-park-twotone:hashtag-key"
+            :error="errors[0]"
+          />
+        </Field>
+      </VeeField>
+
+      <VeeField v-slot="{ componentField, errors }" name="author">
+        <Field :data-invalid="!!errors.length">
+          <CInputText
+            v-bind="componentField"
+            label="Autor"
+            id="author"
+            no-borders
+            prepend-icon="icon-park-twotone:people"
+            :error="errors[0]"
+          />
+        </Field>
+      </VeeField>
+
+      <VeeField v-slot="{ componentField, errors }" name="source_url">
+        <Field :data-invalid="!!errors.length">
+          <CInputText
+            v-bind="componentField"
+            label="URL de fuente"
+            id="source_url"
+            no-borders
+            prepend-icon="icon-park-outline:link-one"
+            :error="errors[0]"
+          />
+        </Field>
+      </VeeField>
+
+      <VeeField v-slot="{ field, errors }" name="category_id">
+        <Field :data-invalid="!!errors.length">
+          <CSelect
+            label="Categoría"
+            id="category_id"
+            :items="categories?.results || []"
+            option-label="name"
+            option-value="id"
+            no-borders
+            prepend-icon="icon-park-twotone:tree-list"
+            :model-value="field.value"
+            @update:model-value="field.onChange"
+            @blur="field.onBlur"
+            :error="errors[0]"
+          />
+        </Field>
+      </VeeField>
+
       <div class="flex gap-4 pt-2">
-        <CButton
+        <Button
           label="Cancelar"
           icon="icon-park-outline:arrow-left"
           severity="secondary"
           class="flex-1"
           @click="dialogRef.close()"
         />
-        <CButton
+        <Button
           label="Guardar"
           icon="icon-park-outline:check"
           type="submit"
@@ -87,19 +113,21 @@
           :loading="saving"
         />
       </div>
-    </PForm>
+    </form>
   </div>
 </template>
 
 <script setup lang="ts">
 import { inject } from 'vue'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm, Field as VeeField } from 'vee-validate'
 import { z } from 'zod'
 import { updateBook, getAllCategories } from '~/lib/api/admin/books'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
+import { Field } from '~/components/ui/field'
 
 const dialogRef: any = inject('dialogRef')
 const { bookItem } = dialogRef.value.data
@@ -110,34 +138,33 @@ const { data: categories } = await useAsyncData('categories', () =>
   getAllCategories()
 )
 
-const initialValues = reactive({
-  name: bookItem.name || '',
-  description: bookItem.description || '',
-  isbn: bookItem.isbn || '',
-  author: bookItem.author || '',
-  source_url: bookItem.source_url || '',
-  category_id: bookItem.category_id || null
+const formSchema = z.object({
+  name: z.string().nonempty('El nombre del libro es requerido'),
+  description: z.string().nonempty('La descripción del libro es requerida'),
+  isbn: z.string(),
+  author: z.string().nonempty('El autor del libro es requerido'),
+  source_url: z.string().url('La URL de la fuente no es válida'),
+  category_id: z
+    .number({ message: 'La categoría es requerida' })
+    .int('La categoría es requerida')
 })
 
-const resolver = zodResolver(
-  z.object({
-    name: z.string().nonempty('El nombre del libro es requerido'),
-    description: z.string().nonempty('La descripción del libro es requerida'),
-    isbn: z.string(),
-    author: z.string().nonempty('El autor del libro es requerido'),
-    source_url: z.string().url('La URL de la fuente no es válida'),
-    category_id: z
-      .number({ message: 'La categoría es requerida' })
-      .int('La categoría es requerida')
-  })
-)
-
-const saveBook = async (e: any) => {
-  if (e.valid) {
-    saving.value = true
-    await updateBook(bookItem.id, e.values)
-    saving.value = false
-    dialogRef.value.close({ success: true })
+const { handleSubmit } = useForm({
+  validationSchema: toTypedSchema(formSchema),
+  initialValues: {
+    name: bookItem.name || '',
+    description: bookItem.description || '',
+    isbn: bookItem.isbn || '',
+    author: bookItem.author || '',
+    source_url: bookItem.source_url || '',
+    category_id: bookItem.category_id || undefined
   }
-}
+})
+
+const onSubmit = handleSubmit(async (values) => {
+  saving.value = true
+  await updateBook(bookItem.id, values)
+  saving.value = false
+  dialogRef.value.close({ success: true })
+})
 </script>

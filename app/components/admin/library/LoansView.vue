@@ -72,7 +72,11 @@
         prepend-icon="icon-park-twotone:category-management"
         no-borders
         clearable
-        checkmark
+        :model-value="
+          $route.query.category_id
+            ? String($route.query.category_id)
+            : undefined
+        "
         option-label="name"
         option-value="id"
         @value-change="
@@ -88,217 +92,33 @@
       />
     </div>
 
-    <PDataTable
-      :value="data"
-      :loading="status === 'pending'"
-      :rows="limit"
-      :first="currentPage"
-      :total-records="data?.length"
-      :rows-per-page-options="[5, 10, 25, 50]"
-      row-hover
-      lazy
-      paginator
-      @page="
-        ($event) =>
-          $router.push({ query: { ...$route.query, page: $event.page + 1 } })
+    <DataTable
+      :columns
+      :data="data || []"
+      :total-elements="data?.length"
+      :pagination-state="paginationOptions"
+      :enable-sorting="false"
+      disable-pagination
+      @pagination-change="
+        ($event) => {
+          if (typeof $event === 'function') {
+            paginationOptions = $event(paginationOptions)
+          } else {
+            paginationOptions = {
+              ...paginationOptions,
+              ...$event
+            }
+          }
+        }
       "
-      @update:rows="limit = $event"
-    >
-      <PColumn
-        field="library_reference_id"
-        header="Referencia"
-        class="text-center"
-        body-class="w-52"
-      >
-      </PColumn>
-      <PColumn
-        field="library_reference.book.name"
-        header="Nombre"
-        class="text-center"
-        body-class="w-52"
-      >
-      </PColumn>
-      <PColumn
-        field="library_reference.book.author"
-        header="Autor"
-        class="text-center"
-        body-class="w-60"
-      ></PColumn>
-      <PColumn
-        field="place"
-        header="Lugar"
-        class="text-center"
-        body-class="w-60"
-      ></PColumn>
-      <PColumn
-        field="id"
-        header="Identificacion"
-        class="text-center"
-        body-class="truncate max-w-0"
-      >
-        <template #body="slotProps">
-          <p class="truncate text-sm">
-            {{
-              (slotProps.data.ra?.length ?? 0 > 0)
-                ? slotProps.data.ra
-                : slotProps.data.personal_id
-            }}
-          </p>
-        </template>
-      </PColumn>
-      <PColumn field="" header="Acciones" class="w-32 text-center">
-        <template #body="slotProps">
-          <div class="flex flex-col items-center justify-center gap-y-2">
-            <LoanDetailDialog
-              :title="slotProps.data.name"
-              :loan-item="slotProps.data"
-              show-all-info
-            >
-              <CButton
-                icon="lucide:receipt-text"
-                size="small"
-                label="Detalle del Prestamo"
-                variant="tonal"
-              />
-            </LoanDetailDialog>
-            <CButton
-              icon="icon-park-twotone:eyes"
-              size="small"
-              label="Detalle del Libro"
-              variant="tonal"
-              @click="openDetail(slotProps.data.library_reference.book, true)"
-            />
-            <LoanActionDialog
-              :book-name="slotProps.data.library_reference.book.name"
-              :book-reference-id="slotProps.data.library_reference_id"
-              :loan_id="slotProps.data.id"
-              @confirm="refresh"
-            >
-              <CButton
-                icon="lucide:hand-helping"
-                size="small"
-                label="Retornar"
-                variant="tonal"
-              />
-            </LoanActionDialog>
-          </div>
-        </template>
-      </PColumn>
-    </PDataTable>
-
-    <h2 class="mt-8 mb-4 text-lg font-semibold">
-      <Icon
-        name="icon-park-twotone:bookshelf"
-        class="mr-1.5 mb-1 inline-block"
-      />
-      Préstamos Retornados
-    </h2>
-
-    <PDataTable
-      :value="returnedLoans"
-      :loading="returnedStatus === 'pending'"
-      :rows="limit"
-      :first="currentPage"
-      :total-records="returnedLoans?.length"
-      :rows-per-page-options="[5, 10, 25, 50]"
-      row-hover
-      lazy
-      paginator
-      @page="
-        ($event) =>
-          $router.push({ query: { ...$route.query, page: $event.page + 1 } })
-      "
-      @update:rows="limit = $event"
-    >
-      <PColumn
-        field="library_reference_id"
-        header="Referencia"
-        class="text-center"
-        body-class="w-52"
-      >
-      </PColumn>
-      <PColumn
-        field="library_reference.book.name"
-        header="Nombre"
-        class="text-center"
-        body-class="w-52"
-      >
-      </PColumn>
-      <PColumn
-        field="library_reference.book.author"
-        header="Autor"
-        class="text-center"
-        body-class="w-60"
-      ></PColumn>
-      <PColumn
-        field="place"
-        header="Lugar"
-        class="text-center"
-        body-class="w-60"
-      ></PColumn>
-      <PColumn
-        field="id"
-        header="Identificacion"
-        class="text-center"
-        body-class="truncate max-w-0"
-      >
-        <template #body="slotProps">
-          <p class="truncate text-sm">
-            {{
-              (slotProps.data.ra?.length ?? 0 > 0)
-                ? slotProps.data.ra
-                : slotProps.data.personal_id
-            }}
-          </p>
-        </template>
-      </PColumn>
-      <PColumn
-        field="returned_at"
-        header="Fecha de Retorno"
-        class="text-center"
-        body-class="w-40"
-      >
-        <template #body="slotProps">
-          <p class="text-sm">
-            {{
-              new Date(slotProps.data.returned_at).toLocaleDateString('es-CO')
-            }}
-          </p>
-        </template>
-      </PColumn>
-      <PColumn field="" header="Acciones" class="w-32 text-center">
-        <template #body="slotProps">
-          <div class="flex flex-col items-center justify-center gap-y-2">
-            <LoanDetailDialog
-              :title="slotProps.data.name"
-              :loan-item="slotProps.data"
-              show-all-info
-            >
-              <CButton
-                icon="lucide:receipt-text"
-                size="small"
-                label="Detalle del Prestamo"
-                variant="tonal"
-              />
-            </LoanDetailDialog>
-            <CButton
-              icon="icon-park-twotone:eyes"
-              size="small"
-              label="Detalle del Libro"
-              variant="tonal"
-              @click="openDetail(slotProps.data.library_reference.book, true)"
-            />
-          </div>
-        </template>
-      </PColumn>
-    </PDataTable>
+    />
   </section>
 </template>
-<script setup lang="ts">
+<script setup lang="tsx">
 import LoanActionDialog from '~/components/dialogs/admin/loans/LoanActionDialog.vue'
 import BookDetailDialog from '~/components/dialogs/BookDetailDialog.vue'
 import LoanDetailDialog from '~/components/dialogs/LoanDetailDialog.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import { getAllCategories } from '~/lib/api/admin/books'
@@ -306,13 +126,29 @@ import {
   fetchAllOutstandingLoans,
   fetchAllReturnedLoans
 } from '~/lib/api/admin/loans'
+import DataTable from '~/components/partials/datatable/DataTable.vue'
+import type { ColumnDef } from '@tanstack/vue-table'
+import type { Loan } from '~/lib/api/admin/loans'
 
 const route = useRoute()
 
-const limit = ref(10)
-const currentPage = computed(() => {
-  return limit.value * (route.query.page ? Number(route.query.page) - 1 : 0)
+const paginationOptions = computed({
+  get: () => ({
+    pageIndex: route.query.page ? Number(route.query.page) : 0,
+    pageSize: route.query.limit ? Number(route.query.limit) : 10
+  }),
+  set: (value) => {
+    navigateTo({
+      query: {
+        ...route.query,
+        page: value.pageIndex,
+        limit: value.pageSize
+      }
+    })
+  }
 })
+
+const limit = computed(() => paginationOptions.value.pageSize)
 
 const { data, status, refresh } = await useAsyncData(
   'admin-books',
@@ -352,19 +188,109 @@ const { data: categories } = useAsyncData('categories', () =>
   getAllCategories()
 )
 
-const dialog = useDialog()
-function openDetail(bookItem: any, showAllInfo: any) {
-  dialog.open(BookDetailDialog, {
-    header: 'Información del libro',
-    style: {
-      width: '50vw'
+
+const columns: ColumnDef<Loan>[] = [
+  {
+    accessorKey: 'library_reference_id',
+    meta: {
+      displayName: 'Referencia'
     },
-    props: {
-      modal: true,
-      dismissableMask: true
+    header: () => <div class="font-semibold">Referencia</div>,
+    cell: ({ row }) => (
+      <div class=" ">{row.getValue('library_reference_id')}</div>
+    )
+  },
+  {
+    accessorKey: 'library_reference.book.name',
+    meta: {
+      displayName: 'Nombre'
     },
-    data: { bookItem, showAllInfo },
-    onClose: () => {}
-  })
-}
+    header: () => <div class="font-semibold">Nombre</div>,
+    cell: ({ row }) => (
+      <div class=" ">{(row.original.library_reference as any).book?.name}</div>
+    )
+  },
+  {
+    accessorKey: 'library_reference.book.author',
+    meta: {
+      displayName: 'Autor'
+    },
+    header: () => <div class="font-semibold">Autor</div>,
+    cell: ({ row }) => (
+      <div class="">{(row.original.library_reference as any).book?.author}</div>
+    )
+  },
+  {
+    accessorKey: 'place',
+    meta: {
+      displayName: 'Lugar'
+    },
+    header: () => <div class="font-semibold">Lugar</div>,
+    cell: ({ row }) => <div class="">{row.getValue('place')}</div>
+  },
+  {
+    accessorKey: 'id',
+    meta: {
+      displayName: 'Identificación'
+    },
+    header: () => (
+      <div class="font-semibold">Identificación</div>
+    ),
+    cell: ({ row }) => (
+      <p class="truncate text-sm">
+        {row.original.ra ? `RA: ${row.original.ra}` : `ID: ${row.original.personal_id}`}
+      </p>
+    )
+  },
+  {
+    id: 'actions',
+    meta: {
+      displayName: 'Acciones'
+    },
+    header: () => <div class="font-semibold">Acciones</div>,
+    cell: ({ row }) => (
+      <div class="flex flex-col items-center justify-center gap-y-2">
+        <LoanDetailDialog
+          title={row.original.library_reference.book.name}
+          loanItem={row.original}
+          showAllInfo
+        >
+          <Button
+            icon="lucide:receipt-text"
+            size="small"
+            label="Detalle del Prestamo"
+            variant="tonal"
+            class="w-full"
+          />
+        </LoanDetailDialog>
+        <BookDetailDialog
+          bookItem={(row.original.library_reference as any).book}
+          showAllInfo={true}
+        >
+          <Button
+            icon="icon-park-twotone:eyes"
+            size="small"
+            label="Detalle del Libro"
+            variant="tonal"
+            class="w-full"
+          />
+        </BookDetailDialog>
+        <LoanActionDialog
+          bookName={(row.original.library_reference as any).book.name}
+          bookReferenceId={row.original.library_reference_id}
+          loan_id={row.original.id}
+          onConfirm={refresh}
+        >
+          <Button
+            icon="lucide:hand-helping"
+            size="small"
+            label="Retornar"
+            variant="tonal"
+            class="w-full"
+          />
+        </LoanActionDialog>
+      </div>
+    )
+  }
+]
 </script>

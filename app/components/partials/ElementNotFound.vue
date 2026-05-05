@@ -10,7 +10,7 @@
         eliminado.`
         }}
       </p>
-      <CButton
+      <Button
         class="mt-2"
         :label="backToLabel"
         variant="link"
@@ -21,7 +21,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 
 defineProps<{
   elementType?: string

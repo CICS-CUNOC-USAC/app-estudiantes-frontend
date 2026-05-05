@@ -8,7 +8,7 @@
         />
         Editar perfil
       </h1>
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar"
@@ -35,7 +35,7 @@
 <script lang="ts" setup>
 import PersonalInfoForm from '~/components/profile/PersonalInfoForm.vue'
 import PasswordProfileForm from '~/components/profile/PasswordProfileForm.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { mapActions, mapState, type Pinia } from 'pinia';
 
 const authStore = useAuthStore()

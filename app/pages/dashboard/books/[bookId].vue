@@ -2,14 +2,14 @@
   <main>
     <div v-if="book">
       <nav class="mb-4 flex flex-wrap gap-x-3 print:hidden">
-        <CButton
+        <Button
           icon="icon-park-outline:arrow-left"
           variant="link"
           label="Regresar a libros"
           class="text-muted-color-emphasis mb-4 lg:mb-2"
           to="/dashboard/books"
         />
-        <CButton
+        <Button
           icon="icon-park-twotone:download-three"
           variant="link"
           label="Descargar este libro"
@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import ElementNotFound from '@/components/partials/ElementNotFound.vue'
 import PdfPreview from '~/components/content/PdfPreview.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 const { fetchBookById } = useUserLibraryStore()
 const route = useRoute()
 const { data: book, pending: loading } = await useLazyAsyncData(

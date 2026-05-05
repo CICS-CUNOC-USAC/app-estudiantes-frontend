@@ -1,5 +1,5 @@
 <template>
-  <DialogRoot
+  <Dialog
     @update:open="
       (open) => {
         if (open) execute()
@@ -9,122 +9,119 @@
     <DialogTrigger as-child>
       <slot />
     </DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay
-        class="data-[state=open]:animate-overlayShow fixed inset-0 z-30 bg-gray-950/50 transition-all duration-500"
-      />
-      <DialogContent
-        class="data-[state=open]:animate-contentShow bg-cics-white fixed top-1/2 left-1/2 z-[100] h-auto max-h-[80vh] w-11/12 -translate-x-1/2 -translate-y-1/2 rounded-xl border border-black/80 p-6 shadow-lg shadow-black/15 focus:outline-none lg:max-w-xl dark:border-neutral-700 dark:bg-neutral-900"
-      >
-        <DialogTitle class="mb-4 flex items-center justify-between">
-          <span class="text-xl font-semibold"> Información del Prestamo </span>
-          <div class="flex items-center gap-2">
-            <CButton
-              v-if="!isReturned"
-              icon="lucide:printer"
-              variant="text"
-              :loading="printing"
-              @click="handlePrint"
-              title="Imprimir recibo"
-            />
-            <CButton
-              v-else
-              icon="lucide:printer"
-              variant="text"
-              :loading="printing"
-              @click="handleReturnedPrint"
-              title="Imprimir recibo de retorno"
-            />
-            <DialogClose
-              class="cursor-pointer rounded p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-800"
-            >
-              <Icon name="lucide:x" />
-              <span class="sr-only">Close</span>
-            </DialogClose>
-          </div>
-        </DialogTitle>
-        <div class="h-full">
-          <div class="space-y-2" v-if="data">
-            <p class="text-gray-600 dark:text-gray-400">
-              <span class="font-medium"
-                >Prestado:
-                <strong>{{
-                  new Date(loanItem.created_at).toLocaleString()
-                }}</strong></span
-              >
-            </p>
-
-            <p v-if="isReturned" class="text-gray-600 dark:text-gray-400">
-              <span class="font-medium"
-                >Retornado:
-                <strong>{{
-                  new Date(loanItem.returned_at).toLocaleString()
-                }}</strong></span
-              >
-            </p>
-
-            <p
-              v-if="isReturned"
-              class="text-lg font-semibold text-green-600 dark:text-green-400"
-            >
-              Retornado · {{ totalDaysLoaned() }} dia/s
-            </p>
-            <p v-else class="text-gray-600 dark:text-gray-400">
-              <span class="font-medium">{{
-                daysLoan() > 0
-                  ? `Hace ${daysLoan()}
-                dia/s`
-                  : 'Hoy'
-              }}</span>
-            </p>
-
-            <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-              {{ data.name }}
-            </p>
-            <p class="text-gray-600 dark:text-gray-400">
-              <span class="font-medium">Autor:</span> {{ data.author }}
-            </p>
-
-            <p class="text-gray-600 dark:text-gray-400">
-              <span class="font-medium"
-                >{{
-                  (loanItem.ra?.length ?? 0 > 0)
-                    ? 'Registro Academico'
-                    : 'Identificacion Personal'
-                }}:</span
-              >
-              {{
-                (loanItem.ra?.length ?? 0 > 0)
-                  ? loanItem.ra
-                  : loanItem.personal_id
-              }}
-            </p>
-            <p class="text-gray-600 dark:text-gray-400">
-              En <strong>{{ loanItem.place }}</strong>
-            </p>
-            <PDivider />
-            <template v-if="showAllInfo && data.library_reference">
-              <p class="text-gray-600 dark:text-gray-400">
-                <span class="font-medium">Identificador en biblioteca:</span>
-                {{ loanItem.library_reference.id }}
-              </p>
-
-              <p class="text-gray-600 dark:text-gray-400">
-                <span class="font-medium">Ubicación:</span>
-                {{ loanItem.library_reference.location }}
-              </p>
-            </template>
-          </div>
+    <DialogContent>
+      <DialogHeader class="flex flex-row pr-4 items-start justify-between gap-x-4">
+        <DialogTitle>Información del Prestamo</DialogTitle>
+        <div class="flex items-center gap-2">
+          <Button
+            v-if="!isReturned"
+            icon="lucide:printer"
+            variant="text"
+            :loading="printing"
+            @click="handlePrint"
+            title="Imprimir recibo"
+          />
+          <Button
+            v-else
+            icon="lucide:printer"
+            variant="text"
+            :loading="printing"
+            @click="handleReturnedPrint"
+            title="Imprimir recibo de retorno"
+          />
         </div>
-      </DialogContent>
-    </DialogPortal>
-  </DialogRoot>
+      </DialogHeader>
+
+      <div class="h-full">
+        <div class="space-y-2" v-if="data">
+          <p class="text-gray-600 dark:text-gray-400">
+            <span class="font-medium"
+              >Prestado:
+              <strong>{{
+                new Date(loanItem.created_at).toLocaleString()
+              }}</strong></span
+            >
+          </p>
+
+          <p v-if="isReturned" class="text-gray-600 dark:text-gray-400">
+            <span class="font-medium"
+              >Retornado:
+              <strong>{{
+                new Date(loanItem.returned_at).toLocaleString()
+              }}</strong></span
+            >
+          </p>
+
+          <p
+            v-if="isReturned"
+            class="text-lg font-semibold text-green-600 dark:text-green-400"
+          >
+            Retornado · {{ totalDaysLoaned() }} dia/s
+          </p>
+          <p v-else class="text-gray-600 dark:text-gray-400">
+            <span class="font-medium">{{
+              daysLoan() > 0
+                ? `Hace ${daysLoan()}
+                dia/s`
+                : 'Hoy'
+            }}</span>
+          </p>
+
+          <p class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+            {{ data.name }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400">
+            <span class="font-medium">Autor:</span> {{ data.author }}
+          </p>
+
+          <p class="text-gray-600 dark:text-gray-400">
+            <span class="font-medium"
+              >{{
+                (loanItem.ra?.length ?? 0 > 0)
+                  ? 'Registro Academico'
+                  : 'Identificacion Personal'
+              }}:</span
+            >
+            {{
+              (loanItem.ra?.length ?? 0 > 0)
+                ? loanItem.ra
+                : loanItem.personal_id
+            }}
+          </p>
+          <p class="text-gray-600 dark:text-gray-400">
+            En <strong>{{ loanItem.place }}</strong>
+          </p>
+          <Separator />
+          <template v-if="showAllInfo && data.library_reference">
+            <p class="text-gray-600 dark:text-gray-400">
+              <span class="font-medium">Identificador en biblioteca:</span>
+              {{ loanItem.library_reference.id }}
+            </p>
+
+            <p class="text-gray-600 dark:text-gray-400">
+              <span class="font-medium">Ubicación:</span>
+              {{ loanItem.library_reference.location }}
+            </p>
+          </template>
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
 </template>
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
 import { getBookById } from '~/lib/api/books'
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import type { Loan } from '~/lib/api/admin/loans'
+import Separator from '../ui/separator/Separator.vue'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogHeader,
+  DialogTrigger
+} from '../ui/dialog'
 
 const { loanItem } = defineProps<{
   title: string

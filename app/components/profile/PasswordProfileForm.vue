@@ -39,7 +39,7 @@
             no-borders
           />
       </fieldset>
-      <CButton
+      <Button
         type="submit"
         label="Cambiar"
         :disabled="loading"
@@ -50,7 +50,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import CButton from '../primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '../primitives/form/CInputText.vue'
 
 defineProps({

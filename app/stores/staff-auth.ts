@@ -28,6 +28,13 @@ export type Role = {
   updated_at: Date
 }
 
+export type RolePayload = {
+  name: string
+  alias: string
+  description: string
+  permissions_ids: number[]
+}
+
 export type Staff = {
   id: number
   first_name: string

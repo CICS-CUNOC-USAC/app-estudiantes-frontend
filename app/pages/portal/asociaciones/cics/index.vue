@@ -1,7 +1,7 @@
 <template>
   <!-- <ContentDisplay :data /> -->
    <nav class="space-x-4">
-      <CButton
+      <Button
         icon="lucide:megaphone"
         variant="link"
         label="Ver comunicados del CICS"
@@ -15,7 +15,7 @@
 </template>
 <script lang="ts" setup>
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
-import CButton from '~/components/primitives/button/CButton.vue';
+import Button from '~/components/ui/button/Button.vue'
 const { data } = await useAsyncData('cics-aso', () => $strapi('/cics-aso'))
 </script>
 <style lang="css">

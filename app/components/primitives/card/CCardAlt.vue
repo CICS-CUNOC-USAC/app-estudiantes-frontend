@@ -1,44 +1,59 @@
 <template>
-  <component
-    :is="to ? NuxtLink : 'div'"
-    :to
-    unstyled
-    class="overflow-hidden rounded-xl border border-surface-950/75 bg-surface-50 text-color duration-300 ease-in-out dark:bg-surface-900"
+  <Card
+    :to="to"
+    class="h-full transition duration-250 ease-in-out"
     :class="{
-      'flex flex-col h-full': !unstyled,
-      'p-5': !noSpacing,
-      'hover:translate-x-0 hover:translate-y-0 hover:bg-surface-100 hover:shadow-none dark:hover:bg-surface-900':
+      'hover:bg-surface-100 dark:hover:bg-surface-900 hover:translate-x-0 hover:translate-y-0 hover:shadow-none':
         interactive,
       'cursor-pointer': to,
-      'shadow-[2px_2px_0_0_rgba(0,0,0,1)]':
-        elevated || interactive,
-      'hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] dark:hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] hover:-translate-x-0.5 hover:-translate-y-0.5  active:-translate-x-0 active:-translate-y-0':
+      'shadow-[2px_2px_0_0_rgba(0,0,0,1)]': elevated || interactive,
+      'dark:hover:shadow-surface-700 hover:-translate-x-0.5 hover:-translate-y-0.5 hover:shadow-[2px_2px_0_0_rgba(0,0,0,1)] active:-translate-x-0 active:-translate-y-0 dark:hover:shadow-[2px_2px_0_0]':
         interactiveInverse
     }"
   >
-    <slot name="title">
-      <h3
-      v-if="title"
-        class="mb-2 text-lg font-semibold font-heading transition-colors duration-300 ease-in-out"
+    <CardHeader
+      class="flex flex-col gap-2"
+      v-if="title || description"
+      :class="{
+        'flex-1': !$slots.content
+      }"
+    >
+      <Icon v-if="headerIcon" :name="headerIcon" />
+      <CardTitle class="font-heading text-lg font-semibold">{{
+        title
+      }}</CardTitle>
+      <CardDescription v-if="description">{{ description }}</CardDescription>
+    </CardHeader>
+    <CardContent class="flex-1" v-if="$slots.content">
+      <slot name="content"> </slot>
+    </CardContent>
+    <CardFooter
+      class="flex flex-col items-start gap-2 justify-self-end"
+      v-if="small || $slots.footer"
+    >
+      <span
+        class="text-muted-foreground block text-xs font-light tracking-tight"
       >
-        {{ title }}
-      </h3>
-    </slot>
-    <slot name="content">
-      <p class="mb-4 flex-1">
-        {{ description }}
-      </p>
-      <span class="block pb-4 text-sm tracking-tight text-muted-color">
-        <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block text-sm! " />
+        <Icon
+          v-if="smallIcon"
+          :name="smallIcon"
+          class="mr-1 inline-block text-sm"
+        />
         {{ small }}
       </span>
-    </slot>
-    <slot name="footer">
-    </slot>
-  </component>
+      <slot name="footer"> </slot>
+    </CardFooter>
+  </Card>
 </template>
 <script setup lang="ts">
-import { NuxtLink } from '#components'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '~/components/ui/card'
 defineProps<{
   elevated?: boolean
   interactive?: boolean
@@ -48,6 +63,7 @@ defineProps<{
   to?: string
   small?: string
   smallIcon?: string
+  headerIcon?: string
   noSpacing?: boolean
   unstyled?: boolean
 }>()

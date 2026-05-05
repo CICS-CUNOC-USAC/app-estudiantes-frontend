@@ -1,14 +1,14 @@
 <template>
   <main>
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
         class="text-muted-color-emphasis mb-4 lg:mb-2"
         to="/"
       />
-      <CButton
+      <Button
         icon="icon-park-outline:paragraph-alphabet"
         variant="link"
         label="Regresar a información de la asociación"
@@ -36,17 +36,13 @@
         <CCardAlt
           v-for="post in data.data"
           :to="`/portal/asociaciones/cics/comunicados/${post.documentId}`"
-          class="hover:bg-primary-200 dark:hover:bg-primary-900/50"
+          :title="post.title"
+          header-icon="lucide:text"
+          :description="post.description"
+          class="hover:bg-primary-100 dark:hover:bg-primary-900/50"
           interactive-inverse
           :key="post.documentId"
         >
-          <template #title>
-            <Icon name="lucide:text" class="mr-1.5 mb-1 inline-block" />
-            <h3 class="py-2 text-lg font-semibold">{{ post.title }}</h3>
-          </template>
-          <template #content>
-            <p class="text-muted-color text-sm">{{ post.description }}</p>
-          </template>
         </CCardAlt>
       </div>
       <p
@@ -61,7 +57,7 @@
 <script setup lang="ts">
 import type { Strapi5ResponseMany } from '@nuxtjs/strapi'
 import { toast } from 'vue-sonner'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInfiniteScroll from '~/components/primitives/data/CInfiniteScroll.vue'
 import type { Comunicado } from '~/lib/api/strapi/types'

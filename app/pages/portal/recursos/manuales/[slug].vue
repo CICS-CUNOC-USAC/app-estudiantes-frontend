@@ -4,14 +4,14 @@
       class="flex flex-wrap gap-x-3 print:hidden"
       v-if="data && status === 'success'"
     >
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar a manuales"
         class="text-muted-color-emphasis mb-4 lg:mb-2"
         to="/portal/recursos/manuales"
       />
-      <CButton
+      <Button
         icon="icon-park-twotone:printer"
         variant="link"
         label="Imprimir/Guardar este manual"
@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import type { ContentManual } from '~/lib/api/strapi/types'
 
 const route = useRoute()

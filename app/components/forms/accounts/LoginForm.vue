@@ -1,9 +1,9 @@
 <template>
-  <CCardAlt class="px-8 py-12">
-    <template #title>
-      <h2 class="pb-4 text-center text-2xl font-semibold">Iniciar sesión</h2>
-    </template>
-    <template #content>
+  <Card class="gap-4 px-4 py-8">
+    <CardHeader>
+      <CardTitle class="text-lg">Iniciar sesión</CardTitle>
+    </CardHeader>
+    <CardContent>
       <form class="flex flex-col gap-y-4 py-4" @submit.prevent="login">
         <CInputText
           v-model="email"
@@ -31,45 +31,47 @@
           "
           no-borders
         />
-        <CButton
+        <Button
           class="w-full"
           :loading="loading"
           :disabled="!email || !password"
-          :severity="admin ? 'danger' : ''"
+          :severity="admin ? 'danger' : 'default'"
           type="submit"
           label="Iniciar sesión"
         />
       </form>
-    </template>
-    <template #footer>
-      <div class="flex flex-col gap-y-4">
-        <span class="align-center flex gap-2">
-          ¿No tienes una cuenta?
-          <CButton to="/sign-up" variant="link" label="Regístrate" />
-          
-        </span>
-        <CButton
-          class="self-start"
-            to="/recover-password"
-            variant="link"
-            label="¿Olvidaste tu contraseña?"
-          />
-        <div class="align-center flex">
-          <CButton
-            to="/"
-            variant="text"
-            icon="icon-park-outline:arrow-left"
-            label="Regresar al portal"
-          />
-        </div>
-      </div>
-    </template>
-  </CCardAlt>
+    </CardContent>
+    <CardFooter class="flex flex-col items-start gap-y-4">
+      <span class="flex gap-2">
+        ¿No tienes una cuenta?
+        <Button to="/sign-up" variant="link" label="Regístrate" />
+      </span>
+      <Button
+        class="self-start"
+        to="/recover-password"
+        variant="link"
+        label="¿Olvidaste tu contraseña?"
+      />
+
+      <Button
+        to="/"
+        variant="text"
+        icon="icon-park-outline:arrow-left"
+        label="Regresar al portal"
+      />
+    </CardFooter>
+  </Card>
 </template>
 <script lang="ts" setup>
-import CButton from '~/components/primitives/button/CButton.vue'
-import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import Button from '~/components/ui/button/Button.vue'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle
+} from '~/components/ui/card'
 
 const { admin } = defineProps({
   loading: {
@@ -104,6 +106,4 @@ const login = () => {
   emit('login', newCredentials)
 }
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

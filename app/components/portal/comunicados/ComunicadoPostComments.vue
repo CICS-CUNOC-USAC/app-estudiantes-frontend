@@ -15,10 +15,11 @@
           root-class="w-full"
           prepend-icon="icon-park-twotone:edit-name"
           no-borders
+          fill-height
           :rows="3"
           placeholder="Comparte tu opinión sobre este comunicado"
         />
-        <CButton
+        <Button
           label="Comentar"
           icon="icon-park-outline:send"
           size="small"
@@ -28,7 +29,7 @@
         />
       </div>
 
-      <p class="text-muted-color text-xs">
+      <p class="text-muted-color text-xs py-1.5">
         {{
           authenticated
             ? ''
@@ -74,7 +75,7 @@
         </p>
 
         <div class="mt-2 flex items-center gap-4">
-          <CButton
+          <Button
             v-if="authenticated"
             variant="tonal"
             size="small"
@@ -83,7 +84,7 @@
             "
             @click="toggleReplyBox(comment.id)"
           />
-          <CButton
+          <Button
             v-if="isCommentOwner(comment.user?.id)"
             variant="tonal"
             size="small"
@@ -104,7 +105,7 @@
             placeholder="Escribe tu respuesta"
           />
           <div class="mt-2 flex justify-end">
-            <CButton
+            <Button
               label="Responder"
               icon="icon-park-outline:send"
               size="small"
@@ -131,7 +132,7 @@
                   {{ formatCommentDate(reply.createdAt) }}
                 </p>
               </div>
-              <CButton
+              <Button
                 v-if="isCommentOwner(reply.user?.id)"
                 variant="tonal"
                 size="small"
@@ -147,17 +148,20 @@
       </article>
     </div>
 
-    <CDialog v-model:open="deleteModalOpen">
-      <CDialogContent title="¿Eliminar este comentario?">
+    <Dialog v-model:open="deleteModalOpen">
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>¿Eliminar este comentario?</DialogTitle>
+        </DialogHeader>
         <p class="text-sm">Esta acción no se puede deshacer.</p>
-        <div class="mt-4 flex gap-3">
-          <CButton
+        <DialogFooter class="mt-4 flex gap-3 sm:justify-start">
+          <Button
             label="Cancelar"
             severity="secondary"
             class="w-full"
             @click="closeDeleteModal"
           />
-          <CButton
+          <Button
             label="Eliminar"
             severity="danger"
             class="w-full"
@@ -168,16 +172,22 @@
             :disabled="pendingDeleteCommentId === null"
             @click="confirmDeleteComment"
           />
-        </div>
-      </CDialogContent>
-    </CDialog>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </section>
 </template>
 
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
-import CButton from '~/components/primitives/button/CButton.vue'
-import { CDialog, CDialogContent } from '~/components/primitives/dialog'
+import Button from '~/components/ui/button/Button.vue'
+import {
+  Dialog,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle
+} from '~/components/ui/dialog'
 import CTextarea from '~/components/primitives/form/CTextarea.vue'
 import type { StrapiPostComment } from '~/lib/api/strapi/types'
 

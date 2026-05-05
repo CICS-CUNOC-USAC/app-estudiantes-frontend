@@ -29,7 +29,6 @@ export default defineNuxtConfig({
       link: [
         // favicon
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-        { rel: 'manifest', href: '/site.webmanifest' }
       ],
       meta: [
         {
@@ -46,23 +45,17 @@ export default defineNuxtConfig({
     }
   },
   modules: [
-    // '@nuxtjs/tailwindcss',
     '@pinia/nuxt',
     '@pinia/colada-nuxt',
-    '@primevue/nuxt-module',
     '@nuxt/fonts',
     '@nuxt/icon',
     '@vueuse/nuxt',
-    'radix-vue/nuxt', // 'vue-sonner/nuxt',
-    '@nuxt/content', // (_options, nuxt) => {
-    //   nuxt.hooks.hook('vite:extendConfig', (config) => {
-    //     // @ts-expect-error vite-plugin-vuetify
-    //     config.plugins.push(vuetify({ autoImport: true }))
-    //   })
-    // }
+    'radix-vue/nuxt',
+    '@nuxt/content',
     '@nuxtjs/color-mode',
     'nuxt-authorization',
-    '@nuxtjs/strapi'
+    '@nuxtjs/strapi',
+    'shadcn-nuxt'
   ],
   vite: {
     plugins: [tailwindcss()],
@@ -79,6 +72,20 @@ export default defineNuxtConfig({
     //   }
     // }
   },
+  shadcn: {
+    /**
+     * Prefix for all the imported component.
+     * @default "Ui"
+     */
+    prefix: '',
+    /**
+     * Directory that the component lives in.
+     * Will respect the Nuxt aliases.
+     * @link https://nuxt.com/docs/api/nuxt-config#alias
+     * @default "@/components/ui"
+     */
+    componentDir: '@/components/ui'
+  },
   css: ['~/assets/css/main.css'],
   colorMode: {
     classPrefix: '',
@@ -89,31 +96,6 @@ export default defineNuxtConfig({
     plugins: {
       cssnano: {
         preset: ['cssnano-preset-default', { calc: false }]
-      }
-    }
-  },
-  primevue: {
-    composables: {
-      exclude: ['useToast']
-    },
-    directives: {
-      prefix: 'P'
-    },
-    components: {
-      prefix: 'P'
-    },
-    importPT: { from: '@/passthrough/ptOptions.ts' },
-    importTheme: { as: 'Aura', from: '@/themes/pThemes.ts' },
-    options: {
-      theme: {
-        options: {
-          // darkModeSelector: '.app-darkmode',
-          // preset: Aura,
-          cssLayer: {
-            name: 'primevue',
-            order: 'tailwind-base, primevue, tailwind-utilities'
-          }
-        }
       }
     }
   },

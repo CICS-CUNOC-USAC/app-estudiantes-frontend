@@ -1,40 +1,30 @@
 <template>
-  <CDialog v-model:open="dialog">
-    <CDialogTrigger
-      class="lg:hidden text-sm"
-      as-child
-    >
-    <CButton variant="tonal" class="h-full" icon="tabler:calendar-week" size="small" label="Periodos" />
-    </CDialogTrigger>
-    <CDialogContent title="" class="p-0 flex justify-center">
+  <Dialog v-model:open="dialog">
+    <DialogTrigger as-child class="lg:hidden text-sm">
+      <Button variant="tonal" class="h-full" icon="tabler:calendar-week" size="small" label="Periodos" />
+    </DialogTrigger>
+    <DialogContent class="p-0 flex justify-center" :show-close-button="false">
       <DisplayModeSelector
         :model-value="scheduleType"
         :classrooms="classrooms"
         :hours="availableHours || []"
         :selection="selectedHours"
-        @update:selected-periods="
-          (val: Hour[]) => {
-            emit('update:selectedPeriods', val)
-          }
-        "
-        @update:model-value="
-          (val) => {
-            emit('updateModelValue', val)
-          }
-        "
+        @update:selected-periods="(val: Hour[]) => emit('update:selectedPeriods', val)"
+        @update:model-value="(val) => emit('updateModelValue', val)"
       />
-    </CDialogContent>
-  </CDialog>
+    </DialogContent>
+  </Dialog>
 </template>
+
 <script setup lang="ts">
 import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import {
-  CDialog,
-  CDialogContent,
-  CDialogTrigger
-} from '~/components/primitives/dialog'
-import type { Classroom, Hour } from '~/utils/types/schedule-courses';
+  Dialog,
+  DialogContent,
+  DialogTrigger
+} from '~/components/ui/dialog'
+import type { Classroom, Hour } from '~/utils/types/schedule-courses'
 
 const props = defineProps<{
   scheduleType: 'calendar' | 'classroom'
@@ -46,8 +36,8 @@ const props = defineProps<{
 const dialog = ref(false)
 
 const emit = defineEmits(['update:selectedPeriods', 'updateModelValue'])
-
 </script>
+
 <style lang="postcss" scoped>
 .course-details {
   grid-template-areas:

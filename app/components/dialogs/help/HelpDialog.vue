@@ -29,7 +29,7 @@
           <ContentRenderer v-if="data" :value="data" class="md-content" />
         </div>
         <DialogClose as-child>
-          <CButton
+          <Button
             variant="tonal"
             label="Entendido"
             class="w-full"
@@ -41,7 +41,7 @@
   </DialogRoot>
 </template>
 <script setup lang="ts">
-import CButton from '~/components/primitives/button/CButton.vue';
+import Button from '~/components/ui/button/Button.vue'
 
 const { contentPath } = defineProps<{
   title: string

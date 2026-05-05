@@ -1,102 +1,128 @@
 <template>
-  <div
-    class="data-[state=open]:animate-contentShow bg-cics-white fixed top-1/2 left-1/2 z-[100] h-auto max-h-[80vh] w-svw -translate-x-1/2 -translate-y-1/2 rounded-xl border border-black/80 p-6 shadow-lg shadow-black/15 focus:outline-none lg:max-w-md dark:border-neutral-700 dark:bg-neutral-900"
-  >
-    <div class="mb-4 flex items-center justify-between">
-      <span class="text-xl font-semibold"> Agregar existencia </span>
-      <Button
-        class="cursor-pointer rounded p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-800"
-        @click="dialogRef.close()"
-      >
-        <Icon name="lucide:x" />
-        <span class="sr-only">Close</span>
-      </Button>
-    </div>
-    <PForm
-      :initial-values="initialValues"
-      :resolver="resolver"
-      v-slot="$form"
-      @submit="saveReference"
-      class="space-y-4"
-    >
-      <CInputText
-        label="ID de referencia"
-        name="reference_id"
-        id="reference_id"
-        no-borders
-        prepend-icon="icon-park-twotone:tag"
-        :error="$form.reference_id?.error?.message"
-      />
-      <CInputText
-        label="Edición"
-        name="edition"
-        id="edition"
-        no-borders
-        prepend-icon="icon-park-twotone:bookshelf"
-        :error="$form.edition?.error?.message"
-      />
-      <CInputText
-        label="Ubicación"
-        name="location"
-        id="location"
-        no-borders
-        prepend-icon="icon-park-twotone:local"
-        :error="$form.location?.error?.message"
-      />
-      <div class="flex gap-4 pt-2">
-        <CButton
-          label="Cancelar"
-          icon="icon-park-outline:arrow-left"
-          severity="secondary"
-          class="flex-1"
-          @click="dialogRef.close()"
-        />
-        <CButton
-          label="Guardar"
-          icon="icon-park-outline:check"
-          type="submit"
-          class="flex-1"
-          :loading="saving"
-        />
-      </div>
-    </PForm>
-  </div>
+  <Dialog v-model:open="open">
+    <DialogTrigger as-child>
+      <slot />
+    </DialogTrigger>
+    <DialogContent class="lg:max-w-md">
+      <DialogHeader>
+        <DialogTitle>Agregar existencia</DialogTitle>
+      </DialogHeader>
+      <form @submit="onSubmit" class="space-y-4">
+        <VeeField v-slot="{ componentField, errors }" name="reference_id">
+          <Field :data-invalid="!!errors.length">
+            <CInputText
+              v-bind="componentField"
+              label="ID de referencia"
+              id="reference_id"
+              no-borders
+              prepend-icon="icon-park-twotone:tag"
+              :error="errors[0]"
+            />
+          </Field>
+        </VeeField>
+
+        <VeeField v-slot="{ componentField, errors }" name="edition">
+          <Field :data-invalid="!!errors.length">
+            <CInputText
+              v-bind="componentField"
+              label="Edición"
+              id="edition"
+              no-borders
+              prepend-icon="icon-park-twotone:bookshelf"
+              :error="errors[0]"
+            />
+          </Field>
+        </VeeField>
+
+        <VeeField v-slot="{ componentField, errors }" name="location">
+          <Field :data-invalid="!!errors.length">
+            <CInputText
+              v-bind="componentField"
+              label="Ubicación"
+              id="location"
+              no-borders
+              prepend-icon="icon-park-twotone:local"
+              :error="errors[0]"
+            />
+          </Field>
+        </VeeField>
+
+        <DialogFooter class="mt-2 flex gap-4 sm:justify-start">
+          <DialogClose as-child>
+            <Button
+              label="Cancelar"
+              icon="icon-park-outline:arrow-left"
+              type="button"
+              variant="tonal"
+              class="flex-1"
+            />
+          </DialogClose>
+          <Button
+            label="Guardar"
+            icon="icon-park-outline:check"
+            type="submit"
+            class="flex-1"
+            :loading="saving"
+          />
+        </DialogFooter>
+      </form>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
-import { inject } from 'vue'
-import { zodResolver } from '@primevue/forms/resolvers/zod'
+import { toTypedSchema } from '@vee-validate/zod'
+import { useForm, Field as VeeField } from 'vee-validate'
 import { z } from 'zod'
 import { createLibraryReference } from '~/lib/api/admin/books'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import { Field } from '~/components/ui/field'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '~/components/ui/dialog'
 
-const dialogRef: any = inject('dialogRef')
-const { bookId } = dialogRef.value.data
+const props = defineProps<{
+  bookId: number
+}>()
 
+const emit = defineEmits(['confirm'])
+
+const open = ref(false)
 const saving = ref(false)
 
-const initialValues = reactive({
-  reference_id: '',
-  edition: '',
-  location: ''
+const formSchema = z.object({
+  reference_id: z.string().nonempty('El ID de referencia es requerido'),
+  edition: z.string().nonempty('La edición es requerida'),
+  location: z.string().nonempty('La ubicación es requerida')
 })
 
-const resolver = zodResolver(
-  z.object({
-    reference_id: z.string().nonempty('El ID de referencia es requerido'),
-    edition: z.string().nonempty('La edición es requerida'),
-    location: z.string().nonempty('La ubicación es requerida')
-  })
-)
-
-const saveReference = async (e: any) => {
-  if (e.valid) {
-    saving.value = true
-    const { reference_id, ...rest } = e.values
-    await createLibraryReference(bookId, reference_id, rest)
-    saving.value = false
-    dialogRef.value.close({ success: true })
+const { handleSubmit } = useForm({
+  validationSchema: toTypedSchema(formSchema),
+  initialValues: {
+    reference_id: '',
+    edition: '',
+    location: ''
   }
-}
+})
+
+const onSubmit = handleSubmit(async (values) => {
+  saving.value = true
+  try {
+    const { reference_id, ...rest } = values
+    const result = await createLibraryReference(props.bookId, reference_id, rest)
+    if (!(result as any)?.error) {
+      open.value = false
+      emit('confirm')
+    }
+  } finally {
+    saving.value = false
+  }
+})
 </script>

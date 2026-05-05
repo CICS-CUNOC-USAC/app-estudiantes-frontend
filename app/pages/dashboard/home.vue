@@ -14,7 +14,6 @@
           <CCardAlt
             interactive
             unstyled
-            class="pb-14"
             v-for="item in items"
             :key="item.title"
             :to="item.to"
@@ -42,59 +41,70 @@
           Estadísticas generales:
         </h2>
 
-        <section
-          class="border-surface-950/75 bg-surface-50 text-color dark:bg-surface-900 h-48  overflow-hidden rounded-xl border p-5 duration-300 ease-in-out"
-        >
-          <div v-if="status === 'success' && data" class="grid grid-cols-2 gap-4">
-            <div>
-              <h6 class="text-muted-color">Créditos acumulados:</h6>
-              <strong class="text-muted-color-emphasis text-3xl">{{
-                data.current_credits.total_credits
-              }}</strong>
-            </div>
-            <div>
-              <h6 class="text-muted-color">Créditos obligatorios:</h6>
-              <strong class="text-primary-500 text-3xl">{{
-                data.current_credits.mandatory_credits
-              }}</strong>
-              /
-              <span class="text-muted-color-emphasis text-3xl">
-                {{ data.mandatory_credits }}</span
+        <CCardAlt class="h-max rounded-xl border duration-300 ease-in-out">
+          <template #content>
+            <div
+              v-if="status === 'success' && data"
+              class="grid grid-cols-2 gap-4"
+            >
+              <div
+                v-for="stat in [
+                  {
+                    label: 'Créditos acumulados:',
+                    current: data.current_credits.total_credits,
+                    total: null,
+                    valueClass: 'text-muted-color-emphasis'
+                  },
+                  {
+                    label: 'Créditos obligatorios:',
+                    current: data.current_credits.mandatory_credits,
+                    total: data.mandatory_credits,
+                    valueClass: 'text-primary-500'
+                  },
+                  {
+                    label: 'Créditos optativos:',
+                    current: data.current_credits.not_mandatory_credits,
+                    total: data.not_mandatory_credits,
+                    valueClass: 'text-primary-500'
+                  },
+                  {
+                    label: 'Créditos disponibles:',
+                    current: data.current_credits.total_credits,
+                    total: data.available_credits,
+                    valueClass: 'text-primary-500'
+                  }
+                ]"
+                :key="stat.label"
+                class="space-y-1"
               >
+                <h6 class="text-muted-color">{{ stat.label }}</h6>
+                <div class="flex items-baseline gap-2">
+                  <strong class="text-2xl" :class="stat.valueClass">
+                    {{ stat.current }}
+                  </strong>
+                  <span
+                    v-if="stat.total !== null"
+                    class="text-muted-color-emphasis text-2xl"
+                  >
+                    / {{ stat.total }}
+                  </span>
+                </div>
+              </div>
             </div>
-            <div>
-              <h6 class="text-muted-color">Créditos optativos:</h6>
-              <strong class="text-primary-500 text-3xl">{{
-                data.current_credits.not_mandatory_credits
-              }}</strong>
-              /
-              <span class="text-muted-color-emphasis text-3xl">
-                {{ data.not_mandatory_credits }}</span
-              >
-            </div>
-            <div>
-              <h6 class="text-muted-color">Créditos disponibles:</h6>
-              <strong class="text-primary-500 text-3xl">{{
-                data.current_credits.total_credits
-              }}</strong>
-              /
-              <span class="text-muted-color-emphasis text-3xl">
-                {{ data.available_credits }}
-              </span>
-            </div>
-          </div>
-          <template v-else>
-            <div class="flex items-center justify-center h-full">
-              <Icon name="lucide:loader" size="32" class="animate-spin" />
-            </div>
+            <template v-else>
+              <div class="flex h-full items-center justify-center">
+                <Icon name="lucide:loader" size="32" class="animate-spin" />
+              </div>
+            </template>
           </template>
-        </section>
+        </CCardAlt>
       </section>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import type { ProgressCredits } from '~/lib/api/dashboard/career-progress'
 
 const { user } = useRegularAuthStore()
 
