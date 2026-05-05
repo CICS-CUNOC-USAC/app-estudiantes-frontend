@@ -1,7 +1,7 @@
 <template>
   <main>
     <nav class="space-x-4">
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar al inicio"
@@ -64,12 +64,14 @@
 import { toast } from 'vue-sonner'
 import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
 import ProgramsView from '~/components/portal/ProgramsView.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import type { ScrapedProgram } from '~/utils/server/types/programs'
 
 onMounted(() => {
-  searchRef.value.$input.$el.focus()
+  nextTick(() => {
+    searchRef.value?.focus()
+  })
 })
 
 const router = useRouter()

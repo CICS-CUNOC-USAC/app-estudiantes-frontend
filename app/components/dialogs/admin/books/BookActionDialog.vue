@@ -1,64 +1,129 @@
 <template>
-  <div
-    class="data-[state=open]:animate-contentShow bg-cics-white fixed top-1/2 left-1/2 z-[100] h-auto max-h-[80vh] w-svw -translate-x-1/2 -translate-y-1/2 rounded-xl border border-black/80 p-6 shadow-lg shadow-black/15 focus:outline-none lg:max-w-xl dark:border-neutral-700 dark:bg-neutral-900">
-    <div class="mb-4 flex items-center justify-between">
-      <span class="text-xl font-semibold"> Registrar préstamo o retorno </span>
-    </div>
-    <p>
-      Selecciona la acción que deseas realizar con el libro
-      <strong>{{ bookName }}</strong>
-    </p>
-    <PRadioButtonGroup class="mt-3 flex flex-col gap-y-2" v-model="action">
-      <label class="flex items-center">
-        <PRadioButton name="action" value="lend" />
-        <span class="ml-2 font-medium">Préstamo</span>
+  <Dialog
+    v-model:open="open"
+    @update:open="
+      (val) => {
+        if (!val) clear()
+      }
+    "
+  >
+    <DialogTrigger as-child>
+      <slot />
+    </DialogTrigger>
+    <DialogContent class="lg:max-w-xl">
+      <DialogHeader>
+        <DialogTitle>Registrar préstamo o retorno</DialogTitle>
+      </DialogHeader>
+
+      <p>
+        Selecciona la acción que deseas realizar con el libro
+        <strong>{{ bookName }}</strong>
+      </p>
+
+      <RadioGroup
+        class="mt-1 flex flex-col gap-y-2"
+        :model-value="action"
+        @update:model-value="(val) => (action = val as string)"
+      >
+        <div class="flex items-center space-x-2">
+          <RadioGroupItem id="action-lend" value="lend" />
+          <Label for="action-lend" class="font-medium">Préstamo</Label>
+        </div>
+        <div class="flex items-center space-x-2">
+          <RadioGroupItem id="action-return" value="return" />
+          <Label for="action-return" class="font-medium">Retorno</Label>
+        </div>
+      </RadioGroup>
+
+      <label
+        class="flex items-center gap-x-2 select-none"
+        v-if="action === 'lend'"
+      >
+        <Checkbox id="external" v-model="external" />
+        <span class="font-medium">Externo</span>
       </label>
 
-      <label class="flex items-center">
-        <PRadioButton name="action" value="return" />
-        <span class="ml-2 font-medium">Retorno</span>
-      </label>
-    </PRadioButtonGroup>
-    <label class="mt-4 flex items-center" v-if="action === 'lend'">
-      <PCheckbox v-model="external" binary />
-      <span class="ml-2 font-medium">Externo</span>
-    </label>
-    <template v-if="external && action === 'lend'">
-      <div class="mt-4">
-        <PInputText v-model="placeValue" label="Lugar de préstamo" placeholder="Lugar de préstamo" />
-      </div>
-      <label class="my-4 flex items-center">
-        <PToggleSwitch v-model="useRa" />
-        <span class="ml-2 font-medium">Usar Registro Académico</span>
-      </label>
-      <template v-if="action === 'lend'">
-        <div class="" v-if="useRa">
-          <PInputText v-model="raValue" label="Registro académico" placeholder="Registro académico" />
-        </div>
-        <div class="" v-else>
-          <PInputText v-model="personalIdValue" label="Identificación Personal" placeholder="Identificación Personal" />
-        </div>
+      <template v-if="external && action === 'lend'">
+        <CInputText
+          v-model="placeValue"
+          label="Lugar de préstamo"
+          placeholder="Lugar de préstamo"
+          no-borders
+          prepend-icon="icon-park-twotone:local"
+        />
+
+        <label class="flex items-center gap-x-2 select-none">
+          <Checkbox id="use-ra" v-model="useRa" />
+          <span class="font-medium">Usar Registro Académico</span>
+        </label>
+
+        <CInputText
+          v-if="useRa"
+          v-model="raValue"
+          label="Registro académico"
+          placeholder="Registro académico"
+          no-borders
+          prepend-icon="icon-park-twotone:id-card-h"
+        />
+        <CInputText
+          v-else
+          v-model="personalIdValue"
+          label="Identificación Personal"
+          placeholder="Identificación Personal"
+          no-borders
+          prepend-icon="icon-park-twotone:id-card-h"
+        />
       </template>
-    </template>
-    <div class="mt-4 flex gap-x-4">
-      <CButton label="Cancelar" severity="secondary" icon="icon-park-outline:close" class="w-full"
-        @click="closeDialog" />
-      <CButton label="Confirmar" icon="icon-park-outline:arrow-right" class="w-full" @click="mutate"
-        :loading="asyncStatus === 'loading'" />
-    </div>
-  </div>
+
+      <DialogFooter class="mt-2 flex gap-x-4 sm:justify-start">
+        <DialogClose as-child>
+          <Button
+            label="Cancelar"
+            severity="secondary"
+            icon="icon-park-outline:close"
+            class="flex-1"
+          />
+        </DialogClose>
+        <Button
+          label="Confirmar"
+          icon="icon-park-outline:arrow-right"
+          class="flex-1"
+          @click="mutate"
+          :loading="asyncStatus === 'loading'"
+        />
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
 <script setup lang="ts">
 import { toast } from 'vue-sonner'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '~/components/ui/dialog'
+import CInputText from '~/components/primitives/form/CInputText.vue'
+import { Checkbox } from '~/components/ui/checkbox'
+import { RadioGroup, RadioGroupItem } from '~/components/ui/radio-group'
+import { Label } from '~/components/ui/label'
 import { loanOrReturn } from '~/lib/api/admin/books'
 
-const dialogRef: any = inject('dialogRef')
+const props = defineProps<{
+  bookName: string
+  bookReferenceId: number | string
+}>()
 
+const emit = defineEmits(['confirm'])
+
+const open = ref(false)
 const action = ref('lend')
 const external = ref(false)
 const useRa = ref(true)
-
 const raValue = ref('')
 const personalIdValue = ref('')
 const placeValue = ref('')
@@ -66,7 +131,7 @@ const placeValue = ref('')
 const { mutate, asyncStatus } = useMutation({
   mutation: () => {
     return loanOrReturn({
-      bookReferenceId: bookReferenceId,
+      bookReferenceId: props.bookReferenceId,
       loan: action.value === 'lend',
       external: external.value,
       data: {
@@ -78,7 +143,8 @@ const { mutate, asyncStatus } = useMutation({
   },
   onSuccess: () => {
     toast.success('Operación realizada con éxito')
-    dialogRef.value.close({ success: true })
+    open.value = false
+    emit('confirm')
   },
   onError: (error: any) => {
     toast.error(error.data.message || 'Ha ocurrido un error inesperado')
@@ -92,12 +158,6 @@ const clear = () => {
   raValue.value = ''
   personalIdValue.value = ''
   placeValue.value = ''
-}
-
-const { bookReferenceId, bookName } = dialogRef.value.data
-
-function closeDialog() {
-  dialogRef.value.close()
 }
 </script>
 <style scoped></style>

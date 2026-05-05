@@ -8,7 +8,7 @@
         />
         Mi perfil
       </h1>
-      <CButton
+      <Button
         icon="icon-park-twotone:write"
         variant="link"
         label="Editar"
@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import PersonalInfoDetails from '~/components/profile/details/PersonalInfoDetails.vue'
 
 const authStore = useAuthStore()

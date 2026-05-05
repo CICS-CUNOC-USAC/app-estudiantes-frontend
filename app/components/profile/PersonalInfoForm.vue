@@ -31,7 +31,7 @@
           prepend-icon="icon-park-twotone:id-card-h"
         />
       </fieldset>
-      <CButton
+      <Button
         type="submit"
         label="Guardar"
         :disabled="loading"
@@ -45,7 +45,7 @@
 import type { VForm } from 'vuetify/components'
 import { type User } from '~/stores/regular-auth'
 import CInputText from '../primitives/form/CInputText.vue'
-import CButton from '../primitives/button/CButton.vue';
+import Button from '~/components/ui/button/Button.vue'
 
 const props = defineProps<{
   src: User | null

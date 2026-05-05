@@ -1,10 +1,10 @@
 <template>
-  <main class="">
+  <main class="pb-8">
     <nav
       class="flex flex-wrap gap-x-3 print:hidden"
       v-if="data && status === 'success'"
     >
-      <CButton
+      <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar a comunicados"
@@ -29,22 +29,24 @@
 
       <ComunicadoPostComments :post-id="String(data.data.id)" />
     </main>
-    <ElementNotFound
+    <CMessage
       v-else-if="status === 'error' && !data"
       title="Comunicado no encontrado"
       subtitle="Parece que el comunicado que buscas no existe o no está disponible."
       back-to-label="Regresar a comunicados"
       back-to-route="/portal/asociaciones/cics/comunicados"
+      variant="destructive"
     />
   </main>
 </template>
 <script setup lang="ts">
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
+import Button from '~/components/ui/button/Button.vue'
 import ComunicadoPostComments from '~/components/portal/comunicados/ComunicadoPostComments.vue'
 import ComunicadoPostReactions from '~/components/portal/comunicados/ComunicadoPostReactions.vue'
 import { type Comunicado } from '~/lib/api/strapi/types'
+import CMessage from '~/components/partials/CMessage.vue'
 
 const route = useRoute()
 const postId = route.params.postId as string

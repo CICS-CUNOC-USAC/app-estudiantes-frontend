@@ -1,42 +1,49 @@
 <template>
-  <CDialog v-model:open="dialog">
-    <CDialogTrigger as-child>
+  <Dialog v-model:open="dialog">
+    <DialogTrigger as-child>
       <slot />
-    </CDialogTrigger>
-    <CDialogContent title="¿Eliminar este elemento?">
+    </DialogTrigger>
+    <DialogContent>
+      <DialogHeader>
+        <DialogTitle>¿Eliminar este elemento?</DialogTitle>
+      </DialogHeader>
       <p>Esta acción no es reversible</p>
-      <div class="flex gap-x-4 mt-4">
-
+      <DialogFooter class="mt-4 flex gap-x-4 sm:justify-start">
         <DialogClose as-child>
-
-          <CButton
-          label="Cancelar"
-          severity="secondary"
-          @click="dialog = false"
-          icon="icon-park-outline:close"
-          class="w-full"
+          <Button
+            label="Cancelar"
+            severity="secondary"
+            icon="icon-park-outline:close"
+            class="w-full"
           />
         </DialogClose>
-        <CButton
-        label="Eliminar"
-        severity="danger"
-        @click="confirmAction"
-        
-        icon="icon-park-twotone:delete"
-        class="w-full"
+        <Button
+          label="Eliminar"
+          severity="danger"
+          icon="icon-park-twotone:delete"
+          class="w-full"
+          @click="confirmAction"
         />
-      </div>
-
-    </CDialogContent>
-  </CDialog>
+      </DialogFooter>
+    </DialogContent>
+  </Dialog>
 </template>
 
 <script setup lang="ts">
-import CButton from '../primitives/button/CButton.vue';
-import { CDialog, CDialogContent, CDialogTrigger } from '../primitives/dialog'
+import Button from '~/components/ui/button/Button.vue'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from '~/components/ui/dialog'
 
 const emit = defineEmits(['confirm'])
 const dialog = ref(false)
+
 const confirmAction = () => {
   dialog.value = false
   emit('confirm')

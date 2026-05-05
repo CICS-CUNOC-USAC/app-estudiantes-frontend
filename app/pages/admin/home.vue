@@ -10,35 +10,41 @@
         Accesos Directos:
       </h2>
       <div class="grid grid-cols-2 gap-4 md:grid-cols-2">
-        <CCardAlt
-          interactive
-          unstyled
-          class="pb-14"
+        <Can
           v-for="item in items"
           :key="item.title"
-          :to="item.to"
+          :ability="showMenuItem"
+          :args="[item.action, item.subject]"
         >
-          <template #content>
-            <div class="flex flex-col gap-4 lg:flex-row">
-              <Icon
-                :name="item.icon"
-                class="text-primary-600 dark:text-primary-200 shrink-0"
-                size="26"
-              ></Icon>
+          <CCardAlt
+            interactive
+            unstyled
+            class="pb-14"
+            :to="item.to"
+          >
+            <template #content>
+              <div class="flex flex-col gap-4 lg:flex-row">
+                <Icon
+                  :name="item.icon"
+                  class="text-primary-600 dark:text-primary-200 shrink-0"
+                  size="26"
+                ></Icon>
 
-              <div class="">
-                <h2 class="font-bold">{{ item.title }}</h2>
-                <h3>{{ item.description }}</h3>
+                <div class="">
+                  <h2 class="font-bold">{{ item.title }}</h2>
+                  <h3>{{ item.description }}</h3>
+                </div>
               </div>
-            </div>
-          </template>
-        </CCardAlt>
+            </template>
+          </CCardAlt>
+        </Can>
       </div>
     </section>
   </main>
 </template>
 <script setup lang="ts">
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import { showMenuItem } from '~/shared/utils/abilities'
 
 const { user } = useStaffAuthStore()
 
@@ -47,25 +53,33 @@ const items = [
     icon: 'icon-park-twotone:user',
     title: 'Perfil',
     description: 'Ver informacion de tu perfil',
-    to: '/admin/me'
+    to: '/admin/me',
+    action: [],
+    subject: [],
   },
   {
     icon: 'icon-park-twotone:book',
     title: 'Biblioteca Fisica',
     description: 'Administrar libros disponibles en la biblioteca de Ingenieria',
-    to: '/admin/books/physical'
+    to: '/admin/books/physical',
+    action: ['manage'],
+    subject: ['Book', 'all'],
   },
   {
     icon: 'icon-park-twotone:book-one',
     title: 'Biblioteca Digital',
     description: 'Administrar libros disponibles en la biblioteca digital',
-    to: '/admin/books/digital'
+    to: '/admin/books/digital',
+    action: ['manage'],
+    subject: ['Book', 'all'],
   },
   {
     icon: 'lucide:hand-helping',
     title: 'Prestamos Externos',
     description: 'Administrar prestamos externos pendientes de la biblioteca de Ingenieria',
-    to: '/admin/loans/outstanding'
+    to: '/admin/loans/outstanding',
+    action: ['manage'],
+    subject: ['Loan', 'all'],
   },
 ]
 

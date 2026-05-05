@@ -1,21 +1,17 @@
 <template>
-  <CCardAlt>
-    <template #title>
+  <CCardAlt :title="`Semestre ${semesterCourses.semester}`" class="gap-3">
+    <!-- <template #title>
       <h1 class="mb-2 text-2xl font-bold">
         Semestre {{ semesterCourses.semester }}
       </h1>
-    </template>
+    </template> -->
 
     <template #content>
-      <div class="mb-2">
-        <span class="block"> Filtrar por: </span>
-        <CChipButton
-          label="Solo obligatorios"
-          filter
-          icon="lucide:check"
-          v-model="onlyMandatory"
-          class="my-1.5"
-        ></CChipButton>
+      <div class="mb-2 space-y-2">
+        <span class="block text-sm"> Filtrar por: </span>
+        <Toggle v-model="onlyMandatory" size="sm" with-indicator>
+          Solo obligatorios
+        </Toggle>
       </div>
       <TransitionGroup
         name="course-transition"
@@ -32,8 +28,8 @@
   </CCardAlt>
 </template>
 <script setup lang="ts">
-import CChipButton from '~/components/primitives/button/CChipButton.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import { Toggle } from '~/components/ui/toggle'
 import type { CareerCourses } from '~/utils/types/career-courses'
 import CourseCard from './CourseCard.vue'
 const onlyMandatory = ref()

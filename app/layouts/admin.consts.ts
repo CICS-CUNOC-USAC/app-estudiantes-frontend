@@ -20,15 +20,15 @@ export const ADMIN_LAYOUT_ITEMS = [
         itemName: 'Biblioteca (Digital)',
         itemIcon: 'icon-park-twotone:book-one',
         itemLink: '/admin/books/digital',
-        action: [],
-        subject: [],
+        action: ['manage'],
+        subject: ['Book', 'all'],
       },
       {
         itemName: 'Biblioteca (Físico)',
         itemIcon: 'icon-park-twotone:book-one',
         itemLink: '/admin/books/physical',
-        action: [],
-        subject: [],
+        action: ['manage'],
+        subject: ['Book', 'all'],
       },
 
     ]
@@ -56,7 +56,7 @@ export const ADMIN_LAYOUT_ITEMS = [
         itemIcon: 'lucide:hand-helping',
         itemLink: '/admin/loans/outstanding',
         action: ['manage'],
-        subject: ['all'],
+        subject: ['all', 'Loan'],
       },
     ]
   }

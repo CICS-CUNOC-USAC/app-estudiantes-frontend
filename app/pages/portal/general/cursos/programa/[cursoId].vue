@@ -1,10 +1,10 @@
 <template>
   <main class="pb-12">
     <nav class="space-x-4">
-      <CButton v-if="fromSearch" icon="icon-park-outline:arrow-left" variant="link"
+      <Button v-if="fromSearch" icon="icon-park-outline:arrow-left" variant="link"
         :label="`Regresar a búsqueda &quot;${fromSearch}&quot;`" class="text-muted-color-emphasis mb-4 lg:mb-2"
         :to="`/portal/general/cursos/programas?curso=${fromSearch}`" />
-      <CButton v-else icon="icon-park-outline:arrow-left" variant="link" label="Regresar a programas"
+      <Button v-else icon="icon-park-outline:arrow-left" variant="link" label="Regresar a programas"
         class="mb-4 text-muted-color-emphasis lg:mb-2" to="/portal/general/cursos/programas" />
     </nav>
     <h1 class="mb-8 mt-2 text-xl font-semibold flex items-center">
@@ -14,7 +14,7 @@
         Vista previa: Programa de curso #{{ id }}
       </span>
 
-      <CButton icon="icon-park-twotone:download-three" variant="tonal" label="Descargar" class="ml-4"
+      <Button icon="icon-park-twotone:download-three" variant="tonal" label="Descargar" class="ml-4"
         :href="`${pdfProgramURL}?program=${id}`" target="_blank" />
     </h1>
     <div class="">
@@ -27,7 +27,7 @@
 </template>
 <script setup lang="ts">
 import PdfPreview from '~/components/content/PdfPreview.vue'
-import CButton from '~/components/primitives/button/CButton.vue';
+import Button from '~/components/ui/button/Button.vue'
 
 const route = useRoute()
 const pdfProgramURL = `${import.meta.env.VITE_APP_BASE_URL}/api/pdfprogram`;

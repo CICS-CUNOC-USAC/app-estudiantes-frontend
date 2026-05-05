@@ -13,6 +13,8 @@
         unstyled: true,
         duration: 3000,
         classes: {
+          actionButton:
+            'bg-transparent text-sm text-primary-600 hover:text-primary-700 rounded-md hover:underline',
           toast:
             'w-full py-2 text-sm px-3 border border-black/85 rounded-lg text-current font-sans flex items-center gap-3 shadow-lg',
           default: 'dark:bg-surface-800 bg-surface-50',
@@ -41,17 +43,6 @@
         <Icon name="lucide:alert-circle" />
       </template>
     </Toaster>
-    <!-- w-full px-4 py-3 rounded-md !font-normal text-sm bg-white !border shadow -->
-    <!-- <GeneralSnackbar /> -->
-     <!-- <div class="fixed bottom-2 left-2 border p-2">
-      screen-<span class="font-bold inline sm:hidden">xs</span>
-      <span class="hidden font-bold sm:inline md:hidden">sm</span>
-      <span class="hidden font-bold md:inline lg:hidden">md</span>
-      <span class="hidden font-bold lg:inline xl:hidden">lg</span>
-      <span class="hidden font-bold xl:inline 2xl:hidden">xl</span>
-      <span class="hidden font-bold 2xl:inline">2xl</span>
-     </div> -->
-    <PDynamicDialog/>
   </main>
 </template>
 <script lang="ts" setup>
@@ -89,7 +80,7 @@ useSeoMeta({
 
 
 
-:root {
+body {
   @apply dark:bg-surface-800 bg-white transition-colors;
 }
 

@@ -1,66 +1,22 @@
 <template>
-  <PDataTable
-    :value="data"
-    v-model:filters="filters"
-    pt:root:class="max-w-5xl mx-auto"
-    :loading
-    removableSort
-  >
-    <PColumn field="" header="Acciones" class="w-min text-center">
-      <template #body="slotProps">
-        <div class="flex flex-col items-center justify-center gap-y-2">
-          <CButton
-            :to="`/portal/general/cursos/programa/${slotProps.data.id}?fromSearch=${fromSearch}`"
-            icon="lucide:eye"
-            fluid
-            size="small"
-            variant="tonal"
-            label="Ver"
-          />
-
-          <CButton
-            :href="slotProps.data.pdfLink"
-            icon="lucide:download"
-            fluid
-            size="small"
-            variant="tonal"
-            label="Descargar"
-          />
-        </div>
-      </template>
-    </PColumn>
-    <PColumn field="name" header="Nombre" class="text-center"></PColumn>
-    <PColumn field="teacher" header="Docente" class="text-center">
-      <!-- <template  #filter="{ filterModel, filterCallback }">
-        <PInputText v-model="filterModel.value" placeholder="Buscar docente" type="text" @input="filterCallback" />
-      </template> -->
-    </PColumn>
-    <PColumn field="semester" header="Cohorte" class="text-center"></PColumn>
-    <PColumn field="year" header="Año" class="text-center" sortable></PColumn>
-    <PColumn field="section" header="Sección" class="text-center"></PColumn>
-
-    <template #empty>
-      <div class="text-center">
-        <span class="text-muted-color-emphasis text-sm font-semibold">
-          {{
-            data?.length === 0 && !loading
-              ? searchEmpty
-                ? 'Escribe el nombre del curso para buscar los programas asociados.'
-                : 'No hay datos disponibles, intenta con otro término de búsqueda.'
-              : 'Cargando...'
-          }}
-        </span>
-      </div>
-    </template>
-  </PDataTable>
+  <div class="max-w-5xl mx-auto">
+    <DataTable
+      :columns
+      :data="data || []"
+      :enable-sorting="false"
+      disable-pagination
+      disable-column-visibility
+    >
+    </DataTable>
+  </div>
 </template>
-<script setup lang="ts">
+<script setup lang="tsx">
 import type { ScrapedProgram } from '~/utils/server/types/programs'
-import CButton from '../primitives/button/CButton.vue'
-import { FilterMatchMode } from '@primevue/core/api'
-import { DataTable } from 'primevue'
+import Button from '~/components/ui/button/Button.vue'
+import DataTable from '~/components/partials/datatable/DataTable.vue'
+import type { ColumnDef } from '@tanstack/vue-table'
 
-const { teacherSearch } = defineProps<{
+const { teacherSearch, fromSearch } = defineProps<{
   teacherSearch: string
   data: ScrapedProgram[] | null
   searchEmpty: boolean
@@ -68,7 +24,73 @@ const { teacherSearch } = defineProps<{
   fromSearch: string
 }>()
 
-const filters = ref({
-  teacher: { value: null, matchMode: FilterMatchMode.CONTAINS }
-})
+const columns: ColumnDef<ScrapedProgram>[] = [
+  {
+    id: 'actions',
+    meta: {
+      displayName: 'Acciones'
+    },
+    header: () => <div class="text-center font-semibold">Acciones</div>,
+    cell: ({ row }) => (
+      <div class="flex flex-col items-center justify-center gap-y-2">
+        <Button
+          to={`/portal/general/cursos/programa/${row.original.id}?fromSearch=${fromSearch}`}
+          icon="lucide:eye"
+          fluid
+          size="small"
+          variant="tonal"
+          label="Ver"
+        />
+        <Button
+          href={row.original.pdfLink}
+          icon="lucide:download"
+          fluid
+          size="small"
+          variant="tonal"
+          label="Descargar"
+        />
+      </div>
+    )
+  },
+  {
+    accessorKey: 'name',
+    meta: {
+      displayName: 'Nombre'
+    },
+    header: () => <div class="text-center font-semibold">Nombre</div>,
+    cell: ({ row }) => <div class="text-center">{row.getValue('name')}</div>
+  },
+  {
+    accessorKey: 'teacher',
+    meta: {
+      displayName: 'Docente'
+    },
+    header: () => <div class="text-center font-semibold">Docente</div>,
+    cell: ({ row }) => <div class="text-center">{row.getValue('teacher')}</div>
+  },
+  {
+    accessorKey: 'semester',
+    meta: {
+      displayName: 'Cohorte'
+    },
+    header: () => <div class="text-center font-semibold">Cohorte</div>,
+    cell: ({ row }) => <div class="text-center">{row.getValue('semester')}</div>
+  },
+  {
+    accessorKey: 'year',
+    meta: {
+      displayName: 'Año'
+    },
+    header: () => <div class="text-center font-semibold">Año</div>,
+    cell: ({ row }) => <div class="text-center">{row.getValue('year')}</div>
+  },
+  {
+    accessorKey: 'section',
+    meta: {
+      displayName: 'Sección'
+    },
+    header: () => <div class="text-center font-semibold">Sección</div>,
+    cell: ({ row }) => <div class="text-center">{row.getValue('section')}</div>
+  }
+]
 </script>

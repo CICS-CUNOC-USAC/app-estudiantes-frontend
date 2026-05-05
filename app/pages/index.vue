@@ -15,14 +15,14 @@
             />
             Publicaciones oficiales recientes
           </span>
-          <CButton
+          <Button
             variant="link"
             icon="lucide:square-arrow-up-right"
             to="/portal/general/publicaciones"
             label="Ver más"
           />
         </h2>
-        <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
+        <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/10" />
         <OfficialPostsView />
       </section>
       <section class="my-6">
@@ -37,14 +37,14 @@
             />
             Comunicados recientes del CICS
           </span>
-          <CButton
+          <Button
             variant="link"
             icon="lucide:square-arrow-up-right"
             to="/portal/asociaciones/cics/comunicados"
             label="Ver más"
           />
         </h2>
-        <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
+        <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/10" />
         <CICSPostsView />
       </section>
       <section v-for="section in sections" :key="section.name" class="my-5">
@@ -60,7 +60,7 @@
             {{ section.title }}
           </span>
         </h2>
-        <div class="my-4 border-t border-zinc-300/50 dark:border-zinc-300/30" />
+        <div class="my-4 border-t border-zinc-300/50 dark:border-zinc-300/10" />
 
         <div
           :class="[
@@ -68,14 +68,13 @@
               'grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4'
           ]"
         >
-          <CCardAlt
+          <Card
             v-for="(item, index) in section.items"
-            no-spacing
-            class="group hover:bg-primary-100/75 active:bg-primary-200/70 dark:hover:bg-primary-900/30 dark:active:bg-primary-800/70"
             :key="index"
             :to="item.route"
+            class="group hover:bg-primary-100/75 active:bg-primary-200/70 dark:hover:bg-primary-900/30 dark:active:bg-primary-800/70 overflow-hidden pt-0 transition"
           >
-            <template #content>
+            <CardContent class="p-0">
               <img
                 :src="item.img"
                 class="h-28 w-full object-cover select-none"
@@ -89,8 +88,8 @@
                 <h3 class="py-2 text-lg font-semibold">{{ item.title }}</h3>
                 <p class="text-sm">{{ item.description }}</p>
               </div>
-            </template>
-          </CCardAlt>
+            </CardContent>
+          </Card>
         </div>
       </section>
     </div>
@@ -100,8 +99,8 @@
 import CICSPostsView from '~/components/portal/CICSPostsView.vue'
 import HomeBanner from '~/components/portal/HomeBanner.vue'
 import OfficialPostsView from '~/components/portal/OfficialPostsView.vue'
-import CButton from '~/components/primitives/button/CButton.vue'
-import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+import Button from '~/components/ui/button/Button.vue'
+import { Card, CardContent } from '~/components/ui/card'
 import { sections } from '~/utils/consts/main-page.consts'
 
 definePageMeta({
