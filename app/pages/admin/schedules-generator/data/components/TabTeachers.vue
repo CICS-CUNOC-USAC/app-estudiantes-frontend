@@ -26,36 +26,57 @@
       </button>
     </div>
 
-    <!-- Paginación -->
+    <!-- Paginación + columnas -->
     <TablePagination
       v-model:current-page="currentPage"
       :total-pages="totalPages"
       :total="filtered.length"
-    />
+    >
+      <template #actions>
+        <ColumnToggle
+          v-model:visible="visibleCols"
+          :columns="columnDefs"
+        />
+      </template>
+    </TablePagination>
 
     <!-- Tabla -->
     <div class="overflow-x-auto border border-border rounded-lg">
       <table class="w-full">
         <thead class="bg-muted/30 border-b border-border">
           <tr>
-            <th v-for="col in columns" :key="col" class="px-4 py-3 text-left font-medium text-sm text-muted-foreground">
-              {{ col }}
+            <th
+              v-for="col in columnDefs"
+              v-show="visibleCols[col.key]"
+              :key="col.key"
+              class="px-4 py-3 text-left font-medium text-sm text-muted-foreground"
+              :class="col.key === 'activo' || col.key === 'acciones' ? 'text-center' : ''"
+            >
+              {{ col.label }}
             </th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="isLoading">
-            <td :colspan="columns.length" class="px-4 py-8 text-center text-muted-foreground">Cargando docentes...</td>
+            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">
+              Cargando docentes...
+            </td>
           </tr>
           <tr v-else-if="paged.length === 0">
-            <td :colspan="columns.length" class="px-4 py-8 text-center text-muted-foreground">No hay docentes disponibles</td>
+            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">
+              No hay docentes disponibles
+            </td>
           </tr>
-          <tr v-for="t in paged" :key="t.id" class="border-b border-border hover:bg-muted/20 transition-colors last:border-0">
-            <td class="px-4 py-3 text-sm">{{ t.nombre }}</td>
-            <td class="px-4 py-3 text-sm">{{ t.registro_personal }}</td>
-            <td class="px-4 py-3 text-sm">{{ t.hora_entrada }}</td>
-            <td class="px-4 py-3 text-sm">{{ t.hora_salida }}</td>
-            <td class="px-4 py-3 text-center">
+          <tr
+            v-for="t in paged"
+            :key="t.id"
+            class="border-b border-border hover:bg-muted/20 transition-colors last:border-0"
+          >
+            <td v-show="visibleCols.nombre"    class="px-4 py-3 text-sm">{{ t.nombre }}</td>
+            <td v-show="visibleCols.registro"  class="px-4 py-3 text-sm">{{ t.registro_personal }}</td>
+            <td v-show="visibleCols.entrada"   class="px-4 py-3 text-sm">{{ t.hora_entrada }}</td>
+            <td v-show="visibleCols.salida"    class="px-4 py-3 text-sm">{{ t.hora_salida }}</td>
+            <td v-show="visibleCols.activo"    class="px-4 py-3 text-center">
               <span
                 class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
                 :class="t.activo
@@ -63,7 +84,7 @@
                   : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'"
               >{{ t.activo ? 'Activo' : 'Inactivo' }}</span>
             </td>
-            <td class="px-4 py-3 text-center">
+            <td v-show="visibleCols.acciones"  class="px-4 py-3 text-center">
               <div class="flex justify-center gap-2">
                 <TeacherFormDialog :teacher-id="t.id" @teacher-saved="refreshTeachers" />
                 <button
@@ -111,17 +132,35 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import TeacherFormDialog from '~/components/schedules-generator/TeacherFormDialog.vue'
 import ImportCard from '../../components/ImportCard.vue'
 import TablePagination from '~/components/schedules-generator/Tablepagination.vue'
+import ColumnToggle from '~/components/schedules-generator/Columntoggle.vue'
 import { useTableSearch } from '~/composables/Usetablesearch'
 import { fetchTeachers, deleteTeacher } from '~/lib/api/schedules-generator/teachers'
 import type { Teacher } from '~/lib/api/schedules-generator/types'
 
-const columns = ['Nombre', 'Registro Personal', 'Hora Entrada', 'Hora Salida', 'Activo', 'Acciones']
+// ── Columnas ───────────────────────────────────────────────────────────────────
+const columnDefs = [
+  { key: 'nombre',   label: 'Nombre' },
+  { key: 'registro', label: 'Registro Personal' },
+  { key: 'entrada',  label: 'Hora Entrada' },
+  { key: 'salida',   label: 'Hora Salida' },
+  { key: 'activo',   label: 'Activo' },
+  { key: 'acciones', label: 'Acciones' },
+]
 
+const visibleCols = ref<Record<string, boolean>>(
+  Object.fromEntries(columnDefs.map(c => [c.key, true]))
+)
+
+const visibleCount = computed(() =>
+  Object.values(visibleCols.value).filter(Boolean).length
+)
+
+// ── Data ───────────────────────────────────────────────────────────────────────
 const allTeachers = ref<Teacher[]>([])
 const isLoading = ref(false)
 const isImportModalOpen = ref(false)
@@ -151,10 +190,8 @@ const refreshTeachers = () => {
 
 const handleDelete = async (id: number) => {
   if (!confirm('¿Estás seguro de que deseas eliminar este docente?')) return
-  try {
-    await deleteTeacher(id)
-    refreshTeachers()
-  } catch { /* handled in API */ }
+  try { await deleteTeacher(id); refreshTeachers() }
+  catch { /* handled in API */ }
 }
 
 onMounted(loadTeachers)

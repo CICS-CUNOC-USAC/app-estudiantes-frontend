@@ -106,39 +106,51 @@
       </button>
     </div>
 
-    <!-- Paginación -->
-    <TablePagination v-model:current-page="currentPage" :total-pages="totalPages" :total="filtered.length" />
+    <!-- Paginación + columnas -->
+    <TablePagination
+      v-model:current-page="currentPage"
+      :total-pages="totalPages"
+      :total="filtered.length"
+    >
+      <template #actions>
+        <ColumnToggle v-model:visible="visibleCols" :columns="columnDefs" />
+      </template>
+    </TablePagination>
 
     <!-- Tabla -->
     <div class="overflow-x-auto border border-border rounded-lg">
       <table class="w-full">
         <thead class="bg-muted/30 border-b border-border">
           <tr>
-            <th v-for="col in columns" :key="col"
-              class="px-4 py-3 text-left font-medium text-sm text-muted-foreground">{{ col }}</th>
+            <th
+              v-for="col in columnDefs"
+              v-show="visibleCols[col.key]"
+              :key="col.key"
+              class="px-4 py-3 text-left font-medium text-sm text-muted-foreground"
+            >{{ col.label }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="isLoading && allRelations.length === 0">
-            <td :colspan="columns.length" class="px-4 py-8 text-center text-muted-foreground">Cargando relaciones...</td>
+            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">Cargando relaciones...</td>
           </tr>
           <tr v-else-if="paged.length === 0">
-            <td :colspan="columns.length" class="px-4 py-8 text-center text-muted-foreground">No hay relaciones docente-curso</td>
+            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">No hay relaciones docente-curso</td>
           </tr>
           <tr v-for="r in paged" :key="r.id" class="border-b border-border hover:bg-muted/20 transition-colors last:border-0">
-            <td class="px-4 py-3 text-sm">
+            <td v-show="visibleCols.docente" class="px-4 py-3 text-sm">
               {{ getTeacher(r.docente_id)?.nombre ?? `Docente ${r.docente_id}` }}
             </td>
-            <td class="px-4 py-3 text-sm text-muted-foreground">
+            <td v-show="visibleCols.registro" class="px-4 py-3 text-sm text-muted-foreground">
               {{ getTeacher(r.docente_id)?.registro_personal ?? '—' }}
             </td>
-            <td class="px-4 py-3 text-sm">
+            <td v-show="visibleCols.curso" class="px-4 py-3 text-sm">
               {{ getCourse(r.curso_id)?.nombre ?? `Curso ${r.curso_id}` }}
             </td>
-            <td class="px-4 py-3 text-sm text-muted-foreground">
+            <td v-show="visibleCols.codigo" class="px-4 py-3 text-sm text-muted-foreground">
               {{ getCourse(r.curso_id)?.codigo ?? '—' }}
             </td>
-            <td class="px-4 py-3 text-center">
+            <td v-show="visibleCols.laboratorio" class="px-4 py-3 text-center">
               <span
                 class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
                 :class="r.puede_laboratorio
@@ -146,7 +158,7 @@
                   : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'"
               >{{ r.puede_laboratorio ? 'Sí' : 'No' }}</span>
             </td>
-            <td class="px-4 py-3 text-center">
+            <td v-show="visibleCols.acciones" class="px-4 py-3 text-center">
               <button
                 @click="handleDelete(r.id)"
                 class="px-3 py-1 text-sm border border-destructive text-destructive rounded hover:bg-destructive hover:text-destructive-foreground transition-colors flex items-center gap-1 mx-auto"
@@ -191,7 +203,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import Dialog from '~/components/ui/dialog/Dialog.vue'
 import DialogTrigger from '~/components/ui/dialog/DialogTrigger.vue'
 import DialogContent from '~/components/ui/dialog/DialogContent.vue'
@@ -206,12 +218,28 @@ import ImportCard from '../../components/ImportCard.vue'
 import TablePagination from '~/components/schedules-generator/Tablepagination.vue'
 import ModalSearchField from '~/components/schedules-generator/Modalsearchfield.vue'
 import { useTableSearch } from '~/composables/Usetablesearch'
+import ColumnToggle from '~/components/schedules-generator/Columntoggle.vue'
 import { useModalSearch } from '~/composables/Usemodalsearch'
 import { fetchTeacherCourses, createTeacherCourse, deleteTeacherCourse, fetchCourses } from '~/lib/api/schedules-generator/teachers-courses'
 import { fetchTeachers } from '~/lib/api/schedules-generator/teachers'
 import type { TeacherCourse, CreateTeacherCourseInput, Teacher, Course } from '~/lib/api/schedules-generator/types'
 
-const columns = ['Docente', 'Registro', 'Curso', 'Código', 'Puede Laboratorio', 'Acciones']
+const columnDefs = [
+  { key: 'docente',      label: 'Docente' },
+  { key: 'registro',     label: 'Registro' },
+  { key: 'curso',        label: 'Curso' },
+  { key: 'codigo',       label: 'Código' },
+  { key: 'laboratorio',  label: 'Puede Laboratorio' },
+  { key: 'acciones',     label: 'Acciones' },
+]
+
+const visibleCols = ref<Record<string, boolean>>(
+  Object.fromEntries(columnDefs.map(c => [c.key, true]))
+)
+
+const visibleCount = computed(() =>
+  Object.values(visibleCols.value).filter(Boolean).length
+)
 
 // ── Data ──────────────────────────────────────────────────────────────────────
 const allRelations = ref<TeacherCourse[]>([])
