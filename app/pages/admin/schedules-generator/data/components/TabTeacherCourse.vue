@@ -97,13 +97,23 @@
         @clear="handleClear"
       />
 
-      <button
-        @click="isImportModalOpen = true"
-        class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
-      >
-        <Icon name="lucide:upload" size="18" />
-        Importar CSV
-      </button>
+      <Dialog v-model:open="isImportModalOpen">
+        <DialogTrigger as-child>
+          <Button icon="lucide:upload" label="Importar CSV" />
+        </DialogTrigger>
+        <DialogContent class="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Importar Relaciones</DialogTitle>
+            <DialogDescription>Sube un CSV con datos de cursos del docente</DialogDescription>
+          </DialogHeader>
+          <ImportCard
+            title="Importar Cursos del Docente"
+            description="Sube un CSV con datos de cursos del docente"
+            import-type="teacher-course"
+            @imported="() => { isImportModalOpen = false; loadData() }"
+          />
+        </DialogContent>
+      </Dialog>
     </div>
 
     <!-- Paginación + columnas -->
@@ -159,59 +169,27 @@
               >{{ r.puede_laboratorio ? 'Sí' : 'No' }}</span>
             </td>
             <td v-show="visibleCols.acciones" class="px-4 py-3 text-center">
-              <button
+              <Button
                 @click="handleDelete(r.id)"
-                class="px-3 py-1 text-sm border border-destructive text-destructive rounded hover:bg-destructive hover:text-destructive-foreground transition-colors flex items-center gap-1 mx-auto"
-              >
-                <Icon name="lucide:trash-2" size="16" />
-                Eliminar
-              </button>
+                label="Eliminar"
+                icon="lucide:trash-2"
+                severity="danger"
+                variant="outlined"
+                size="sm"
+                class="mx-auto"
+              />
             </td>
           </tr>
         </tbody>
       </table>
     </div>
 
-    <!-- Modal importación -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div
-          v-if="isImportModalOpen"
-          class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-          @click.self="isImportModalOpen = false"
-        >
-          <div class="bg-background rounded-lg shadow-lg max-w-md w-full">
-            <div class="p-6 border-b border-border flex items-center justify-between">
-              <h2 class="text-lg font-semibold">Importar Relaciones</h2>
-              <button @click="isImportModalOpen = false" class="text-muted-foreground hover:text-foreground">
-                <Icon name="lucide:x" size="20" />
-              </button>
-            </div>
-            <div class="p-6">
-              <ImportCard
-                title="Importar Cursos del Docente"
-                description="Sube un CSV con datos de cursos del docente"
-                import-type="teacher-course"
-                @imported="() => { isImportModalOpen = false; loadData() }"
-              />
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, computed } from 'vue'
-import Dialog from '~/components/ui/dialog/Dialog.vue'
-import DialogTrigger from '~/components/ui/dialog/DialogTrigger.vue'
-import DialogContent from '~/components/ui/dialog/DialogContent.vue'
-import DialogHeader from '~/components/ui/dialog/DialogHeader.vue'
-import DialogTitle from '~/components/ui/dialog/DialogTitle.vue'
-import DialogDescription from '~/components/ui/dialog/DialogDescription.vue'
-import DialogFooter from '~/components/ui/dialog/DialogFooter.vue'
-import DialogClose from '~/components/ui/dialog/DialogClose.vue'
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import ImportCard from '../../components/ImportCard.vue'
@@ -335,8 +313,3 @@ const handleDelete = async (id: number) => {
 
 onMounted(loadData)
 </script>
-
-<style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-</style>

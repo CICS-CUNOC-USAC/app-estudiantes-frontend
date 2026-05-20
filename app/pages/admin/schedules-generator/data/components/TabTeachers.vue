@@ -17,13 +17,23 @@
         @clear="handleClear"
       />
 
-      <button
-        @click="isImportModalOpen = true"
-        class="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2"
-      >
-        <Icon name="lucide:upload" size="18" />
-        Importar CSV
-      </button>
+      <Dialog v-model:open="isImportModalOpen">
+        <DialogTrigger as-child>
+          <Button icon="lucide:upload" label="Importar CSV" />
+        </DialogTrigger>
+        <DialogContent class="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Importar Docentes</DialogTitle>
+            <DialogDescription>Sube un CSV con datos de docentes</DialogDescription>
+          </DialogHeader>
+          <ImportCard
+            title="Importar Docentes"
+            description="Sube un CSV con datos de docentes"
+            import-type="teachers"
+            @imported="() => { isImportModalOpen = false; refreshTeachers() }"
+          />
+        </DialogContent>
+      </Dialog>
     </div>
 
     <!-- Paginación + columnas -->
@@ -87,13 +97,14 @@
             <td v-show="visibleCols.acciones"  class="px-4 py-3 text-center">
               <div class="flex justify-center gap-2">
                 <TeacherFormDialog :teacher-id="t.id" @teacher-saved="refreshTeachers" />
-                <button
+                <Button
                   @click="handleDelete(t.id)"
-                  class="px-3 py-1 text-sm border border-destructive text-destructive rounded hover:bg-destructive hover:text-destructive-foreground transition-colors flex items-center gap-1"
-                >
-                  <Icon name="lucide:trash-2" size="16" />
-                  Eliminar
-                </button>
+                  label="Eliminar"
+                  icon="lucide:trash-2"
+                  severity="danger"
+                  variant="outlined"
+                  size="sm"
+                />
               </div>
             </td>
           </tr>
@@ -101,38 +112,13 @@
       </table>
     </div>
 
-    <!-- Modal importación -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div
-          v-if="isImportModalOpen"
-          class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
-          @click.self="isImportModalOpen = false"
-        >
-          <div class="bg-background rounded-lg shadow-lg max-w-md w-full">
-            <div class="p-6 border-b border-border flex items-center justify-between">
-              <h2 class="text-lg font-semibold">Importar Docentes</h2>
-              <button @click="isImportModalOpen = false" class="text-muted-foreground hover:text-foreground">
-                <Icon name="lucide:x" size="20" />
-              </button>
-            </div>
-            <div class="p-6">
-              <ImportCard
-                title="Importar Docentes"
-                description="Sube un CSV con datos de docentes"
-                import-type="teachers"
-                @imported="() => { isImportModalOpen = false; refreshTeachers() }"
-              />
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
+import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import TeacherFormDialog from '~/components/schedules-generator/TeacherFormDialog.vue'
 import ImportCard from '../../components/ImportCard.vue'
@@ -196,8 +182,3 @@ const handleDelete = async (id: number) => {
 
 onMounted(loadTeachers)
 </script>
-
-<style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.2s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
-</style>
