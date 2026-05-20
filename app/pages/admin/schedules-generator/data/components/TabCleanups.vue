@@ -14,30 +14,29 @@
 
     <!-- Main Content Grid -->
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
       <!-- Estado de la Base de Datos -->
-      <div class="h-full border border-border rounded-xl bg-card/50 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
-        <div class="bg-linear-to-r from-blue-500/10 to-cyan-500/10 p-6 border-b border-border">
-          <div class="flex items-center gap-3 mb-2">
-            <div class="p-2 bg-blue-500/20 rounded-lg">
+      <Card class="overflow-hidden py-0">
+        <CardHeader class="bg-linear-to-r from-blue-500/10 to-cyan-500/10 border-b border-border py-6">
+          <div class="flex items-center gap-3">
+            <div class="p-2 bg-blue-500/20 rounded-lg shrink-0">
               <Icon name="lucide:database" size="20" class="text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h3 class="font-semibold text-lg">Estado de la BD</h3>
-              <p class="text-sm text-muted-foreground">Consulta el estado actual del sistema</p>
+              <CardTitle>Estado de la BD</CardTitle>
+              <CardDescription>Consulta el estado actual del sistema</CardDescription>
             </div>
           </div>
-        </div>
-
-        <div class="p-6 space-y-4 flex-1 flex flex-col">
+        </CardHeader>
+        <CardContent class="flex-1 py-6">
           <div class="cleanup-card__note cleanup-card__note--blue cleanup-card__note--compact min-h-23">
             <Icon name="lucide:info" size="18" class="mt-0.5 text-blue-600 dark:text-blue-400 shrink-0" />
             <p>
               Útil para verificar qué tablas tienen datos antes de ejecutar una limpieza.
             </p>
           </div>
-        </div>
-
-        <div class="cleanup-card__footer">
+        </CardContent>
+        <CardFooter class="border-t border-border py-4">
           <Button
             @click="loadState"
             :disabled="loading.state"
@@ -46,33 +45,31 @@
             icon="lucide:refresh-cw"
             class="w-full"
           />
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
 
       <!-- Limpieza Completa -->
-      <div class="h-full border border-border rounded-xl bg-card/50 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
-        <div class="bg-linear-to-r from-amber-500/10 to-orange-500/10 p-6 border-b border-border">
-          <div class="flex items-center gap-3 mb-2">
-            <div class="p-2 bg-amber-500/20 rounded-lg">
+      <Card class="overflow-hidden py-0">
+        <CardHeader class="bg-linear-to-r from-amber-500/10 to-orange-500/10 border-b border-border py-6">
+          <div class="flex items-center gap-3">
+            <div class="p-2 bg-amber-500/20 rounded-lg shrink-0">
               <Icon name="lucide:trash-2" size="20" class="text-amber-600 dark:text-amber-400" />
             </div>
             <div>
-              <h3 class="font-semibold text-lg">Limpieza Completa</h3>
-              <p class="text-sm text-muted-foreground">Elimina datos operativos (destructivo)</p>
+              <CardTitle>Limpieza Completa</CardTitle>
+              <CardDescription>Elimina datos operativos (destructivo)</CardDescription>
             </div>
           </div>
-        </div>
-
-        <div class="p-6 space-y-4 flex-1 flex flex-col">
+        </CardHeader>
+        <CardContent class="flex-1 py-6">
           <div class="cleanup-card__note cleanup-card__note--amber cleanup-card__note--compact min-h-23">
             <Icon name="lucide:alert-triangle" size="18" class="mt-0.5 text-amber-600 dark:text-amber-400 shrink-0" />
             <p>
               Esta operación eliminará todos los datos operativos y no se puede deshacer.
             </p>
           </div>
-        </div>
-
-        <div class="cleanup-card__footer">
+        </CardContent>
+        <CardFooter class="border-t border-border py-4">
           <Button
             @click="showCompleteConfirm = true"
             :disabled="loading.complete"
@@ -81,33 +78,31 @@
             icon="lucide:zap"
             class="w-full"
           />
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
 
       <!-- Eliminar Horarios -->
-      <div class="h-full border border-border rounded-xl bg-card/50 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
-        <div class="bg-linear-to-r from-red-500/10 to-rose-500/10 p-6 border-b border-border">
-          <div class="flex items-center gap-3 mb-2">
-            <div class="p-2 bg-red-500/20 rounded-lg">
+      <Card class="overflow-hidden py-0">
+        <CardHeader class="bg-linear-to-r from-red-500/10 to-rose-500/10 border-b border-border py-6">
+          <div class="flex items-center gap-3">
+            <div class="p-2 bg-red-500/20 rounded-lg shrink-0">
               <Icon name="lucide:calendar-x" size="20" class="text-red-600 dark:text-red-400" />
             </div>
             <div>
-              <h3 class="font-semibold text-lg">Eliminar Horarios</h3>
-              <p class="text-sm text-muted-foreground">Elimina horarios, detalles e historial (destructivo)</p>
+              <CardTitle>Eliminar Horarios</CardTitle>
+              <CardDescription>Elimina horarios, detalles e historial (destructivo)</CardDescription>
             </div>
           </div>
-        </div>
-
-        <div class="p-6 space-y-4 flex-1 flex flex-col">
+        </CardHeader>
+        <CardContent class="flex-1 py-6">
           <div class="cleanup-card__note cleanup-card__note--red cleanup-card__note--compact min-h-23">
             <Icon name="lucide:alert-circle" size="18" class="mt-0.5 text-red-600 dark:text-red-400 shrink-0" />
             <p>
               Solo se eliminarán los horarios generados. Esta acción no se puede deshacer.
             </p>
           </div>
-        </div>
-
-        <div class="cleanup-card__footer">
+        </CardContent>
+        <CardFooter class="border-t border-border py-4">
           <Button
             @click="showSchedulesConfirm = true"
             :disabled="loading.schedules"
@@ -116,8 +111,9 @@
             icon="lucide:trash"
             class="w-full"
           />
-        </div>
-      </div>
+        </CardFooter>
+      </Card>
+
     </div>
 
     <!-- Confirmation Dialogs -->
@@ -240,16 +236,10 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, computed } from 'vue'
+import { reactive, ref } from 'vue'
 import { fetchResetState, resetComplete, resetSchedules } from '~/lib/api/schedules-generator/reset'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '~/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '~/components/ui/dialog'
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '~/components/ui/card'
 import Button from '~/components/ui/button/Button.vue'
 import { Icon } from '#components'
 
@@ -415,22 +405,4 @@ const runSchedulesReset = async () => {
     loading.schedules = false
   }
 }
-
 </script>
-
-<style scoped>
-.slide-fade-enter-active,
-.slide-fade-leave-active {
-  transition: all 0.3s ease;
-}
-
-.slide-fade-enter-from {
-  transform: translateY(-10px);
-  opacity: 0;
-}
-
-.slide-fade-leave-to {
-  transform: translateY(-10px);
-  opacity: 0;
-}
-</style>

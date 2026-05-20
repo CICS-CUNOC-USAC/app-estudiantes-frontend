@@ -40,16 +40,15 @@
     <!-- Periods Grid -->
     <div v-else>
       <div v-if="periods.length" class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <div
+        <Card
           v-for="period in periods"
           :key="period.id"
-          class="relative group border border-border rounded-2xl bg-card/70 overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
+          class="relative overflow-hidden rounded-2xl py-0 hover:shadow-md hover:-translate-y-0.5 transition-all duration-200"
         >
-          <!-- Gradient Background Bar -->
+          <!-- Gradient top bar -->
           <div class="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-blue-500/50 to-cyan-500/50" />
 
-          <!-- Content -->
-          <div class="p-6 space-y-5">
+          <CardContent class="py-6 space-y-5">
             <!-- Number Badge -->
             <div class="flex items-center justify-between">
               <div class="flex items-center gap-3">
@@ -63,7 +62,6 @@
               </div>
             </div>
 
-            <!-- Divider -->
             <div class="h-px bg-border" />
 
             <!-- Time Information -->
@@ -78,28 +76,27 @@
               </div>
             </div>
 
-            <!-- Divider -->
             <div class="h-px bg-border" />
 
             <!-- Session Tags -->
             <div class="flex gap-2">
               <div
                 v-if="period.es_manana"
-                class="flex-1 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center gap-2 group/tag"
+                class="flex-1 px-3 py-2 rounded-lg bg-green-500/10 border border-green-500/20 flex items-center justify-center gap-2"
               >
                 <Icon name="lucide:sun" size="16" class="text-green-600 dark:text-green-400" />
                 <span class="text-xs font-medium text-green-700 dark:text-green-300">Mañana</span>
               </div>
               <div
                 v-if="period.es_tarde"
-                class="flex-1 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center gap-2 group/tag"
+                class="flex-1 px-3 py-2 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center gap-2"
               >
                 <Icon name="lucide:moon" size="16" class="text-blue-600 dark:text-blue-400" />
                 <span class="text-xs font-medium text-blue-700 dark:text-blue-300">Tarde</span>
               </div>
             </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
       </div>
 
       <!-- Empty State -->
@@ -121,6 +118,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { fetchPeriods, type Period } from '~/lib/api/schedules-generator/periods'
+import { Card, CardContent } from '~/components/ui/card'
 import Button from '~/components/ui/button/Button.vue'
 import { Icon } from '#components'
 
@@ -150,9 +148,3 @@ onMounted(() => {
   loadPeriods()
 })
 </script>
-
-<style scoped>
-table {
-  background-color: var(--color-background);
-}
-</style>

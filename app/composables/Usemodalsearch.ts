@@ -2,7 +2,6 @@ import { ref, computed } from 'vue'
 
 /**
  * Composable para el buscador tipo autocomplete dentro de un modal.
- * Maneja: query, lista filtrada, item seleccionado, seleccionar y limpiar.
  *
  * @param source   - ref con el array completo de opciones
  * @param filterFn - (item, query) => boolean
@@ -34,10 +33,5 @@ export function useModalSearch<T>(
     query.value = ''
   }
 
-  const reset = () => {
-    selected.value = null
-    query.value = ''
-  }
-
-  return { query, selected, results, select, clear, reset }
+  return { query, selected, results, select, clear, reset: clear }
 }
