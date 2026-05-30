@@ -1,5 +1,5 @@
 <template>
-  <DialogRoot>
+  <Dialog>
     <DialogTrigger as-child>
       <button
         class="bg-surface-600 dark:bg-surface-200 ring-primary-200 fixed right-10 bottom-10 rounded-full p-2.5 text-primary-contrast transition hover:ring-2"
@@ -18,27 +18,13 @@
           <span class="text-xl font-semibold">
             {{ title }}
           </span>
-          <DialogClose
-            class="cursor-pointer rounded p-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-800"
-          >
-            <Icon name="lucide:x" />
-            <span class="sr-only">Close</span>
-          </DialogClose>
         </DialogTitle>
-        <div class="h-full overflow-scroll pb-6 mb-4">
+        <div class="h-full overflow-y-auto pb-6 mb-4">
           <ContentRenderer v-if="data" :value="data" class="md-content" />
         </div>
-        <DialogClose as-child>
-          <Button
-            variant="tonal"
-            label="Entendido"
-            class="w-full"
-          />
-
-        </DialogClose>
       </DialogContent>
     </DialogPortal>
-  </DialogRoot>
+  </Dialog>
 </template>
 <script setup lang="ts">
 import Button from '~/components/ui/button/Button.vue'

@@ -76,7 +76,9 @@ useSeoMeta({
 <style>
 @reference '~/assets/css/main.css';
 
-
+:root {
+  color-scheme: light dark;
+}
 
 
 
