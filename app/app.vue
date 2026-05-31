@@ -16,17 +16,15 @@
           actionButton:
             'bg-transparent text-sm text-primary-600 hover:text-primary-700 rounded-md hover:underline',
           toast:
-            'w-full py-2 text-sm px-3 border border-black/85 rounded-lg text-current font-sans flex items-center gap-3 shadow-lg',
-          default: 'dark:bg-surface-800 bg-surface-50',
-          description: 'text-gray-500 text-sm',
-          warning:
-            'dark:bg-yellow-600 dark:text-yellow-100 bg-yellow-200 text-yellow-800',
-          error: 'dark:bg-red-600 dark:text-red-100 bg-red-200 text-red-800',
-          info: 'dark:bg-sky-600 dark:text-sky-100 bg-sky-200 text-sky-800',
-          success:
-            'dark:bg-green-600 dark:text-green-100 bg-green-200 text-green-800',
+            'w-full py-2 text-sm px-3 border border-black/85 rounded-lg text-current font-sans flex items-center gap-3 shadow-lg backdrop-blur-sm',
+          default: 'dark:bg-surface-800/50 bg-surface-50/50',
+          description: 'text-muted-foreground text-sm',
+          warning: 'dark:bg-yellow-800/50 bg-yellow-200/50',
+          error: 'dark:bg-red-800/50 bg-red-200/50 ',
+          info: 'dark:bg-sky-800/50  bg-sky-200/50 ',
+          success: 'dark:bg-green-800/50 bg-green-200/50',
           closeButton:
-            'dark:!bg-surface-800 !text-surface-50 !border-black/85 !text-color'
+            'dark:!bg-surface-800/50 !text-surface-50 !border-black/85 !text-color'
         }
       }"
     >
@@ -49,7 +47,6 @@
 import { Toaster } from 'vue-sonner'
 import 'vue-sonner/style.css'
 
-
 // useHead({
 //   titleTemplate: (titleChunk) => {
 //     return titleChunk ? `${titleChunk} | CICS App` : 'CICS App | Portal'
@@ -70,7 +67,7 @@ useSeoMeta({
   ogType: 'website',
   ogUrl: 'https://cics.cunoc.edu.gt/',
   ogSiteName: 'CICS App',
-  twitterCard: 'summary_large_image',
+  twitterCard: 'summary_large_image'
 })
 </script>
 <style>
@@ -79,8 +76,6 @@ useSeoMeta({
 :root {
   color-scheme: light dark;
 }
-
-
 
 body {
   @apply dark:bg-surface-800 bg-white transition-colors;

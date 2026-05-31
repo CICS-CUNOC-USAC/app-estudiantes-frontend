@@ -98,14 +98,14 @@ const { data, refresh, status } = await useLazyAsyncData(
 
 const paginationOptions = computed({
   get: () => ({
-    pageIndex: route.query.page ? Number(route.query.page) : 0,
+    pageIndex: route.query.page ? Number(route.query.page) - 1 : 0,
     pageSize: route.query.limit ? Number(route.query.limit) : 10
   }),
   set: (value) => {
     navigateTo({
       query: {
         ...route.query,
-        page: value.pageIndex,
+        page: value.pageIndex + 1,
         limit: value.pageSize
       }
     })
