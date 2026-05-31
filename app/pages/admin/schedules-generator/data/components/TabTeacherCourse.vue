@@ -78,7 +78,7 @@
               <DialogClose as-child>
                 <Button type="button" label="Cancelar" variant="text" />
               </DialogClose>
-              <Button type="submit" label="Agregar" :loading="isLoading" severity="success" />
+              <Button type="submit" label="Agregar" :loading="isSubmitting" severity="success" />
             </DialogFooter>
           </form>
         </DialogContent>
@@ -110,128 +110,68 @@
             title="Importar Cursos del Docente"
             description="Sube un CSV con datos de cursos del docente"
             import-type="teacher-course"
-            @imported="() => { isImportModalOpen = false; loadData() }"
+            @imported="() => { isImportModalOpen = false; refresh() }"
           />
         </DialogContent>
       </Dialog>
     </div>
 
-    <!-- Paginación + columnas -->
-    <TablePagination
-      v-model:current-page="currentPage"
+    <DataTable
+      :columns="columns"
+      :data="paged"
+      :total-elements="filtered.length"
       :total-pages="totalPages"
-      :total="filtered.length"
-    >
-      <template #actions>
-        <ColumnToggle v-model:visible="visibleCols" :columns="columnDefs" />
-      </template>
-    </TablePagination>
-
-    <!-- Tabla -->
-    <div class="overflow-x-auto border border-border rounded-lg">
-      <table class="w-full">
-        <thead class="bg-muted/30 border-b border-border">
-          <tr>
-            <th
-              v-for="col in columnDefs"
-              v-show="visibleCols[col.key]"
-              :key="col.key"
-              class="px-4 py-3 text-left font-medium text-sm text-muted-foreground"
-            >{{ col.label }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="isLoading && allRelations.length === 0">
-            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">Cargando relaciones...</td>
-          </tr>
-          <tr v-else-if="paged.length === 0">
-            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">No hay relaciones docente-curso</td>
-          </tr>
-          <tr v-for="r in paged" :key="r.id" class="border-b border-border hover:bg-muted/20 transition-colors last:border-0">
-            <td v-show="visibleCols.docente" class="px-4 py-3 text-sm">
-              {{ getTeacher(r.docente_id)?.nombre ?? `Docente ${r.docente_id}` }}
-            </td>
-            <td v-show="visibleCols.registro" class="px-4 py-3 text-sm text-muted-foreground">
-              {{ getTeacher(r.docente_id)?.registro_personal ?? '—' }}
-            </td>
-            <td v-show="visibleCols.curso" class="px-4 py-3 text-sm">
-              {{ getCourse(r.curso_id)?.nombre ?? `Curso ${r.curso_id}` }}
-            </td>
-            <td v-show="visibleCols.codigo" class="px-4 py-3 text-sm text-muted-foreground">
-              {{ getCourse(r.curso_id)?.codigo ?? '—' }}
-            </td>
-            <td v-show="visibleCols.laboratorio" class="px-4 py-3 text-center">
-              <span
-                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
-                :class="r.puede_laboratorio
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'"
-              >{{ r.puede_laboratorio ? 'Sí' : 'No' }}</span>
-            </td>
-            <td v-show="visibleCols.acciones" class="px-4 py-3 text-center">
-              <Button
-                @click="handleDelete(r.id)"
-                label="Eliminar"
-                icon="lucide:trash-2"
-                severity="danger"
-                variant="outlined"
-                size="sm"
-                class="mx-auto"
-              />
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
+      :pagination-state="paginationState"
+      :enable-sorting="false"
+      table-key-name="schedules-teacher-courses"
+      @pagination-change="onPaginationChange"
+    />
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, reactive, computed } from 'vue'
+<script setup lang="tsx">
+import type { ColumnDef } from '@tanstack/vue-table'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import DeleteItemDialog from '~/components/dialogs/DeleteItemDialog.vue'
 import ImportCard from '../../components/ImportCard.vue'
-import TablePagination from '~/components/schedules-generator/Tablepagination.vue'
+import DataTable from '~/components/partials/datatable/DataTable.vue'
 import ModalSearchField from '~/components/schedules-generator/Modalsearchfield.vue'
 import { useTableSearch } from '~/composables/Usetablesearch'
-import ColumnToggle from '~/components/schedules-generator/Columntoggle.vue'
 import { useModalSearch } from '~/composables/Usemodalsearch'
 import { fetchTeacherCourses, createTeacherCourse, deleteTeacherCourse, fetchCourses } from '~/lib/api/schedules-generator/teachers-courses'
 import { fetchTeachers } from '~/lib/api/schedules-generator/teachers'
 import type { TeacherCourse, CreateTeacherCourseInput, Teacher, Course } from '~/lib/api/schedules-generator/types'
 
-const columnDefs = [
-  { key: 'docente',      label: 'Docente' },
-  { key: 'registro',     label: 'Registro' },
-  { key: 'curso',        label: 'Curso' },
-  { key: 'codigo',       label: 'Código' },
-  { key: 'laboratorio',  label: 'Puede Laboratorio' },
-  { key: 'acciones',     label: 'Acciones' },
-]
-
-const visibleCols = ref<Record<string, boolean>>(
-  Object.fromEntries(columnDefs.map(c => [c.key, true]))
-)
-
-const visibleCount = computed(() =>
-  Object.values(visibleCols.value).filter(Boolean).length
-)
-
-// ── Data ──────────────────────────────────────────────────────────────────────
-const allRelations = ref<TeacherCourse[]>([])
-const allTeachers  = ref<Teacher[]>([])
-const allCourses   = ref<Course[]>([])
-const isLoading = ref(false)
 const isAddModalOpen = ref(false)
 const isImportModalOpen = ref(false)
+const isSubmitting = ref(false)
 
-// ── Helpers lookup ─────────────────────────────────────────────────────────────
+const { data, refresh } = await useAsyncData(
+  'schedules-teacher-courses',
+  () => Promise.all([
+    fetchTeacherCourses(),
+    fetchCourses(),
+    fetchTeachers({})
+  ])
+)
+
+const allRelations = computed<TeacherCourse[]>(() =>
+  Array.isArray(data.value?.[0]) ? data.value![0] as TeacherCourse[] : []
+)
+const allCourses = computed<Course[]>(() =>
+  Array.isArray(data.value?.[1]) ? data.value![1] as Course[] : []
+)
+const allTeachers = computed<Teacher[]>(() => {
+  const raw = data.value?.[2]
+  if (!raw) return []
+  return 'results' in (raw as any) ? (raw as any).results ?? [] : Array.isArray(raw) ? raw as Teacher[] : []
+})
+
 const getTeacher = (id: number) => allTeachers.value.find(t => t.id === id)
 const getCourse  = (id: number) => allCourses.value.find(c => c.id === id)
 
-// ── Tabla: filtrado + paginación ───────────────────────────────────────────────
 const { searchQuery, currentPage, filtered, totalPages, paged, handleSearch, handleClear } =
   useTableSearch(allRelations, (r, q) => {
     const t = getTeacher(r.docente_id)
@@ -244,7 +184,14 @@ const { searchQuery, currentPage, filtered, totalPages, paged, handleSearch, han
     )
   })
 
-// ── Modal: buscadores de docente y curso ──────────────────────────────────────
+const paginationState = ref({ pageIndex: 0, pageSize: 10 })
+
+const onPaginationChange = (updater: any) => {
+  const next = typeof updater === 'function' ? updater(paginationState.value) : { ...paginationState.value, ...updater }
+  paginationState.value = next
+  currentPage.value = next.pageIndex + 1
+}
+
 const teacherModal = useModalSearch(
   allTeachers,
   (t, q) => t.nombre.toLowerCase().includes(q) || t.registro_personal.toLowerCase().includes(q)
@@ -255,7 +202,6 @@ const courseModal = useModalSearch(
   (c, q) => c.nombre.toLowerCase().includes(q) || (c.codigo?.toLowerCase().includes(q) ?? false)
 )
 
-// ── Form ───────────────────────────────────────────────────────────────────────
 const newRelation = reactive<CreateTeacherCourseInput>({ docente_id: 0, curso_id: 0, puede_laboratorio: false })
 const errors = reactive({ docente_id: '', curso_id: '' })
 
@@ -275,41 +221,86 @@ const validateForm = () => {
   return !errors.docente_id && !errors.curso_id
 }
 
-// ── CRUD ───────────────────────────────────────────────────────────────────────
-const loadData = async () => {
-  isLoading.value = true
-  try {
-    const [relData, courseData, teacherData] = await Promise.all([
-      fetchTeacherCourses(),
-      fetchCourses(),
-      fetchTeachers({})
-    ])
-    allRelations.value = Array.isArray(relData)    ? relData    : []
-    allCourses.value   = Array.isArray(courseData) ? courseData : []
-    allTeachers.value  = teacherData && 'results' in teacherData
-      ? teacherData.results || []
-      : Array.isArray(teacherData) ? teacherData : []
-  } catch { /* handled in API */ }
-  finally { isLoading.value = false }
-}
-
 const handleAddRelation = async () => {
   if (!validateForm()) return
-  isLoading.value = true
+  isSubmitting.value = true
   try {
     await createTeacherCourse(newRelation)
     isAddModalOpen.value = false
     resetForm()
-    await loadData()
+    refresh()
   } catch { /* handled in API */ }
-  finally { isLoading.value = false }
+  finally { isSubmitting.value = false }
 }
 
 const handleDelete = async (id: number) => {
-  if (!confirm('¿Estás seguro de que deseas eliminar esta relación?')) return
-  try { await deleteTeacherCourse(id); await loadData() }
+  try { await deleteTeacherCourse(id); refresh() }
   catch { /* handled in API */ }
 }
 
-onMounted(loadData)
+const columns: ColumnDef<TeacherCourse>[] = [
+  {
+    id: 'docente',
+    meta: { displayName: 'Docente' },
+    header: () => <div class="font-semibold">Docente</div>,
+    cell: ({ row }) => {
+      const t = getTeacher(row.original.docente_id)
+      return <div>{t?.nombre ?? `Docente ${row.original.docente_id}`}</div>
+    },
+  },
+  {
+    id: 'registro',
+    meta: { displayName: 'Registro' },
+    header: () => <div class="font-semibold">Registro</div>,
+    cell: ({ row }) => {
+      const t = getTeacher(row.original.docente_id)
+      return <div class="text-muted-foreground">{t?.registro_personal ?? '—'}</div>
+    },
+  },
+  {
+    id: 'curso',
+    meta: { displayName: 'Curso' },
+    header: () => <div class="font-semibold">Curso</div>,
+    cell: ({ row }) => {
+      const c = getCourse(row.original.curso_id)
+      return <div>{c?.nombre ?? `Curso ${row.original.curso_id}`}</div>
+    },
+  },
+  {
+    id: 'codigo',
+    meta: { displayName: 'Código' },
+    header: () => <div class="font-semibold">Código</div>,
+    cell: ({ row }) => {
+      const c = getCourse(row.original.curso_id)
+      return <div class="text-muted-foreground">{c?.codigo ?? '—'}</div>
+    },
+  },
+  {
+    accessorKey: 'puede_laboratorio',
+    meta: { displayName: 'Puede Laboratorio' },
+    header: () => <div class="font-semibold">Puede Laboratorio</div>,
+    cell: ({ row }) => {
+      const puede = row.getValue('puede_laboratorio') as boolean
+      return (
+        <span class={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+          puede
+            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+            : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+        }`}>
+          {puede ? 'Sí' : 'No'}
+        </span>
+      )
+    },
+  },
+  {
+    id: 'actions',
+    meta: { displayName: 'Acciones' },
+    header: () => <div class="font-semibold">Acciones</div>,
+    cell: ({ row }) => (
+      <DeleteItemDialog onConfirm={() => handleDelete(row.original.id)}>
+        <Button label="Eliminar" icon="lucide:trash-2" severity="danger" variant="text" size="sm" />
+      </DeleteItemDialog>
+    ),
+  },
+]
 </script>

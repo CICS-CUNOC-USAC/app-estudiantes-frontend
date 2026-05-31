@@ -1,48 +1,57 @@
 <template>
   <div class="space-y-6">
-    <div>
-      <h1 class="text-3xl font-bold">Generador de Horarios</h1>
-      <p class="text-muted-foreground mt-1">Gestiona los horarios y importa datos</p>
-    </div>
+    <header class="space-y-2">
+      <h1 class="text-xl font-semibold">
+        <Icon
+          name="icon-park-twotone:peoples"
+          class="mr-1.5 mb-1 inline-block"
+        />
+        Generador de Horarios
+      </h1>
+      <p class="mt-2">Gestiona los horarios y importa datos</p>
+    </header>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-      <NuxtLink
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <CCardAlt
+        title="Datos"
+        description="Importar archivos CSV"
         to="/admin/schedules-generator/data"
-        class="p-6 rounded-lg border border-border hover:bg-accent transition-colors"
+        header-icon="icon-park-twotone:data"
+        interactive
       >
-        <div class="text-lg font-semibold">Datos</div>
-        <p class="text-sm text-muted-foreground mt-1">Importar archivos CSV</p>
-      </NuxtLink>
+      </CCardAlt>
 
-      <NuxtLink
+      <CCardAlt
+        title="Horarios"
+        description="Ver horarios generados"
         to="/admin/schedules-generator/schedules"
-        class="p-6 rounded-lg border border-border hover:bg-accent transition-colors"
-      >
-        <div class="text-lg font-semibold">Horarios</div>
-        <p class="text-sm text-muted-foreground mt-1">Ver horarios generados</p>
-      </NuxtLink>
+        header-icon="icon-park-twotone:calendar"
+        interactive
+      />
 
-      <NuxtLink
+      <CCardAlt
+        title="Reportes"
+        description="Ver reportes de importación"
         to="/admin/schedules-generator/reports"
-        class="p-6 rounded-lg border border-border hover:bg-accent transition-colors"
-      >
-        <div class="text-lg font-semibold">Reportes</div>
-        <p class="text-sm text-muted-foreground mt-1">Ver reportes de importación</p>
-      </NuxtLink>
+        header-icon="icon-park-twotone:chart-histogram-two"
+        interactive
+      />
 
-      <NuxtLink
+      <CCardAlt
+        title="Acerca de"
+        description="Información del módulo"
         to="/admin/schedules-generator/about"
-        class="p-6 rounded-lg border border-border hover:bg-accent transition-colors"
-      >
-        <div class="text-lg font-semibold">Acerca de</div>
-        <p class="text-sm text-muted-foreground mt-1">Información del módulo</p>
-      </NuxtLink>
+        header-icon="icon-park-twotone:info"
+        interactive
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
+
 definePageMeta({
-  layout: 'admin',
+  layout: 'admin'
 })
 </script>

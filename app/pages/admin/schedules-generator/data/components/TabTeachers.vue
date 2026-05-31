@@ -2,7 +2,7 @@
   <div class="space-y-4">
     <!-- Header -->
     <div class="sticky top-0 z-10 grid grid-cols-1 gap-4 py-4 md:grid-cols-[fit-content(100%)_1fr_fit-content(100%)]">
-      <TeacherFormDialog @teacher-saved="refreshTeachers" />
+      <TeacherFormDialog @teacher-saved="onMutate" />
 
       <CInputText
         placeholder="Buscar por nombre o registro"
@@ -30,126 +30,46 @@
             title="Importar Docentes"
             description="Sube un CSV con datos de docentes"
             import-type="teachers"
-            @imported="() => { isImportModalOpen = false; refreshTeachers() }"
+            @imported="() => { isImportModalOpen = false; onMutate() }"
           />
         </DialogContent>
       </Dialog>
     </div>
 
-    <!-- Paginación + columnas -->
-    <TablePagination
-      v-model:current-page="currentPage"
+    <DataTable
+      :columns="columns"
+      :data="paged"
+      :total-elements="filtered.length"
       :total-pages="totalPages"
-      :total="filtered.length"
-    >
-      <template #actions>
-        <ColumnToggle
-          v-model:visible="visibleCols"
-          :columns="columnDefs"
-        />
-      </template>
-    </TablePagination>
-
-    <!-- Tabla -->
-    <div class="overflow-x-auto border border-border rounded-lg">
-      <table class="w-full">
-        <thead class="bg-muted/30 border-b border-border">
-          <tr>
-            <th
-              v-for="col in columnDefs"
-              v-show="visibleCols[col.key]"
-              :key="col.key"
-              class="px-4 py-3 text-left font-medium text-sm text-muted-foreground"
-              :class="col.key === 'activo' || col.key === 'acciones' ? 'text-center' : ''"
-            >
-              {{ col.label }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-if="isLoading">
-            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">
-              Cargando docentes...
-            </td>
-          </tr>
-          <tr v-else-if="paged.length === 0">
-            <td :colspan="visibleCount" class="px-4 py-8 text-center text-muted-foreground">
-              No hay docentes disponibles
-            </td>
-          </tr>
-          <tr
-            v-for="t in paged"
-            :key="t.id"
-            class="border-b border-border hover:bg-muted/20 transition-colors last:border-0"
-          >
-            <td v-show="visibleCols.nombre"    class="px-4 py-3 text-sm">{{ t.nombre }}</td>
-            <td v-show="visibleCols.registro"  class="px-4 py-3 text-sm">{{ t.registro_personal }}</td>
-            <td v-show="visibleCols.entrada"   class="px-4 py-3 text-sm">{{ t.hora_entrada }}</td>
-            <td v-show="visibleCols.salida"    class="px-4 py-3 text-sm">{{ t.hora_salida }}</td>
-            <td v-show="visibleCols.activo"    class="px-4 py-3 text-center">
-              <span
-                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium"
-                :class="t.activo
-                  ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
-                  : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'"
-              >{{ t.activo ? 'Activo' : 'Inactivo' }}</span>
-            </td>
-            <td v-show="visibleCols.acciones"  class="px-4 py-3 text-center">
-              <div class="flex justify-center gap-2">
-                <TeacherFormDialog :teacher-id="t.id" @teacher-saved="refreshTeachers" />
-                <Button
-                  @click="handleDelete(t.id)"
-                  label="Eliminar"
-                  icon="lucide:trash-2"
-                  severity="danger"
-                  variant="outlined"
-                  size="sm"
-                />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
+      :pagination-state="paginationState"
+      :enable-sorting="false"
+      table-key-name="schedules-teachers"
+      @pagination-change="onPaginationChange"
+    />
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed } from 'vue'
+<script setup lang="tsx">
+import type { ColumnDef } from '@tanstack/vue-table'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import TeacherFormDialog from '~/components/schedules-generator/TeacherFormDialog.vue'
+import DeleteItemDialog from '~/components/dialogs/DeleteItemDialog.vue'
 import ImportCard from '../../components/ImportCard.vue'
-import TablePagination from '~/components/schedules-generator/Tablepagination.vue'
-import ColumnToggle from '~/components/schedules-generator/Columntoggle.vue'
+import DataTable from '~/components/partials/datatable/DataTable.vue'
 import { useTableSearch } from '~/composables/Usetablesearch'
 import { fetchTeachers, deleteTeacher } from '~/lib/api/schedules-generator/teachers'
 import type { Teacher } from '~/lib/api/schedules-generator/types'
 
-// ── Columnas ───────────────────────────────────────────────────────────────────
-const columnDefs = [
-  { key: 'nombre',   label: 'Nombre' },
-  { key: 'registro', label: 'Registro Personal' },
-  { key: 'entrada',  label: 'Hora Entrada' },
-  { key: 'salida',   label: 'Hora Salida' },
-  { key: 'activo',   label: 'Activo' },
-  { key: 'acciones', label: 'Acciones' },
-]
-
-const visibleCols = ref<Record<string, boolean>>(
-  Object.fromEntries(columnDefs.map(c => [c.key, true]))
-)
-
-const visibleCount = computed(() =>
-  Object.values(visibleCols.value).filter(Boolean).length
-)
-
-// ── Data ───────────────────────────────────────────────────────────────────────
-const allTeachers = ref<Teacher[]>([])
-const isLoading = ref(false)
 const isImportModalOpen = ref(false)
+
+const { data, refresh } = await useAsyncData(
+  'schedules-teachers',
+  () => fetchTeachers({})
+)
+
+const allTeachers = computed(() => data.value?.results ?? [])
 
 const { searchQuery, currentPage, filtered, totalPages, paged, handleSearch, handleClear } =
   useTableSearch(allTeachers, (t, q) =>
@@ -157,28 +77,79 @@ const { searchQuery, currentPage, filtered, totalPages, paged, handleSearch, han
     t.registro_personal.toLowerCase().includes(q)
   )
 
-const loadTeachers = async () => {
-  isLoading.value = true
-  try {
-    const response = await fetchTeachers({})
-    allTeachers.value = response.results || []
-  } catch {
-    allTeachers.value = []
-  } finally {
-    isLoading.value = false
-  }
+const paginationState = ref({ pageIndex: 0, pageSize: 10 })
+
+const onPaginationChange = (updater: any) => {
+  const next = typeof updater === 'function' ? updater(paginationState.value) : { ...paginationState.value, ...updater }
+  paginationState.value = next
+  currentPage.value = next.pageIndex + 1
 }
 
-const refreshTeachers = () => {
+const onMutate = () => {
   currentPage.value = 1
-  loadTeachers()
+  paginationState.value = { ...paginationState.value, pageIndex: 0 }
+  refresh()
 }
 
 const handleDelete = async (id: number) => {
-  if (!confirm('¿Estás seguro de que deseas eliminar este docente?')) return
-  try { await deleteTeacher(id); refreshTeachers() }
+  try { await deleteTeacher(id); refresh() }
   catch { /* handled in API */ }
 }
 
-onMounted(loadTeachers)
+const columns: ColumnDef<Teacher>[] = [
+  {
+    accessorKey: 'nombre',
+    meta: { displayName: 'Nombre' },
+    header: () => <div class="font-semibold">Nombre</div>,
+    cell: ({ row }) => <div>{row.getValue('nombre')}</div>,
+  },
+  {
+    accessorKey: 'registro_personal',
+    meta: { displayName: 'Registro Personal' },
+    header: () => <div class="font-semibold">Registro Personal</div>,
+    cell: ({ row }) => <div>{row.getValue('registro_personal')}</div>,
+  },
+  {
+    accessorKey: 'hora_entrada',
+    meta: { displayName: 'Hora Entrada' },
+    header: () => <div class="font-semibold">Hora Entrada</div>,
+    cell: ({ row }) => <div>{row.getValue('hora_entrada')}</div>,
+  },
+  {
+    accessorKey: 'hora_salida',
+    meta: { displayName: 'Hora Salida' },
+    header: () => <div class="font-semibold">Hora Salida</div>,
+    cell: ({ row }) => <div>{row.getValue('hora_salida')}</div>,
+  },
+  {
+    accessorKey: 'activo',
+    meta: { displayName: 'Activo' },
+    header: () => <div class="font-semibold">Activo</div>,
+    cell: ({ row }) => {
+      const activo = row.getValue('activo') as boolean
+      return (
+        <span class={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${
+          activo
+            ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+            : 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+        }`}>
+          {activo ? 'Activo' : 'Inactivo'}
+        </span>
+      )
+    },
+  },
+  {
+    id: 'actions',
+    meta: { displayName: 'Acciones' },
+    header: () => <div class="font-semibold">Acciones</div>,
+    cell: ({ row }) => (
+      <div class="flex items-center gap-2">
+        <TeacherFormDialog teacherId={row.original.id} onTeacherSaved={onMutate} />
+        <DeleteItemDialog onConfirm={() => handleDelete(row.original.id)}>
+          <Button label="Eliminar" icon="lucide:trash-2" severity="danger" variant="text" size="sm" />
+        </DeleteItemDialog>
+      </div>
+    ),
+  },
+]
 </script>

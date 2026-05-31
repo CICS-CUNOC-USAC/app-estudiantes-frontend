@@ -9,13 +9,13 @@
       />
     </DialogTrigger>
     <DialogTrigger v-else as-child>
-      <button
+      <Button
+        label="Editar"
+        variant="tonal"
+        icon="lucide:pencil"
+        class="px-3 py-1 text-sm"
         @click="resetForm"
-        class="px-3 py-1 text-sm bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors flex items-center gap-1"
-      >
-        <Icon name="lucide:pencil" size="16" />
-        Editar
-      </button>
+      />
     </DialogTrigger>
 
     <DialogContent class="max-w-md">
@@ -28,52 +28,51 @@
 
       <form @submit.prevent="handleSubmit" class="space-y-4">
         <div>
-          <label class="text-sm font-medium mb-1 block">Nombre *</label>
           <CInputText
             v-model="formData.nombre"
             placeholder="Ej: Juan Pérez"
             :error="errors.nombre"
             class="w-full"
+            label="Nombre *"
           />
         </div>
 
         <div>
-          <label class="text-sm font-medium mb-1 block">Registro Personal *</label>
           <CInputText
             v-model="formData.registro_personal"
             placeholder="Ej: RP123"
             :error="errors.registro_personal"
             class="w-full"
+            label="Registro Personal *"
           />
         </div>
 
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="text-sm font-medium mb-1 block">Hora Entrada *</label>
             <CInputText
               v-model="formData.hora_entrada"
               type="time"
               :error="errors.hora_entrada"
               class="w-full"
+              label="Hora Entrada *"
             />
           </div>
           <div>
-            <label class="text-sm font-medium mb-1 block">Hora Salida *</label>
             <CInputText
               v-model="formData.hora_salida"
               type="time"
               :error="errors.hora_salida"
               class="w-full"
+              label="Hora Salida *"
             />
           </div>
         </div>
 
         <div class="flex items-center gap-2">
-          <input
+          <Checkbox
             id="activo"
             v-model="formData.activo"
-            type="checkbox"
-            class="w-4 h-4 rounded border-border accent-primary cursor-pointer"
+            class="cursor-pointer"
           />
           <label for="activo" class="text-sm font-medium cursor-pointer">
             Activo
