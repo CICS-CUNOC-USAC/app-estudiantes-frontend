@@ -144,7 +144,7 @@ const columns: ColumnDef<Teacher>[] = [
     header: () => <div class="font-semibold">Acciones</div>,
     cell: ({ row }) => (
       <div class="flex items-center gap-2">
-        <TeacherFormDialog teacherId={row.original.id} onTeacherSaved={onMutate} />
+        <TeacherFormDialog teacherId={row.original.id} onTeacher-saved={onMutate} />
         <DeleteItemDialog onConfirm={() => handleDelete(row.original.id)}>
           <Button label="Eliminar" icon="lucide:trash-2" severity="danger" variant="text" size="sm" />
         </DeleteItemDialog>
