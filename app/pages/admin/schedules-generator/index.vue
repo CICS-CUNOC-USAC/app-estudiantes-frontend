@@ -52,6 +52,8 @@
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  subject: ['all'],
+  action: ['manage'],
 })
 </script>

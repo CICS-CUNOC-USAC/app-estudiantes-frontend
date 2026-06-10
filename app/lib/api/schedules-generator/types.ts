@@ -74,3 +74,57 @@ export interface Course {
   codigo: string
   creditos: number
 }
+
+// Carreras types
+export interface Carrera {
+  id: number
+  nombre: string
+  codigo: string
+  created_at?: string
+  updated_at?: string
+}
+
+export interface CreateCarreraInput {
+  nombre: string
+  codigo: string
+}
+
+export interface UpdateCarreraInput extends Partial<CreateCarreraInput> {}
+
+// Cursos types
+export interface Curso {
+  id: number
+  nombre: string
+  codigo: string
+  carrera_id: number | null
+  semestre: number
+  tipo: 'obligatorio' | 'optativo'
+  num_estudiantes: number | null
+  puede_manana: boolean
+  puede_tarde: boolean
+  tiene_laboratorio: boolean
+  activo: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+export interface CreateCursoInput {
+  nombre: string
+  codigo: string
+  carrera_id?: number | null
+  semestre: number
+  tipo: 'obligatorio' | 'optativo'
+  num_estudiantes?: number | null
+  puede_manana: boolean
+  puede_tarde: boolean
+  tiene_laboratorio: boolean
+  activo: boolean
+}
+
+export interface UpdateCursoInput extends Partial<CreateCursoInput> {}
+
+export interface BulkActionResponse {
+  message: string
+  cursos_afectados: number
+  laboratorios_afectados: number
+}
