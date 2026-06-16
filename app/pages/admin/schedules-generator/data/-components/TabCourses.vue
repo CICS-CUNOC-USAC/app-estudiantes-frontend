@@ -157,7 +157,7 @@ import CInputText from '~/components/primitives/form/CInputText.vue'
 import CSelect from '~/components/primitives/form/CSelect.vue'
 import CourseFormDialog from '~/components/schedules-generator/CourseFormDialog.vue'
 import DeleteItemDialog from '~/components/dialogs/DeleteItemDialog.vue'
-import ImportCard from '../../components/ImportCard.vue'
+import ImportCard from '../../-components/ImportCard.vue'
 import DataTable from '~/components/partials/datatable/DataTable.vue'
 import { useTableSearch } from '~/composables/Usetablesearch'
 import {
@@ -441,7 +441,6 @@ const columns: ColumnDef<Curso>[] = [
         <CourseFormDialog cursoId={row.original.id} onCurso-saved={onMutate} />
         <DeleteItemDialog onConfirm={() => handleDelete(row.original.id)}>
           <Button
-            label="Eliminar"
             icon="lucide:trash-2"
             severity="danger"
             variant="text"

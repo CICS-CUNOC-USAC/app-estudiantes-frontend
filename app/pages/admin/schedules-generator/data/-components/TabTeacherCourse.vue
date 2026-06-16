@@ -135,7 +135,7 @@ import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, Di
 import Button from '~/components/ui/button/Button.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import DeleteItemDialog from '~/components/dialogs/DeleteItemDialog.vue'
-import ImportCard from '../../components/ImportCard.vue'
+import ImportCard from '../../-components/ImportCard.vue'
 import DataTable from '~/components/partials/datatable/DataTable.vue'
 import ModalSearchField from '~/components/schedules-generator/Modalsearchfield.vue'
 import { useTableSearch } from '~/composables/Usetablesearch'
