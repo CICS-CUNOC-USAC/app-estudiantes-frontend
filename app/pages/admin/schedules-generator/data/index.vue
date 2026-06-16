@@ -53,15 +53,17 @@ import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { Tabs, TabsList, TabsTrigger } from '~/components/ui/tabs'
 import type { ImportType } from '~/lib/api/schedules-generator/types'
-import TabTeachers from './components/TabTeachers.vue'
-import TabCourses from './components/TabCourses.vue'
-import TabTeacherCourse from './components/TabTeacherCourse.vue'
-import TabClassrooms from './components/TabClassrooms.vue'
-import TabLabs from './components/TabLabs.vue'
-import TabSections from './components/TabSections.vue'
-import TabSectionLab from './components/TabSectionLab.vue'
-import TabCleanups from './components/TabCleanups.vue'
-import TabPeriods from './components/TabPeriods.vue'
+
+import TabTeachers from './-components/TabTeachers.vue'
+import TabCourses from './-components/TabCourses.vue'
+import TabCarreras from './-components/TabCarreras.vue'
+import TabTeacherCourse from './-components/TabTeacherCourse.vue'
+import TabClassrooms from './-components/TabClassrooms.vue'
+import TabLabs from './-components/TabLabs.vue'
+import TabSections from './-components/TabSections.vue'
+import TabSectionLab from './-components/TabSectionLab.vue'
+import TabCleanups from './-components/TabCleanups.vue'
+import TabPeriods from './-components/TabPeriods.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -84,6 +86,12 @@ const importTabs = [
     label: 'Cursos',
     icon: 'lucide:book-open',
     component: TabCourses
+  },
+  {
+    type: 'carreras' as const,
+    label: 'Carreras',
+    icon: 'lucide:graduation-cap',
+    component: TabCarreras
   },
   {
     type: 'teacher-course' as ImportType,
@@ -117,6 +125,8 @@ const importTabs = [
   }
 ]
 
+type TabType = (typeof importTabs)[number]['type']
+
 const activeView = computed<'imports' | 'cleanups' | 'periods'>(() => {
   const view = route.query.view
   if (view === 'cleanups' || view === 'periods')
@@ -124,8 +134,8 @@ const activeView = computed<'imports' | 'cleanups' | 'periods'>(() => {
   return 'imports'
 })
 
-const activeTab = computed<ImportType>(() => {
-  return (route.query.tab as ImportType) || 'teachers'
+const activeTab = computed<TabType>(() => {
+  return (route.query.tab as TabType) || 'teachers'
 })
 
 const currentComponent = computed(() => {
@@ -148,6 +158,8 @@ const onTabChange = (tab: string | number) => {
 }
 
 definePageMeta({
-  layout: 'admin'
+  layout: 'admin',
+  subject: ['all'],
+  action: ['manage'],
 })
 </script>

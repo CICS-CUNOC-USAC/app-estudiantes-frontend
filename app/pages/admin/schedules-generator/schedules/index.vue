@@ -14,5 +14,7 @@
 <script setup lang="ts">
 definePageMeta({
   layout: 'admin',
+  subject: ['all'],
+  action: ['manage'],
 })
 </script>
