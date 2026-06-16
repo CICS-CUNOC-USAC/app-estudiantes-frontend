@@ -8,13 +8,13 @@
         </DialogTrigger>
         <DialogContent class="max-w-md">
           <DialogHeader>
-            <DialogTitle>Importar Laboratorios</DialogTitle>
-            <DialogDescription>Sube un CSV con datos de laboratorios</DialogDescription>
+            <DialogTitle>Importar Secciones</DialogTitle>
+            <DialogDescription>Sube un CSV con datos de secciones</DialogDescription>
           </DialogHeader>
           <ImportCard
-            title="Importar Laboratorios"
-            description="Sube un CSV con datos de laboratorios"
-            import-type="labs"
+            title="Importar Secciones"
+            description="Sube un CSV con datos de secciones"
+            import-type="sections"
             @imported="isModalOpen = false"
           />
         </DialogContent>
@@ -22,7 +22,7 @@
     </div>
 
     <div class="border border-border rounded-lg p-8 bg-muted/30">
-      <p class="text-center text-sm text-muted-foreground">Tabla de Laboratorios</p>
+      <p class="text-center text-sm text-muted-foreground">Tabla de Secciones</p>
     </div>
 
   </div>
@@ -32,7 +32,7 @@
 import { ref } from 'vue'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
 import Button from '~/components/ui/button/Button.vue'
-import ImportCard from '../../components/ImportCard.vue'
+import ImportCard from '../../-components/ImportCard.vue'
 
 const isModalOpen = ref(false)
 </script>

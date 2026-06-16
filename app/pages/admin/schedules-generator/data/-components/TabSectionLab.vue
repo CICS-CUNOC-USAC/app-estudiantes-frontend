@@ -32,7 +32,7 @@
 import { ref } from 'vue'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '~/components/ui/dialog'
 import Button from '~/components/ui/button/Button.vue'
-import ImportCard from '../../components/ImportCard.vue'
+import ImportCard from '../../-components/ImportCard.vue'
 
 const isModalOpen = ref(false)
 </script>
