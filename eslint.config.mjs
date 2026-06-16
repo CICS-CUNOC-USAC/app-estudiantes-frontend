@@ -7,6 +7,14 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 export default withNuxt(
   [
     {
+      // og-renderer uses satori's JSX runtime via @jsxImportSource pragma — disable Vue JSX rules
+      files: ['server/utils/og-renderer.tsx'],
+      rules: {
+        'vue/no-unused-vars': 'off',
+        'vue/jsx-uses-vars': 'off',
+      },
+    },
+    {
       plugins: {
         prettier: prettierPlugin
       },
