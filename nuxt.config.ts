@@ -28,7 +28,7 @@ export default defineNuxtConfig({
     head: {
       link: [
         // favicon
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/x-icon', href: '/estudiantes/favicon.ico' },
       ],
       meta: [
         {
