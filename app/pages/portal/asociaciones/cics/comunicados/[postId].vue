@@ -83,9 +83,10 @@ useCustomPageTitle(
 )
 
 const { origin } = useRequestURL()
+const basePath = '/estudiantes'
 useSeoMeta({
-  ogImage: `${origin}/api/og/comunicado/${postId}`,
-  twitterImage: `${origin}/api/og/comunicado/${postId}`,
+  ogImage: `${origin}${basePath}/api/og/comunicado/${postId}`,
+  twitterImage: `${origin}${basePath}/api/og/comunicado/${postId}`,
   twitterCard: 'summary_large_image',
   ogDescription: data.value?.data?.description ?? 'Comunicado CICS',
 })
