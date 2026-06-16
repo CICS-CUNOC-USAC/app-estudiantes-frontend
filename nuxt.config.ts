@@ -40,7 +40,14 @@ export default defineNuxtConfig({
           name: 'theme-color',
           content: '#262626',
           media: '(prefers-color-scheme: dark)'
-        }
+        },
+        { property: 'og:site_name', content: 'CICS App' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: 'CICS App | Portal' },
+        { property: 'og:description', content: 'Portal para los estudiantes de Ingeniería del Centro Universitario De Occidente' },
+        { property: 'og:image', content: 'https://cics.cunoc.edu.gt/estudiantes/og.png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:image', content: 'https://cics.cunoc.edu.gt/estudiantes/og.png' },
       ]
     }
   },
