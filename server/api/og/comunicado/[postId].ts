@@ -8,14 +8,16 @@ export default defineEventHandler(async (event) => {
   let card: OgCardData = FALLBACK_CARD
 
   try {
-    const strapiUrl = process.env.VITE_STRAPI_URL || 'https://cics.cunoc.edu.gt/content'
-    const strapiToken = process.env.VITE_STRAPI_TOKEN
+    const strapiUrl = process.env.STRAPI_URL || 'https://cics.cunoc.edu.gt/content'
+    const strapiToken = process.env.STRAPI_TOKEN
 
     const res = await fetch(`${strapiUrl}/api/comunicados/${postId}`, {
       headers: strapiToken ? { Authorization: `Bearer ${strapiToken}` } : {},
     })
 
-    if (res.ok) {
+    if (!res.ok) {
+      console.error(`[og/comunicado] Strapi returned ${res.status} for postId=${postId}`)
+    } else {
       const json = await res.json() as { data: { title: string; description: string; publishedAt: string } }
       const { title, description, publishedAt } = json.data
 
@@ -29,8 +31,8 @@ export default defineEventHandler(async (event) => {
         badge: 'Comunicado',
       }
     }
-  } catch {
-    // use fallback card
+  } catch (err) {
+    console.error(`[og/comunicado] Failed to fetch from Strapi for postId=${postId}:`, err)
   }
 
   const png = await buildOgImage(card)
