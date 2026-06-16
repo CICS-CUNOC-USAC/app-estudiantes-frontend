@@ -1,5 +1,5 @@
 import fs from 'node:fs'
-import { fileURLToPath } from 'node:url'
+import path from 'node:path'
 import satori from 'satori'
 import { Resvg } from '@resvg/resvg-js'
 import { createElement as h, type JSX as SatoriJSX } from 'satori/jsx'
@@ -11,9 +11,9 @@ declare global {
   }
 }
 
-const fontsDir = fileURLToPath(new URL('../../public/fonts', import.meta.url))
-const interRegular = fs.readFileSync(`${fontsDir}/Inter-Regular.ttf`)
-const interBold = fs.readFileSync(`${fontsDir}/Inter-Bold.ttf`)
+const fontsDir = path.join(process.cwd(), 'public/fonts')
+const interRegular = fs.readFileSync(path.join(fontsDir, 'Inter-Regular.ttf'))
+const interBold = fs.readFileSync(path.join(fontsDir, 'Inter-Bold.ttf'))
 
 const COLORS = {
   bg: '#F9F5F3',
