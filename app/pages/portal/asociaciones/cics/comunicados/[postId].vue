@@ -81,6 +81,15 @@ useCustomPageTitle(
     ? `Comunicado - ${data.value?.data?.title}`
     : 'Comunicado'
 )
+
+const { origin } = useRequestURL()
+useSeoMeta({
+  ogImage: `${origin}/api/og/comunicado/${postId}`,
+  twitterImage: `${origin}/api/og/comunicado/${postId}`,
+  twitterCard: 'summary_large_image',
+  ogDescription: data.value?.data?.description ?? 'Comunicado CICS',
+})
+
 definePageMeta({
   title: 'Comunicado'
 })

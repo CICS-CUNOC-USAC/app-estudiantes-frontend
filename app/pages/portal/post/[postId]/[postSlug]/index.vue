@@ -89,6 +89,15 @@ useCustomPageTitle(
     ? `${data.value.title} | Publicación`
     : 'Publicación oficial'
 )
+
+const { origin } = useRequestURL()
+useSeoMeta({
+  ogImage: `${origin}/api/og/post/${postId}/${postSlug}`,
+  twitterImage: `${origin}/api/og/post/${postId}/${postSlug}`,
+  twitterCard: 'summary_large_image',
+  ogDescription: data.value?.meta ?? 'Publicación oficial CICS',
+})
+
 definePageMeta({
   title: 'Publicación oficial'
 })
