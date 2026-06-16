@@ -8,8 +8,8 @@ export default defineEventHandler(async (event) => {
   let card: OgCardData = FALLBACK_CARD
 
   try {
-    const strapiUrl = process.env.STRAPI_URL || 'http://localhost:1337'
-    const strapiToken = process.env.STRAPI_TOKEN
+    const strapiUrl = process.env.VITE_STRAPI_URL || 'https://cics.cunoc.edu.gt/content'
+    const strapiToken = process.env.VITE_STRAPI_TOKEN
 
     const res = await fetch(`${strapiUrl}/api/comunicados/${postId}`, {
       headers: strapiToken ? { Authorization: `Bearer ${strapiToken}` } : {},
