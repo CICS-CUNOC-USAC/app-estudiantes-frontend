@@ -10,13 +10,17 @@ export default defineEventHandler(async (event) => {
   try {
     const strapiUrl = process.env.STRAPI_URL || 'https://cics.cunoc.edu.gt/content'
     const strapiToken = process.env.STRAPI_TOKEN
+    const targetUrl = `${strapiUrl}/api/comunicados/${postId}`
 
-    const res = await fetch(`${strapiUrl}/api/comunicados/${postId}`, {
+    console.error(`[og/comunicado] DEBUG fetching url=${targetUrl} hasToken=${!!strapiToken}`)
+
+    const res = await fetch(targetUrl, {
       headers: strapiToken ? { Authorization: `Bearer ${strapiToken}` } : {},
     })
 
     if (!res.ok) {
-      console.error(`[og/comunicado] Strapi returned ${res.status} for postId=${postId}`)
+      const body = await res.text().catch(() => '<unreadable body>')
+      console.error(`[og/comunicado] Strapi returned ${res.status} ${res.statusText} for postId=${postId} url=${targetUrl} body=${body}`)
     } else {
       const json = await res.json() as { data: { title: string; description: string; publishedAt: string } }
       const { title, description, publishedAt } = json.data
@@ -32,7 +36,8 @@ export default defineEventHandler(async (event) => {
       }
     }
   } catch (err) {
-    console.error(`[og/comunicado] Failed to fetch from Strapi for postId=${postId}:`, err)
+    const cause = err instanceof Error && 'cause' in err ? (err as { cause?: unknown }).cause : undefined
+    console.error(`[og/comunicado] Failed to fetch from Strapi for postId=${postId}:`, err instanceof Error ? err.stack || err.message : err, cause ? `cause=${String(cause)}` : '')
   }
 
   const png = await buildOgImage(card)
