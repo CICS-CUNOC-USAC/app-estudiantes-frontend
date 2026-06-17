@@ -22,7 +22,9 @@ export default defineNuxtConfig({
     dirs: ['stores']
   },
   runtimeConfig: {
-    baseURL: process.env.BASE_URL || 'http://localhost:8000'
+    baseURL: process.env.BASE_URL || 'http://localhost:8000',
+    strapiUrl: process.env.STRAPI_URL || 'http://localhost:1337',
+    strapiToken: process.env.STRAPI_TOKEN || ''
   },
   app: {
     head: {

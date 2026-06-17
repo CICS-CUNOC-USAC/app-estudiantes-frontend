@@ -8,8 +8,7 @@ export default defineEventHandler(async (event) => {
   let card: OgCardData = FALLBACK_CARD
 
   try {
-    const strapiUrl = process.env.STRAPI_URL || 'https://cics.cunoc.edu.gt/content'
-    const strapiToken = process.env.STRAPI_TOKEN
+    const { strapiUrl, strapiToken } = useRuntimeConfig()
     const targetUrl = `${strapiUrl}/api/comunicados/${postId}`
 
     console.error(`[og/comunicado] DEBUG fetching url=${targetUrl} hasToken=${!!strapiToken}`)
