@@ -20,7 +20,7 @@
       v-if="course.mandatory"
       class="bg-surface-950/75 dark:bg-cics-white m-1.5 size-3 rounded-sm"
     ></div>
-    <div class="border-surface-950/75 flex shrink-0 border-l">
+    <div class="border-surface-950/75 flex shrink-0 border-l px-1">
       <AdminCourseEditDialog
         :pensum-id="pensumId"
         :course-code="course.course_code"
@@ -31,24 +31,25 @@
         :pensum-courses-list="pensumCoursesList"
         @updated="emit('updated')"
       >
-        <button
-          type="button"
-          class="hover:bg-surface-100 dark:hover:bg-surface-700 flex h-full cursor-pointer items-center px-2.5 transition"
-        >
-          <Icon name="icon-park-twotone:edit" size="16" class="text-primary-600 dark:text-primary-300" />
-        </button>
+        <Button
+          icon="icon-park-twotone:edit"
+          variant="text"
+          size="icon-sm"
+          class="my-auto text-muted-foreground-emphasis"
+        />
       </AdminCourseEditDialog>
       <ConfirmDialog
         :title="`¿Eliminar ${course.course.name}?`"
         :description="`El curso ${course.course_code} sera eliminado de este pensum. Esta accion no es reversible.`"
         @confirm="onDeleteCourse"
       >
-        <button
-          type="button"
-          class="flex cursor-pointer items-center px-2.5 transition hover:bg-red-100 dark:hover:bg-red-900/30"
-        >
-          <Icon name="icon-park-outline:delete" size="16" class="text-red-500" />
-        </button>
+        <Button
+          icon="icon-park-outline:delete"
+          variant="text"
+          size="icon-sm"
+          severity="danger"
+          class="my-auto"
+        />
       </ConfirmDialog>
     </div>
   </div>
@@ -61,6 +62,7 @@ import AdminCourseEditDialog from '~/components/dialogs/courses/AdminCourseEditD
 import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
 import type { PensumSemesterCourse, PensumCourseOption } from '~/utils/types/pensum-courses'
 import { removeCourseFromPensum } from '~/lib/api/admin/pensums'
+import { Button } from '~/components/ui/button'
 
 const props = defineProps<{
   course: PensumSemesterCourse

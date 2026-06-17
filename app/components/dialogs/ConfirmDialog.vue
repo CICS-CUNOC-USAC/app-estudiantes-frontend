@@ -40,12 +40,13 @@ import {
   DialogTitle,
   DialogTrigger
 } from '~/components/ui/dialog'
+import type { ButtonVariants } from '../ui/button';
 
 withDefaults(defineProps<{
   title?: string
   description?: string
   confirmLabel?: string
-  confirmSeverity?: string
+  confirmSeverity?: ButtonVariants['severity']
   confirmIcon?: string
 }>(), {
   title: '¿Estas seguro?',
