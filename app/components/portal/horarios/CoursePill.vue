@@ -12,7 +12,7 @@
             <v-col class="text-center">
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.career_course.course.name }}
+                  {{ curso.pensum_course.course.name }}
                 </v-col>
               </v-row>
               <v-row>
@@ -32,7 +32,7 @@
               </v-row>
               <v-row>
                 <v-col class="text-center small-text">
-                  Semestre: {{ curso.career_course.semester }}
+                  Semestre: {{ curso.pensum_course.semester }}
                 </v-col>
               </v-row>
             </v-col>
@@ -53,21 +53,21 @@ export default {
   },
   methods: {
     getColorCourse(curso: Course) {
-      if (curso.career_course.semester == 3) {
+      if (curso.pensum_course.semester == 3) {
         return 'card_color_green'
-      } else if (curso.career_course.semester == 4) {
+      } else if (curso.pensum_course.semester == 4) {
         return 'card_color_yellow'
-      } else if (curso.career_course.semester == 5) {
+      } else if (curso.pensum_course.semester == 5) {
         return 'card_color_smoth_green'
-      } else if (curso.career_course.semester == 6) {
+      } else if (curso.pensum_course.semester == 6) {
         return 'card_color_orange'
-      } else if (curso.career_course.semester == 7) {
+      } else if (curso.pensum_course.semester == 7) {
         return 'card_color_red'
-      } else if (curso.career_course.semester == 8) {
+      } else if (curso.pensum_course.semester == 8) {
         return 'card_color_magenta'
-      } else if (curso.career_course.semester == 9) {
+      } else if (curso.pensum_course.semester == 9) {
         return 'card_color_ocean'
-      } else if (curso.career_course.semester == 10) {
+      } else if (curso.pensum_course.semester == 10) {
         return 'card_color_blue'
       }
     }
