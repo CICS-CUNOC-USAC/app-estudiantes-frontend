@@ -81,6 +81,14 @@ const items = [
     action: ['manage'],
     subject: ['Loan', 'all'],
   },
+  {
+    icon: 'icon-park-twotone:notebook-one',
+    title: 'Pensums',
+    description: 'Administrar pensums de las carreras',
+    to: '/admin/pensums',
+    action: ['manage'],
+    subject: ['Pensum', 'all'],
+  },
 ]
 
 
