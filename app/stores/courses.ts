@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import { type CareerCourse } from '~/lib/api/dashboard/career-progress'
+import { type PensumCourse } from '~/lib/api/dashboard/career-progress'
 
 export const useCoursesStore = defineStore('courses', () => {
   const loading = ref<boolean>(false)
-  const careerCourse = ref<CareerCourse>({
-    career_code: 0,
+  const pensumCourse = ref<PensumCourse>({
+    pensum_id: 0,
     course_code: '',
     semester: 0,
     field: 0,
@@ -18,13 +18,13 @@ export const useCoursesStore = defineStore('courses', () => {
     }
   })
 
-  const fetchCareerCourse = async (code: string, careerCode: number) => {
+  const fetchPensumCourse = async (code: string, pensumId: number) => {
     loading.value = true
     try {
-      const response = await $api<CareerCourse>(
-        `/courses/${code}/${careerCode}`
+      const response = await $api<PensumCourse>(
+        `/courses/${code}/pensum/${pensumId}`
       )
-      careerCourse.value = response
+      pensumCourse.value = response
       return {
         response,
         error: null
@@ -40,7 +40,7 @@ export const useCoursesStore = defineStore('courses', () => {
 
   return {
     loading,
-    careerCourse,
-    fetchCareerCourse
+    pensumCourse,
+    fetchPensumCourse
   }
 })

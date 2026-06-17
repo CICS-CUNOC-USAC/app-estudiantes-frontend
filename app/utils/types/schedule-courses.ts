@@ -42,24 +42,28 @@ export type Classroom = {
 
 export type Course = {
   id: number
-  career_code: number | null
+  pensum_id: number | null
   course_code: string
   section_id: number
   classroom_id: number
   periods: Array<Period>
-  career_course: {
+  pensum_course: {
     semester: number
     field: number
-    career: {
-      name: string
+    pensum: {
+      career_code: number
+      career: {
+        code: number
+        name: string
+      }
     }
     course: {
       name: string
-    },
-    career_field: {
-      career_code: number,
-      field_number: number,
-      name: string,
+    }
+    career_field?: {
+      career_code: number
+      field_number: number
+      name: string
       common_field: boolean
     }
   }

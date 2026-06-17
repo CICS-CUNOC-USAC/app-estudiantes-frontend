@@ -10,24 +10,27 @@
       />
     </nav>
     <h1 class="mt-4 mb-8 text-xl font-semibold">
-      <template v-if="status === 'pending'">
+      <template v-if="pensumStatus === 'pending' || coursesStatus === 'pending'">
         <Skeleton height="1.7rem" width="28rem"></Skeleton>
       </template>
-      <template v-if="careerCourses && status === 'success'">
+      <template v-if="pensumCourses && coursesStatus === 'success'">
         <Icon
           name="icon-park-twotone:s-turn-left"
           class="mr-1.5 mb-1 inline-block"
         />
         <span class="font-weight-light">Carrera:</span>
-        {{ careerCourses?.career_name }} -
+        {{ pensumCourses?.career_name }} -
         <span>
-          {{ careerCourses?.career_code }}
+          {{ pensumCourses?.career_code }}
+        </span>
+        <span class="text-muted-color ml-2 text-base font-normal">
+          (Pensum {{ pensumCourses?.pensum_year }})
         </span>
       </template>
     </h1>
     <PensumPublicView
-      :career-courses="careerCourses?.courses"
-      :loading="status === 'pending'"
+      :pensum-semesters="pensumCourses?.courses"
+      :loading="coursesStatus === 'pending'"
     />
     <HelpDialog title="Pensum de carrera" content-path="/help/pensums"></HelpDialog>
     <ElementNotFound
@@ -35,32 +38,48 @@
       subtitle="Parece que el pensum de la carrera que buscas no existe, verifica que el código de carrera sea correcto."
       backToRoute="/portal/general/pensums"
       backToLabel="Regresar a pensums"
-      v-if="status === 'error' && error?.statusCode === 404"
+      v-if="coursesStatus === 'error' && coursesError?.statusCode === 404"
     />
   </main>
 </template>
 
 <script setup lang="ts">
-import { NuxtLink } from '#components'
 import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
 import PensumPublicView from '~/components/portal/pensums/PensumPublicView.vue'
 import Button from '~/components/ui/button/Button.vue'
 import { Skeleton } from '~/components/ui/skeleton'
-import type { CareerCoursesResponse } from '~/utils/types/career-courses'
+import type { Pensum, PensumCoursesResponse } from '~/utils/types/pensum-courses'
 
 const route = useRoute()
+
 const {
-  data: careerCourses,
-  status,
-  error
-} = await useCustomFetch<CareerCoursesResponse>(
-  `/career-courses/${route.params.codigoCarrera}`
+  data: pensums,
+  status: pensumStatus,
+} = await useCustomFetch<Pensum[]>(
+  `/pensums?career_code=${route.params.codigoCarrera}`
+)
+
+const activePensum = computed(() =>
+  pensums.value?.find((p) => p.active) ?? pensums.value?.[0]
+)
+
+const {
+  data: pensumCourses,
+  status: coursesStatus,
+  error: coursesError,
+} = await useCustomFetch<PensumCoursesResponse>(
+  computed(() =>
+    activePensum.value
+      ? `/pensums/${activePensum.value.id}/courses`
+      : ''
+  ),
+  { watch: [activePensum] }
 )
 
 useCustomPageTitle(
-  careerCourses?.value?.career_name
-    ? `Pensum - ${careerCourses?.value?.career_name}`
+  pensumCourses?.value?.career_name
+    ? `Pensum - ${pensumCourses?.value?.career_name}`
     : 'Pensum de carrera'
 )
 definePageMeta({

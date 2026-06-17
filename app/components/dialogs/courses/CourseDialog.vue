@@ -57,21 +57,21 @@ import {
   DialogClose
 } from '@/components/ui/dialog'
 
-const { courseCode, careerCode } = defineProps<{
+const { courseCode, pensumId } = defineProps<{
   field: number
   courseCode: string
   courseName: string
   mandatory: boolean
-  careerCode: number
+  pensumId: number
 }>()
 
-const { fetchCareerCourse } = useCoursesStore()
+const { fetchPensumCourse } = useCoursesStore()
 const dialog = ref(false)
 
 const { data, status, refresh } = await useLazyAsyncData(
-  `course-dialog-${courseCode}-${careerCode}`,
+  `course-dialog-${courseCode}-${pensumId}`,
   () => {
-    return fetchCareerCourse(courseCode, careerCode)
+    return fetchPensumCourse(courseCode, pensumId)
   },
   {
     immediate: false

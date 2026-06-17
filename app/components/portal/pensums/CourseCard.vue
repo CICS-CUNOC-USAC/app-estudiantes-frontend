@@ -24,7 +24,7 @@
           :course-code="course.course_code"
           :mandatory="false"
           :course-name="course.course.name"
-          :career-code="course.career_code"
+          :pensum-id="course.pensum_id"
         />
       </div>
     </div>
@@ -36,9 +36,9 @@
 </template>
 <script setup lang="ts">
 import CourseDialog from '@/components/dialogs/courses/CourseDialog.vue'
-import type { SemesterCourses } from '~/utils/types/career-courses'
+import type { PensumSemesterCourse } from '~/utils/types/pensum-courses'
 defineProps<{
-  course: SemesterCourses
+  course: PensumSemesterCourse
   elevated?: boolean
   interactive?: boolean
   interactiveInverse?: boolean
