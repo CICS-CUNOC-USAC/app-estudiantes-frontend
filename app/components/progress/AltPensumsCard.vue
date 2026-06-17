@@ -39,7 +39,7 @@ const props = defineProps<{
 const filteredCourses = computed(() => {
   if (onlyMandatory.value) {
     return props.semesterProgress.courses_semester_progress.filter(
-      (course) => course.career_course.mandatory
+      (course) => course.pensum_course.mandatory
     )
   }
   return props.semesterProgress.courses_semester_progress

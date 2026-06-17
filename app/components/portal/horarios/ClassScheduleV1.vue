@@ -31,10 +31,10 @@
                         <GridItem class="border-b border-r border-gray-200 p-0.5 z-10" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                             :h="item.h" :i="item.i">
                             <ScheduleCourseCard :id="`S${item.content.course_code}${item.content.section.name}`"
-                                class="z-20 ScheduleCourseCard" :career="isCommonField(item.content) ? 'Area Comun' : item.content.career_course.career.name"
-                                :career_id="isCommonField(item.content) ? 0 : item.content.career_code as number"
-                                :curso="item.content.career_course.course.name" :seccion="item.content.section.name"
-                                :semester="item.content.career_course.semester"
+                                class="z-20 ScheduleCourseCard" :career="isCommonField(item.content) ? 'Area Comun' : item.content.pensum_course.pensum.career.name"
+                                :career_id="isCommonField(item.content) ? 0 : item.content.pensum_id as number"
+                                :curso="item.content.pensum_course.course.name" :seccion="item.content.section.name"
+                                :semester="item.content.pensum_course.semester"
                                 :days="(item.content as Course).periods.map(period => period.weekday_id)" />
                         </GridItem>
                     </template>
@@ -70,9 +70,9 @@
                             grid-column-start: ${classroom.id + 1};
                             `">
                             <div class="h-full" v-if="typeof lastSchedule !== 'undefined'">
-                                <ScheduleCourseCard :career="lastSchedule.career_course.career.name"
-                                    :curso="lastSchedule.career_course.course.name" :seccion="lastSchedule.section.name"
-                                    :semester="lastSchedule.career_course.semester"
+                                <ScheduleCourseCard :career="lastSchedule.pensum_course.pensum.career.name"
+                                    :curso="lastSchedule.pensum_course.course.name" :seccion="lastSchedule.section.name"
+                                    :semester="lastSchedule.pensum_course.semester"
                                     :days="lastSchedule.periods.map(period => period.weekday_id)" />
                             </div>
                         </div>
@@ -107,9 +107,9 @@
             <template v-for="hour in hours" :key="hour.id">
                 <template v-if="hasSchedule(classroom.id, hour, schedules)">
                     <div class="w-52 h-32 border-b border-r" :class="{'row-span-1' : getPeriodsSchedule(lastSchedule.periods) > 1}" v-if="typeof lastSchedule !== 'undefined'">
-                        <ScheduleCourseCard :career="lastSchedule.career_course.career.name" :career_id="lastSchedule.career_code as number"
-                            :curso="lastSchedule.career_course.course.name" :seccion="lastSchedule.section.name"
-                            :semester="lastSchedule.career_course.semester"
+                        <ScheduleCourseCard :career="lastSchedule.pensum_course.pensum.career.name" :career_id="lastSchedule.pensum_id as number"
+                            :curso="lastSchedule.pensum_course.course.name" :seccion="lastSchedule.section.name"
+                            :semester="lastSchedule.pensum_course.semester"
                             :days="lastSchedule.periods.map(period => period.weekday_id)" />
                     </div>
                 </template>
@@ -149,8 +149,8 @@
                         <ScheduleCourseCard class="h-full" v-if="
                             schedule.periods[0].hour.start_time == hour.start_time &&
                             schedule.classroom_id == classroom.id
-                        " :career="schedule.career_course.career.name" :curso="schedule.career_course.course.name"
-                            :seccion="schedule.section.name" :semester="schedule.career_course.semester"
+                        " :career="schedule.pensum_course.pensum.career.name" :curso="schedule.pensum_course.course.name"
+                            :seccion="schedule.section.name" :semester="schedule.pensum_course.semester"
                             :days="schedule.periods.map(period => period.weekday_id)" />
                     </div>
                 </td>
@@ -307,7 +307,7 @@ function getSchedule(classroom_id: number, hour: Hour, schedules: Array<Course>)
 }
 
 function isCommonField(course: Course) {
-    return course.career_course.career_field.common_field
+    return course.pensum_course.career_field?.common_field ?? false
 }
 
 function getPeriodsSchedule(periods: Array<Period>) {

@@ -159,7 +159,7 @@ import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
 import HoursDialog from '~/components/schedule/HoursDIalog.vue'
 import { Icon } from '@iconify/vue'
 import CMessage from '~/components/partials/CMessage.vue'
-import type { Career } from '~/utils/types/career-courses'
+import type { Career } from '~/utils/types/pensum-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 import { Button } from '~/components/ui/button'
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area'
@@ -237,7 +237,7 @@ function searchScheduleCourse(courseName: string) {
   }
 
   foundCourses.value = schedules.value.filter((schedule) =>
-    schedule.career_course.course.name.toLowerCase().includes(lowerCaseName)
+    schedule.pensum_course.course.name.toLowerCase().includes(lowerCaseName)
   )
 
   if (!foundCourses.value.length) {
