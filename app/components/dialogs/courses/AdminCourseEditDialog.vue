@@ -431,9 +431,10 @@ function validateCoursePrereq(code: string, excludePrereqId?: number): string | 
   return null
 }
 
-function validateCreditsPrereq(credits: string, excludePrereqId?: number): string | null {
-  const num = Number(credits)
-  if (!credits.trim() || isNaN(num)) return 'Debes ingresar un numero de creditos'
+function validateCreditsPrereq(credits: string | number, excludePrereqId?: number): string | null {
+  const str = String(credits).trim()
+  const num = Number(str)
+  if (!str || isNaN(num)) return 'Debes ingresar un numero de creditos'
   if (num <= 0) return 'Los creditos deben ser mayores a 0'
 
   const duplicate = prerequisites.value.some(p =>
