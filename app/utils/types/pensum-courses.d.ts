@@ -38,3 +38,9 @@ export type Career = {
   code: number
   name: string
 }
+
+export type PensumCourseOption = {
+  code: string
+  name: string
+  semester: number
+}
