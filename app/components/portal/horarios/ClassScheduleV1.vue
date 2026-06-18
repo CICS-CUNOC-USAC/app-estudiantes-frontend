@@ -32,10 +32,10 @@
                             :h="item.h" :i="item.i">
                             <ScheduleCourseCard :id="`S${item.content.course_code}${item.content.section.name}`"
                                 class="z-20 ScheduleCourseCard" :career="isCommonField(item.content) ? 'Area Comun' : item.content.pensum_course.pensum.career.name"
-                                :career_id="isCommonField(item.content) ? 0 : item.content.pensum_id as number"
+                                :career_id="isCommonField(item.content) ? 0 : item.content.pensum_course.pensum.career_code"
                                 :curso="item.content.pensum_course.course.name" :seccion="item.content.section.name"
                                 :semester="item.content.pensum_course.semester"
-                                :days="(item.content as Course).periods.map(period => period.weekday_id)" />
+                                :days="(item.content as Course).periods.map(period => period.weekday.name)" />
                         </GridItem>
                     </template>
                     <template v-else>
@@ -293,9 +293,15 @@ const gridState = reactive({
     layout: createLayout()
 })
 
+watch(() => [props.hours, props.classrooms, props.schedules], () => {
+    gridState.layout = createLayout()
+}, { deep: true })
+
 function getSchedule(classroom_id: number, hour: Hour, schedules: Array<Course>) {
     for (const schedule of schedules) {
         if (
+            schedule.periods?.length &&
+            schedule.periods[0].hours?.length &&
             schedule.periods[0].hours[0].start_time == hour.start_time &&
             schedule.classroom_id == classroom_id
         ) {
@@ -311,8 +317,8 @@ function isCommonField(course: Course) {
 }
 
 function getPeriodsSchedule(periods: Array<Period>) {
-    const hours = periods[0].hours
-    return hours.length
+    if (!periods?.length || !periods[0].hours?.length) return 1
+    return periods[0].hours.length
 }
 </script>
 
