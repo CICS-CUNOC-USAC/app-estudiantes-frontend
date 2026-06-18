@@ -4,7 +4,7 @@
     " :class="{
       'p-2': !noSpacing,
       'cursor-pointer': to,
-      [colorCareer[career_id]]: true
+      [colorCareer[career_id] || 'bg-gray-200']: true
     }">
     <slot name="career">
       <h3 v-if="career" class="mb-2 text-xs font-semibold transition-colors duration-300 ease-in-out">
@@ -22,13 +22,13 @@
         </span>
         <span class="block text-xs tracking-tight justify-self-end">
           <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
-          {{ transformToWeekdays(days || []) }}
+          {{ abbreviateWeekdays(days || []) }}
         </span>
       </div>
     </slot>
     <slot name="footer">
       <div class="dark:min-h-1 dark:mt-1 light:hidden dark:block" :class="{
-        [colorCareer[career_id]]: true
+        [colorCareer[career_id] || 'bg-gray-200']: true
       }"></div>
     </slot>
   </component>
@@ -42,7 +42,7 @@ defineProps<{
   to?: string
   seccion?: string
   semester?: number
-  days?: Array<number>
+  days?: Array<string>
   smallIcon?: string
   noSpacing?: boolean
 }>()
@@ -56,23 +56,12 @@ function semesterToRoman(semesterNum: number) {
   return romanNumerals[semesterNum - 1];
 }
 
-function transformToWeekdays(numbers: number[]): string {
-  const weekdays: { [key: number]: string } = {
-    1: 'L',   // Lunes
-    2: 'M',   // Martes
-    3: 'Mi',  // Miércoles
-    4: 'J',   // Jueves
-    5: 'V',   // Viernes
-    6: 'S',   // Sábado
-    7: 'D'    // Domingo
+function abbreviateWeekdays(names: string[]): string {
+  const abbrev: Record<string, string> = {
+    'Lunes': 'L', 'Martes': 'M', 'Miercoles': 'Mi', 'Miércoles': 'Mi',
+    'Jueves': 'J', 'Viernes': 'V', 'Sabado': 'S', 'Sábado': 'S', 'Domingo': 'D',
   };
-
-  return numbers.map((num) => {
-    if (num < 1 || num > 7) {
-      throw new Error(`Invalid day number: ${num}. Must be between 1 and 7.`);
-    }
-    return weekdays[num];
-  }).join(' ');
+  return names.map((name) => abbrev[name] || name.substring(0, 2)).join(' ');
 }
 
 const colorCareer: Record<number, string> = {
