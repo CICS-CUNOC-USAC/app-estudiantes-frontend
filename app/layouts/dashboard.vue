@@ -18,7 +18,10 @@
         </div>
       </nav>
 
-      <div class="mx-auto w-full max-w-7xl rounded-xl px-6 pb-4 pt-16 lg:pt-6">
+      <div
+        class="mx-auto w-full rounded-xl pb-4 pt-16 lg:pt-6"
+        :class="$route.meta.wideScreen ? 'px-3 sm:px-5 lg:px-7' : 'max-w-7xl px-6'"
+      >
         <NuxtPage />
       </div>
     </div>

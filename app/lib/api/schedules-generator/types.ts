@@ -128,3 +128,111 @@ export interface BulkActionResponse {
   cursos_afectados: number
   laboratorios_afectados: number
 }
+
+// ─── Horarios ──────────────────────────────────────────────────────────────
+
+export interface Horario {
+  id: number
+  nombre: string
+  fecha_generacion: string
+  aptitud_final: number | null
+  generaciones_ejecutadas: number | null
+  tiempo_ejecucion_ms: number | null
+  metodo_seleccion: string | null
+  metodo_cruce: string | null
+  metodo_mutacion: string | null
+  es_activo: boolean
+}
+
+export interface HorarioDetalle {
+  detalle_id: number
+  seccion_id: number | null
+  seccion_lab_id: number | null
+  salon_id: number | null
+  docente_id: number | null
+  dia_horario_id: number
+  periodo_inicio_id: number
+  periodo_fin_id: number
+  dia_especifico: string | null
+  modificado_manual: boolean
+  curso_id: number
+  curso_nombre: string
+  curso_codigo: string
+  semestre: number
+  curso_tipo: string
+  carrera_id: number | null
+  carrera_nombre: string | null
+  seccion_letra: string | null
+  salon_nombre: string | null
+  salon_es_laboratorio: boolean | null
+  docente_nombre: string | null
+  hora_inicio: string
+  hora_fin: string
+  es_manana: boolean
+  es_tarde: boolean
+  dias_nombre: string
+  dia_display: string
+  es_laboratorio: boolean
+}
+
+export interface HorarioCompleto {
+  horario: Horario
+  detalles: HorarioDetalle[]
+}
+
+export interface EditarDetalleInput {
+  salon_id?: number | null
+  docente_id?: number | null
+  periodo_inicio_id?: number
+  periodo_fin_id?: number
+  dia_horario_id?: number
+  dia_especifico?: string | null
+}
+
+export interface EditarDetalleResult {
+  detalle: HorarioDetalle
+  nueva_aptitud: number | null
+  advertencias: string[]
+}
+
+export interface ConflictoHorario {
+  tipo: string
+  descripcion?: string
+  penalizacion?: number
+  bono?: number
+  [key: string]: unknown
+}
+
+export interface ConflictosResponse {
+  aptitud: number
+  aptitud_recalculada: number
+  total_conflictos: number
+  total_penalizacion: number
+  total_bonos: number
+  conflictos: ConflictoHorario[]
+  bonos: ConflictoHorario[]
+}
+
+// ─── Salones ──────────────────────────────────────────────────────────────
+
+export interface Salon {
+  id: number
+  nombre: string
+  capacidad: number | null
+  es_laboratorio: boolean
+  activo?: boolean
+}
+
+// ─── Horario Personal ─────────────────────────────────────────────────────
+
+export interface HorarioPersonalDetalle {
+  seccion_id?: number
+  seccion_lab_id?: number
+}
+
+export interface HorarioPersonal {
+  estudiante: string
+  horario_origen_id: number | null
+  detalles: HorarioPersonalDetalle[]
+  actualizado: string | null
+}

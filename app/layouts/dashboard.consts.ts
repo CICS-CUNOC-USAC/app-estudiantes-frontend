@@ -15,6 +15,11 @@ export const DashboardLayoutItems = [
     shortName: 'Mis recursos',
     items: [
       {
+        itemName: 'Mi Horario',
+        itemIcon: 'icon-park-twotone:calendar',
+        itemLink: '/dashboard/horario'
+      },
+      {
         itemName: 'Progreso académico',
         itemIcon: 'icon-park-twotone:up-and-down',
         itemLink: '/dashboard/pensum/progress'
