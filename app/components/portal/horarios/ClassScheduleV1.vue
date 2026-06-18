@@ -1,8 +1,8 @@
 <template>
     <!--VERSION GRID PLUGIN-->
     <ClientOnly>
-        <GridLayout id="ScheduleLayoutMain" class="lg:w-[350vw] sm:w-[600vw] w-[1000vw]" v-model:layout="gridState.layout" :col-num="classrooms.length + 2"
-            :row-height="120" :margin="[2, 2]">
+        <GridLayout id="ScheduleLayoutMain" class="lg:w-[250vw] sm:w-[500vw] w-[800vw]" v-model:layout="gridState.layout" :col-num="classrooms.length + 2"
+            :row-height="100" :margin="[1, 1]">
             <template class="border" v-for="(item, index) in gridState.layout" :key="index">
                 <template v-if="item.i === '0'">
                     <GridItem class="" :static="item.static" :x="item.x" :y="item.y" :w="item.w" :h="item.h"
@@ -10,18 +10,18 @@
                     </GridItem>
                 </template>
                 <template v-else-if="item.type === 'classroom'">
-                    <GridItem class="text-left border-r border-gray-200 pl-2" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
+                    <GridItem class="text-left border-r border-gray-200 pl-1.5" :static="item.static" :x="item.x" :y="item.y" :w="item.w"
                         :h="item.h" :i="item.i">
-                        <div class="text-sm">
+                        <div class="text-xs text-muted-foreground">
                             Salón
                         </div>
-                        <div class="text-lg font-bold">
+                        <div class="text-sm font-bold">
                             {{ item.content.name }}
                         </div>
                     </GridItem>
                 </template>
                 <template v-else-if="item.type === 'hour'">
-                    <GridItem class="text-center justify-end flex pr-12 pl-12" :static="item.static" :x="item.x"
+                    <GridItem class="text-center justify-end flex px-2 text-xs" :static="item.static" :x="item.x"
                         :y="item.y" :w="item.w" :h="item.h" :i="item.i">
                         {{ item.content.start_time }} - {{ item.content.end_time }}
                     </GridItem>

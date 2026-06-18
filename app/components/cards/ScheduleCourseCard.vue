@@ -2,26 +2,24 @@
   <component :is="to ? NuxtLink : 'div'" :to unstyled class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-950/75 text-color duration-300 ease-in-out dark:bg-surface-800
       -translate-x-0.5 -translate-y-0.5 shadow-[2px_2px_0_0_rgba(0,0,0,1)]
     " :class="{
-      'p-2': !noSpacing,
+      'p-1.5': !noSpacing,
       'cursor-pointer': to,
       [colorCareer[career_id] || 'bg-gray-200']: true
     }">
     <slot name="career">
-      <h3 v-if="career" class="mb-2 text-xs font-semibold transition-colors duration-300 ease-in-out">
+      <h3 v-if="career" class="mb-0.5 truncate text-[10px] font-semibold leading-tight transition-colors duration-300 ease-in-out">
         {{ semesterToRoman(semester || 1) }} &bull; {{ career }}
       </h3>
     </slot>
     <slot name="content">
-      <p class="mb-2 text-sm font-medium flex-1 leading-tight">
+      <p class="mb-0.5 text-[11px] font-medium flex-1 leading-snug">
         {{ curso }}
       </p>
-      <div class="grid grid-cols-2">
-        <span class="block text-xs tracking-tight justify-self-start">
-          <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
-          Seccion: {{ seccion }}
+      <div class="mt-auto flex justify-between">
+        <span class="text-[10px] tracking-tight">
+          {{ seccion }}
         </span>
-        <span class="block text-xs tracking-tight justify-self-end">
-          <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
+        <span class="text-[10px] tracking-tight">
           {{ abbreviateWeekdays(days || []) }}
         </span>
       </div>
