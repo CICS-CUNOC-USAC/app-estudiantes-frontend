@@ -111,17 +111,6 @@ export default defineNuxtConfig({
   fonts: {
     defaults: {
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
-    },
-    families: [
-      { name: 'Geist', provider: 'google' },
-      { name: 'Stack Sans Notch', provider: 'google' },
-      { name: 'Stack Sans Headline', provider: 'google' },
-      { name: 'Stack Sans Text', provider: 'google' },
-      { name: 'Geist Mono', provider: 'google' },
-      { name: 'Bricolage Grotesque', provider: 'google' }
-    ],
-    experimental: {
-      processCSSVariables: true
     }
   }
 })
