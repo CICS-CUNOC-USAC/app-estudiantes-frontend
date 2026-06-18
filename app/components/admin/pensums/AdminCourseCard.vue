@@ -12,8 +12,17 @@
         <strong class="block">{{ course.course.credits }} <span>Cr</span></strong>
       </div>
       <div class="bg-gray-950 h-3/4 w-0.5 shrink-0 rounded-lg"></div>
-      <div class="min-w-0 flex-1">
+      <div class="min-w-0 flex-1 py-1.5">
         <span class="text-sm">{{ course.course.name }}</span>
+        <div v-if="prerequisiteLabels.length" class="mt-0.5 flex flex-wrap gap-1">
+          <span
+            v-for="prereq in prerequisiteLabels"
+            :key="prereq"
+            class="text-muted-foreground inline-block max-w-full truncate text-[10px] leading-tight"
+          >
+            {{ prereq }}
+          </span>
+        </div>
       </div>
     </div>
     <div
@@ -61,6 +70,7 @@ import AdminCourseEditDialog from '~/components/dialogs/courses/AdminCourseEditD
 import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
 import type { PensumSemesterCourse, PensumCourseOption } from '~/utils/types/pensum-courses'
 import { removeCourseFromPensum } from '~/lib/api/admin/pensums'
+import { fetchPrerequisites, type Prerequisite } from '~/lib/api/admin/prerequisites'
 
 const props = defineProps<{
   course: PensumSemesterCourse
@@ -73,6 +83,31 @@ const emit = defineEmits<{
 }>()
 
 const courseDescription = computed(() => (props.course.course as any).description ?? '')
+
+const prerequisites = ref<Prerequisite[]>([])
+
+onMounted(async () => {
+  try {
+    prerequisites.value = await fetchPrerequisites(props.pensumId, props.course.course_code)
+  } catch {
+  }
+})
+
+const prerequisiteLabels = computed(() => {
+  const labels: string[] = []
+  for (const p of prerequisites.value) {
+    if (p.is_course) {
+      for (const entry of p.coursePrerequisites) {
+        labels.push(entry.course_code)
+      }
+    } else {
+      for (const entry of p.creditsPrerequisites) {
+        labels.push(`${entry.credits}Cr`)
+      }
+    }
+  }
+  return labels
+})
 
 async function onDeleteCourse() {
   try {
