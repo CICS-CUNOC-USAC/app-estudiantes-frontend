@@ -115,7 +115,7 @@ defineOptions({ inheritAttrs: false })
         <SelectTrigger
           :class="
             cn(
-              'relative h-full flex-1 rounded-none border-0 bg-transparent pr-4 pl-0 shadow-none focus-visible:border-0 focus-visible:ring-0',
+              'relative h-full min-w-0 flex-1 overflow-hidden rounded-none border-0 bg-transparent pr-4 pl-0 shadow-none focus-visible:border-0 focus-visible:ring-0',
               label ? 'items-end pb-1' : '',
               !hasPrepend ? 'rounded-l-lg pl-2' : '',
               !hasAppend ? 'rounded-r-lg pr-2' : ''
