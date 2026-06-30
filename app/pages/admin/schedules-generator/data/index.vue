@@ -58,7 +58,7 @@ import TabTeachers from './-components/TabTeachers.vue'
 import TabCourses from './-components/TabCourses.vue'
 import TabCarreras from './-components/TabCarreras.vue'
 import TabTeacherCourse from './-components/TabTeacherCourse.vue'
-import TabClassrooms from './-components/TabClassrooms.vue'
+import TabSalones from './-components/TabSalones.vue'
 import TabLabs from './-components/TabLabs.vue'
 import TabSections from './-components/TabSections.vue'
 import TabSectionLab from './-components/TabSectionLab.vue'
@@ -103,7 +103,7 @@ const importTabs = [
     type: 'classrooms' as ImportType,
     label: 'Salones',
     icon: 'lucide:home',
-    component: TabClassrooms
+    component: TabSalones
   },
   {
     type: 'labs' as ImportType,
