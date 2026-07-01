@@ -13,18 +13,14 @@ export default defineNuxtConfig({
   },
   compatibilityDate: '2024-11-15',
   srcDir: 'app/',
-  strapi: {
-    version: 'v5',
-    url: process.env.STRAPI_URL || 'http://localhost:1337',
-    token: process.env.STRAPI_TOKEN || undefined
-  },
   imports: {
     dirs: ['stores']
   },
   runtimeConfig: {
     baseURL: process.env.BASE_URL || 'http://localhost:8000',
     strapiUrl: process.env.STRAPI_URL || 'http://localhost:1337',
-    strapiToken: process.env.STRAPI_TOKEN || ''
+    strapiToken: process.env.STRAPI_TOKEN || '',
+    strapiPrefix: process.env.STRAPI_PREFIX || 'api'
   },
   app: {
     head: {
@@ -63,7 +59,6 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/color-mode',
     'nuxt-authorization',
-    '@nuxtjs/strapi',
     'shadcn-nuxt'
   ],
   vite: {
