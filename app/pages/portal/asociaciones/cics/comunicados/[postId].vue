@@ -1,49 +1,37 @@
 <template>
-  <main class="pb-8">
-    <nav
-      class="flex flex-wrap gap-x-3 print:hidden"
-      v-if="data && status === 'success'"
-    >
-      <Button
-        icon="icon-park-outline:arrow-left"
-        variant="link"
-        label="Regresar a comunicados"
-        class="text-muted-foreground mb-4 lg:mb-2"
-        to="/portal/asociaciones/cics/comunicados"
-      />
-      <Button
-        icon="icon-park-twotone:share-one"
-        variant="link"
-        label="Compartir comunicado"
-        class="text-muted-foreground mb-4 lg:mb-2"
-        @click="handleShareCurrentLink"
-      />
-    </nav>
-    <main v-if="data && status === 'success'">
-      <ComunicadoPostReactions :post-id="String(data.data.id)" />
-      <h1 class="py-3 text-xl font-semibold">
-        <Icon name="lucide:megaphone" class="mr-1.5 mb-1 inline-block" />
-        {{ data.data.title }}
-      </h1>
-      <p
-        class="text-muted-foreground mb-4 text-sm"
-        v-html="formatPublishedDate(data.data.publishedAt)"
-      />
+  <main class="pb-8 pt-16">
 
-      <div class="content-renderer mx-auto">
-        <StrapiBlocks :content="data.data.content" v-if="data.data.content" />
-      </div>
+    <img v-if="data?.data.hero_image" :src="imageUrl" :alt="data.data.hero_image.alternativeText || ''"
+      class="mx-auto mb-4 max-h-125 w-full object-cover" />
+    <section class="max-w-5xl mx-auto px-5 lg:px-8">
 
-      <ComunicadoPostComments :post-id="String(data.data.id)" />
-    </main>
-    <CMessage
-      v-else-if="status === 'error' && !data"
-      title="Comunicado no encontrado"
-      subtitle="Parece que el comunicado que buscas no existe o no está disponible."
-      back-to-label="Regresar a comunicados"
-      back-to-route="/portal/asociaciones/cics/comunicados"
-      variant="destructive"
-    />
+      <main v-if="data && status === 'success'">
+        <nav class="flex flex-wrap gap-x-3 print:hidden" v-if="data && status === 'success'">
+          <Button icon="icon-park-outline:arrow-left" variant="link" label="Regresar a comunicados"
+            class="text-muted-foreground mb-4 lg:mb-2" to="/portal/asociaciones/cics/comunicados" />
+          <Button icon="icon-park-twotone:share-one" variant="link" label="Compartir comunicado"
+            class="text-muted-foreground mb-4 lg:mb-2" @click="handleShareCurrentLink" />
+        </nav>
+        <ComunicadoPostReactions :post-id="String(data.data.id)" />
+        <h1 class="py-3 text-2xl lg:text-3xl font-semibold">
+          <Icon name="lucide:megaphone" class="mr-1.5 mb-1 inline-block" />
+          {{ data.data.title }}
+        </h1>
+        <p class="text-muted-foreground mb-4 text-sm" v-html="formatPublishedDate(data.data.publishedAt)" />
+
+        <div class="content-renderer max-w-full! mx-auto">
+          <StrapiBlocks :content="data.data.content" v-if="data.data.content" />
+        </div>
+
+        <ComunicadoPostComments :post-id="String(data.data.id)" />
+      </main>
+      <CMessage v-else-if="status === 'error' && !data" title="Comunicado no encontrado"
+        subtitle="Parece que el comunicado que buscas no existe o no está disponible."
+        back-to-label="Regresar a comunicados" back-to-route="/portal/asociaciones/cics/comunicados"
+        variant="destructive" />
+    </section>
+
+
   </main>
 </template>
 <script setup lang="ts">
@@ -61,27 +49,39 @@ const postId = route.params.postId as string
 
 const { data, status } = await useAsyncData<{ data: Comunicado }>(
   `cics-comunicados-${postId}`,
-  () => $strapi(`/comunicados/${postId}`)
+  () => $strapi(`/comunicados/${postId}?populate[hero_image]=true`)
 )
+
+const imageUrl = computed(() => {
+  if (data.value?.data?.hero_image) {
+    return `${import.meta.env.VITE_STRAPI_URL}${data.value.data.hero_image.url}`
+  }
+  return
+})
 
 const formatPublishedDate = (dateString: string) => {
   const date = new Date(dateString)
 
-  // Convert to GMT-6 by subtracting 6 hours in milliseconds
-  const gmt6Date = new Date(date.getTime() - 6 * 60 * 60 * 1000)
+  const dateFormatter = new Intl.DateTimeFormat('es-GT', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'America/Guatemala',
+  })
+  const timeFormatter = new Intl.DateTimeFormat('es-GT', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+    timeZone: 'America/Guatemala',
+  })
 
-  const year = gmt6Date.getUTCFullYear()
-  const month = String(gmt6Date.getUTCMonth() + 1).padStart(2, '0')
-  const day = String(gmt6Date.getUTCDate()).padStart(2, '0')
-  const hours = String(gmt6Date.getUTCHours()).padStart(2, '0')
-  const minutes = String(gmt6Date.getUTCMinutes()).padStart(2, '0')
+  const parts = dateFormatter.formatToParts(date)
+  const month = parts.find(part => part.type === 'month')?.value ?? ''
+  const day = parts.find(part => part.type === 'day')?.value ?? ''
+  const year = parts.find(part => part.type === 'year')?.value ?? ''
+  const time = timeFormatter.format(date)
 
-  return `
-  Publicado el 
-  <strong>${day}-${month}-${year}</strong>
-  a las 
-  <strong>${hours}:${minutes}</strong>
-  `
+  return `${month} ${day}, ${year} · ${time}`
 }
 
 useCustomPageTitle(
@@ -100,7 +100,8 @@ useSeoMeta({
 })
 
 definePageMeta({
-  title: 'Comunicado'
+  title: 'Comunicado',
+  extendScreen: true,
 })
 </script>
 <style scoped></style>

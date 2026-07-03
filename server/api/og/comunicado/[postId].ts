@@ -1,3 +1,5 @@
+import { buildOgImage, FALLBACK_CARD, OgCardData } from "~~/server/utils/og-renderer"
+
 export default defineEventHandler(async (event) => {
   const postId = getRouterParam(event, 'postId')
 
@@ -11,15 +13,12 @@ export default defineEventHandler(async (event) => {
     const { strapiUrl, strapiToken } = useRuntimeConfig()
     const targetUrl = `${strapiUrl}/api/comunicados/${postId}`
 
-    console.error(`[og/comunicado] DEBUG fetching url=${targetUrl} hasToken=${!!strapiToken}`)
-
     const res = await fetch(targetUrl, {
       headers: strapiToken ? { Authorization: `Bearer ${strapiToken}` } : {},
     })
 
     if (!res.ok) {
       const body = await res.text().catch(() => '<unreadable body>')
-      console.error(`[og/comunicado] Strapi returned ${res.status} ${res.statusText} for postId=${postId} url=${targetUrl} body=${body}`)
     } else {
       const json = await res.json() as { data: { title: string; description: string; publishedAt: string } }
       const { title, description, publishedAt } = json.data
@@ -36,7 +35,6 @@ export default defineEventHandler(async (event) => {
     }
   } catch (err) {
     const cause = err instanceof Error && 'cause' in err ? (err as { cause?: unknown }).cause : undefined
-    console.error(`[og/comunicado] Failed to fetch from Strapi for postId=${postId}:`, err instanceof Error ? err.stack || err.message : err, cause ? `cause=${String(cause)}` : '')
   }
 
   const png = await buildOgImage(card)
