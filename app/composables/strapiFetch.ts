@@ -10,5 +10,5 @@
  * const articles = await $strapi('/articles');
  */
 export const $strapi = $fetch.create({
-  baseURL: '/api/strapi',
+  baseURL: '/estudiantes/api/strapi',
 })
