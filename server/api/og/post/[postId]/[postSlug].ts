@@ -1,3 +1,5 @@
+import { buildOgImage, FALLBACK_CARD, OgCardData } from "~~/server/utils/og-renderer"
+
 export default defineEventHandler(async (event) => {
   const postId = getRouterParam(event, 'postId')
   const postSlug = getRouterParam(event, 'postSlug')

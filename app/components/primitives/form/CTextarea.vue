@@ -99,11 +99,11 @@ defineExpose({ focus })
           :rows="rows"
           :disabled="disabled"
           :class="cn(
-            'rounded-none border-0 bg-transparent! shadow-none resize-none focus-visible:ring-0 field-sizing-fixed min-h-0 text-sm',
+            'rounded-none border-0 bg-transparent! shadow-none resize-none focus-visible:ring-0 field-sizing-fixed min-h-0 text-sm px-0',
             label ? 'pt-5' : 'pt-2',
             showClear ? 'pr-7' : '',
-            !hasPrepend ? 'rounded-l-lg' : 'pl-2',
-            !hasAppend ? 'rounded-r-lg' : 'pr-2',
+            !hasPrepend ? 'rounded-l-lg pl-2' : '',
+            !hasAppend ? 'rounded-r-lg pr-2' : '',
             fillHeight ? 'h-full' : '',
             attrClass,
           )"
