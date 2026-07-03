@@ -28,7 +28,6 @@
               v-model="courseQuery"
               placeholder="Busca un curso por nombre o código..."
               prepend-icon="lucide:search"
-              :no-borders="false"
             />
           </div>
 
