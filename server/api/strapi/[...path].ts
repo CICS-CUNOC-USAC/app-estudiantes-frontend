@@ -8,9 +8,9 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'path is required' })
   }
 
-  const { strapiUrl, strapiToken, strapiPrefix } = useRuntimeConfig()
+  const { baseURL: appBaseUrl, strapiUrl, strapiToken, strapiPrefix } = useRuntimeConfig()
   const queryString = getRequestURL(event).search
-  const targetUrl = `${strapiUrl}/${strapiPrefix}/${path}${queryString}`
+  const targetUrl = `${appBaseUrl}/${strapiUrl}/${strapiPrefix}/${path}${queryString}`
 
   const res = await fetch(targetUrl, {
     headers: strapiToken ? { Authorization: `Bearer ${strapiToken}` } : {},
