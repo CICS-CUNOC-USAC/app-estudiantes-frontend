@@ -19,6 +19,10 @@ export interface Comunicado extends BaseContentItem {
     content:     BlocksContent;
     title:       string;
     description: string;
+    hero_image:  {
+      url: string;
+      alternativeText: string;
+    }
 }
 
 export interface StrapiPostReactionResponse {
