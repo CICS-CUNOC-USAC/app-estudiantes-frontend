@@ -54,8 +54,8 @@ export default {
   methods: {
     itemPromp(item: LineSchedule) {
       return {
-        title: item.courses[0].career_course.course.name,
-        subtitle: `Semestre: ${item.courses[0].career_course.semester}, Salon: ${item.courses[0].classroom.name}`
+        title: item.courses[0].pensum_course.course.name,
+        subtitle: `Semestre: ${item.courses[0].pensum_course.semester}, Salon: ${item.courses[0].classroom.name}`
       }
     }
   }

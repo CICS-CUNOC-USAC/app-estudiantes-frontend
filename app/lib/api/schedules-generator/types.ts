@@ -153,6 +153,20 @@ export interface CreateSalonInput {
 
 export interface UpdateSalonInput extends Partial<CreateSalonInput> {}
 
+// Dias-horario types
+export interface DiaHorarioDia {
+  id: number
+  nombre: string
+  relacion_id: number
+}
+
+export interface DiaHorario {
+  id: number
+  nombre: string
+  es_laboratorio: boolean
+  dias: DiaHorarioDia[]
+}
+
 // Laboratorios types
 export interface Laboratorio {
   id: number
@@ -174,3 +188,47 @@ export interface CreateLaboratorioInput {
 }
 
 export interface UpdateLaboratorioInput extends Partial<CreateLaboratorioInput> {}
+
+// Secciones types
+export interface Seccion {
+  id: number
+  curso_id: number
+  letra: string
+  num_estudiantes_seccion: number | null
+  salon_fijo_id: number | null
+  docente_fijo_id: number | null
+  periodo_fijo_inicio_id: number | null
+  dia_horario_fijo_id: number | null
+  sin_salon: boolean
+  created_at?: string
+  updated_at?: string
+}
+
+export interface CreateSeccionInput {
+  curso_id: number
+  letra: string
+  num_estudiantes_seccion?: number | null
+  salon_fijo_id?: number | null
+  docente_fijo_id?: number | null
+  periodo_fijo_inicio_id?: number | null
+  dia_horario_fijo_id?: number | null
+  sin_salon?: boolean
+}
+
+export interface UpdateSeccionInput extends Partial<CreateSeccionInput> {}
+
+export interface SeccionLaboratorio {
+  id: number
+  seccion_id: number
+  laboratorio_id: number
+  salon_fijo_id: number | null
+  docente_fijo_id: number | null
+  activo: boolean
+}
+
+export interface CreateSeccionLaboratorioInput {
+  seccion_id: number
+  laboratorio_id: number
+  salon_fijo_id?: number | null
+  docente_fijo_id?: number | null
+}

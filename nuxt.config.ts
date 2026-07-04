@@ -22,13 +22,15 @@ export default defineNuxtConfig({
     dirs: ['stores']
   },
   runtimeConfig: {
-    baseURL: process.env.BASE_URL || 'http://localhost:8000'
+    baseURL: process.env.BASE_URL || 'http://localhost:8000',
+    strapiUrl: process.env.STRAPI_URL || 'http://localhost:1337',
+    strapiToken: process.env.STRAPI_TOKEN || ''
   },
   app: {
     head: {
       link: [
         // favicon
-        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/x-icon', href: '/estudiantes/favicon.ico' },
       ],
       meta: [
         {
@@ -40,7 +42,14 @@ export default defineNuxtConfig({
           name: 'theme-color',
           content: '#262626',
           media: '(prefers-color-scheme: dark)'
-        }
+        },
+        { property: 'og:site_name', content: 'CICS App' },
+        { property: 'og:type', content: 'website' },
+        { property: 'og:title', content: 'CICS App | Portal' },
+        { property: 'og:description', content: 'Portal para los estudiantes de Ingeniería del Centro Universitario De Occidente' },
+        { property: 'og:image', content: 'https://cics.cunoc.edu.gt/estudiantes/og.png' },
+        { name: 'twitter:card', content: 'summary_large_image' },
+        { name: 'twitter:image', content: 'https://cics.cunoc.edu.gt/estudiantes/og.png' },
       ]
     }
   },
@@ -102,17 +111,6 @@ export default defineNuxtConfig({
   fonts: {
     defaults: {
       weights: [100, 200, 300, 400, 500, 600, 700, 800, 900]
-    },
-    families: [
-      { name: 'Geist', provider: 'google' },
-      { name: 'Stack Sans Notch', provider: 'google' },
-      { name: 'Stack Sans Headline', provider: 'google' },
-      { name: 'Stack Sans Text', provider: 'google' },
-      { name: 'Geist Mono', provider: 'google' },
-      { name: 'Bricolage Grotesque', provider: 'google' }
-    ],
-    experimental: {
-      processCSSVariables: true
     }
   }
 })

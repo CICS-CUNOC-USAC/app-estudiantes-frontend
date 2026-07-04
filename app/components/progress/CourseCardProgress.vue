@@ -5,14 +5,14 @@
     <div
       class="border-surface-950/75 mr-3 w-5 shrink-0 rounded-lg border"
       :style="{
-        backgroundColor: getFieldColor(course.career_course.field)
+        backgroundColor: getFieldColor(course.pensum_course.field)
       }"
     ></div>
     <div class="flex flex-1 items-center gap-4">
       <div class="w-9 shrink-0 text-sm">
         <span class="block">{{ course.course_code }}</span>
         <strong class="block"
-          >{{ course.career_course.course.credits }}
+          >{{ course.pensum_course.course.credits }}
           <span class="">Cr</span></strong
         >
       </div>
@@ -21,11 +21,11 @@
       <!--Divider-->
       <div class="w-auto flex-1" cols="8">
         <CourseDialog
-          :field="course.career_course.field"
+          :field="course.pensum_course.field"
           :course-code="course.course_code"
           :mandatory="false"
-          :course-name="course.career_course.course.name"
-          :career-code="course.career_course.career_code"
+          :course-name="course.pensum_course.course.name"
+          :pensum-id="course.pensum_course.pensum_id"
         />
       </div>
       <Checkbox
@@ -37,7 +37,7 @@
       />
     </div>
     <div
-      v-if="course.career_course.mandatory"
+      v-if="course.pensum_course.mandatory"
       class="bg-surface-950/75 dark:bg-cics-white absolute top-1 right-1 size-2.5 rounded-sm"
     ></div>
   </div>

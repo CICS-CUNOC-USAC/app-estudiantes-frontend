@@ -8,8 +8,15 @@
         icon="icon-park-outline:arrow-left"
         variant="link"
         label="Regresar a comunicados"
-        class="text-muted-color-emphasis mb-4 lg:mb-2"
+        class="text-muted-foreground mb-4 lg:mb-2"
         to="/portal/asociaciones/cics/comunicados"
+      />
+      <Button
+        icon="icon-park-twotone:share-one"
+        variant="link"
+        label="Compartir comunicado"
+        class="text-muted-foreground mb-4 lg:mb-2"
+        @click="handleShareCurrentLink"
       />
     </nav>
     <main v-if="data && status === 'success'">
@@ -47,6 +54,7 @@ import ComunicadoPostComments from '~/components/portal/comunicados/ComunicadoPo
 import ComunicadoPostReactions from '~/components/portal/comunicados/ComunicadoPostReactions.vue'
 import { type Comunicado } from '~/lib/api/strapi/types'
 import CMessage from '~/components/partials/CMessage.vue'
+import { handleShareCurrentLink } from '~/utils/consts/share-link'
 
 const route = useRoute()
 const postId = route.params.postId as string
@@ -81,6 +89,16 @@ useCustomPageTitle(
     ? `Comunicado - ${data.value?.data?.title}`
     : 'Comunicado'
 )
+
+const { origin } = useRequestURL()
+const basePath = '/estudiantes'
+useSeoMeta({
+  ogImage: `${origin}${basePath}/api/og/comunicado/${postId}`,
+  twitterImage: `${origin}${basePath}/api/og/comunicado/${postId}`,
+  twitterCard: 'summary_large_image',
+  ogDescription: data.value?.data?.description ?? 'Comunicado CICS',
+})
+
 definePageMeta({
   title: 'Comunicado'
 })

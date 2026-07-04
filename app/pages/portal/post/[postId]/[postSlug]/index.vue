@@ -16,6 +16,13 @@
         class="text-muted-color mb-4 lg:mb-2"
         to="/portal/general/publicaciones"
       />
+      <Button
+        icon="icon-park-twotone:share-one"
+        variant="link"
+        label="Compartir publicación"
+        class="text-muted-color mb-4 lg:mb-2"
+        @click="handleShareCurrentLink"
+      />
     </nav>
     <header class="mx-auto mt-2 max-w-3xl">
       <template v-if="status === 'pending'">
@@ -27,7 +34,7 @@
           data?.meta
         }}</small>
         <h1
-          class="text-color flex flex-col items-start gap-3 font-heading text-2xl font-bold"
+          class="text-color font-heading flex flex-col items-start gap-3 text-2xl font-bold"
         >
           {{ data?.title }}
 
@@ -74,6 +81,7 @@ import AttachmentsPopover from './(components)/AttachmentsPopover.vue'
 import ElementNotFound from '~/components/partials/ElementNotFound.vue'
 import CMessage from '~/components/partials/CMessage.vue'
 import { Skeleton } from '~/components/ui/skeleton'
+import { handleShareCurrentLink } from '~/utils/consts/share-link.js'
 
 const route = useRoute()
 const postId = route.params.postId
@@ -89,6 +97,17 @@ useCustomPageTitle(
     ? `${data.value.title} | Publicación`
     : 'Publicación oficial'
 )
+
+
+const { origin } = useRequestURL()
+const basePath = '/estudiantes'
+useSeoMeta({
+  ogImage: `${origin}${basePath}/api/og/post/${postId}/${postSlug}`,
+  twitterImage: `${origin}${basePath}/api/og/post/${postId}/${postSlug}`,
+  twitterCard: 'summary_large_image',
+  ogDescription: data.value?.meta ?? 'Publicación oficial CICS'
+})
+
 definePageMeta({
   title: 'Publicación oficial'
 })
@@ -98,8 +117,8 @@ definePageMeta({
 
 .official-post-content {
   @apply prose prose-base prose-neutral dark:prose-invert max-w-none;
-  
-  @apply font-sans prose-headings:font-heading;
+
+  @apply prose-headings:font-heading font-sans;
 
   /* @apply prose-a:border-b prose-a:border-primary-500 prose-a:font-medium prose-a:no-underline prose-a:transition prose-a:hover:border-b-2; */
 
@@ -146,7 +165,7 @@ definePageMeta({
   }
 
   iframe {
-    @apply min-h-96 min-w-full  shadow-md;
+    @apply min-h-96 min-w-full shadow-md;
   }
 }
 </style>

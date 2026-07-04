@@ -6,24 +6,28 @@ export const useScheduleStore = defineStore('schedule-courses', () => {
   const schedule = ref<Array<Course>>([
     {
       id: 0,
-      career_code: 0,
+      pensum_id: 0,
       course_code: '',
       section_id: 0,
       classroom_id: 0,
       periods: [],
-      career_course: {
+      pensum_course: {
         semester: 0,
         field: 0,
-        career: {
-          name: ''
+        pensum: {
+          career_code: 0,
+          career: {
+            code: 0,
+            name: ''
+          }
         },
         course: {
           name: ''
         },
         career_field: {
-          career_code: 36,
-          field_number: 3,
-          name: "",
+          career_code: 0,
+          field_number: 0,
+          name: '',
           common_field: false
         },
       },
