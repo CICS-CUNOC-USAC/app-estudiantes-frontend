@@ -5,8 +5,8 @@ export type Course = {
   credits: number
 }
 
-export type CareerCourse = {
-  career_code: number
+export type PensumCourse = {
+  pensum_id: number
   course_code: string
   semester: number
   field: number
@@ -22,7 +22,7 @@ export type CoursesSemesterProgress = {
   approved: boolean
   created_at: Date
   updated_at: Date
-  career_course: CareerCourse
+  pensum_course: PensumCourse
 }
 export type SemesterProgress = {
   id: number

@@ -1,0 +1,35 @@
+name: Deploy via Jenkins
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Trigger Jenkins Deployment on Push to Main in Remote Server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Trigger Nuxt frontend application deploy
+        id: jenkins
+        uses: appleboy/jenkins-action@v1
+        with:
+          url: ${{ secrets.JENKINS_URL }}
+          user: ${{ secrets.JENKINS_USER }}
+          token: ${{ secrets.JENKINS_TOKEN }}
+          job: "cics-app-frontend"
+          wait: true
+          poll_interval: 5s
+          timeout: 30m
+
+      - name: Successful Deploy
+        if: success()
+        run: echo "✅ Deploy job was successful"
+
+      - name: Failed Deploy
+        if: failure()
+        run: echo "❌ Deploy job failed"

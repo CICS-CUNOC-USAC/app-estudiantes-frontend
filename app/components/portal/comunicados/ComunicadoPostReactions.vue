@@ -1,10 +1,7 @@
 <template>
-  <section class="mb-4" v-if="reactionsData">
-    <p class="text-muted-color font-heading pb-2 text-sm font-light">
-      Reacciones:
-    </p>
+  <section class="py-2" v-if="reactionsData">
     <div
-      class="flex flex-wrap gap-2 transition-opacity"
+      class="flex flex-wrap gap-2 transition-opacity opacity-75 hover:opacity-100"
       :class="{
         'pointer-events-none opacity-60':
           status === 'pending' || asyncStatus === 'loading'

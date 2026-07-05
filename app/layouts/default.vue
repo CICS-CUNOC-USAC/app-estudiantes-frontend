@@ -137,9 +137,9 @@
       <div class="d-flex flex-column">
         <main
           id="appcont"
-          class="mx-auto min-h-screen print:pt-14"
+          class="mx-auto min-h-screen print:pt-14 "
           :class="{
-            'max-w-screen-xl px-5 pt-20 lg:px-8': !$route.meta.extendScreen
+            'max-w-screen-xl pt-20 px-5 lg:px-8': !$route.meta.extendScreen
           }"
         >
           <NuxtPage @search="toggleSearch({ leaveOpen: true })" keepalive />

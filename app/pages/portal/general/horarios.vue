@@ -159,7 +159,7 @@ import DisplayModeSelector from '~/components/schedule/DisplayModeSelector.vue'
 import HoursDialog from '~/components/schedule/HoursDIalog.vue'
 import { Icon } from '@iconify/vue'
 import CMessage from '~/components/partials/CMessage.vue'
-import type { Career } from '~/utils/types/career-courses'
+import type { Career } from '~/utils/types/pensum-courses'
 import type { Classroom, Course, Hour } from '~/utils/types/schedule-courses'
 import { Button } from '~/components/ui/button'
 import { ScrollArea, ScrollBar } from '~/components/ui/scroll-area'
@@ -199,26 +199,38 @@ const availableCareers = ref<Career[]>([])
 const scheduleType = ref<'calendar' | 'classroom'>('classroom')
 const coursesMode = ref<'lectures' | 'laboratories'>('lectures')
 
-const { data: classrooms, status: classroomStatus } =
-  useCustomLazyFetch<Array<Classroom>>(`/classrooms`)
+const classrooms = ref<Array<Classroom> | null>(null)
+const schedules = ref<Array<Course> | null>(null)
+const hours = ref<Array<Hour> | null>(null)
 
-const { data: schedules, status: scheduleStatus } = useCustomLazyFetch<
-  Array<Course>
->(() => `/schedules/${coursesMode.value}`, {
-  query: {
-    selection: selectionSchedules,
-    career: selectionCareer
-  }
+async function fetchScheduleData() {
+  const query: Record<string, string | undefined> = {}
+  if (selectionSchedules.value) query.selection = selectionSchedules.value
+  if (selectionCareer.value !== undefined) query.career = String(selectionCareer.value)
+
+  const hoursQuery: Record<string, string | undefined> = {}
+  if (selectionSchedules.value) hoursQuery.selection = selectionSchedules.value
+
+  const [classroomsRes, schedulesRes, hoursRes] = await Promise.all([
+    $api<Array<Classroom>>('/classrooms').catch(() => null),
+    $api<Array<Course>>(`/schedules/${coursesMode.value}`, { query }).catch(() => null),
+    $api<Array<Hour>>('/hours', { query: hoursQuery }).catch(() => null),
+  ])
+
+  classrooms.value = classroomsRes
+  schedules.value = schedulesRes
+  hours.value = hoursRes
+}
+
+watch([coursesMode, selectionSchedules, selectionCareer], () => {
+  fetchScheduleData()
 })
 
-const { data: hours, status: hourStatus } = useCustomLazyFetch<Array<Hour>>(
-  () => `/hours`,
-  {
-    query: {
-      selection: selectionSchedules
-    }
-  }
-)
+onMounted(async () => {
+  fetchScheduleData()
+  $api<Hour[]>('/hours').then((res) => { availableHours.value = res }).catch(() => {})
+  $api<Career[]>('/careers').then((res) => { availableCareers.value = res }).catch(() => {})
+})
 
 function searchScheduleCourse(courseName: string) {
   resetClassesSchedule()
@@ -237,7 +249,7 @@ function searchScheduleCourse(courseName: string) {
   }
 
   foundCourses.value = schedules.value.filter((schedule) =>
-    schedule.career_course.course.name.toLowerCase().includes(lowerCaseName)
+    schedule.pensum_course.course.name.toLowerCase().includes(lowerCaseName)
   )
 
   if (!foundCourses.value.length) {
@@ -377,12 +389,6 @@ definePageMeta({
   title: 'Horarios'
 })
 const search = ref('')
-await $api<Hour[]>('/hours').then((response) => {
-  availableHours.value = response
-})
-await $api<Career[]>('/careers').then((response) => {
-  availableCareers.value = response
-})
 </script>
 <style scoped>
 @reference '~/assets/css/main.css';
