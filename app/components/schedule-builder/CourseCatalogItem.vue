@@ -21,6 +21,7 @@ interface HorarioDetalle {
 const props = defineProps<{
   detalle: HorarioDetalle
   added: boolean
+  pending?: boolean
 }>()
 
 const emit = defineEmits<{
@@ -30,6 +31,7 @@ const emit = defineEmits<{
 
 function onDragStart(e: DragEvent) {
   if (props.added) return
+  if (e.dataTransfer) e.dataTransfer.effectAllowed = 'copy'
   e.dataTransfer?.setData('detalleId', props.detalle.detalle_id.toString())
   e.dataTransfer?.setData('detalle', JSON.stringify(props.detalle))
 }
@@ -76,6 +78,12 @@ function formatHour(h: string) {
             class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-cyan-200 dark:bg-cyan-900 text-cyan-900 dark:text-cyan-100"
           >
             Lab
+          </span>
+          <span
+            v-if="pending && !added"
+            class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-cics-primary text-white"
+          >
+            Pendiente
           </span>
         </div>
 

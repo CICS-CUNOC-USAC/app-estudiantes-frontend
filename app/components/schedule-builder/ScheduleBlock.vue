@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 interface HorarioDetalle {
   detalle_id: number
@@ -32,6 +32,24 @@ const emit = defineEmits<{
 }>()
 
 const dragging = ref(false)
+
+// Codificación por color por semestre (paleta fija, con dark:)
+const SEMESTRE_COLORS = [
+  'bg-orange-500 dark:bg-orange-400',
+  'bg-sky-500 dark:bg-sky-400',
+  'bg-emerald-500 dark:bg-emerald-400',
+  'bg-violet-500 dark:bg-violet-400',
+  'bg-rose-500 dark:bg-rose-400',
+  'bg-amber-500 dark:bg-amber-400',
+  'bg-teal-500 dark:bg-teal-400',
+  'bg-fuchsia-500 dark:bg-fuchsia-400',
+]
+
+const semestreColor = computed(() => {
+  const s = Number(props.detalle.semestre)
+  if (!Number.isFinite(s) || s <= 0) return 'bg-neutral-400 dark:bg-neutral-500'
+  return SEMESTRE_COLORS[(s - 1) % SEMESTRE_COLORS.length]
+})
 
 function onDragStart(e: DragEvent) {
   dragging.value = true
@@ -69,9 +87,14 @@ function onClick() {
       isConflict
         ? 'border-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.5),2px_2px_0_0_rgba(0,0,0,1)] animate-pulse'
         : '',
-      dragging ? 'opacity-40' : '',
+      dragging ? 'opacity-40 rotate-1 scale-95' : '',
     ]"
   >
+    <!-- Barra lateral de color por semestre -->
+    <span
+      class="absolute left-0 top-0 bottom-0 w-1 rounded-l-[0.45rem]"
+      :class="semestreColor"
+    />
     <!-- X Remove button -->
     <button
       v-if="showRemove"
@@ -82,8 +105,11 @@ function onClick() {
     </button>
 
     <!-- Row 1: course name + section badge -->
-    <div class="flex items-start justify-between gap-1">
-      <span class="text-[11px] font-black leading-tight text-foreground flex-1 min-w-0 truncate">
+    <div class="flex items-start justify-between gap-1 pl-1">
+      <span
+        class="text-[11px] font-black leading-tight text-foreground flex-1 min-w-0 truncate"
+        :title="String(detalle.curso_nombre ?? '')"
+      >
         {{ detalle.curso_nombre ?? '—' }}
       </span>
       <span
@@ -95,12 +121,15 @@ function onClick() {
     </div>
 
     <!-- Row 2: room · teacher -->
-    <div class="text-[9px] opacity-70 mt-0.5 text-foreground truncate">
+    <div
+      class="text-[9px] text-muted-foreground mt-0.5 truncate pl-1"
+      :title="[detalle.salon_nombre, detalle.docente_nombre].filter(Boolean).join(' · ')"
+    >
       {{ [detalle.salon_nombre, detalle.docente_nombre].filter(Boolean).join(' · ') || '—' }}
     </div>
 
     <!-- Row 3: type · semester -->
-    <div class="text-[8px] uppercase font-bold tracking-wide opacity-60 text-foreground mt-0.5">
+    <div class="text-[8px] uppercase font-bold tracking-wide opacity-60 text-foreground mt-0.5 pl-1">
       {{ detalle.es_laboratorio ? 'Lab' : 'Teórica' }}
       <span v-if="detalle.semestre"> · S{{ detalle.semestre }}</span>
     </div>

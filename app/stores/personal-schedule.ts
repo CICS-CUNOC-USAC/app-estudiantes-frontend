@@ -12,7 +12,7 @@ import { fetchPeriods, type Period } from '~/lib/api/schedules-generator/periods
 import { fetchCarreras } from '~/lib/api/schedules-generator/carreras'
 import { getPersonal, savePersonal } from '~/lib/api/schedules-generator/horarios-personales'
 import { resolveCarreraId } from '~/lib/api/schedules-generator/career-map'
-import { careerProgressApi } from '~/lib/api/dashboard/career-progress'
+import { careerProgressApi, type ProgressResponse } from '~/lib/api/dashboard/career-progress'
 import { useRegularAuthStore } from '~/stores/regular-auth'
 
 export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
@@ -33,6 +33,7 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
   })
   const seleccion = ref<HorarioPersonalDetalle[]>([])
   const periodos = ref<Period[]>([])
+  const progresoAcademico = ref<ProgressResponse | null>(null)
   const preferencias = ref<{ jornada: 'manana' | 'tarde' | 'ambas' }>({ jornada: 'ambas' })
   const loading = ref(false)
   const loadingSave = ref(false)
@@ -78,6 +79,8 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
         fetchCarreras(),
         careerProgressApi.fetchProgress(),
       ])
+      // Se reutiliza la misma respuesta para el panel de avance (evita fetch doble)
+      progresoAcademico.value = progressResponse
 
       const carreraId = resolveCarreraId(carreras as Carrera[], user.career.code)
 
@@ -126,6 +129,54 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
       if (detalle.es_laboratorio) return s.seccion_lab_id !== detalle.seccion_lab_id
       return s.seccion_id !== detalle.seccion_id
     })
+  }
+
+  // Cambiar de sección: en el horario personal "mover" un curso = elegir otra sección
+  const cambiarSeccion = (actual: HorarioDetalle, nueva: HorarioDetalle) => {
+    quitar(actual)
+    agregar(nueva)
+  }
+
+  // Otras secciones del mismo curso y tipo (teórica/lab), distintas a la actual
+  const seccionesAlternativas = (d: HorarioDetalle): HorarioDetalle[] => {
+    const vistos = new Set<string>()
+    return catalogo.value.filter((c) => {
+      if (c.curso_codigo !== d.curso_codigo) return false
+      if (c.es_laboratorio !== d.es_laboratorio) return false
+      if (c.es_laboratorio ? c.seccion_lab_id === d.seccion_lab_id : c.seccion_id === d.seccion_id) return false
+      const key = c.es_laboratorio ? `lab-${c.seccion_lab_id}` : `sec-${c.seccion_id}`
+      if (vistos.has(key)) return false
+      vistos.add(key)
+      return true
+    })
+  }
+
+  // ¿Esta sección choca con lo ya colocado (excluyendo el bloque que reemplazaría)?
+  const chocaConSeleccion = (candidato: HorarioDetalle, excluir?: HorarioDetalle): boolean => {
+    return bloquesColocados.value.some((b) => {
+      if (excluir) {
+        const mismo = excluir.es_laboratorio
+          ? b.seccion_lab_id === excluir.seccion_lab_id
+          : (!b.es_laboratorio && b.seccion_id === excluir.seccion_id)
+        if (mismo) return false
+      }
+      if (b.dia_horario_id !== candidato.dia_horario_id) return false
+      return b.periodo_inicio_id <= candidato.periodo_fin_id
+        && candidato.periodo_inicio_id <= b.periodo_fin_id
+    })
+  }
+
+  // Copia el horario propuesto de la carrera+semestre del estudiante a la selección
+  const duplicarPropuesto = () => {
+    seleccion.value = []
+    const base = catalogoDeMiSemestre.value
+    const vistos = new Set<string>()
+    for (const d of base) {
+      const key = d.es_laboratorio ? `lab-${d.seccion_lab_id}` : `sec-${d.seccion_id}`
+      if (vistos.has(key)) continue
+      vistos.add(key)
+      agregar(d)
+    }
   }
 
   const estaSeleccionado = (detalle: HorarioDetalle): boolean => {
@@ -285,6 +336,118 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     return descripciones
   })
 
+  // detalle_id en conflicto para pintarlos en la grilla del estudiante
+  const conflictoIds = computed<number[]>(() => {
+    const ids = new Set<number>()
+    const bloques = bloquesColocados.value
+    for (let i = 0; i < bloques.length; i++) {
+      for (let j = i + 1; j < bloques.length; j++) {
+        const a = bloques[i], b = bloques[j]
+        if (a.dia_horario_id !== b.dia_horario_id) continue
+        if (a.periodo_inicio_id <= b.periodo_fin_id && b.periodo_inicio_id <= a.periodo_fin_id) {
+          ids.add(a.detalle_id)
+          ids.add(b.detalle_id)
+        }
+      }
+    }
+    return [...ids]
+  })
+
+  // Map curso_codigo → créditos, derivado del progreso oficial
+  const creditosPorCurso = computed<Map<string, number>>(() => {
+    const map = new Map<string, number>()
+    const p = progresoAcademico.value
+    if (!p) return map
+    for (const sem of p.progress.semester_progress) {
+      for (const c of sem.courses_semester_progress) {
+        map.set(c.career_course.course.code, c.career_course.course.credits)
+      }
+    }
+    return map
+  })
+
+  // Créditos de los cursos actualmente en el horario (dedup por curso_codigo)
+  const creditosEnHorario = computed<number>(() => {
+    const vistos = new Set<string>()
+    let total = 0
+    for (const d of bloquesColocados.value) {
+      if (d.es_laboratorio) continue
+      if (vistos.has(d.curso_codigo)) continue
+      vistos.add(d.curso_codigo)
+      total += creditosPorCurso.value.get(d.curso_codigo) ?? 0
+    }
+    return total
+  })
+
+  const statsAcademicas = computed(() => {
+    const p = progresoAcademico.value
+    if (!p) return null
+    const semestres = p.progress.semester_progress
+    const cursosAprobados = semestres.reduce(
+      (n, s) => n + s.courses_semester_progress.filter(c => c.approved).length, 0)
+    const cursosTotales = semestres.reduce(
+      (n, s) => n + s.courses_semester_progress.length, 0)
+    const creditosGanados = p.current_credits.total_credits
+    const creditosCarrera = p.mandatory_credits + p.not_mandatory_credits
+    const pctAvance = creditosCarrera > 0
+      ? Math.round((creditosGanados / creditosCarrera) * 100)
+      : 0
+    return {
+      cursosAprobados,
+      cursosTotales,
+      creditosGanados,
+      creditosCarrera,
+      creditosDisponibles: p.available_credits,
+      pctAvance,
+    }
+  })
+
+  // Cursos pendientes del semestre que aún no están en el horario
+  const cursosPendientesFaltantes = computed<string[]>(() => {
+    const enHorario = new Set(bloquesColocados.value.map(d => d.curso_codigo))
+    return estudiante.value.cursos_pendientes.filter(c => !enHorario.has(c))
+  })
+
+  const horarioCompleto = computed<boolean>(() =>
+    cursosPendientesFaltantes.value.length === 0
+    && bloquesColocados.value.length > 0
+    && conflictoIds.value.length === 0,
+  )
+
+  // ¿Supera los créditos disponibles del ciclo?
+  const excedeCreditos = computed<boolean>(() => {
+    const s = statsAcademicas.value
+    if (!s) return false
+    return creditosEnHorario.value > s.creditosDisponibles
+  })
+
+  // Huecos entre clases y jornada predominante, derivado de bloques + periodos
+  const resumenJornada = computed(() => {
+    const bloques = bloquesColocados.value
+    if (!bloques.length) return { horasLibres: 0, jornada: null as 'mañana' | 'tarde' | 'mixta' | null }
+
+    // Huecos: por cada patrón de días, periodos vacíos entre el primero y el último ocupado
+    let horasLibres = 0
+    for (const dia of [1, 2]) {
+      const delDia = bloques.filter(b => b.dia_horario_id === dia)
+      if (delDia.length < 2) continue
+      const ocupados = new Set<number>()
+      for (const b of delDia) {
+        for (let p = b.periodo_inicio_id; p <= b.periodo_fin_id; p++) ocupados.add(p)
+      }
+      const min = Math.min(...delDia.map(b => b.periodo_inicio_id))
+      const max = Math.max(...delDia.map(b => b.periodo_fin_id))
+      for (let p = min; p <= max; p++) {
+        if (!ocupados.has(p)) horasLibres++
+      }
+    }
+
+    const manana = bloques.filter(b => b.es_manana).length
+    const tarde = bloques.filter(b => b.es_tarde).length
+    const jornada = manana > tarde ? 'mañana' as const : tarde > manana ? 'tarde' as const : 'mixta' as const
+    return { horasLibres, jornada }
+  })
+
   const resumen = computed(() => {
     const cursos = new Set(bloquesColocados.value.map(d => d.curso_id)).size
     const periodoSlots = new Set(
@@ -303,10 +466,15 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     loading,
     loadingSave,
     error,
+    progresoAcademico,
     cargarPropuesto,
     cargarContextoEstudiante,
     agregar,
     quitar,
+    cambiarSeccion,
+    seccionesAlternativas,
+    chocaConSeleccion,
+    duplicarPropuesto,
     estaSeleccionado,
     autoArmar,
     guardar,
@@ -314,6 +482,14 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     catalogoDeMiSemestre,
     bloquesColocados,
     conflictosLocales,
+    conflictoIds,
+    creditosPorCurso,
+    creditosEnHorario,
+    statsAcademicas,
+    cursosPendientesFaltantes,
+    horarioCompleto,
+    excedeCreditos,
+    resumenJornada,
     resumen,
   }
 })

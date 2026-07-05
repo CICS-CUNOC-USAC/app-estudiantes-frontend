@@ -236,3 +236,54 @@ export interface HorarioPersonal {
   detalles: HorarioPersonalDetalle[]
   actualizado: string | null
 }
+
+// ─── Algoritmo Genético ────────────────────────────────────────────────────
+
+export interface AlgoritmoConfig {
+  id?: number
+  tamano_poblacion: number
+  max_generaciones: number
+  aptitud_objetivo: number | null
+  tasa_mutacion: number
+  metodo_seleccion: 'torneo' | 'ruleta'
+  metodo_cruce: 'un_punto' | 'multipunto'
+  metodo_mutacion: 'intercambio' | 'reisercion'
+  duracion_periodo: number
+  hora_inicio_manana: string
+  hora_fin_manana: string
+  hora_inicio_tarde: string
+  hora_fin_tarde: string
+}
+
+export interface AlgoritmoEstado {
+  corriendo: boolean
+  generacion: number
+  mejorAptitud: number | null
+  conflictos: number | null
+  horarioId: number | null
+  error: string | null
+}
+
+export interface HistorialRow {
+  generacion: number
+  mejor_aptitud: number
+  conflictos: number
+}
+
+export type WsEvent =
+  | { type: 'connected';  payload: { message: string } }
+  | { type: 'estado';     payload: AlgoritmoEstado }
+  | { type: 'progreso';   payload: { generacion: number; mejorAptitud: number; conflictos: number } }
+  | { type: 'finalizado'; payload: { horarioId: number; stats: unknown } }
+  | { type: 'error';      payload: { message: string } }
+
+export interface EjecutarBody {
+  nombre?: string
+  tamano_poblacion?: number
+  max_generaciones?: number
+  metodo_seleccion?: AlgoritmoConfig['metodo_seleccion']
+  metodo_cruce?: AlgoritmoConfig['metodo_cruce']
+  metodo_mutacion?: AlgoritmoConfig['metodo_mutacion']
+  tasa_mutacion?: number
+  aptitud_objetivo?: number
+}

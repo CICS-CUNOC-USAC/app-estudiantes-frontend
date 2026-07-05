@@ -49,7 +49,7 @@ export const editarDetalle = async (
       `/api/horarios/${id}/detalle/${detalleId}`,
       { method: 'PUT', body }
     )
-    toast.success('Bloque actualizado')
+    // El feedback (toast/advertencias) lo decide la página que llama
     return result
   } catch (error: any) {
     toast.error('Error al actualizar bloque', {

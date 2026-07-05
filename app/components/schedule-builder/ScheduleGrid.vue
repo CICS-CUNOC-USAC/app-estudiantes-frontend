@@ -28,13 +28,17 @@ const props = defineProps<{
   editable: boolean
   readonly: boolean
   catalogMode?: boolean
+  conflictIds?: number[]
+  clickable?: boolean
 }>()
 
 const emit = defineEmits<{
-  'drop': [payload: { detalleId: number; nuevoPeriodoId: number }]
+  'drop': [payload: { detalleId: number; nuevoPeriodoId: number; colIndex: number }]
   'click-block': [detalle: HorarioDetalle]
   'remove-block': [detalle: HorarioDetalle]
 }>()
+
+const conflictSet = computed(() => new Set(props.conflictIds ?? []))
 
 // dia_horario_id 1 = L/Mi/V (columns 1, 3, 5), dia_horario_id 2 = Ma/J (columns 2, 4)
 const DIA_COLS: Record<number, number[]> = {
@@ -100,6 +104,7 @@ const maxPeriodId = computed<number>(() =>
 // HTML5 drag & drop handlers
 function onDragOver(e: DragEvent, colIndex: number, periodId: number) {
   e.preventDefault()
+  if (props.catalogMode && e.dataTransfer) e.dataTransfer.dropEffect = 'copy'
   dragOverCell.value = `${colIndex}-${periodId}`
 }
 
@@ -129,7 +134,7 @@ function onDrop(e: DragEvent, colIndex: number, period: Period) {
   }
   // Catalog items (not yet in grid): emit without span validation
 
-  emit('drop', { detalleId, nuevoPeriodoId: period.id })
+  emit('drop', { detalleId, nuevoPeriodoId: period.id, colIndex })
 }
 
 function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
@@ -142,7 +147,7 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
     <div class="min-w-205">
 
       <!-- Header row: empty time column + 5 day headers -->
-      <div class="grid grid-cols-[56px_repeat(5,minmax(130px,1fr))] xl:grid-cols-[64px_repeat(5,minmax(160px,1fr))] gap-1.5 mb-1.5">
+      <div class="grid grid-cols-[56px_repeat(5,minmax(130px,1fr))] xl:grid-cols-[64px_repeat(5,minmax(160px,1fr))] gap-1.5 mb-1.5 sticky top-0 z-10 bg-card py-1">
         <!-- Empty corner above time column -->
         <div />
         <!-- Day headers -->
@@ -161,9 +166,18 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
           v-for="period in periodos"
           :key="period.id"
         >
+          <!-- Separador Mañana / Tarde -->
+          <div
+            v-if="isFirstAfternoon(period)"
+            class="flex items-center gap-2 mt-3 mb-1.5 pl-14 xl:pl-16"
+          >
+            <span class="text-[9px] font-black uppercase tracking-widest text-muted-foreground">Tarde</span>
+            <span class="flex-1 border-t-2 border-dashed border-border" />
+          </div>
+
           <div
             class="grid grid-cols-[56px_repeat(5,minmax(130px,1fr))] xl:grid-cols-[64px_repeat(5,minmax(160px,1fr))] gap-1.5"
-            :class="{ 'mt-3': isFirstAfternoon(period) }"
+            :class="{ 'bg-muted/30 rounded-lg': period.es_tarde }"
           >
             <!-- Time column -->
             <div class="text-[9px] xl:text-[10px] font-bold text-muted-foreground text-right pr-1 xl:pr-1.5 pt-1 whitespace-pre-line leading-tight">{{ period.hora_inicio.slice(0,5) }}&#10;{{ period.hora_fin.slice(0,5) }}</div>
@@ -183,9 +197,9 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
                   :editable="catalogMode ? false : editable"
                   :readonly="readonly"
                   :show-remove="catalogMode ?? false"
-                  :is-conflict="false"
+                  :is-conflict="conflictSet.has(getDetalle(colIndex, period.id)!.detalle_id)"
                   :style="{ minHeight: blockHeight(getDetalle(colIndex, period.id)!) + 'px' }"
-                  @click="!catalogMode && emit('click-block', getDetalle(colIndex, period.id)!)"
+                  @click="(!catalogMode || clickable) && emit('click-block', getDetalle(colIndex, period.id)!)"
                   @remove="emit('remove-block', getDetalle(colIndex, period.id)!)"
                   @dragstart="!catalogMode && onBlockDragStart($event, getDetalle(colIndex, period.id)!)"
                 />
