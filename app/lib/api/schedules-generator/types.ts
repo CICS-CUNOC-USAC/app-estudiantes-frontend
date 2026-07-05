@@ -129,10 +129,11 @@ export interface BulkActionResponse {
   laboratorios_afectados: number
 }
 
+// Salones types
 export interface Salon {
   id: number
   nombre: string
-  capacidad: number
+  capacidad: number | null
   es_laboratorio: boolean
   lab_habilitado_teorico: boolean
   disponible_manana: boolean
@@ -140,6 +141,19 @@ export interface Salon {
   activo: boolean
 }
 
+export interface CreateSalonInput {
+  nombre: string
+  capacidad?: number | null
+  es_laboratorio: boolean
+  lab_habilitado_teorico: boolean
+  disponible_manana: boolean
+  disponible_tarde: boolean
+  activo: boolean
+}
+
+export interface UpdateSalonInput extends Partial<CreateSalonInput> {}
+
+// Dias-horario types
 export interface DiaHorarioDia {
   id: number
   nombre: string
@@ -153,16 +167,29 @@ export interface DiaHorario {
   dias: DiaHorarioDia[]
 }
 
+// Laboratorios types
 export interface Laboratorio {
   id: number
   curso_id: number
-  nombre: string
+  nombre: string | null
   num_periodos: number
   puede_manana: boolean
   puede_tarde: boolean
   activo: boolean
 }
 
+export interface CreateLaboratorioInput {
+  curso_id: number
+  nombre?: string | null
+  num_periodos?: number
+  puede_manana?: boolean
+  puede_tarde?: boolean
+  activo?: boolean
+}
+
+export interface UpdateLaboratorioInput extends Partial<CreateLaboratorioInput> {}
+
+// Secciones types
 export interface Seccion {
   id: number
   curso_id: number
