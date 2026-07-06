@@ -34,7 +34,7 @@
     >
       <div v-if="data" class="grid grid-cols-1 gap-4 lg:grid-cols-3 pb-6">
         <CCardAlt
-          v-for="post in data.data"
+          v-for="post in communicados"
           :to="`/portal/asociaciones/cics/comunicados/${post.documentId}`"
           :title="post.title"
           header-icon="lucide:text"
@@ -42,6 +42,7 @@
           class="hover:bg-primary-100 dark:hover:bg-primary-900/50"
           interactive-inverse
           :key="post.documentId"
+          :image="post.imageUrl"
         >
         </CCardAlt>
       </div>
@@ -69,10 +70,16 @@ const { data, status } = await useAsyncData<Strapi5ResponseMany<Comunicado>>(
       sort: ['publishedAt:desc'],
       pagination: {
         pageSize: 10
-      }
+      },
+      'populate[hero_image]': true
     }
   })
 )
+
+const communicados = computed(() => data.value?.data.map((item) => ({
+  ...item,
+  imageUrl: item.hero_image ? `${import.meta.env.VITE_STRAPI_URL}${item.hero_image.url}` : undefined
+})) ?? [])
 
 const page = ref(1)
 const message = ref('')

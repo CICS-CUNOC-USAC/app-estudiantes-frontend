@@ -28,6 +28,7 @@ export interface OgCardData {
   title: string
   subtitle: string
   badge: 'Comunicado' | 'Publicación Oficial' | 'Portal'
+  imageUrl?: string
 }
 
 export const FALLBACK_CARD: OgCardData = {
@@ -40,8 +41,13 @@ function truncate(str: string, max: number) {
   return str.length > max ? str.slice(0, max) + '…' : str
 }
 
-function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
+function OgCard({ title: rawTitle, subtitle, badge, imageUrl }: OgCardData) {
   const title = truncate(rawTitle, 80)
+  const hasImage = Boolean(imageUrl)
+
+  const textColor = hasImage ? COLORS.white : COLORS.dark
+  const mutedColor = hasImage ? 'rgba(255,255,255,0.78)' : COLORS.muted
+  const borderColor = hasImage ? 'rgba(255,255,255,0.25)' : COLORS.border
 
   return (
     <div
@@ -50,13 +56,43 @@ function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
         flexDirection: 'column',
         width: '1200px',
         height: '630px',
-        backgroundColor: COLORS.bg,
+        backgroundColor: hasImage ? COLORS.dark : COLORS.bg,
         fontFamily: 'Inter',
         padding: '64px',
         position: 'relative',
         overflow: 'hidden'
       }}
     >
+      {hasImage && (
+        <img
+          src={imageUrl}
+          width={1200}
+          height={630}
+          style={{
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            width: '1200px',
+            height: '630px',
+            objectFit: 'cover'
+          }}
+        />
+      )}
+
+      {hasImage && (
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            top: '0',
+            left: '0',
+            right: '0',
+            bottom: '0',
+            backgroundImage: 'linear-gradient(180deg, rgba(15,13,11,0.55) 0%, rgba(15,13,11,0.62) 35%, rgba(15,13,11,0.97) 100%)'
+          }}
+        />
+      )}
+
       {/* Top orange accent bar */}
       <div
         style={{
@@ -71,19 +107,21 @@ function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
       />
 
       {/* Decorative faint circle bottom-right */}
-      <div
-        style={{
-          display: 'flex',
-          position: 'absolute',
-          bottom: '-80px',
-          right: '-80px',
-          width: '340px',
-          height: '340px',
-          borderRadius: '50%',
-          backgroundColor: COLORS.primary,
-          opacity: '0.07'
-        }}
-      />
+      {!hasImage && (
+        <div
+          style={{
+            display: 'flex',
+            position: 'absolute',
+            bottom: '-80px',
+            right: '-80px',
+            width: '340px',
+            height: '340px',
+            borderRadius: '50%',
+            backgroundColor: COLORS.primary,
+            opacity: '0.07'
+          }}
+        />
+      )}
 
       {/* Badge pill */}
       <div style={{ display: 'flex', marginBottom: '28px', marginTop: '20px' }}>
@@ -109,7 +147,7 @@ function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
           display: 'flex',
           fontSize: '52px',
           fontWeight: 700,
-          color: COLORS.dark,
+          color: textColor,
           lineHeight: '1.15',
           marginBottom: '24px',
           maxWidth: '1050px'
@@ -124,7 +162,7 @@ function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
           display: 'flex',
           fontSize: '24px',
           fontWeight: 400,
-          color: COLORS.muted,
+          color: mutedColor,
           flex: '1'
         }}
       >
@@ -139,7 +177,7 @@ function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
           justifyContent: 'space-between',
           alignItems: 'center',
           paddingTop: '24px',
-          borderTop: `2px solid ${COLORS.border}`
+          borderTop: `2px solid ${borderColor}`
         }}
       >
         {/* Left: dot + brand name */}
@@ -165,7 +203,7 @@ function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
               display: 'flex',
               fontSize: '22px',
               fontWeight: 700,
-              color: COLORS.dark
+              color: textColor
             }}
           >
             CICS App
@@ -178,7 +216,7 @@ function OgCard({ title: rawTitle, subtitle, badge }: OgCardData) {
             display: 'flex',
             fontSize: '18px',
             fontWeight: 400,
-            color: COLORS.muted
+            color: mutedColor
           }}
         >
           cics.cunoc.edu.gt
