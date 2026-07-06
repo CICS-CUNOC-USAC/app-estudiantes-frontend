@@ -2,33 +2,31 @@
   <component :is="to ? NuxtLink : 'div'" :to unstyled class="flex h-full flex-col overflow-hidden rounded-lg border border-surface-950/75 text-color duration-300 ease-in-out dark:bg-surface-800
       -translate-x-0.5 -translate-y-0.5 shadow-[2px_2px_0_0_rgba(0,0,0,1)]
     " :class="{
-      'p-2': !noSpacing,
+      'p-1.5': !noSpacing,
       'cursor-pointer': to,
-      [colorCareer[career_id]]: true
+      [colorCareer[career_id] || 'bg-gray-200']: true
     }">
     <slot name="career">
-      <h3 v-if="career" class="mb-2 text-xs font-semibold transition-colors duration-300 ease-in-out">
+      <h3 v-if="career" class="mb-0.5 truncate text-[10px] font-semibold leading-tight transition-colors duration-300 ease-in-out">
         {{ semesterToRoman(semester || 1) }} &bull; {{ career }}
       </h3>
     </slot>
     <slot name="content">
-      <p class="mb-2 text-sm font-medium flex-1 leading-tight">
+      <p class="mb-0.5 text-[11px] font-medium flex-1 leading-snug">
         {{ curso }}
       </p>
-      <div class="grid grid-cols-2">
-        <span class="block text-xs tracking-tight justify-self-start">
-          <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
-          Seccion: {{ seccion }}
+      <div class="mt-auto flex justify-between">
+        <span class="text-[10px] tracking-tight">
+          {{ seccion }}
         </span>
-        <span class="block text-xs tracking-tight justify-self-end">
-          <Icon v-if="smallIcon" :name="smallIcon" class="mr-1 inline-block !text-sm" />
-          {{ transformToWeekdays(days || []) }}
+        <span class="text-[10px] tracking-tight">
+          {{ abbreviateWeekdays(days || []) }}
         </span>
       </div>
     </slot>
     <slot name="footer">
       <div class="dark:min-h-1 dark:mt-1 light:hidden dark:block" :class="{
-        [colorCareer[career_id]]: true
+        [colorCareer[career_id] || 'bg-gray-200']: true
       }"></div>
     </slot>
   </component>
@@ -42,7 +40,7 @@ defineProps<{
   to?: string
   seccion?: string
   semester?: number
-  days?: Array<number>
+  days?: Array<string>
   smallIcon?: string
   noSpacing?: boolean
 }>()
@@ -56,23 +54,12 @@ function semesterToRoman(semesterNum: number) {
   return romanNumerals[semesterNum - 1];
 }
 
-function transformToWeekdays(numbers: number[]): string {
-  const weekdays: { [key: number]: string } = {
-    1: 'L',   // Lunes
-    2: 'M',   // Martes
-    3: 'Mi',  // Miércoles
-    4: 'J',   // Jueves
-    5: 'V',   // Viernes
-    6: 'S',   // Sábado
-    7: 'D'    // Domingo
+function abbreviateWeekdays(names: string[]): string {
+  const abbrev: Record<string, string> = {
+    'Lunes': 'L', 'Martes': 'M', 'Miercoles': 'Mi', 'Miércoles': 'Mi',
+    'Jueves': 'J', 'Viernes': 'V', 'Sabado': 'S', 'Sábado': 'S', 'Domingo': 'D',
   };
-
-  return numbers.map((num) => {
-    if (num < 1 || num > 7) {
-      throw new Error(`Invalid day number: ${num}. Must be between 1 and 7.`);
-    }
-    return weekdays[num];
-  }).join(' ');
+  return names.map((name) => abbrev[name] || name.substring(0, 2)).join(' ');
 }
 
 const colorCareer: Record<number, string> = {

@@ -18,14 +18,24 @@
       <!--Divider-->
       <div class="h-3/4 w-0.5 shrink-0 rounded-lg bg-gray-950"></div>
       <!--Divider-->
-      <div class="w-auto" cols="8">
-        <CourseDialog 
+      <div class="w-auto flex-1 min-w-0 py-1.5">
+        <CourseDialog
           :field="course.field"
           :course-code="course.course_code"
           :mandatory="false"
           :course-name="course.course.name"
-          :career-code="course.career_code"
+          :pensum-id="course.pensum_id"
+          :prerequisites="prerequisites"
         />
+        <div v-if="prerequisites.length" class="mt-0.5 flex flex-wrap gap-1">
+          <span
+            v-for="prereq in prerequisiteLabels"
+            :key="prereq"
+            class="text-muted-foreground inline-block max-w-full truncate text-[10px] leading-tight"
+          >
+            {{ prereq }}
+          </span>
+        </div>
       </div>
     </div>
     <div
@@ -36,9 +46,11 @@
 </template>
 <script setup lang="ts">
 import CourseDialog from '@/components/dialogs/courses/CourseDialog.vue'
-import type { SemesterCourses } from '~/utils/types/career-courses'
-defineProps<{
-  course: SemesterCourses
+import type { PensumSemesterCourse } from '~/utils/types/pensum-courses'
+import { fetchPrerequisites, type Prerequisite } from '~/lib/api/admin/prerequisites'
+
+const props = defineProps<{
+  course: PensumSemesterCourse
   elevated?: boolean
   interactive?: boolean
   interactiveInverse?: boolean
@@ -49,5 +61,31 @@ defineProps<{
   smallIcon?: string
   noSpacing?: boolean
 }>()
+
+const prerequisites = ref<Prerequisite[]>([])
+
+onMounted(async () => {
+  try {
+    prerequisites.value = await fetchPrerequisites(props.course.pensum_id, props.course.course_code)
+  } catch {
+    // silently fail — prerequisites are supplementary info
+  }
+})
+
+const prerequisiteLabels = computed(() => {
+  const labels: string[] = []
+  for (const p of prerequisites.value) {
+    if (p.is_course) {
+      for (const entry of p.coursePrerequisites) {
+        labels.push(entry.course_code)
+      }
+    } else {
+      for (const entry of p.creditsPrerequisites) {
+        labels.push(`${entry.credits}Cr`)
+      }
+    }
+  }
+  return labels
+})
 </script>
 <style lang="postcss" scoped></style>

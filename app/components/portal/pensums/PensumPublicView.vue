@@ -6,9 +6,9 @@
       <Skeleton height="500px" width="100%"></Skeleton>
       <Skeleton height="500px" width="100%"></Skeleton>
     </template>
-    <template v-if="careerCourses && !loading">
+    <template v-if="pensumSemesters && !loading">
       <SemesterCoursesCard
-        v-for="item in careerCourses"
+        v-for="item in pensumSemesters"
         :key="item.semester"
         :semester-courses="item"
       />
@@ -18,10 +18,10 @@
 <script setup lang="ts">
 import { Skeleton } from '~/components/ui/skeleton';
 import SemesterCoursesCard from './SemesterCoursesCard.vue'
-import type { CareerCourses } from '~/utils/types/career-courses'
+import type { PensumSemester } from '~/utils/types/pensum-courses'
 
 defineProps<{
-  careerCourses: CareerCourses[] | undefined
+  pensumSemesters: PensumSemester[] | undefined
   loading: boolean
 }>()
 </script>

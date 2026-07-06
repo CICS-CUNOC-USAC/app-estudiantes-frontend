@@ -52,6 +52,13 @@ export const ADMIN_LAYOUT_ITEMS = [
         subject: ['all'],
       },
       {
+        itemName: 'Pensums',
+        itemIcon: 'icon-park-twotone:notebook-one',
+        itemLink: '/admin/pensums',
+        action: ['manage'],
+        subject: ['Pensum', 'all'],
+      },
+      {
         itemName: 'Prestamos Externos',
         itemIcon: 'lucide:hand-helping',
         itemLink: '/admin/loans/outstanding',

@@ -2,7 +2,7 @@
   <div>
     <v-card
       class="rounded-sm"
-      :class="getSemesterColor(curso.career_course.semester)"
+      :class="getSemesterColor(curso.pensum_course.semester)"
       max-width="350"
       min-width="180"
     >
@@ -12,7 +12,7 @@
             <v-col class="text-center">
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.career_course.course.name }}
+                  {{ curso.pensum_course.course.name }}
                 </v-col>
               </v-row>
               <v-row>
@@ -27,7 +27,7 @@
               </v-row>
               <v-row>
                 <v-col class="text-center small-text">
-                  {{ curso.career_course.semester }}
+                  {{ curso.pensum_course.semester }}
                 </v-col>
               </v-row>
             </v-col>

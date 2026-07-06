@@ -8,13 +8,14 @@
   </template>
   <template v-if="data && status === 'success'">
     <section class="mt-4 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-      <div v-for="(item, index) in data.data" :key="index" class="col-span-1">
+      <div v-for="item in communicados" :key="item.documentId" class="col-span-1">
         <CCardAlt
           class="group hover:bg-primary-100/75 dark:hover:bg-primary-900/30"
           interactive-inverse
           :title="item.title"
           :description="item.description"
           :to="`/portal/asociaciones/cics/comunicados/${item.documentId}`"
+          :image="item.imageUrl"
         >
           <template #footer>
             <span
@@ -46,9 +47,15 @@ import type { Strapi5ResponseMany } from '@nuxtjs/strapi';
 const { data, status } = await useAsyncData<Strapi5ResponseMany<Comunicado>>('cics-comunicados-home', () => $strapi('/comunicados', {
   query: {
     sort: ['publishedAt:desc'],
-    "pagination[pageSize]": 3
+    "pagination[pageSize]": 3,
+    "populate[hero_image]": true
   }
 }))
+
+const communicados = computed(() => data.value?.data.map((item) => ({
+  ...item,
+  imageUrl: item.hero_image ? `${import.meta.env.VITE_STRAPI_URL}${item.hero_image.url}` : undefined
+})) ?? [])
 
 
 </script>

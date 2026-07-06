@@ -26,11 +26,11 @@ export const buttonVariants = cva(
       },
       severity: {
         default: "",
-        danger: "bg-red-600 text-red-800 dark:text-red-100 hover:bg-red-500",
-        success: "bg-green-600 text-green-800 dark:text-green-100 hover:bg-green-500",
-        warn: "bg-yellow-600 text-yellow-800 dark:text-yellow-100 hover:bg-yellow-500",
-        info: "bg-blue-600 text-blue-800 dark:text-blue-100 hover:bg-blue-500",
-        secondary: "bg-zinc-600 text-zinc-800 dark:text-zinc-100 hover:bg-zinc-500",
+        danger: "bg-red-600 hover:bg-red-500",
+        success: "bg-green-600 hover:bg-green-500",
+        warn: "bg-yellow-600 hover:bg-yellow-500",
+        info: "bg-blue-600 hover:bg-blue-500",
+        secondary: "bg-zinc-600 hover:bg-zinc-500",
       },
       outlined: {
         true: "bg-transparent text-muted-color-emphasis focus:bg-surface-50/20 dark:focus:bg-surface-600/40 dark:border-white",
@@ -85,6 +85,31 @@ export const buttonVariants = cva(
         variant: ["text"],
         severity: ["danger", "success", "warn", "info", "secondary"],
         class: "bg-transparent",
+      },
+      {
+        variant: ["text", "link"],
+        severity: "danger",
+        class: "text-red-800 dark:text-red-400",
+      },
+      {
+        variant: ["text", "link"],
+        severity: "success",
+        class: "text-green-800 dark:text-green-400",
+      },
+      {
+        variant: ["text", "link"],
+        severity: "warn",
+        class: "text-yellow-800 dark:text-yellow-400",
+      },
+      {
+        variant: ["text", "link"],
+        severity: "info",
+        class: "text-blue-800 dark:text-blue-400",
+      },
+      {
+        variant: ["text", "link"],
+        severity: "secondary",
+        class: "text-zinc-800 dark:text-zinc-400",
       },
       {
         variant: ["text"],

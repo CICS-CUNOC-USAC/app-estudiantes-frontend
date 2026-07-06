@@ -1,7 +1,7 @@
 <template>
   <section class="mt-10 border-t border-black/10 pt-6">
     <div class="mb-4 flex items-center justify-between">
-      <h2 class="text-lg font-semibold">Comentarios</h2>
+      <h2 class="text-muted-color font-heading pb-2 text-sm font-light">Comentarios</h2>
       <span class="text-muted-color text-sm">
         {{ commentsData?.length || 0 }}
       </span>
@@ -17,12 +17,13 @@
           no-borders
           fill-height
           :rows="3"
-          placeholder="Comparte tu opinión sobre este comunicado"
         />
         <Button
           label="Comentar"
           icon="icon-park-outline:send"
           size="small"
+          variant="default"
+          outlined
           :loading="createAsyncStatus === 'loading'"
           :disabled="!newCommentContent.trim()"
           @click="submitRootComment"

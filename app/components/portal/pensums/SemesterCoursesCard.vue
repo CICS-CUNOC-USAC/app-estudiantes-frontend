@@ -30,11 +30,11 @@
 <script setup lang="ts">
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import { Toggle } from '~/components/ui/toggle'
-import type { CareerCourses } from '~/utils/types/career-courses'
+import type { PensumSemester } from '~/utils/types/pensum-courses'
 import CourseCard from './CourseCard.vue'
 const onlyMandatory = ref()
 const props = defineProps<{
-  semesterCourses: CareerCourses
+  semesterCourses: PensumSemester
 }>()
 const filteredCourses = computed(() => {
   if (onlyMandatory.value) {
