@@ -1,5 +1,36 @@
 import { toast } from 'vue-sonner'
-import type { Horario, HorarioCompleto, EditarDetalleInput, EditarDetalleResult, ConflictosResponse } from './types'
+import type { Horario, HorarioCompleto, HorarioDetalle, EditarDetalleInput, EditarDetalleResult, ConflictosResponse } from './types'
+import type { Period } from './periods'
+
+/**
+ * El backend arma los detalles con LEFT JOIN a periodos, así que un detalle puede
+ * llegar con periodo_inicio_id/periodo_fin_id u hora_inicio/hora_fin en null
+ * (pasa con datos reales: labs con distribución incompleta). Sin normalizar,
+ * cualquier `.length`/aritmética sobre esos campos revienta la vista completa
+ * ("Cannot read properties of null"). Se rellena lo recuperable y el resto queda
+ * seguro de renderizar.
+ */
+export const normalizarDetalles = (
+  detalles: HorarioDetalle[] | null | undefined,
+  periodos?: Period[],
+): HorarioDetalle[] => {
+  return (detalles ?? []).map((d) => {
+    const inicio = d.periodo_inicio_id ?? d.periodo_fin_id
+    const fin = d.periodo_fin_id ?? d.periodo_inicio_id
+    if (inicio === d.periodo_inicio_id && fin === d.periodo_fin_id && d.hora_inicio && d.hora_fin) {
+      return d
+    }
+    const pIni = periodos?.find(p => p.id === inicio)
+    const pFin = periodos?.find(p => p.id === fin)
+    return {
+      ...d,
+      periodo_inicio_id: inicio as number,
+      periodo_fin_id: fin as number,
+      hora_inicio: d.hora_inicio ?? pIni?.hora_inicio ?? null as unknown as string,
+      hora_fin: d.hora_fin ?? pFin?.hora_fin ?? null as unknown as string,
+    }
+  })
+}
 
 export const fetchHorarios = async (): Promise<Horario[]> => {
   try {
@@ -49,7 +80,7 @@ export const editarDetalle = async (
       `/api/horarios/${id}/detalle/${detalleId}`,
       { method: 'PUT', body }
     )
-    toast.success('Bloque actualizado')
+    // El feedback (toast/advertencias) lo decide la página que llama
     return result
   } catch (error: any) {
     toast.error('Error al actualizar bloque', {

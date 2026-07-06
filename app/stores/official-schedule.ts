@@ -9,6 +9,7 @@ import type {
   ConflictosResponse,
   Teacher,
   Carrera,
+  Curso,
 } from '~/lib/api/schedules-generator/types'
 import {
   fetchHorarios,
@@ -17,11 +18,14 @@ import {
   editarDetalle,
   activarHorario,
   eliminarHorario,
+  normalizarDetalles,
 } from '~/lib/api/schedules-generator/horarios'
 import { fetchSalones } from '~/lib/api/schedules-generator/salones'
 import { fetchTeachers } from '~/lib/api/schedules-generator/teachers'
 import { fetchCarreras } from '~/lib/api/schedules-generator/carreras'
+import { fetchCursos } from '~/lib/api/schedules-generator/cursos'
 import { fetchPeriods, type Period } from '~/lib/api/schedules-generator/periods'
+import { describirConflictos, type ConflictoLegible } from '~/lib/api/schedules-generator/conflictos-legibles'
 
 export const useOfficialScheduleStore = defineStore('official-schedule', () => {
   // ── State ──────────────────────────────────────────────────────────────────
@@ -33,6 +37,7 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
   const salones = ref<Salon[]>([])
   const docentes = ref<Teacher[]>([])
   const carreras = ref<Carrera[]>([])
+  const cursosCatalogo = ref<Curso[]>([])
   const conflictos = ref<ConflictoHorario[]>([])
   const conflictosData = ref<ConflictosResponse | null>(null)
   const loading = ref(false)
@@ -78,7 +83,8 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
 
       const result = await fetchHorario(id, query)
       horarioActual.value = result.horario
-      detalles.value = result.detalles
+      // Rellena periodo/hora null (LEFT JOIN del backend con datos reales)
+      detalles.value = normalizarDetalles(result.detalles, periodos.value)
     }
     catch (err: unknown) {
       error.value = (err as { data?: { error?: string; message?: string } })?.data?.error
@@ -91,11 +97,12 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
   }
 
   const fetchCatalogos = async () => {
-    const [salonesRes, docentesRes, carrerasRes, periodosRes] = await Promise.allSettled([
+    const [salonesRes, docentesRes, carrerasRes, periodosRes, cursosRes] = await Promise.allSettled([
       fetchSalones(),
       fetchTeachers(),
       fetchCarreras(),
       fetchPeriods(),
+      fetchCursos(),
     ])
 
     if (salonesRes.status === 'fulfilled') salones.value = salonesRes.value
@@ -104,14 +111,31 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     if (periodosRes.status === 'fulfilled' && periodosRes.value !== undefined) {
       periodos.value = periodosRes.value
     }
+    if (cursosRes.status === 'fulfilled') cursosCatalogo.value = cursosRes.value
   }
 
   const editarDetalleAction = async (detalleId: number, cambios: EditarDetalleInput) => {
     if (!horarioActual.value) return
     loadingDetalle.value = true
+    const idx = detalles.value.findIndex(d => d.detalle_id === detalleId)
+    const prev = idx >= 0 ? { ...detalles.value[idx] } : null
+    // Optimista: aplica el cambio en memoria, sin refetch completo
+    if (idx >= 0) detalles.value[idx] = { ...detalles.value[idx], ...cambios, modificado_manual: true }
     try {
-      await editarDetalle(horarioActual.value.id, detalleId, cambios)
-      await fetchHorarioAction(horarioActual.value.id)
+      const resp = await editarDetalle(horarioActual.value.id, detalleId, cambios)
+      if (resp?.detalle && idx >= 0) {
+        detalles.value[idx] = { ...detalles.value[idx], ...resp.detalle }
+      }
+      if (typeof resp?.nueva_aptitud === 'number') {
+        horarioActual.value.aptitud_final = resp.nueva_aptitud
+        const h = horarios.value.find(x => x.id === horarioActual.value!.id)
+        if (h) h.aptitud_final = resp.nueva_aptitud
+      }
+      return resp   // la página decide si mostrar advertencias
+    }
+    catch (e) {
+      if (prev && idx >= 0) detalles.value[idx] = prev   // rollback
+      throw e
     }
     finally {
       loadingDetalle.value = false
@@ -173,6 +197,49 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     })
   })
 
+  // detalle_id en conflicto (traslape de salón/docente en día+periodo compartidos),
+  // calculado localmente para no depender de un fetch por cada movimiento
+  const conflictoIds = computed<number[]>(() => {
+    const DIA_COLS: Record<number, number[]> = { 1: [1, 3, 5], 2: [2, 4] }
+    const ids = new Set<number>()
+    const arr = detalles.value
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = i + 1; j < arr.length; j++) {
+        const a = arr[i], b = arr[j]
+        const colsA = DIA_COLS[a.dia_horario_id] ?? []
+        const colsB = DIA_COLS[b.dia_horario_id] ?? []
+        const sameDay = colsA.some(c => colsB.includes(c))
+        if (!sameDay) continue
+        const overlap = a.periodo_inicio_id <= b.periodo_fin_id && b.periodo_inicio_id <= a.periodo_fin_id
+        if (!overlap) continue
+        const mismoSalon = a.salon_id !== null && a.salon_id === b.salon_id
+        const mismoDocente = a.docente_id !== null && a.docente_id === b.docente_id
+        if (mismoSalon || mismoDocente) {
+          ids.add(a.detalle_id)
+          ids.add(b.detalle_id)
+        }
+      }
+    }
+    return [...ids]
+  })
+
+  // Conflictos del backend traducidos a lenguaje natural (día, hora y nombres
+  // reales en lugar de "slot 24-1-8"); esta vista la usan docentes/coordinación
+  const conflictosLegibles = computed<ConflictoLegible[]>(() =>
+    describirConflictos(conflictos.value, {
+      periodos: periodos.value,
+      docentes: docentes.value,
+      salones: salones.value,
+      carreras: carreras.value,
+      cursos: cursosCatalogo.value,
+    }),
+  )
+
+  // ¿El horario cargado tiene bloques editados a mano después de generarse?
+  const tieneEdicionManual = computed<boolean>(() =>
+    detalles.value.some(d => d.modificado_manual),
+  )
+
   const gridPorDiaYPeriodo = computed(() => {
     const grid: Record<string, HorarioDetalle[]> = {}
     for (const d of detalles.value) {
@@ -191,6 +258,7 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     salones,
     docentes,
     carreras,
+    cursosCatalogo,
     conflictos,
     conflictosData,
     loading,
@@ -207,6 +275,9 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     setFiltros,
     horarioActivo,
     detallesFiltrados,
+    conflictoIds,
+    conflictosLegibles,
+    tieneEdicionManual,
     gridPorDiaYPeriodo,
   }
 })

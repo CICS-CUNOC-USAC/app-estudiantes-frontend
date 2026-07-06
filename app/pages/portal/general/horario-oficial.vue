@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 definePageMeta({
   layout: 'default',
@@ -31,26 +31,65 @@ async function onFiltroSemestre(val: string) {
   store.setFiltros({ semestre: val ? +val : null })
   if (store.horarioActivo) await store.fetchHorarioAction(store.horarioActivo.id)
 }
+
+// Fecha de la versión publicada (fecha en que el algoritmo generó este horario)
+const fechaActualizado = computed(() => {
+  const f = store.horarioActivo?.fecha_generacion
+  if (!f) return null
+  return new Date(f).toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+})
+
+// ── Imprimir / PDF ──
+const printArea = ref<{ imprimir: () => Promise<void> } | null>(null)
+
+const printChips = computed(() => {
+  const chips: string[] = []
+  const carrera = store.carreras.find(c => String(c.id) === filtroCarrera.value)
+  chips.push(carrera ? carrera.nombre : 'Todas las carreras')
+  chips.push(filtroSemestre.value ? `Semestre ${filtroSemestre.value}` : 'Todos los semestres')
+  return chips
+})
 </script>
 
 <template>
-  <div class="px-4 sm:px-6 lg:px-10 pt-6 space-y-6">
+  <div class="px-4 sm:px-6 lg:px-10 pt-14 space-y-6">
 
     <!-- ── Header ─────────────────────────────────────────────────────────── -->
-    <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <div class="flex items-center gap-2 flex-wrap">
-        <h1 class="text-xl font-black tracking-tight">Horario Oficial</h1>
-        <template v-if="store.horarioActivo">
-          <span
-            class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
-          >
-            Activo
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+      <div class="space-y-1">
+        <div class="flex items-center gap-2 flex-wrap">
+          <h1 class="text-xl font-black tracking-tight">Horario Oficial</h1>
+          <template v-if="store.horarioActivo">
+            <span
+              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+            >
+              Activo
+            </span>
+            <span
+              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-card font-mono"
+            >
+              ID #{{ store.horarioActivo.id }}
+            </span>
+          </template>
+        </div>
+        <!-- Nombre del horario = la versión publicada; la fecha dice qué tan reciente es -->
+        <div v-if="store.horarioActivo" class="flex items-center gap-2 flex-wrap text-sm">
+          <span class="font-bold">{{ store.horarioActivo.nombre }}</span>
+          <span v-if="fechaActualizado" class="text-xs text-muted-foreground">
+            · Actualizado el {{ fechaActualizado }}
           </span>
-          <span class="text-sm text-muted-foreground font-medium">
-            {{ store.horarioActivo.nombre }}
-          </span>
-        </template>
+        </div>
       </div>
+      <Button
+        v-if="store.horarioActivo"
+        variant="tonal"
+        size="sm"
+        icon="lucide:printer"
+        class="shrink-0"
+        @click="printArea?.imprimir()"
+      >
+        Imprimir / PDF
+      </Button>
     </div>
 
     <!-- ── Loading skeleton ───────────────────────────────────────────────── -->
@@ -103,14 +142,20 @@ async function onFiltroSemestre(val: string) {
       </div>
 
       <!-- ── Grid ─────────────────────────────────────────────────────────── -->
-      <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto">
+      <SchedulePrintArea
+        ref="printArea"
+        titulo="Horario Oficial"
+        :subtitulo="store.horarioActivo.nombre + (fechaActualizado ? ` · Actualizado el ${fechaActualizado}` : '')"
+        :chips="printChips"
+        class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto"
+      >
         <ScheduleGrid
           :detalles="store.detallesFiltrados"
           :periodos="store.periodos"
           :editable="false"
           :readonly="true"
         />
-      </div>
+      </SchedulePrintArea>
     </template>
 
   </div>

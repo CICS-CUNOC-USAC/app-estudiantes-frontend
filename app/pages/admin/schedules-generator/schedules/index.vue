@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { toast } from 'vue-sonner'
+import { Dialog } from '~/components/ui/dialog'
 import type { HorarioDetalle, EditarDetalleInput } from '~/lib/api/schedules-generator/types'
 import { csvUrl } from '~/lib/api/schedules-generator/horarios'
 
@@ -29,11 +31,16 @@ const filtroTipo = ref<'' | 'cursos' | 'laboratorios'>('')
 
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 
+const route = useRoute()
+
 onMounted(async () => {
   await store.fetchHorariosAction()
   await store.fetchCatalogos()
   if (store.horarios.length > 0) {
-    const activo = store.horarios.find(h => h.es_activo) ?? store.horarios[0]
+    // ?id= permite llegar desde el algoritmo con el horario recién generado seleccionado
+    const queryId = route.query.id ? +String(route.query.id) : null
+    const porQuery = queryId !== null ? store.horarios.find(h => h.id === queryId) : undefined
+    const activo = porQuery ?? store.horarios.find(h => h.es_activo) ?? store.horarios[0]
     selectedHorarioId.value = activo.id
     await store.fetchHorarioAction(activo.id)
   }
@@ -51,6 +58,55 @@ const aptitudPct = computed(() => {
   return Math.round(a * 100)
 })
 
+// Items para CSelect (los valores viajan como string). La fecha corta permite
+// distinguir versiones con nombres parecidos.
+const horarioItems = computed(() =>
+  store.horarios.map(h => ({
+    label: `#${h.id} · ${h.nombre}`
+      + (h.fecha_generacion ? ` · ${new Date(h.fecha_generacion).toLocaleDateString('es-GT', { day: '2-digit', month: '2-digit', year: '2-digit' })}` : '')
+      + (h.es_activo ? ' ✓ Activo' : ''),
+    value: String(h.id),
+  })),
+)
+
+const selectedHorarioStr = computed<string | null>({
+  get: () => (selectedHorarioId.value !== null ? String(selectedHorarioId.value) : null),
+  set: (v) => {
+    selectedHorarioId.value = v ? +v : null
+    onSelectHorario()
+  },
+})
+
+const carreraItems = computed(() =>
+  store.carreras.map(c => ({ label: c.nombre, value: String(c.id) })),
+)
+
+// Fecha de la versión: cuándo generó el algoritmo este horario. La BD del
+// scheduler no guarda fecha por edición manual, así que si hay bloques con
+// modificado_manual se indica "con ediciones manuales posteriores".
+const fechaGeneracion = computed(() => {
+  const f = horarioSeleccionado.value?.fecha_generacion
+  if (!f) return null
+  return new Date(f).toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+})
+
+// ── Imprimir / PDF ──
+const printArea = ref<{ imprimir: () => Promise<void> } | null>(null)
+
+const printChips = computed(() => {
+  const chips: string[] = []
+  if (horarioSeleccionado.value?.es_activo) chips.push('Oficial')
+  if (fechaGeneracion.value) chips.push(`Generado el ${fechaGeneracion.value}`)
+  const carrera = store.carreras.find(c => String(c.id) === filtroCarrera.value)
+  if (carrera) chips.push(carrera.nombre)
+  if (filtroSemestre.value) chips.push(`Semestre ${filtroSemestre.value}`)
+  return chips
+})
+
+const semestreItems = computed(() =>
+  Array.from({ length: 10 }, (_, i) => ({ label: `Semestre ${i + 1}`, value: String(i + 1) })),
+)
+
 // ── Handlers ──────────────────────────────────────────────────────────────────
 
 async function onSelectHorario() {
@@ -58,14 +114,14 @@ async function onSelectHorario() {
   await store.fetchHorarioAction(selectedHorarioId.value)
 }
 
-async function onFiltroCarrera(val: string) {
-  filtroCarrera.value = val
+async function onFiltroCarrera(val: string | null) {
+  filtroCarrera.value = val ?? ''
   store.setFiltros({ carrera_id: val ? +val : null })
   if (selectedHorarioId.value !== null) await store.fetchHorarioAction(selectedHorarioId.value)
 }
 
-async function onFiltroSemestre(val: string) {
-  filtroSemestre.value = val
+async function onFiltroSemestre(val: string | null) {
+  filtroSemestre.value = val ?? ''
   store.setFiltros({ semestre: val ? +val : null })
   if (selectedHorarioId.value !== null) await store.fetchHorarioAction(selectedHorarioId.value)
 }
@@ -105,15 +161,43 @@ async function onDelete() {
   }
 }
 
-function onDrop(payload: { detalleId: number; nuevoPeriodoId: number }) {
-  const detalleEncontrado = store.detalles.find(d => d.detalle_id === payload.detalleId)
-  if (!detalleEncontrado) return
-  const span = detalleEncontrado.periodo_fin_id - detalleEncontrado.periodo_inicio_id + 1
+const DIA_COLS: Record<number, number[]> = { 1: [1, 3, 5], 2: [2, 4] }
+
+async function onDrop(payload: { detalleId: number; nuevoPeriodoId: number; colIndex?: number }) {
+  const det = store.detalles.find(d => d.detalle_id === payload.detalleId)
+  if (!det) return
+
+  // Restricción de patrón de días: un bloque Ma/J no puede soltarse en L/Mi/V y viceversa
+  if (payload.colIndex !== undefined) {
+    const colsValidas = DIA_COLS[det.dia_horario_id] ?? []
+    if (!colsValidas.includes(payload.colIndex)) {
+      if (det.dia_horario_id === 2) {
+        toast.error('Este bloque solo se mueve en Martes/Jueves')
+      }
+      else {
+        toast.error('Este bloque solo se mueve en Lunes/Miércoles/Viernes')
+      }
+      return
+    }
+  }
+
+  const span = det.periodo_fin_id - det.periodo_inicio_id + 1
   const cambios: EditarDetalleInput = {
     periodo_inicio_id: payload.nuevoPeriodoId,
     periodo_fin_id: payload.nuevoPeriodoId + span - 1,
   }
-  store.editarDetalleAction(payload.detalleId, cambios)
+  try {
+    const resp = await store.editarDetalleAction(payload.detalleId, cambios)
+    if (resp?.advertencias?.length) {
+      toast.warning(`Movido con ${resp.advertencias.length} advertencia(s). Revisa conflictos.`)
+    }
+    else {
+      toast.success('Bloque reubicado')
+    }
+  }
+  catch {
+    toast.error('No se pudo reubicar el bloque')
+  }
 }
 
 function onClickBlock(detalle: HorarioDetalle) {
@@ -123,8 +207,19 @@ function onClickBlock(detalle: HorarioDetalle) {
 
 async function onSaveDetalle(cambios: EditarDetalleInput) {
   if (!editDetalle.value) return
-  await store.editarDetalleAction(editDetalle.value.detalle_id, cambios)
-  editOpen.value = false
+  try {
+    const resp = await store.editarDetalleAction(editDetalle.value.detalle_id, cambios)
+    if (resp?.advertencias?.length) {
+      toast.warning(`Guardado con ${resp.advertencias.length} advertencia(s). Revisa conflictos.`)
+    }
+    else {
+      toast.success('Bloque actualizado')
+    }
+    editOpen.value = false
+  }
+  catch {
+    toast.error('No se pudo actualizar el bloque')
+  }
 }
 </script>
 
@@ -135,12 +230,7 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
     <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
       <div class="space-y-1">
         <div class="flex items-center gap-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" />
-            <line x1="16" y1="2" x2="16" y2="6" />
-            <line x1="8" y1="2" x2="8" y2="6" />
-            <line x1="3" y1="10" x2="21" y2="10" />
-          </svg>
+          <Icon name="lucide:calendar-days" class="size-5 shrink-0" />
           <h1 class="text-xl font-black tracking-tight">Horario Oficial — Visualizar y Editar</h1>
         </div>
         <p class="text-sm text-muted-foreground">
@@ -158,22 +248,21 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
         <!-- Selector + meta -->
         <div class="space-y-2 flex-1 min-w-0">
           <div class="flex items-center gap-2 flex-wrap">
-            <select
-              v-model="selectedHorarioId"
-              class="appearance-none bg-card border-2 border-black rounded-[0.625rem] px-2.5 py-1.5 text-sm font-medium shadow-[2px_2px_0_0_rgba(0,0,0,1)] focus:outline-none focus:ring-2 focus:ring-cics-primary dark:bg-neutral-800"
-              @change="onSelectHorario"
+            <CSelect
+              v-model="selectedHorarioStr"
+              :items="horarioItems"
+              option-label="label"
+              option-value="value"
+              :placeholder="store.horarios.length === 0 ? 'Sin horarios' : 'Selecciona un horario'"
+              :disabled="store.horarios.length === 0"
+              class="min-w-56"
+            />
+            <span
+              v-if="horarioSeleccionado"
+              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-card font-mono"
             >
-              <option v-if="store.horarios.length === 0" :value="null" disabled>
-                Sin horarios
-              </option>
-              <option
-                v-for="h in store.horarios"
-                :key="h.id"
-                :value="h.id"
-              >
-                {{ h.nombre }}{{ h.es_activo ? ' ✓ Activo' : '' }}
-              </option>
-            </select>
+              ID #{{ horarioSeleccionado.id }}
+            </span>
             <span
               v-if="horarioSeleccionado?.es_activo"
               class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
@@ -209,8 +298,11 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
 
           <!-- Meta info -->
           <div v-if="horarioSeleccionado" class="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-muted-foreground">
-            <span v-if="horarioSeleccionado.generaciones_ejecutadas !== null">
-              Generaciones: <strong>{{ horarioSeleccionado.generaciones_ejecutadas }}</strong>
+            <span v-if="fechaGeneracion">
+              Generado: <strong>{{ fechaGeneracion }}</strong>
+            </span>
+            <span v-if="store.tieneEdicionManual" class="text-amber-600 dark:text-amber-400">
+              <strong>Con ediciones manuales posteriores</strong>
             </span>
             <span v-if="horarioSeleccionado.tiempo_ejecucion_ms !== null">
               Tiempo: <strong>{{ (horarioSeleccionado.tiempo_ejecucion_ms / 1000).toFixed(1) }}s</strong>
@@ -229,41 +321,66 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
 
         <!-- Action buttons -->
         <div class="flex flex-wrap items-center gap-2 shrink-0">
-          <button
-            type="button"
-            class="inline-flex items-center gap-1.5 border-2 border-black rounded-[0.625rem] font-semibold text-sm bg-red-500 text-white shadow-[3px_3px_0_0_rgba(0,0,0,1)] px-3 py-2 transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:-translate-x-px hover:-translate-y-px"
-            @click="onOpenConflictos"
-          >
+          <Button severity="danger" size="sm" icon="lucide:triangle-alert" @click="onOpenConflictos">
             Conflictos
-          </button>
-          <button
-            type="button"
-            class="inline-flex items-center gap-1.5 border-2 border-black rounded-[0.625rem] font-semibold text-sm bg-green-600 text-white shadow-[3px_3px_0_0_rgba(0,0,0,1)] px-3 py-2 transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:-translate-x-px hover:-translate-y-px"
-            @click="onExportarCsv"
-          >
+          </Button>
+          <Button severity="success" size="sm" icon="lucide:download" @click="onExportarCsv">
             Exportar CSV
-          </button>
-          <button
-            type="button"
+          </Button>
+          <Button variant="tonal" size="sm" icon="lucide:printer" @click="printArea?.imprimir()">
+            Imprimir / PDF
+          </Button>
+          <Button
+            variant="tonal"
+            size="sm"
+            icon="lucide:check"
             :disabled="horarioSeleccionado?.es_activo === true"
-            class="inline-flex items-center gap-1.5 border-2 border-black rounded-[0.625rem] font-semibold text-sm bg-cics-blue text-white shadow-[3px_3px_0_0_rgba(0,0,0,1)] px-3 py-2 transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:-translate-x-px hover:-translate-y-px disabled:opacity-40 disabled:pointer-events-none"
             @click="onActivar"
           >
             Activar
-          </button>
-          <button
-            type="button"
-            class="inline-flex items-center gap-1.5 border-2 border-black rounded-[0.625rem] font-semibold text-sm bg-card text-red-600 shadow-[3px_3px_0_0_rgba(0,0,0,1)] px-2.5 py-2 transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:-translate-x-px hover:-translate-y-px"
+          </Button>
+          <Button
+            variant="text"
+            severity="danger"
+            size="sm"
+            icon="lucide:trash-2"
             aria-label="Eliminar horario"
             @click="deleteOpen = true"
+          />
+        </div>
+      </div>
+
+      <!-- Hero de métricas -->
+      <div v-if="horarioSeleccionado" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+          <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
+            {{ horarioSeleccionado.aptitud_final !== null ? aptitudPct + '%' : '—' }}
+          </div>
+          <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Aptitud</div>
+        </div>
+        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+          <div class="text-xl font-extrabold text-foreground tabular-nums leading-none">
+            {{ horarioSeleccionado.generaciones_ejecutadas ?? '—' }}
+          </div>
+          <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Generaciones</div>
+        </div>
+        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+          <div
+            class="text-xl font-extrabold tabular-nums leading-none"
+            :class="store.conflictoIds.length > 0 ? 'text-red-500' : 'text-green-600 dark:text-green-400'"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6" />
-              <path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6" />
-              <path d="M10 11v6M14 11v6" />
-              <path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2" />
-            </svg>
-          </button>
+            {{ store.conflictoIds.length }}
+          </div>
+          <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Conflictos</div>
+        </div>
+        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+          <div
+            class="text-xl font-extrabold leading-none"
+            :class="horarioSeleccionado.es_activo ? 'text-green-600 dark:text-green-400' : 'text-foreground'"
+          >
+            {{ horarioSeleccionado.es_activo ? 'Oficial' : 'Borrador' }}
+          </div>
+          <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Estado</div>
         </div>
       </div>
     </div>
@@ -272,26 +389,28 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
     <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4">
       <div class="flex flex-wrap items-center gap-3">
         <!-- Carrera -->
-        <select
-          :value="filtroCarrera"
-          class="appearance-none bg-card border-2 border-black rounded-[0.625rem] px-2.5 py-1.5 text-sm font-medium shadow-[2px_2px_0_0_rgba(0,0,0,1)] focus:outline-none focus:ring-2 focus:ring-cics-primary dark:bg-neutral-800"
-          @change="onFiltroCarrera(($event.target as HTMLSelectElement).value)"
-        >
-          <option value="">Todas las carreras</option>
-          <option v-for="c in store.carreras" :key="c.id" :value="String(c.id)">
-            {{ c.nombre }}
-          </option>
-        </select>
+        <CSelect
+          :model-value="filtroCarrera || null"
+          :items="carreraItems"
+          option-label="label"
+          option-value="value"
+          clearable
+          placeholder="Todas las carreras"
+          class="min-w-48"
+          @update:model-value="onFiltroCarrera"
+        />
 
         <!-- Semestre -->
-        <select
-          :value="filtroSemestre"
-          class="appearance-none bg-card border-2 border-black rounded-[0.625rem] px-2.5 py-1.5 text-sm font-medium shadow-[2px_2px_0_0_rgba(0,0,0,1)] focus:outline-none focus:ring-2 focus:ring-cics-primary dark:bg-neutral-800"
-          @change="onFiltroSemestre(($event.target as HTMLSelectElement).value)"
-        >
-          <option value="">Todos</option>
-          <option v-for="n in 10" :key="n" :value="String(n)">Semestre {{ n }}</option>
-        </select>
+        <CSelect
+          :model-value="filtroSemestre || null"
+          :items="semestreItems"
+          option-label="label"
+          option-value="value"
+          clearable
+          placeholder="Todos los semestres"
+          class="min-w-44"
+          @update:model-value="onFiltroSemestre"
+        />
 
         <!-- Tipo toggle -->
         <div class="flex items-center border-2 border-black rounded-[0.625rem] overflow-hidden shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
@@ -326,33 +445,73 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
             <span class="w-3 h-3 rounded border-2 border-black bg-amber-100 dark:bg-amber-900 inline-block" />
             Editado
           </span>
+          <span class="flex items-center gap-1">
+            <span class="w-3 h-3 rounded border-2 border-red-500 bg-red-100 dark:bg-red-900 inline-block animate-pulse" />
+            Conflicto
+          </span>
         </div>
       </div>
     </div>
 
+    <!-- ── Error state ─────────────────────────────────────────────────────── -->
+    <div
+      v-if="store.error"
+      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-red-50 dark:bg-red-950/30 p-4 flex flex-wrap items-center justify-between gap-3"
+    >
+      <p class="text-sm font-bold text-red-700 dark:text-red-300 flex items-center gap-1.5">
+        <Icon name="lucide:circle-alert" class="size-4" />
+        {{ store.error }}
+      </p>
+      <Button
+        variant="tonal"
+        size="sm"
+        icon="lucide:rotate-ccw"
+        @click="store.fetchHorariosAction().then(() => selectedHorarioId !== null && store.fetchHorarioAction(selectedHorarioId))"
+      >
+        Reintentar
+      </Button>
+    </div>
+
+    <!-- ── Empty state ─────────────────────────────────────────────────────── -->
+    <div
+      v-if="!store.loading && !store.error && store.horarios.length === 0"
+      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-6 text-center space-y-2"
+    >
+      <Icon name="lucide:calendar-off" class="size-10 text-muted-foreground/40 mx-auto" />
+      <p class="text-sm font-black">No hay horarios generados</p>
+      <p class="text-xs text-muted-foreground">Genera uno desde la página del algoritmo.</p>
+      <Button variant="tonal" size="sm" icon="lucide:brain-circuit" to="/admin/schedules-generator/algoritmo">
+        Ir al algoritmo
+      </Button>
+    </div>
+
     <!-- ── Schedule grid ───────────────────────────────────────────────────── -->
-    <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto relative min-h-40">
+    <SchedulePrintArea
+      ref="printArea"
+      :titulo="horarioSeleccionado ? `Horario: ${horarioSeleccionado.nombre}` : 'Horario'"
+      :subtitulo="horarioSeleccionado ? `ID #${horarioSeleccionado.id}` : undefined"
+      :chips="printChips"
+      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto relative min-h-40"
+    >
       <div
         v-if="store.loading"
         class="absolute inset-0 z-10 flex items-center justify-center bg-card/70 rounded-xl"
       >
         <div class="flex items-center gap-2 text-sm font-semibold">
-          <svg class="animate-spin w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-          </svg>
+          <Icon name="svg-spinners:bars-rotate-fade" class="size-5" />
           Cargando...
         </div>
       </div>
       <ScheduleGrid
         :detalles="store.detallesFiltrados"
         :periodos="store.periodos"
+        :conflict-ids="store.conflictoIds"
         :editable="true"
         :readonly="false"
         @drop="onDrop"
         @click-block="onClickBlock"
       />
-    </div>
+    </SchedulePrintArea>
 
     <!-- ── Edit detail dialog ─────────────────────────────────────────────── -->
     <EditDetailDialog
@@ -369,62 +528,35 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
     <!-- ── Conflicts dialog ───────────────────────────────────────────────── -->
     <ConflictsDialog
       v-model:open="conflictsOpen"
-      :conflictos="store.conflictos"
+      :conflictos="store.conflictosLegibles"
       :total-conflictos="store.conflictosData?.total_conflictos ?? 0"
       :aptitud="store.conflictosData?.aptitud_recalculada ?? null"
       :loading="store.loading"
     />
 
     <!-- ── Delete confirm dialog ──────────────────────────────────────────── -->
-    <Teleport to="body">
-      <Transition name="fade">
-        <div
-          v-if="deleteOpen"
-          class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4"
-          @click.self="deleteOpen = false"
-        >
-          <div class="border-2 border-black rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] bg-card p-6 w-full max-w-sm space-y-4">
-            <h2 class="text-base font-black">¿Eliminar este horario?</h2>
-            <p class="text-sm text-muted-foreground">
-              Esta acción no se puede deshacer. El horario
-              <strong>{{ horarioSeleccionado?.nombre }}</strong> será eliminado permanentemente.
-            </p>
-            <div class="flex gap-2 justify-end">
-              <button
-                type="button"
-                class="inline-flex items-center gap-1.5 border-2 border-black rounded-[0.625rem] font-semibold text-sm bg-card text-foreground shadow-[3px_3px_0_0_rgba(0,0,0,1)] px-3 py-2 transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:-translate-x-px hover:-translate-y-px"
-                @click="deleteOpen = false"
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                :disabled="deleteLoading"
-                class="inline-flex items-center gap-1.5 border-2 border-black rounded-[0.625rem] font-semibold text-sm bg-red-500 text-white shadow-[3px_3px_0_0_rgba(0,0,0,1)] px-3 py-2 transition-transform active:translate-x-0.5 active:translate-y-0.5 active:shadow-none hover:-translate-x-px hover:-translate-y-px disabled:opacity-50 disabled:pointer-events-none"
-                @click="onDelete"
-              >
-                <svg v-if="deleteLoading" class="animate-spin w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
-                </svg>
-                Eliminar
-              </button>
-            </div>
-          </div>
+    <Dialog :open="deleteOpen" @update:open="deleteOpen = $event">
+      <DialogContent title="¿Eliminar este horario?" closeButton>
+        <p class="text-sm text-muted-foreground">
+          Esta acción no se puede deshacer. El horario
+          <strong>{{ horarioSeleccionado?.nombre }}</strong> será eliminado permanentemente.
+        </p>
+        <div class="flex gap-2 justify-end mt-4">
+          <Button variant="tonal" size="sm" @click="deleteOpen = false">
+            Cancelar
+          </Button>
+          <Button
+            severity="danger"
+            size="sm"
+            icon="lucide:trash-2"
+            :loading="deleteLoading"
+            @click="onDelete"
+          >
+            Eliminar
+          </Button>
         </div>
-      </Transition>
-    </Teleport>
+      </DialogContent>
+    </Dialog>
 
   </div>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.15s ease;
-}
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-</style>

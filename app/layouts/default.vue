@@ -1,6 +1,7 @@
 <template>
   <SidebarProvider :default-open="false">
     <DefaultSidebar />
+    <SidebarFloatingToggle />
     <div class="w-full">
       <nav
         class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
@@ -165,6 +166,7 @@ import {
 } from '~/components/ui/tooltip'
 import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
 import DefaultSidebar from '~/components/partials/navigation/DefaultSidebar.vue'
+import SidebarFloatingToggle from '~/components/partials/navigation/SidebarFloatingToggle.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())

@@ -228,6 +228,12 @@ export interface Salon {
 export interface HorarioPersonalDetalle {
   seccion_id?: number
   seccion_lab_id?: number
+  // Posición personalizada (opcional): el estudiante puede mover un curso a otro
+  // día/hora distinto del horario oficial de su sección. Si están ausentes, se usa
+  // la posición real de la sección. Viaja en el mismo JSONB de horarios_personales,
+  // no requiere cambios de backend.
+  dia_horario_id?: number
+  periodo_inicio_id?: number
 }
 
 export interface HorarioPersonal {
@@ -235,4 +241,55 @@ export interface HorarioPersonal {
   horario_origen_id: number | null
   detalles: HorarioPersonalDetalle[]
   actualizado: string | null
+}
+
+// ─── Algoritmo Genético ────────────────────────────────────────────────────
+
+export interface AlgoritmoConfig {
+  id?: number
+  tamano_poblacion: number
+  max_generaciones: number
+  aptitud_objetivo: number | null
+  tasa_mutacion: number
+  metodo_seleccion: 'torneo' | 'ruleta'
+  metodo_cruce: 'un_punto' | 'multipunto'
+  metodo_mutacion: 'intercambio' | 'reisercion'
+  duracion_periodo: number
+  hora_inicio_manana: string
+  hora_fin_manana: string
+  hora_inicio_tarde: string
+  hora_fin_tarde: string
+}
+
+export interface AlgoritmoEstado {
+  corriendo: boolean
+  generacion: number
+  mejorAptitud: number | null
+  conflictos: number | null
+  horarioId: number | null
+  error: string | null
+}
+
+export interface HistorialRow {
+  generacion: number
+  mejor_aptitud: number
+  conflictos: number
+}
+
+export type WsEvent =
+  | { type: 'connected';  payload: { message: string } }
+  | { type: 'estado';     payload: AlgoritmoEstado }
+  | { type: 'progreso';   payload: { generacion: number; mejorAptitud: number; conflictos: number } }
+  | { type: 'finalizado'; payload: { horarioId: number; stats: unknown } }
+  | { type: 'error';      payload: { message: string } }
+
+export interface EjecutarBody {
+  nombre?: string
+  tamano_poblacion?: number
+  max_generaciones?: number
+  metodo_seleccion?: AlgoritmoConfig['metodo_seleccion']
+  metodo_cruce?: AlgoritmoConfig['metodo_cruce']
+  metodo_mutacion?: AlgoritmoConfig['metodo_mutacion']
+  tasa_mutacion?: number
+  aptitud_objetivo?: number
 }

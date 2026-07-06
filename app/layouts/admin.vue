@@ -1,6 +1,7 @@
 <template>
   <SidebarProvider :default-open="true">
     <AdminSidebar />
+    <SidebarFloatingToggle />
     <div class="dark:bg-surface-800 w-full bg-white">
       <nav
         class="dark:bg-surface-800/80 fixed top-0 z-20 h-14 w-full bg-white/80 px-4 py-2.5 backdrop-blur-sm transition-shadow lg:hidden"
@@ -30,6 +31,7 @@
 
 <script lang="ts" setup>
 import AdminSidebar from '~/components/partials/navigation/AdminSidebar.vue'
+import SidebarFloatingToggle from '~/components/partials/navigation/SidebarFloatingToggle.vue'
 import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
 
 const { hasScrolled } = useNavScrollShadow()
