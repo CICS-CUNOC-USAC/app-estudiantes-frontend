@@ -18,6 +18,7 @@
         'flex-1': !$slots.content
       }"
     >
+      <img v-if="image" :src="image" class="mb-2 h-32 w-full rounded-md object-cover" />
       <Icon v-if="headerIcon" :name="headerIcon" />
       <CardTitle class="font-heading text-lg font-semibold">{{
         title
@@ -66,6 +67,7 @@ defineProps<{
   headerIcon?: string
   noSpacing?: boolean
   unstyled?: boolean
+  image?: string
 }>()
 </script>
 <style lang="postcss" scoped></style>
