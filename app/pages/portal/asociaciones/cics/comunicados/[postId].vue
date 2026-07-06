@@ -1,8 +1,18 @@
 <template>
   <main class="pb-8 pt-16">
 
-    <img v-if="data?.data.hero_image" :src="imageUrl" :alt="data.data.hero_image.alternativeText || ''"
-      class="mx-auto mb-4 max-h-125 w-full object-cover" />
+    <div v-if="data?.data.hero_image" class="transition-[padding] duration-300" :class="{
+      'px-6': hasScrolled,
+      'p-0': !hasScrolled
+    }">
+      <img :src="imageUrl" :alt="data.data.hero_image.alternativeText || ''"
+        class="mx-auto mb-4 max-h-125 w-full object-cover"
+        :class="{
+          'rounded-lg': hasScrolled,
+          'rounded-none': !hasScrolled
+        }"
+        />
+    </div>
     <section class="max-w-5xl mx-auto px-5 lg:px-8">
 
       <main v-if="data && status === 'success'">
@@ -36,12 +46,11 @@
 </template>
 <script setup lang="ts">
 import { StrapiBlocks } from 'vue-strapi-blocks-renderer'
-import ElementNotFound from '~/components/partials/ElementNotFound.vue'
-import Button from '~/components/ui/button/Button.vue'
+import CMessage from '~/components/partials/CMessage.vue'
 import ComunicadoPostComments from '~/components/portal/comunicados/ComunicadoPostComments.vue'
 import ComunicadoPostReactions from '~/components/portal/comunicados/ComunicadoPostReactions.vue'
+import Button from '~/components/ui/button/Button.vue'
 import { type Comunicado } from '~/lib/api/strapi/types'
-import CMessage from '~/components/partials/CMessage.vue'
 import { handleShareCurrentLink } from '~/utils/consts/share-link'
 
 const route = useRoute()
@@ -58,6 +67,8 @@ const imageUrl = computed(() => {
   }
   return
 })
+
+const { hasScrolled } = useNavScrollShadow(50)
 
 const formatPublishedDate = (dateString: string) => {
   const date = new Date(dateString)

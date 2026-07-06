@@ -3,16 +3,16 @@
 
 
     <section class="max-w-5xl mx-auto px-5 lg:px-8">
-      <header class="mx-auto mt-2 max-w-3xl">
+      <header class="mx-auto mt-2">
         <template v-if="status === 'pending'">
           <Skeleton class="mt-1.5 mb-5"></Skeleton>
           <Skeleton height="2.3rem" class=""></Skeleton>
         </template>
         <template v-else-if="status === 'success' && data">
           <nav class="flex flex-wrap gap-x-3">
-            <Button v-if="fromSearch" icon="icon-park-outline:arrow-left" variant="link" label="Regresar a búsqueda"
+            <Button v-if="fromSearch" icon="icon-park-outline:search" variant="link" :label="`Regresar a búsqueda: ${fromSearch}`"
               class="text-muted-color mb-4 lg:mb-2" :to="`/portal/general/busqueda?q=${fromSearch}`" />
-            <Button icon="lucide:layout-dashboard" variant="link" label="Ver todas las publicaciones"
+            <Button icon="icon-park-outline:arrow-left" variant="link" label="Regresar a publicaciones"
               class="text-muted-color mb-4 lg:mb-2" to="/portal/general/publicaciones" />
             <Button icon="icon-park-twotone:share-one" variant="link" label="Compartir publicación"
               class="text-muted-color mb-4 lg:mb-2" @click="handleShareCurrentLink" />
@@ -32,14 +32,14 @@
         <!-- <div class="mt-4 border-t border-zinc-300/50 dark:border-zinc-300/30" /> -->
       </header>
       <template v-if="status === 'pending'">
-        <div class="mx-auto mt-5 max-w-3xl">
+        <div class="mx-auto mt-5 max-w-full">
           <Skeleton width="100%"></Skeleton>
           <Skeleton width="60%" class="mt-2"></Skeleton>
           <Skeleton width="80%" class="mt-4"></Skeleton>
         </div>
       </template>
       <template v-else-if="status === 'success' && data">
-        <article class="mx-auto max-w-3xl">
+        <article class="mx-auto max-w-full!">
           <div class="official-post-content" v-html="data?.content" />
         </article>
       </template>
