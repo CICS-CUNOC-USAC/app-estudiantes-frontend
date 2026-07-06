@@ -33,10 +33,15 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits<{
-  'drop': [payload: { detalleId: number; nuevoPeriodoId: number; colIndex: number }]
+  'drop': [payload: { detalleId: number; nuevoPeriodoId: number; colIndex: number; celdaOcupadaPor?: number }]
   'click-block': [detalle: HorarioDetalle]
   'remove-block': [detalle: HorarioDetalle]
 }>()
+
+// Marca si el drag actual terminó en una celda válida de la grilla (drop real).
+// Si un bloque colocado se suelta FUERA de cualquier celda (catalogMode), se interpreta
+// como "quitar arrastrando afuera".
+let dropHandled = false
 
 const conflictSet = computed(() => new Set(props.conflictIds ?? []))
 
@@ -117,6 +122,7 @@ function onDragLeave(colIndex: number, periodId: number) {
 function onDrop(e: DragEvent, colIndex: number, period: Period) {
   e.preventDefault()
   dragOverCell.value = null
+  dropHandled = true
 
   const rawId = e.dataTransfer?.getData('detalleId')
   if (!rawId) return
@@ -134,17 +140,44 @@ function onDrop(e: DragEvent, colIndex: number, period: Period) {
   }
   // Catalog items (not yet in grid): emit without span validation
 
-  emit('drop', { detalleId, nuevoPeriodoId: period.id, colIndex })
+  // ¿La celda destino ya tiene otra sección colocada? (distinta a la que se arrastra)
+  // Permite a quien recibe el evento decidir si es un "cambio de sección" por drag.
+  const ocupante = getDetalle(colIndex, period.id)
+  const celdaOcupadaPor = ocupante && ocupante.detalle_id !== detalleId ? ocupante.detalle_id : undefined
+
+  emit('drop', { detalleId, nuevoPeriodoId: period.id, colIndex, celdaOcupadaPor })
 }
 
 function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
+  dropHandled = false
   e.dataTransfer?.setData('detalleId', detalle.detalle_id.toString())
+}
+
+// Si un bloque colocado (catalogMode) se suelta fuera de cualquier celda válida,
+// no hubo drop → se interpreta como "arrastrar afuera para quitar".
+function onBlockDragEnd(detalle: HorarioDetalle) {
+  if (props.catalogMode && !dropHandled) {
+    emit('remove-block', detalle)
+  }
 }
 </script>
 
 <template>
   <div class="overflow-x-auto">
-    <div class="min-w-205">
+    <!-- Sin periodos la grilla no puede dibujar filas: hacerlo visible, nunca silencioso -->
+    <div
+      v-if="periodos.length === 0"
+      class="border-2 border-dashed border-red-400 rounded-xl p-6 text-center space-y-1"
+    >
+      <Icon name="lucide:calendar-x" class="size-8 text-red-400 mx-auto" />
+      <p class="text-sm font-black text-red-600 dark:text-red-400">No se cargaron los periodos de clase</p>
+      <p class="text-xs text-muted-foreground">
+        Sin periodos no se puede dibujar el horario. Verifica que el genetic-scheduler esté
+        corriendo y recarga la página.
+      </p>
+    </div>
+
+    <div v-else class="min-w-205">
 
       <!-- Header row: empty time column + 5 day headers -->
       <div class="grid grid-cols-[56px_repeat(5,minmax(130px,1fr))] xl:grid-cols-[64px_repeat(5,minmax(160px,1fr))] gap-1.5 mb-1.5 sticky top-0 z-10 bg-card py-1">
@@ -180,7 +213,7 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
             :class="{ 'bg-muted/30 rounded-lg': period.es_tarde }"
           >
             <!-- Time column -->
-            <div class="text-[9px] xl:text-[10px] font-bold text-muted-foreground text-right pr-1 xl:pr-1.5 pt-1 whitespace-pre-line leading-tight">{{ period.hora_inicio.slice(0,5) }}&#10;{{ period.hora_fin.slice(0,5) }}</div>
+            <div class="text-[9px] xl:text-[10px] font-bold text-muted-foreground text-right pr-1 xl:pr-1.5 pt-1 whitespace-pre-line leading-tight">{{ (period.hora_inicio ?? '').slice(0,5) }}&#10;{{ (period.hora_fin ?? '').slice(0,5) }}</div>
 
             <!-- 5 day cells (columns 1–5) -->
             <template v-for="colIndex in [1, 2, 3, 4, 5]" :key="colIndex">
@@ -194,14 +227,15 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
               >
                 <ScheduleBlock
                   :detalle="getDetalle(colIndex, period.id)!"
-                  :editable="catalogMode ? false : editable"
+                  :editable="catalogMode ? true : editable"
                   :readonly="readonly"
                   :show-remove="catalogMode ?? false"
                   :is-conflict="conflictSet.has(getDetalle(colIndex, period.id)!.detalle_id)"
                   :style="{ minHeight: blockHeight(getDetalle(colIndex, period.id)!) + 'px' }"
                   @click="(!catalogMode || clickable) && emit('click-block', getDetalle(colIndex, period.id)!)"
                   @remove="emit('remove-block', getDetalle(colIndex, period.id)!)"
-                  @dragstart="!catalogMode && onBlockDragStart($event, getDetalle(colIndex, period.id)!)"
+                  @dragstart="onBlockDragStart($event, getDetalle(colIndex, period.id)!)"
+                  @dragend="onBlockDragEnd(getDetalle(colIndex, period.id)!)"
                 />
               </div>
 

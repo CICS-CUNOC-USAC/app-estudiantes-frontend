@@ -12,6 +12,9 @@ const props = defineProps<{
   open: boolean
   cursosCatalogo: CursoCatalogo[]
   cursosPreseleccionados: string[]
+  // Cursos obligatorios pendientes del pensum completo (no solo el semestre "actual"
+  // heurístico), acotados a los créditos disponibles del ciclo. Ver personal-schedule.ts.
+  sugerencia?: string[]
 }>()
 
 const emit = defineEmits<{
@@ -54,6 +57,10 @@ function toggleCurso(codigo: string) {
 
 function seleccionarTodos() {
   cursosSeleccionados.value = props.cursosCatalogo.map((c) => c.codigo)
+}
+
+function sugerirHorario() {
+  cursosSeleccionados.value = [...(props.sugerencia ?? [])]
 }
 
 function deseleccionarTodos() {
@@ -105,6 +112,21 @@ const jornadaOptions: { value: Jornada; label: string }[] = [
           </button>
         </div>
       </div>
+
+      <!-- Suggest based on pensum progress -->
+      <Button
+        variant="tonal"
+        size="sm"
+        icon="lucide:sparkles"
+        class="mb-3 w-full"
+        :disabled="!sugerencia || sugerencia.length === 0"
+        @click="sugerirHorario"
+      >
+        Sugerir horario ({{ sugerencia?.length ?? 0 }} curso{{ (sugerencia?.length ?? 0) !== 1 ? 's' : '' }} pendiente{{ (sugerencia?.length ?? 0) !== 1 ? 's' : '' }})
+      </Button>
+      <p v-if="!sugerencia || sugerencia.length === 0" class="text-[10px] text-muted-foreground -mt-2 mb-3">
+        No hay sugerencias: o ya completaste tu pensum, o ningún pendiente tiene oferta este ciclo.
+      </p>
 
       <!-- Quick actions -->
       <div class="flex items-center justify-between mb-2">

@@ -7,13 +7,19 @@ import type {
   HorarioPersonalDetalle,
   Carrera,
 } from '~/lib/api/schedules-generator/types'
-import { fetchHorarios, fetchHorario } from '~/lib/api/schedules-generator/horarios'
+import { fetchHorarios, fetchHorario, normalizarDetalles } from '~/lib/api/schedules-generator/horarios'
 import { fetchPeriods, type Period } from '~/lib/api/schedules-generator/periods'
 import { fetchCarreras } from '~/lib/api/schedules-generator/carreras'
 import { getPersonal, savePersonal } from '~/lib/api/schedules-generator/horarios-personales'
 import { resolveCarreraId } from '~/lib/api/schedules-generator/career-map'
 import { careerProgressApi, type ProgressResponse } from '~/lib/api/dashboard/career-progress'
 import { useRegularAuthStore } from '~/stores/regular-auth'
+
+// Nombres de patrón de día (fijos, definidos en el DDL del scheduler: dias_horario)
+const DIA_HORARIO_NOMBRE: Record<number, string> = {
+  1: 'Lunes, Miércoles y Viernes',
+  2: 'Martes y Jueves',
+}
 
 export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
   // ── State ──────────────────────────────────────────────────────────────────
@@ -54,8 +60,21 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
         fetchPeriods(),
       ])
       propuesto.value = completo.horario
-      catalogo.value = completo.detalles
-      if (fetchedPeriodos !== undefined) periodos.value = fetchedPeriodos
+
+      // Sin periodos la grilla no puede dibujarse: reintenta una vez y si no, error visible
+      let periodosFinales = fetchedPeriodos
+      if (!periodosFinales || periodosFinales.length === 0) {
+        periodosFinales = await fetchPeriods()
+      }
+      if (periodosFinales && periodosFinales.length > 0) {
+        periodos.value = periodosFinales
+      }
+      else {
+        error.value = 'No se pudieron cargar los periodos de clase; el horario no puede dibujarse. Verifica el genetic-scheduler y reintenta.'
+      }
+
+      // Con periodos a mano se rellenan detalles con periodo/hora null (datos reales los traen)
+      catalogo.value = normalizarDetalles(completo.detalles, periodos.value)
     }
     catch (err: unknown) {
       error.value = (err as { data?: { error?: string; message?: string } })?.data?.error
@@ -84,20 +103,28 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
 
       const carreraId = resolveCarreraId(carreras as Carrera[], user.career.code)
 
-      const semestres = progressResponse.progress.semester_progress
+      const semestres = progressResponse.progress?.semester_progress ?? []
       // Find the last semester that still has at least one unapproved course
       const semConPendientes = [...semestres]
         .reverse()
-        .find(s => s.courses_semester_progress.some(c => !c.approved))
+        .find(s => (s?.courses_semester_progress ?? []).some(c => !c?.approved))
 
       const semActual = semConPendientes ?? semestres[semestres.length - 1] ?? null
 
       const semestre = semActual?.semester ?? null
-      const cursos_pendientes = semActual
-        ? semActual.courses_semester_progress
-            .filter(c => !c.approved)
-            .map(c => c.course_code)
-        : []
+      const pendientesDelSemestre = (semActual?.courses_semester_progress ?? [])
+        .filter(c => !c?.approved && c?.course_code)
+
+      // Solo obligatorios del semestre (no optativos). Si el API de progreso no trae
+      // `career_course.mandatory` fiable por registro (pasa en datos reales, mismo
+      // problema que con los créditos) y ese filtro deja todo vacío pese a haber
+      // pendientes, no se bloquea: se usan todos los pendientes en vez de nada.
+      const pendientesObligatorios = pendientesDelSemestre.filter(c => c?.career_course?.mandatory)
+      const pendientesFinal = pendientesObligatorios.length > 0 ? pendientesObligatorios : pendientesDelSemestre
+
+      // String()+trim(): el API de progreso a veces manda códigos numéricos y a veces
+      // strings, a veces con espacios; sin normalizar, las Map lookups fallan en silencio.
+      const cursos_pendientes = pendientesFinal.map(c => String(c.course_code).trim())
 
       estudiante.value = { ra: user.ra, carrera_id: carreraId, semestre, cursos_pendientes }
     }
@@ -131,10 +158,36 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     })
   }
 
+  // Empieza de cero: vacía toda la selección local (no toca lo ya guardado hasta "Guardar")
+  const reiniciarHorario = () => {
+    seleccion.value = []
+  }
+
   // Cambiar de sección: en el horario personal "mover" un curso = elegir otra sección
   const cambiarSeccion = (actual: HorarioDetalle, nueva: HorarioDetalle) => {
     quitar(actual)
     agregar(nueva)
+  }
+
+  // El horario personal es de referencia del estudiante, no el oficial: se le permite
+  // mover libremente un bloque a otro día/hora (a diferencia del horario oficial admin,
+  // que sí debe ser exacto). Los choques se marcan como advertencia visual (rojo en la
+  // grilla), nunca se bloquea la acción.
+  const moverBloque = (detalle: HorarioDetalle, dia_horario_id: number, periodo_inicio_id: number) => {
+    const esDeEsteBloque = (s: HorarioPersonalDetalle) =>
+      detalle.es_laboratorio ? s.seccion_lab_id === detalle.seccion_lab_id : s.seccion_id === detalle.seccion_id
+    seleccion.value = seleccion.value.map(s => esDeEsteBloque(s) ? { ...s, dia_horario_id, periodo_inicio_id } : s)
+  }
+
+  // Quita la posición personalizada: el bloque vuelve a la hora real de su sección oficial
+  const restaurarPosicionOficial = (detalle: HorarioDetalle) => {
+    const esDeEsteBloque = (s: HorarioPersonalDetalle) =>
+      detalle.es_laboratorio ? s.seccion_lab_id === detalle.seccion_lab_id : s.seccion_id === detalle.seccion_id
+    seleccion.value = seleccion.value.map((s) => {
+      if (!esDeEsteBloque(s)) return s
+      const { dia_horario_id: _d, periodo_inicio_id: _p, ...resto } = s
+      return resto
+    })
   }
 
   // Otras secciones del mismo curso y tipo (teórica/lab), distintas a la actual
@@ -166,17 +219,29 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     })
   }
 
-  // Copia el horario propuesto de la carrera+semestre del estudiante a la selección
-  const duplicarPropuesto = () => {
+  // Copia el horario propuesto a la selección. Por defecto solo la carrera+semestre
+  // del estudiante, pero si esa combinación no tiene oferta este ciclo el estudiante
+  // puede pedir duplicar de todos modos con un alcance más amplio ('carrera' = toda
+  // su carrera, 'todo' = el propuesto completo). Devuelve cuántas secciones se
+  // agregaron para que la página informe con la verdad.
+  const duplicarPropuesto = (alcance: 'semestre' | 'carrera' | 'todo' = 'semestre'): number => {
     seleccion.value = []
-    const base = catalogoDeMiSemestre.value
+    const base = alcance === 'semestre'
+      ? catalogoDeMiSemestre.value
+      : alcance === 'carrera'
+        ? catalogoDeMiCarrera.value
+        : catalogo.value
     const vistos = new Set<string>()
+    let agregadas = 0
     for (const d of base) {
       const key = d.es_laboratorio ? `lab-${d.seccion_lab_id}` : `sec-${d.seccion_id}`
       if (vistos.has(key)) continue
       vistos.add(key)
+      const antes = seleccion.value.length
       agregar(d)
+      if (seleccion.value.length > antes) agregadas++
     }
+    return agregadas
   }
 
   const estaSeleccionado = (detalle: HorarioDetalle): boolean => {
@@ -280,7 +345,8 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     error.value = null
     try {
       const result = await getPersonal(estudiante.value.ra)
-      seleccion.value = result.detalles
+      // El JSONB `detalles` puede venir null desde la BD: nunca dejar seleccion sin arreglo
+      seleccion.value = Array.isArray(result.detalles) ? result.detalles : []
     }
     catch (err: unknown) {
       error.value = (err as { data?: { error?: string; message?: string } })?.data?.error
@@ -306,18 +372,54 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     })
   })
 
-  const bloquesColocados = computed((): HorarioDetalle[] => {
-    return catalogo.value.filter((d) => {
-      if (d.es_laboratorio) {
-        return seleccion.value.some(s => s.seccion_lab_id === d.seccion_lab_id)
-      }
-      return seleccion.value.some(s => s.seccion_id === d.seccion_id)
-    })
+  // Todo el propuesto de la carrera del estudiante (cualquier semestre); es la base
+  // de "duplicar de todos modos" cuando su semestre no tiene oferta este ciclo
+  const catalogoDeMiCarrera = computed(() => {
+    if (estudiante.value.carrera_id === null) return catalogo.value
+    return catalogo.value.filter(d => d.carrera_id === estudiante.value.carrera_id)
   })
 
-  const conflictosLocales = computed((): string[] => {
+  const bloquesColocados = computed((): HorarioDetalle[] => {
+    return catalogo.value
+      .map((d) => {
+        const entry = d.es_laboratorio
+          ? seleccion.value.find(s => s.seccion_lab_id === d.seccion_lab_id)
+          : seleccion.value.find(s => s.seccion_id === d.seccion_id)
+        if (!entry) return null
+        // Posición personalizada: se dibuja donde el estudiante la movió, manteniendo
+        // la misma duración (span de periodos) que tenía en su horario oficial. También
+        // se recalculan hora/día "de texto" (usados en diálogos y descripciones de
+        // conflicto); si no se recalculan quedan mostrando la hora oficial vieja.
+        if (entry.dia_horario_id !== undefined && entry.periodo_inicio_id !== undefined) {
+          const span = d.periodo_fin_id - d.periodo_inicio_id
+          const nuevoFin = entry.periodo_inicio_id + span
+          const pIni = periodos.value.find(p => p.id === entry.periodo_inicio_id)
+          const pFin = periodos.value.find(p => p.id === nuevoFin)
+          const diasNombre = DIA_HORARIO_NOMBRE[entry.dia_horario_id] ?? d.dias_nombre
+          return {
+            ...d,
+            dia_horario_id: entry.dia_horario_id,
+            periodo_inicio_id: entry.periodo_inicio_id,
+            periodo_fin_id: nuevoFin,
+            hora_inicio: pIni?.hora_inicio ?? d.hora_inicio,
+            hora_fin: pFin?.hora_fin ?? d.hora_fin,
+            es_manana: pIni?.es_manana ?? d.es_manana,
+            es_tarde: pIni?.es_tarde ?? d.es_tarde,
+            dias_nombre: diasNombre,
+            dia_display: diasNombre,
+            modificado_manual: true,
+          }
+        }
+        return d
+      })
+      .filter((d): d is HorarioDetalle => d !== null)
+  })
+
+  // Forma compatible con ConflictsDialog.vue (tipo/descripcion) para reutilizar el
+  // mismo modal que usa el horario oficial admin, en vez de un componente aparte.
+  const conflictosLocales = computed((): { tipo: string; descripcion: string }[] => {
     const bloques = bloquesColocados.value
-    const descripciones: string[] = []
+    const conflictos: { tipo: string; descripcion: string }[] = []
 
     for (let i = 0; i < bloques.length; i++) {
       for (let j = i + 1; j < bloques.length; j++) {
@@ -327,13 +429,14 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
         const solapan = a.periodo_inicio_id <= b.periodo_fin_id
           && b.periodo_inicio_id <= a.periodo_fin_id
         if (solapan) {
-          descripciones.push(
-            `Conflicto: "${a.curso_nombre}" y "${b.curso_nombre}" se solapan el ${a.dias_nombre} (${a.hora_inicio}–${a.hora_fin} vs ${b.hora_inicio}–${b.hora_fin})`,
-          )
+          conflictos.push({
+            tipo: 'Choque de horario',
+            descripcion: `"${a.curso_nombre}" y "${b.curso_nombre}" se solapan el ${a.dias_nombre} (${a.hora_inicio}–${a.hora_fin} vs ${b.hora_inicio}–${b.hora_fin})`,
+          })
         }
       }
     }
-    return descripciones
+    return conflictos
   })
 
   // detalle_id en conflicto para pintarlos en la grilla del estudiante
@@ -353,45 +456,51 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     return [...ids]
   })
 
-  // Map curso_codigo → créditos, derivado del progreso oficial
-  const creditosPorCurso = computed<Map<string, number>>(() => {
-    const map = new Map<string, number>()
+  // Map curso_codigo → nombre. Prioriza el catálogo del genetic-scheduler (curso_nombre,
+  // fuente ya confirmada confiable) y solo recurre al progreso académico para cursos que
+  // no tienen oferta este ciclo (por eso no aparecen en el catálogo).
+  const nombrePorCurso = computed<Map<string, string>>(() => {
+    const map = new Map<string, string>()
     const p = progresoAcademico.value
-    if (!p) return map
-    for (const sem of p.progress.semester_progress) {
-      for (const c of sem.courses_semester_progress) {
-        map.set(c.career_course.course.code, c.career_course.course.credits)
+    if (p) {
+      for (const sem of p.progress?.semester_progress ?? []) {
+        for (const c of sem?.courses_semester_progress ?? []) {
+          const curso = c?.career_course?.course
+          const codigo = curso?.code ?? c?.career_course?.course_code ?? c?.course_code
+          if (codigo && curso?.name) map.set(String(codigo).trim(), curso.name)
+        }
       }
     }
-    return map
-  })
-
-  // Créditos de los cursos actualmente en el horario (dedup por curso_codigo)
-  const creditosEnHorario = computed<number>(() => {
-    const vistos = new Set<string>()
-    let total = 0
-    for (const d of bloquesColocados.value) {
-      if (d.es_laboratorio) continue
-      if (vistos.has(d.curso_codigo)) continue
-      vistos.add(d.curso_codigo)
-      total += creditosPorCurso.value.get(d.curso_codigo) ?? 0
+    // El catálogo pisa al progreso académico: es la fuente que sabemos correcta.
+    for (const d of catalogo.value) {
+      if (d.curso_codigo && d.curso_nombre) map.set(String(d.curso_codigo), d.curso_nombre)
     }
-    return total
+    return map
   })
 
   const statsAcademicas = computed(() => {
     const p = progresoAcademico.value
     if (!p) return null
-    const semestres = p.progress.semester_progress
+    const semestres = p.progress?.semester_progress ?? []
     const cursosAprobados = semestres.reduce(
-      (n, s) => n + s.courses_semester_progress.filter(c => c.approved).length, 0)
+      (n, s) => n + (s?.courses_semester_progress ?? []).filter(c => c?.approved).length, 0)
     const cursosTotales = semestres.reduce(
-      (n, s) => n + s.courses_semester_progress.length, 0)
-    const creditosGanados = p.current_credits.total_credits
-    const creditosCarrera = p.mandatory_credits + p.not_mandatory_credits
+      (n, s) => n + (s?.courses_semester_progress ?? []).length, 0)
+    const creditosGanados = p.current_credits?.total_credits ?? 0
+    const creditosCarrera = (p.mandatory_credits ?? 0) + (p.not_mandatory_credits ?? 0)
     const pctAvance = creditosCarrera > 0
       ? Math.round((creditosGanados / creditosCarrera) * 100)
       : 0
+
+    // Avance SOLO de cursos obligatorios del pensum, en créditos (misma fuente y
+    // cálculo que /dashboard/pensum/progress). No se cuenta por curso porque el API
+    // de progreso no puebla `career_course.mandatory` de forma confiable por registro.
+    const creditosObligatoriosGanados = p.current_credits?.mandatory_credits ?? 0
+    const creditosObligatoriosCarrera = p.mandatory_credits ?? 0
+    const pctAvanceObligatorios = creditosObligatoriosCarrera > 0
+      ? Math.round((creditosObligatoriosGanados / creditosObligatoriosCarrera) * 100)
+      : 0
+
     return {
       cursosAprobados,
       cursosTotales,
@@ -399,6 +508,9 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
       creditosCarrera,
       creditosDisponibles: p.available_credits,
       pctAvance,
+      creditosObligatoriosGanados,
+      creditosObligatoriosCarrera,
+      pctAvanceObligatorios,
     }
   })
 
@@ -408,18 +520,70 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     return estudiante.value.cursos_pendientes.filter(c => !enHorario.has(c))
   })
 
+  // De los faltantes, separa los que sí tienen secciones en el propuesto de los
+  // que no tienen oferta este ciclo (el pensum puede incluir cursos sin sección)
+  const codigosConOferta = computed<Set<string>>(() =>
+    new Set(catalogo.value.map(d => d.curso_codigo)),
+  )
+
+  const pendientesConOferta = computed<string[]>(() =>
+    cursosPendientesFaltantes.value.filter(c => codigosConOferta.value.has(c)),
+  )
+
+  const pendientesSinOferta = computed<string[]>(() =>
+    cursosPendientesFaltantes.value.filter(c => !codigosConOferta.value.has(c)),
+  )
+
+  // Sugerencia de cursos a armar en base al pensum completo (no solo el semestre
+  // "actual" heurístico): pendientes con oferta este ciclo, en orden de pensum,
+  // acotados a los créditos disponibles del ciclo. Prioriza obligatorios; si el API
+  // de progreso no trae `career_course.mandatory` fiable por registro (pasa en
+  // datos reales) y ese filtro deja todo vacío, no se bloquea: se sugiere de
+  // los pendientes en general en vez de devolver una sugerencia vacía sin sentido.
+  const sugerenciaHorario = computed<string[]>(() => {
+    const p = progresoAcademico.value
+    if (!p) return []
+    const disponibles = p.available_credits ?? 0
+    const capar = disponibles > 0
+
+    const recolectar = (soloObligatorios: boolean) => {
+      const lista: { codigo: string; semestre: number; creditos: number }[] = []
+      for (const sem of p.progress?.semester_progress ?? []) {
+        for (const c of sem?.courses_semester_progress ?? []) {
+          const cc = c?.career_course
+          if (c?.approved || !c?.course_code) continue
+          if (soloObligatorios && !cc?.mandatory) continue
+          const codigo = String(c.course_code)
+          if (!codigosConOferta.value.has(codigo)) continue
+          lista.push({
+            codigo,
+            semestre: sem?.semester ?? 0,
+            creditos: cc?.course?.credits ?? 0,
+          })
+        }
+      }
+      return lista
+    }
+
+    const soloObligatorios = recolectar(true)
+    const pendientes = soloObligatorios.length > 0 ? soloObligatorios : recolectar(false)
+    pendientes.sort((a, b) => a.semestre - b.semestre)
+
+    const seleccionados: string[] = []
+    let acumulado = 0
+    for (const c of pendientes) {
+      if (capar && acumulado + c.creditos > disponibles) continue
+      seleccionados.push(c.codigo)
+      acumulado += c.creditos
+    }
+    return seleccionados
+  })
+
   const horarioCompleto = computed<boolean>(() =>
     cursosPendientesFaltantes.value.length === 0
     && bloquesColocados.value.length > 0
     && conflictoIds.value.length === 0,
   )
-
-  // ¿Supera los créditos disponibles del ciclo?
-  const excedeCreditos = computed<boolean>(() => {
-    const s = statsAcademicas.value
-    if (!s) return false
-    return creditosEnHorario.value > s.creditosDisponibles
-  })
 
   // Huecos entre clases y jornada predominante, derivado de bloques + periodos
   const resumenJornada = computed(() => {
@@ -471,7 +635,10 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     cargarContextoEstudiante,
     agregar,
     quitar,
+    reiniciarHorario,
     cambiarSeccion,
+    moverBloque,
+    restaurarPosicionOficial,
     seccionesAlternativas,
     chocaConSeleccion,
     duplicarPropuesto,
@@ -480,15 +647,17 @@ export const usePersonalScheduleStore = defineStore('personal-schedule', () => {
     guardar,
     cargar,
     catalogoDeMiSemestre,
+    catalogoDeMiCarrera,
     bloquesColocados,
     conflictosLocales,
     conflictoIds,
-    creditosPorCurso,
-    creditosEnHorario,
+    nombrePorCurso,
     statsAcademicas,
     cursosPendientesFaltantes,
+    pendientesConOferta,
+    pendientesSinOferta,
+    sugerenciaHorario,
     horarioCompleto,
-    excedeCreditos,
     resumenJornada,
     resumen,
   }

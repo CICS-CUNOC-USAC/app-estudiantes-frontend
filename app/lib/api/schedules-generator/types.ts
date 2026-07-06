@@ -228,6 +228,12 @@ export interface Salon {
 export interface HorarioPersonalDetalle {
   seccion_id?: number
   seccion_lab_id?: number
+  // Posición personalizada (opcional): el estudiante puede mover un curso a otro
+  // día/hora distinto del horario oficial de su sección. Si están ausentes, se usa
+  // la posición real de la sección. Viaja en el mismo JSONB de horarios_personales,
+  // no requiere cambios de backend.
+  dia_horario_id?: number
+  periodo_inicio_id?: number
 }
 
 export interface HorarioPersonal {

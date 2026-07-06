@@ -30,7 +30,7 @@ onMounted(async () => {
 
   const data: ChartData<'line'> = {
     datasets: [{
-      label: 'Mejor Aptitud (%)',
+      label: 'Mejor Aptitud',
       data: props.points.map(p => ({ x: p.x, y: p.y })),
       borderColor: '#ff6600',
       backgroundColor: 'rgba(255,102,0,0.07)',
@@ -56,14 +56,15 @@ onMounted(async () => {
         ticks: { color: tc, maxTicksLimit: 12, font: { size: 10 }, maxRotation: 0 },
       },
       y: {
-        min: 0,
-        max: 100,
-        title: { display: true, text: 'Mejor Aptitud (%)', color: tc, font: { size: 11 } },
+        // Sin min/max fijo: la aptitud del scheduler NO es un porcentaje 0-100, es un
+        // puntaje de penalización que puede ser negativo y de magnitud variable según
+        // el tamaño del set de datos (con datos reales llega a los miles negativos).
+        // Fijarlo a 0-100 recortaba la curva fuera de la vista — parecía "sin evolución".
+        title: { display: true, text: 'Mejor Aptitud', color: tc, font: { size: 11 } },
         grid:  { color: gc },
         ticks: {
           color: tc,
           font: { size: 10 },
-          callback: (v) => v + '%',
         },
       },
     },
@@ -78,37 +79,33 @@ onMounted(async () => {
         padding: 10,
         callbacks: {
           title: (ctx) => `Generación ${ctx[0]?.parsed?.x ?? ''}`,
-          label: (ctx) => `  Aptitud: ${(ctx.parsed?.y ?? 0).toFixed(2)} %`,
+          label: (ctx) => `  Aptitud: ${(ctx.parsed?.y ?? 0).toFixed(2)}`,
         },
       },
     },
   }
 
   chart = new Chart(canvasEl.value, { type: 'line', data, options })
-  lastLen = props.points.length
 })
 
 let rafPending = false
-let lastLen = 0
 
+// Re-siembra completa en cada sync (coalescida por rAF): con el append incremental
+// anterior, cargar el historial de un horario ya graficado (misma cantidad de
+// puntos) no cambiaba `length` y el botón "Historial" parecía no hacer nada.
+// Con ≤2000 generaciones el resembrado es despreciable.
 function syncChart() {
-  if (!chart) return
+  if (!chart || !chart.data.datasets[0]) return
   const ds = chart.data.datasets[0].data as { x: number; y: number }[]
-  // Reset (limpiaron la gráfica o cargaron historial): re-siembra completo
-  if (props.points.length < lastLen) {
-    ds.length = 0
-    lastLen = 0
-  }
-  // Append solo lo nuevo
-  for (let i = lastLen; i < props.points.length; i++) {
-    ds.push({ x: props.points[i].x, y: props.points[i].y })
-  }
-  lastLen = props.points.length
+  ds.length = 0
+  for (const p of props.points) ds.push({ x: p.x, y: p.y })
   chart.update('none')
 }
 
 watch(
-  () => props.points.length,
+  // La referencia cambia cuando el store reemplaza el historial (cargar historial /
+  // limpiar) y también cuando el getter recalcula por push durante la ejecución.
+  () => props.points,
   () => {
     if (rafPending) return
     rafPending = true
@@ -183,11 +180,11 @@ defineExpose({ downloadPNG })
           <p class="text-xs text-muted-foreground">Generaciones</p>
         </div>
         <div>
-          <p class="text-sm font-bold text-cics-primary">{{ maxApt?.toFixed(2) }}%</p>
+          <p class="text-sm font-bold text-cics-primary">{{ maxApt?.toFixed(2) }}</p>
           <p class="text-xs text-muted-foreground">Máx. aptitud</p>
         </div>
         <div>
-          <p class="text-sm font-bold text-foreground">{{ initApt?.toFixed(2) }}%</p>
+          <p class="text-sm font-bold text-foreground">{{ initApt?.toFixed(2) }}</p>
           <p class="text-xs text-muted-foreground">Aptitud inicial</p>
         </div>
         <div>
@@ -195,7 +192,7 @@ defineExpose({ downloadPNG })
             class="text-sm font-bold"
             :class="delta !== null && delta >= 0 ? 'text-green-600 dark:text-green-400' : 'text-red-500'"
           >
-            {{ delta !== null ? (delta >= 0 ? '+' : '') + delta.toFixed(2) + '%' : '—' }}
+            {{ delta !== null ? (delta >= 0 ? '+' : '') + delta.toFixed(2) : '—' }}
           </p>
           <p class="text-xs text-muted-foreground">Mejora</p>
         </div>

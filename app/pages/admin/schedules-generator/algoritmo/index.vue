@@ -1,6 +1,8 @@
 <script setup lang="ts">
+import { toast } from 'vue-sonner'
 import type { AlgoritmoConfig, EjecutarBody } from '~/lib/api/schedules-generator/types'
 import { ejecutar } from '~/lib/api/schedules-generator/algoritmo'
+import { fetchHorarios } from '~/lib/api/schedules-generator/horarios'
 
 definePageMeta({
   layout: 'admin',
@@ -107,10 +109,33 @@ function onReloadConfig() {
   store.fetchConfig()
 }
 
+const historialLoading = ref(false)
+
 async function onLoadHistorial() {
-  const id = store.currentHorarioId
-  if (!id) return
-  await store.fetchHistorial(id)
+  if (historialLoading.value) return
+  historialLoading.value = true
+  try {
+    // Sin ejecución en esta sesión, se carga el historial del horario más reciente
+    let id = store.currentHorarioId
+    if (!id) {
+      const lista = await fetchHorarios()   // la API los devuelve del más nuevo al más viejo
+      id = lista[0]?.id ?? null
+    }
+    if (!id) {
+      toast.warning('Aún no hay horarios generados; ejecuta el algoritmo primero.')
+      return
+    }
+    await store.fetchHistorial(id)
+    if (store.historial.length > 0) {
+      toast.success(`Historial del horario #${id} cargado (${store.historial.length} generaciones).`)
+    }
+    else {
+      toast.info(`El horario #${id} no tiene historial de generaciones guardado.`)
+    }
+  }
+  finally {
+    historialLoading.value = false
+  }
 }
 
 function onClearChart() {
@@ -390,7 +415,7 @@ const mutacionItems = [
               <span>Aptitud final</span>
               <span class="font-bold text-foreground">
                 {{ store.estado?.mejorAptitud !== null && store.estado?.mejorAptitud !== undefined
-                    ? store.estado.mejorAptitud.toFixed(2) + '%'
+                    ? store.estado.mejorAptitud.toFixed(2)
                     : '—' }}
               </span>
             </div>
@@ -501,7 +526,7 @@ const mutacionItems = [
             <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
               <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
                 {{ store.estado?.mejorAptitud !== null && store.estado?.mejorAptitud !== undefined
-                    ? store.estado.mejorAptitud.toFixed(2) + '%'
+                    ? store.estado.mejorAptitud.toFixed(2)
                     : '—' }}
               </div>
               <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Mejor Aptitud</div>
@@ -551,8 +576,8 @@ const mutacionItems = [
                 variant="tonal"
                 size="sm"
                 icon="lucide:history"
-                title="Cargar historial del último horario"
-                :disabled="!store.currentHorarioId"
+                title="Cargar la evolución de aptitud del último horario generado"
+                :loading="historialLoading"
                 @click="onLoadHistorial"
               >
                 Historial

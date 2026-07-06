@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onErrorCaptured } from 'vue'
 import { toast } from 'vue-sonner'
+import { Dialog } from '~/components/ui/dialog'
 import type { HorarioDetalle } from '~/lib/api/schedules-generator/types'
 
 definePageMeta({
@@ -11,12 +12,30 @@ definePageMeta({
 
 const personalStore = usePersonalScheduleStore()
 
+// Ningún error de esta vista puede quedar silencioso: se muestra y se loguea
+onErrorCaptured((err) => {
+  console.error('[MiHorario] error interno:', err)
+  toast.error(`Error interno en Mi Horario: ${(err as Error)?.message ?? String(err)}`)
+  return false
+})
+
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 
+// El store marca "loading" true/false en CADA llamada individual (cargarPropuesto,
+// cargarContextoEstudiante, cargar), así que entre una y otra hay un instante en
+// false → eso es el parpadeo de "horario vacío" que se veía al recargar. Este flag
+// solo se apaga cuando las TRES terminan, y controla el skeleton de la página.
+const cargandoInicial = ref(true)
+
 onMounted(async () => {
-  await personalStore.cargarPropuesto()
-  await personalStore.cargarContextoEstudiante()
-  await personalStore.cargar()
+  try {
+    await personalStore.cargarPropuesto()
+    await personalStore.cargarContextoEstudiante()
+    await personalStore.cargar()
+  }
+  finally {
+    cargandoInicial.value = false
+  }
 })
 
 // ── Catalog filter state ──────────────────────────────────────────────────────
@@ -31,9 +50,30 @@ const propuestoOpen = ref(false)
 const asistentOpen = ref(false)
 const guardandoHorario = ref(false)
 const catalogoVisible = ref(false)
+const conflictsOpen = ref(false)
 
 const swapOpen = ref(false)
 const swapDetalle = ref<HorarioDetalle | null>(null)
+
+const reiniciarOpen = ref(false)
+
+const moverOpen = ref(false)
+const moverPendiente = ref<{
+  detalle: HorarioDetalle
+  diaHorarioId: number
+  periodoInicioId: number
+  periodoFinId: number
+} | null>(null)
+
+const DIA_LABELS: Record<number, string> = { 1: 'Lunes, Miércoles y Viernes', 2: 'Martes y Jueves' }
+
+function labelHorario(diaHorarioId: number, periodoInicioId: number, periodoFinId: number): string {
+  const pIni = personalStore.periodos.find(p => p.id === periodoInicioId)
+  const pFin = personalStore.periodos.find(p => p.id === periodoFinId)
+  const horaIni = pIni?.hora_inicio?.slice(0, 5) ?? '?'
+  const horaFin = pFin?.hora_fin?.slice(0, 5) ?? '?'
+  return `${DIA_LABELS[diaHorarioId] ?? '?'} ${horaIni}–${horaFin}`
+}
 
 // ── Computed: unique carrera ids present in catalogo ─────────────────────────
 
@@ -117,12 +157,100 @@ const swapConflictivas = computed((): number[] =>
 
 // ── Handlers ──────────────────────────────────────────────────────────────────
 
-function onPersonalDrop(payload: { detalleId: number }) {
+// dia_horario_id 1 = L/Mi/V (columnas 1,3,5), 2 = Ma/J (columnas 2,4) — igual que ScheduleGrid
+function diaHorarioDeColumna(colIndex: number): number {
+  return [1, 3, 5].includes(colIndex) ? 1 : 2
+}
+
+function onPersonalDrop(payload: { detalleId: number; nuevoPeriodoId?: number; colIndex?: number; celdaOcupadaPor?: number }) {
   const detalle = personalStore.catalogo.find(d => d.detalle_id === payload.detalleId)
-  if (!detalle) return
-  if (personalStore.estaSeleccionado(detalle)) return
+  if (!detalle) {
+    toast.error('No se encontró ese curso en el catálogo. Recarga la página.')
+    return
+  }
+
+  const yaColocado = personalStore.estaSeleccionado(detalle)
+
+  // Atajo: soltar sobre la celda de OTRA sección del MISMO curso = cambiar de sección
+  if (payload.celdaOcupadaPor) {
+    const ocupante = personalStore.bloquesColocados.find(d => d.detalle_id === payload.celdaOcupadaPor)
+    if (
+      ocupante
+      && ocupante.detalle_id !== detalle.detalle_id
+      && ocupante.curso_codigo === detalle.curso_codigo
+      && ocupante.es_laboratorio === detalle.es_laboratorio
+      && !yaColocado
+    ) {
+      personalStore.cambiarSeccion(ocupante, detalle)
+      toast.success(`${detalle.curso_nombre}: cambiado a la sección ${detalle.seccion_letra ?? ''}`.trim())
+      return
+    }
+  }
+
+  // Tu horario personal es de referencia, no el oficial: se coloca donde tú decidas.
+  // Se confirma con un modal (nunca se bloquea la acción); los choques quedan
+  // marcados en rojo en la grilla, no impiden mover el curso.
+  if (payload.colIndex !== undefined && payload.nuevoPeriodoId !== undefined) {
+    const dia = diaHorarioDeColumna(payload.colIndex)
+    const span = detalle.periodo_fin_id - detalle.periodo_inicio_id
+    moverPendiente.value = {
+      detalle,
+      diaHorarioId: dia,
+      periodoInicioId: payload.nuevoPeriodoId,
+      periodoFinId: payload.nuevoPeriodoId + span,
+    }
+    moverOpen.value = true
+    return
+  }
+
+  // Sin celda específica (botón "+" del catálogo): se agrega en su horario oficial
+  if (yaColocado) {
+    toast.info(`${detalle.curso_nombre} ya está en tu horario`)
+    return
+  }
   personalStore.agregar(detalle)
-  toast.success(`${detalle.curso_nombre} agregado a tu horario`)
+  if (personalStore.estaSeleccionado(detalle)) {
+    toast.success(`${detalle.curso_nombre} agregado a tu horario`)
+  }
+  else {
+    toast.error(`${detalle.curso_nombre} no se pudo agregar: la sección no tiene identificador válido.`)
+  }
+}
+
+function onConfirmarMover() {
+  if (!moverPendiente.value) return
+  const { detalle, diaHorarioId, periodoInicioId } = moverPendiente.value
+  const yaColocado = personalStore.estaSeleccionado(detalle)
+  if (!yaColocado) personalStore.agregar(detalle)
+  personalStore.moverBloque(detalle, diaHorarioId, periodoInicioId)
+
+  const clave = detalle.es_laboratorio
+    ? (b: HorarioDetalle) => b.seccion_lab_id === detalle.seccion_lab_id
+    : (b: HorarioDetalle) => b.seccion_id === detalle.seccion_id
+  const hayChoque = personalStore.bloquesColocados
+    .filter(clave)
+    .some(b => personalStore.conflictoIds.includes(b.detalle_id))
+
+  if (hayChoque) {
+    toast.warning(`${detalle.curso_nombre} movido, pero choca con otro curso en ese horario (revisa el bloque en rojo).`)
+  }
+  else {
+    toast.success(yaColocado ? `${detalle.curso_nombre} movido` : `${detalle.curso_nombre} agregado a tu horario`)
+  }
+  moverOpen.value = false
+  moverPendiente.value = null
+}
+
+function onCancelarMover() {
+  moverOpen.value = false
+  moverPendiente.value = null
+}
+
+function onRestaurarPosicion(detalle: HorarioDetalle) {
+  personalStore.restaurarPosicionOficial(detalle)
+  toast.info(`${detalle.curso_nombre} vuelto a su horario oficial`)
+  swapOpen.value = false
+  swapDetalle.value = null
 }
 
 function onRemoveBlock(detalle: HorarioDetalle) {
@@ -150,15 +278,56 @@ function onRemoveFromSwap() {
   swapDetalle.value = null
 }
 
+// Cuando el semestre del estudiante no tiene oferta, no se le bloquea: se le
+// advierte y puede duplicar igual con un alcance más amplio (su carrera, o el
+// propuesto completo si su carrera tampoco tiene secciones este ciclo).
+const duplicarSinOfertaOpen = ref(false)
+const duplicarAlcance = computed<'carrera' | 'todo'>(() =>
+  personalStore.catalogoDeMiCarrera.length > 0 ? 'carrera' : 'todo',
+)
+const duplicarAlcanceCount = computed(() =>
+  duplicarAlcance.value === 'carrera'
+    ? personalStore.catalogoDeMiCarrera.length
+    : personalStore.catalogo.length,
+)
+
 function onDuplicarPropuesto() {
-  personalStore.duplicarPropuesto()
-  toast.success('Horario propuesto duplicado. Ahora puedes personalizarlo.')
+  if (personalStore.catalogoDeMiSemestre.length === 0) {
+    if (personalStore.catalogo.length === 0) {
+      toast.warning('El horario propuesto no tiene ninguna sección cargada este ciclo; no hay nada que duplicar.')
+      return
+    }
+    duplicarSinOfertaOpen.value = true
+    return
+  }
+  const agregadas = personalStore.duplicarPropuesto()
+  if (agregadas > 0) {
+    toast.success(`Horario propuesto duplicado: ${agregadas} sección${agregadas !== 1 ? 'es' : ''} agregada${agregadas !== 1 ? 's' : ''}.`)
+  }
+  else {
+    toast.warning('No se pudo duplicar: las secciones de tu semestre no tienen identificador válido.')
+  }
+}
+
+function onDuplicarDeTodosModos() {
+  const alcance = duplicarAlcance.value
+  const agregadas = personalStore.duplicarPropuesto(alcance)
+  duplicarSinOfertaOpen.value = false
+  if (agregadas > 0) {
+    toast.warning(
+      `Se duplicó el propuesto ${alcance === 'carrera' ? 'de tu carrera' : 'completo'} (${agregadas} sección${agregadas !== 1 ? 'es' : ''}). `
+      + 'Quita los cursos que no te correspondan o usa "Reiniciar horario".',
+    )
+  }
+  else {
+    toast.error('No se pudo duplicar el horario propuesto.')
+  }
 }
 
 function onAgregarPendiente(codigo: string) {
   const secciones = personalStore.catalogo.filter(d => d.curso_codigo === codigo && !d.es_laboratorio)
   if (secciones.length === 0) {
-    toast.error(`No hay secciones disponibles de ${codigo}`)
+    toast.warning(`El curso ${codigo} no tiene secciones en el horario propuesto de este ciclo.`)
     return
   }
   const libre = secciones.find(d => !personalStore.chocaConSeleccion(d))
@@ -176,14 +345,15 @@ function onAutoArmar(payload: { cursos: string[]; jornada: 'manana' | 'tarde' | 
   personalStore.autoArmar(payload.cursos, payload.jornada)
   asistentOpen.value = false
   nextTick(() => {
-    if (personalStore.conflictoIds.length > 0) {
-      toast.info('Horario armado, pero quedaron choques. Revisa los bloques en rojo.')
+    const colocados = personalStore.bloquesColocados.length
+    if (colocados === 0) {
+      toast.warning('No se pudo armar: ninguno de los cursos seleccionados tiene secciones en el horario propuesto de este ciclo.')
     }
-    else if (personalStore.cursosPendientesFaltantes.length > 0) {
-      toast.info('Horario armado; algunos cursos quedaron fuera por choque de horario.')
+    else if (personalStore.conflictoIds.length > 0) {
+      toast.info(`Horario armado con ${colocados} bloque(s), pero quedaron choques. Revisa los bloques en rojo.`)
     }
     else {
-      toast.success('¡Horario armado sin choques!')
+      toast.success(`¡Horario armado con ${colocados} bloque(s), sin choques!`)
     }
   })
 }
@@ -198,8 +368,24 @@ async function onGuardar() {
   }
 }
 
+const printArea = ref<{ imprimir: () => Promise<void> } | null>(null)
+
 function onImprimir() {
-  window.print()
+  printArea.value?.imprimir()
+}
+
+const printChips = computed(() => {
+  const chips: string[] = []
+  if (personalStore.estudiante.semestre !== null) chips.push(`Semestre ${personalStore.estudiante.semestre}`)
+  if (personalStore.resumen.cursos > 0) chips.push(`${personalStore.resumen.cursos} curso${personalStore.resumen.cursos !== 1 ? 's' : ''}`)
+  if (personalStore.estudiante.ra) chips.push(`Carné ${personalStore.estudiante.ra}`)
+  return chips
+})
+
+function onReiniciar() {
+  personalStore.reiniciarHorario()
+  reiniciarOpen.value = false
+  toast.info('Horario reiniciado. Empiezas de cero (aún no guardado).')
 }
 </script>
 
@@ -238,12 +424,14 @@ function onImprimir() {
             Te falta agregar {{ personalStore.cursosPendientesFaltantes.length }} curso{{ personalStore.cursosPendientesFaltantes.length !== 1 ? 's' : '' }}
           </span>
           <template v-if="personalStore.conflictosLocales.length > 0">
-            <span
-              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100"
+            <button
+              type="button"
+              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100 cursor-pointer hover:brightness-95 active:translate-y-px transition"
+              @click="conflictsOpen = true"
             >
               <Icon name="lucide:triangle-alert" class="size-3" />
               {{ personalStore.conflictosLocales.length }} conflicto{{ personalStore.conflictosLocales.length !== 1 ? 's' : '' }}
-            </span>
+            </button>
           </template>
         </div>
       </div>
@@ -263,6 +451,16 @@ function onImprimir() {
           Imprimir / PDF
         </Button>
         <Button
+          variant="text"
+          severity="danger"
+          size="sm"
+          icon="lucide:rotate-ccw"
+          :disabled="personalStore.bloquesColocados.length === 0"
+          @click="reiniciarOpen = true"
+        >
+          Reiniciar horario
+        </Button>
+        <Button
           size="sm"
           icon="lucide:save"
           :loading="guardandoHorario || personalStore.loadingSave"
@@ -272,6 +470,34 @@ function onImprimir() {
         </Button>
       </div>
     </div>
+
+    <!-- ── Skeleton de carga inicial: evita el parpadeo de "horario vacío" ── -->
+    <template v-if="cargandoInicial">
+      <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 space-y-3">
+        <div class="h-5 w-32 rounded bg-muted animate-pulse" />
+        <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2">
+          <div v-for="i in 6" :key="i" class="h-14 rounded-lg bg-muted animate-pulse border-2 border-black/20" />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] 2xl:grid-cols-[380px_1fr] gap-4 items-start">
+        <div class="hidden lg:block border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 space-y-1.5">
+          <div v-for="i in 6" :key="i" class="h-14 rounded-[0.6rem] bg-muted animate-pulse border-2 border-black/20" />
+        </div>
+        <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4">
+          <div class="grid grid-cols-[56px_repeat(5,1fr)] gap-1.5 mb-1.5">
+            <div />
+            <div v-for="i in 5" :key="i" class="h-8 rounded-lg bg-muted animate-pulse" />
+          </div>
+          <div v-for="row in 8" :key="row" class="grid grid-cols-[56px_repeat(5,1fr)] gap-1.5 mb-1.5">
+            <div class="h-11 rounded bg-transparent" />
+            <div v-for="col in 5" :key="col" class="h-11 rounded-lg bg-muted/60 animate-pulse border border-black/10" />
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template v-else>
 
     <!-- ── "Mi avance" academic panel ─────────────────────────────────────── -->
     <div
@@ -303,6 +529,18 @@ function onImprimir() {
         </div>
         <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold tabular-nums leading-none text-foreground">
+            {{ personalStore.statsAcademicas.creditosObligatoriosGanados }}<span class="text-sm text-muted-foreground">/{{ personalStore.statsAcademicas.creditosObligatoriosCarrera }}</span>
+          </div>
+          <div class="relative h-1.5 mt-1.5 rounded-full border border-black overflow-hidden bg-card">
+            <div
+              class="absolute inset-y-0 left-0 bg-cics-blue transition-all"
+              :style="{ width: personalStore.statsAcademicas.pctAvanceObligatorios + '%' }"
+            />
+          </div>
+          <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Avance obligatorios ({{ personalStore.statsAcademicas.pctAvanceObligatorios }}%)</div>
+        </div>
+        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+          <div class="text-xl font-extrabold tabular-nums leading-none text-foreground">
             {{ personalStore.statsAcademicas.pctAvance }}%
           </div>
           <div class="relative h-1.5 mt-1.5 rounded-full border border-black overflow-hidden bg-card">
@@ -319,16 +557,13 @@ function onImprimir() {
           </div>
           <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Créditos disponibles</div>
         </div>
-        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
-          <div
-            class="text-xl font-extrabold tabular-nums leading-none"
-            :class="personalStore.excedeCreditos ? 'text-red-500' : 'text-foreground'"
-          >
-            {{ personalStore.creditosEnHorario }}
-          </div>
-          <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Créditos en mi horario</div>
-        </div>
-        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+        <button
+          type="button"
+          class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center cursor-pointer hover:brightness-95 active:translate-y-px transition"
+          :disabled="personalStore.conflictoIds.length === 0"
+          :class="{ 'cursor-default hover:brightness-100 active:translate-y-0': personalStore.conflictoIds.length === 0 }"
+          @click="conflictsOpen = true"
+        >
           <div
             class="text-xl font-extrabold tabular-nums leading-none"
             :class="personalStore.conflictoIds.length > 0 ? 'text-red-500' : 'text-green-600 dark:text-green-400'"
@@ -336,17 +571,13 @@ function onImprimir() {
             {{ personalStore.conflictoIds.length }}
           </div>
           <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Conflictos</div>
-        </div>
+        </button>
       </div>
 
       <!-- Avisos de carga del ciclo y jornada -->
       <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] text-muted-foreground">
-        <span v-if="personalStore.excedeCreditos" class="inline-flex items-center gap-1 font-bold text-red-600 dark:text-red-400">
-          <Icon name="lucide:triangle-alert" class="size-3.5" />
-          Superas tus créditos disponibles este ciclo
-        </span>
         <span v-if="personalStore.resumen.cursos > 0">
-          {{ personalStore.creditosEnHorario }} créditos · {{ personalStore.resumen.cursos }} curso{{ personalStore.resumen.cursos !== 1 ? 's' : '' }} este ciclo
+          {{ personalStore.resumen.cursos }} curso{{ personalStore.resumen.cursos !== 1 ? 's' : '' }} este ciclo
         </span>
         <span v-if="personalStore.resumenJornada.jornada === 'mañana' || personalStore.resumenJornada.jornada === 'tarde'">
           Tu horario es mayormente de {{ personalStore.resumenJornada.jornada }}
@@ -367,25 +598,43 @@ function onImprimir() {
     >
       <p class="text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-1.5">
         <Icon name="lucide:list-todo" class="size-4 text-cics-primary" />
-        Te faltan por agregar
+        Te faltan por agregar (obligatorios de tu semestre)
       </p>
       <div class="flex flex-wrap gap-2">
         <span
-          v-for="codigo in personalStore.cursosPendientesFaltantes"
+          v-for="codigo in personalStore.pendientesConOferta"
           :key="codigo"
           class="inline-flex items-center gap-1.5 border-2 border-black rounded-full bg-card pl-2.5 pr-1 py-0.5 text-xs font-bold shadow-[2px_2px_0_0_rgba(0,0,0,1)]"
         >
-          {{ codigo }}
+          <span class="max-w-48 truncate" :title="personalStore.nombrePorCurso.get(codigo) ?? codigo">
+            {{ codigo }}<template v-if="personalStore.nombrePorCurso.get(codigo)"> — {{ personalStore.nombrePorCurso.get(codigo) }}</template>
+          </span>
           <button
             type="button"
-            class="inline-flex items-center gap-0.5 rounded-full border border-black bg-cics-primary text-white text-[10px] font-extrabold uppercase px-1.5 py-0.5 hover:brightness-110 active:translate-y-px"
+            class="inline-flex items-center gap-0.5 shrink-0 rounded-full border border-black bg-cics-primary text-white text-[10px] font-extrabold uppercase px-1.5 py-0.5 hover:brightness-110 active:translate-y-px"
             @click="onAgregarPendiente(codigo)"
           >
             <Icon name="lucide:plus" class="size-3" />
             Agregar
           </button>
         </span>
+        <span
+          v-for="codigo in personalStore.pendientesSinOferta"
+          :key="codigo"
+          class="inline-flex items-center gap-1.5 border-2 border-dashed border-black/40 rounded-full bg-muted px-2.5 py-0.5 text-xs font-bold text-muted-foreground max-w-64 truncate"
+          :title="`${personalStore.nombrePorCurso.get(codigo) ?? codigo}: sin secciones en el horario propuesto de este ciclo`"
+        >
+          {{ codigo }}<template v-if="personalStore.nombrePorCurso.get(codigo)"> — {{ personalStore.nombrePorCurso.get(codigo) }}</template>
+          <span class="text-[9px] font-extrabold uppercase shrink-0">Sin oferta</span>
+        </span>
       </div>
+      <p
+        v-if="personalStore.pendientesSinOferta.length > 0"
+        class="text-[10px] text-muted-foreground mt-2"
+      >
+        Los cursos marcados "Sin oferta" están en tu pensum pero no tienen secciones en el horario
+        propuesto de este ciclo; no es posible agregarlos.
+      </p>
     </div>
 
     <!-- ── Empty state / onboarding ───────────────────────────────────────── -->
@@ -510,8 +759,11 @@ function onImprimir() {
       </aside>
 
       <!-- ── Right: Personal schedule grid ─────────────────────────────────── -->
-      <div
-        id="horario-print"
+      <SchedulePrintArea
+        ref="printArea"
+        titulo="Mi Horario"
+        :subtitulo="personalStore.propuesto ? `Basado en: ${personalStore.propuesto.nombre}` : undefined"
+        :chips="printChips"
         class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto relative min-h-64"
       >
         <div
@@ -536,12 +788,15 @@ function onImprimir() {
           @click-block="onClickBlock"
         />
         <p class="text-[10px] text-muted-foreground mt-2 print:hidden">
-          Tip: haz clic en un bloque para <strong>cambiar de sección</strong> o quitarlo.
-          Cada sección tiene día y hora fijos; mover un curso significa elegir otra sección.
+          Tip: arrastra un curso a cualquier día/hora que prefieras (es solo tu organización personal,
+          no cambia tu inscripción real); si choca con otro, se marca en rojo. Haz clic en un bloque
+          para <strong>cambiar de sección</strong>, quitarlo o volver a su horario oficial.
         </p>
-      </div>
+      </SchedulePrintArea>
 
     </div>
+
+    </template>
 
     <!-- ── Proposed schedule dialog ───────────────────────────────────────── -->
     <ProposedScheduleDialog
@@ -551,13 +806,93 @@ function onImprimir() {
       :horario-nombre="personalStore.propuesto?.nombre ?? ''"
     />
 
+    <!-- ── Conflicts dialog ────────────────────────────────────────────────── -->
+    <ConflictsDialog
+      v-model:open="conflictsOpen"
+      :conflictos="personalStore.conflictosLocales"
+      :total-conflictos="personalStore.conflictosLocales.length"
+      :aptitud="null"
+      :loading="false"
+      nota="Estos conflictos son solo de tu horario personal (de referencia): no afectan tu horario oficial ni impiden guardar, imprimir o exportar tu horario. Puedes dejarlos así si te conviene esa organización, o resolverlos cambiando de sección o moviendo el bloque."
+    />
+
     <!-- ── Schedule assistant dialog ──────────────────────────────────────── -->
     <ScheduleAssistantDialog
       v-model:open="asistentOpen"
       :cursos-catalogo="cursosUnicos"
       :cursos-preseleccionados="personalStore.estudiante.cursos_pendientes"
+      :sugerencia="personalStore.sugerenciaHorario"
       @armar="onAutoArmar"
     />
+
+    <!-- ── Reset confirm dialog ────────────────────────────────────────────── -->
+    <Dialog :open="reiniciarOpen" @update:open="reiniciarOpen = $event">
+      <DialogContent title="¿Reiniciar tu horario?" closeButton>
+        <p class="text-sm text-muted-foreground">
+          Se vaciará tu selección actual ({{ personalStore.resumen.cursos }} curso{{ personalStore.resumen.cursos !== 1 ? 's' : '' }}).
+          Si ya lo habías guardado, sigue existiendo hasta que presiones "Guardar" de nuevo.
+        </p>
+        <div class="flex gap-2 justify-end mt-4">
+          <Button variant="tonal" size="sm" @click="reiniciarOpen = false">
+            Cancelar
+          </Button>
+          <Button severity="danger" size="sm" icon="lucide:rotate-ccw" @click="onReiniciar">
+            Reiniciar
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+
+    <!-- ── Duplicate-without-offer confirm dialog ─────────────────────────── -->
+    <Dialog :open="duplicarSinOfertaOpen" @update:open="duplicarSinOfertaOpen = $event">
+      <DialogContent title="Tu semestre no tiene oferta este ciclo" closeButton>
+        <p class="text-sm text-muted-foreground">
+          El horario propuesto no tiene secciones para tu carrera y semestre
+          (Sem. {{ personalStore.estudiante.semestre ?? '?' }}) este ciclo. Puedes duplicarlo de
+          todos modos: se copiará el propuesto
+          <strong>{{ duplicarAlcance === 'carrera' ? 'de tu carrera (todos los semestres)' : 'completo (todas las carreras)' }}</strong>
+          — {{ duplicarAlcanceCount }} sección{{ duplicarAlcanceCount !== 1 ? 'es' : '' }} — y
+          luego quitas los cursos que no te correspondan.
+        </p>
+        <p class="text-xs text-muted-foreground mt-2">
+          También puedes cancelar y usar el catálogo de la izquierda con el filtro
+          "Todos los semestres" para agregar solo los cursos que quieras.
+        </p>
+        <div class="flex gap-2 justify-end mt-4">
+          <Button variant="tonal" size="sm" @click="duplicarSinOfertaOpen = false">
+            Cancelar
+          </Button>
+          <Button size="sm" icon="lucide:copy" @click="onDuplicarDeTodosModos">
+            Duplicar de todos modos
+          </Button>
+        </div>
+      </DialogContent>
+    </Dialog>
+
+    <!-- ── Move-block confirm dialog ──────────────────────────────────────── -->
+    <Dialog :open="moverOpen" @update:open="moverOpen = $event">
+      <DialogContent title="Confirmar movimiento" closeButton>
+        <template v-if="moverPendiente">
+          <p class="text-sm">
+            ¿Colocar <strong>{{ moverPendiente.detalle.curso_nombre }}</strong> en
+            <strong>{{ labelHorario(moverPendiente.diaHorarioId, moverPendiente.periodoInicioId, moverPendiente.periodoFinId) }}</strong>?
+          </p>
+          <p class="text-xs text-muted-foreground mt-2">
+            Este es tu horario personal de referencia, no el oficial de la sección: puedes ponerlo
+            donde te convenga. Si choca con otro curso, se marcará en rojo en la grilla, pero el
+            cambio se aplica igual.
+          </p>
+          <div class="flex gap-2 justify-end mt-4">
+            <Button variant="tonal" size="sm" @click="onCancelarMover">
+              Cancelar
+            </Button>
+            <Button size="sm" icon="lucide:check" @click="onConfirmarMover">
+              Colocar aquí
+            </Button>
+          </div>
+        </template>
+      </DialogContent>
+    </Dialog>
 
     <!-- ── Swap section dialog ────────────────────────────────────────────── -->
     <SwapSectionDialog
@@ -567,6 +902,7 @@ function onImprimir() {
       :conflictivas="swapConflictivas"
       @swap="onSwap"
       @remove="onRemoveFromSwap"
+      @restaurar="() => swapDetalle && onRestaurarPosicion(swapDetalle)"
     />
 
   </div>
@@ -584,26 +920,5 @@ function onImprimir() {
 .cat-list-leave-to {
   opacity: 0;
   transform: scale(0.96);
-}
-</style>
-
-<style>
-/* Imprimir: solo la grilla del horario personal */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  #horario-print,
-  #horario-print * {
-    visibility: visible;
-  }
-  #horario-print {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    border: none !important;
-    box-shadow: none !important;
-  }
 }
 </style>

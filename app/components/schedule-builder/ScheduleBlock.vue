@@ -29,6 +29,7 @@ const emit = defineEmits<{
   'click': []
   'remove': []
   'dragstart': [e: DragEvent]
+  'dragend': [e: DragEvent]
 }>()
 
 const dragging = ref(false)
@@ -56,8 +57,9 @@ function onDragStart(e: DragEvent) {
   emit('dragstart', e)
 }
 
-function onDragEnd() {
+function onDragEnd(e: DragEvent) {
   dragging.value = false
+  emit('dragend', e)
 }
 
 function onClick() {
@@ -84,8 +86,10 @@ function onClick() {
       detalle.modificado_manual
         ? 'outline outline-2 outline-dashed outline-cics-primary outline-offset-1'
         : '',
+      // Estático (sin animate-pulse): el parpadeo continuo resultaba muy invasivo
+      // con varios conflictos en pantalla a la vez; el borde+ring ya es visible.
       isConflict
-        ? 'border-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.5),2px_2px_0_0_rgba(0,0,0,1)] animate-pulse'
+        ? 'border-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.5),2px_2px_0_0_rgba(0,0,0,1)]'
         : '',
       dragging ? 'opacity-40 rotate-1 scale-95' : '',
     ]"

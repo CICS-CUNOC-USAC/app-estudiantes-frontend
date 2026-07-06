@@ -4,6 +4,9 @@ import { Dialog } from '~/components/ui/dialog'
 interface ConflictoHorario {
   tipo: string
   descripcion: string
+  // Descripción técnica original del backend (referencia opcional)
+  original?: string
+  penalizacion?: number
 }
 
 defineProps<{
@@ -12,6 +15,9 @@ defineProps<{
   totalConflictos: number
   aptitud: number | null
   loading: boolean
+  // Aclaración de contexto (ej. "esto es solo tu horario personal, no bloquea nada").
+  // Opcional: el uso admin (horario oficial) no la pasa y no cambia su comportamiento actual.
+  nota?: string
 }>()
 
 const emit = defineEmits<{
@@ -45,6 +51,15 @@ const emit = defineEmits<{
         </span>
       </div>
 
+      <!-- Aclaración de contexto (ej. horario personal: no bloquea nada) -->
+      <p
+        v-if="nota"
+        class="mb-4 flex items-start gap-1.5 rounded-lg border-2 border-black/10 bg-muted p-2.5 text-xs text-muted-foreground"
+      >
+        <Icon name="lucide:info" class="size-3.5 shrink-0 mt-0.5" />
+        <span>{{ nota }}</span>
+      </p>
+
       <!-- Loading skeleton -->
       <div v-if="loading" class="space-y-2">
         <div
@@ -71,9 +86,16 @@ const emit = defineEmits<{
         >
           <div class="flex items-start gap-2">
             <span class="text-base leading-none mt-0.5">⚠</span>
-            <div>
+            <div class="min-w-0">
               <p class="font-semibold text-red-800 dark:text-red-300">{{ c.tipo }}</p>
               <p class="text-red-700 dark:text-red-400 mt-0.5">{{ c.descripcion }}</p>
+              <p
+                v-if="c.original && c.original !== c.descripcion"
+                class="text-[10px] font-mono text-red-400/80 dark:text-red-500/70 mt-1 truncate"
+                :title="c.original"
+              >
+                {{ c.original }}
+              </p>
             </div>
           </div>
         </li>

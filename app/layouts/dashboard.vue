@@ -1,6 +1,7 @@
 <template>
   <SidebarProvider :default-open="true">
     <DashboardSidebar />
+    <SidebarFloatingToggle />
     <div class="dark:bg-surface-800 w-full bg-white">
       <nav
         class="fixed top-0 z-20 h-14 w-full px-4 py-2.5 backdrop-blur-sm transition-shadow lg:hidden dark:bg-surface-800/80 bg-white/80"
@@ -29,6 +30,7 @@
 </template>
 <script lang="ts" setup>
 import DashboardSidebar from '~/components/partials/navigation/DashboardSidebar.vue'
+import SidebarFloatingToggle from '~/components/partials/navigation/SidebarFloatingToggle.vue'
 import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
 
 const { hasScrolled } = useNavScrollShadow()

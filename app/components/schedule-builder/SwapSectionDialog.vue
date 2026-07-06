@@ -15,11 +15,14 @@ const emit = defineEmits<{
   'update:open': [val: boolean]
   'swap': [nueva: HorarioDetalle]
   'remove': []
+  'restaurar': []
 }>()
 
 const conflictSet = computed(() => new Set(props.conflictivas))
 
-function formatHour(h: string) {
+function formatHour(h: string | null | undefined) {
+  // La hora puede venir null desde el backend (LEFT JOIN a periodos)
+  if (!h) return '—'
   return h.length > 5 ? h.slice(0, 5) : h
 }
 </script>
@@ -45,10 +48,19 @@ function formatHour(h: string) {
             >
               Lab
             </span>
+            <span
+              v-if="actual.modificado_manual"
+              class="inline-flex items-center text-[0.6rem] font-extrabold uppercase py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full bg-orange-100 text-orange-800 dark:bg-orange-950 dark:text-orange-200"
+            >
+              Movido por ti
+            </span>
           </div>
           <p class="text-xs text-muted-foreground mt-1">
             {{ formatHour(actual.hora_inicio) }}–{{ formatHour(actual.hora_fin) }} · {{ actual.dias_nombre }}
             <template v-if="actual.docente_nombre"> · {{ actual.docente_nombre }}</template>
+          </p>
+          <p v-if="actual.modificado_manual" class="text-[10px] text-orange-700 dark:text-orange-300 mt-1">
+            Este horario ya no es el oficial de la sección; solo es tu referencia personal.
           </p>
         </div>
 
@@ -104,10 +116,21 @@ function formatHour(h: string) {
         </div>
 
         <!-- Footer -->
-        <div class="mt-4 pt-3 border-t-2 border-dashed border-border flex justify-between">
-          <Button variant="tonal" severity="danger" size="sm" icon="lucide:trash-2" @click="emit('remove')">
-            Quitar del horario
-          </Button>
+        <div class="mt-4 pt-3 border-t-2 border-dashed border-border flex flex-wrap justify-between gap-2">
+          <div class="flex flex-wrap gap-2">
+            <Button variant="tonal" severity="danger" size="sm" icon="lucide:trash-2" @click="emit('remove')">
+              Quitar del horario
+            </Button>
+            <Button
+              v-if="actual.modificado_manual"
+              variant="tonal"
+              size="sm"
+              icon="lucide:rotate-ccw"
+              @click="emit('restaurar')"
+            >
+              Volver a horario oficial
+            </Button>
+          </div>
           <Button variant="tonal" size="sm" @click="emit('update:open', false)">
             Cerrar
           </Button>

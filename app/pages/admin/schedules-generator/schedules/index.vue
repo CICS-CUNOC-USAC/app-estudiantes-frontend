@@ -58,10 +58,13 @@ const aptitudPct = computed(() => {
   return Math.round(a * 100)
 })
 
-// Items para CSelect (los valores viajan como string)
+// Items para CSelect (los valores viajan como string). La fecha corta permite
+// distinguir versiones con nombres parecidos.
 const horarioItems = computed(() =>
   store.horarios.map(h => ({
-    label: h.nombre + (h.es_activo ? ' ✓ Activo' : ''),
+    label: `#${h.id} · ${h.nombre}`
+      + (h.fecha_generacion ? ` · ${new Date(h.fecha_generacion).toLocaleDateString('es-GT', { day: '2-digit', month: '2-digit', year: '2-digit' })}` : '')
+      + (h.es_activo ? ' ✓ Activo' : ''),
     value: String(h.id),
   })),
 )
@@ -77,6 +80,28 @@ const selectedHorarioStr = computed<string | null>({
 const carreraItems = computed(() =>
   store.carreras.map(c => ({ label: c.nombre, value: String(c.id) })),
 )
+
+// Fecha de la versión: cuándo generó el algoritmo este horario. La BD del
+// scheduler no guarda fecha por edición manual, así que si hay bloques con
+// modificado_manual se indica "con ediciones manuales posteriores".
+const fechaGeneracion = computed(() => {
+  const f = horarioSeleccionado.value?.fecha_generacion
+  if (!f) return null
+  return new Date(f).toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
+})
+
+// ── Imprimir / PDF ──
+const printArea = ref<{ imprimir: () => Promise<void> } | null>(null)
+
+const printChips = computed(() => {
+  const chips: string[] = []
+  if (horarioSeleccionado.value?.es_activo) chips.push('Oficial')
+  if (fechaGeneracion.value) chips.push(`Generado el ${fechaGeneracion.value}`)
+  const carrera = store.carreras.find(c => String(c.id) === filtroCarrera.value)
+  if (carrera) chips.push(carrera.nombre)
+  if (filtroSemestre.value) chips.push(`Semestre ${filtroSemestre.value}`)
+  return chips
+})
 
 const semestreItems = computed(() =>
   Array.from({ length: 10 }, (_, i) => ({ label: `Semestre ${i + 1}`, value: String(i + 1) })),
@@ -233,6 +258,12 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
               class="min-w-56"
             />
             <span
+              v-if="horarioSeleccionado"
+              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-card font-mono"
+            >
+              ID #{{ horarioSeleccionado.id }}
+            </span>
+            <span
               v-if="horarioSeleccionado?.es_activo"
               class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
             >
@@ -267,6 +298,12 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
 
           <!-- Meta info -->
           <div v-if="horarioSeleccionado" class="flex flex-wrap gap-x-3 gap-y-0.5 text-[11px] text-muted-foreground">
+            <span v-if="fechaGeneracion">
+              Generado: <strong>{{ fechaGeneracion }}</strong>
+            </span>
+            <span v-if="store.tieneEdicionManual" class="text-amber-600 dark:text-amber-400">
+              <strong>Con ediciones manuales posteriores</strong>
+            </span>
             <span v-if="horarioSeleccionado.tiempo_ejecucion_ms !== null">
               Tiempo: <strong>{{ (horarioSeleccionado.tiempo_ejecucion_ms / 1000).toFixed(1) }}s</strong>
             </span>
@@ -289,6 +326,9 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           </Button>
           <Button severity="success" size="sm" icon="lucide:download" @click="onExportarCsv">
             Exportar CSV
+          </Button>
+          <Button variant="tonal" size="sm" icon="lucide:printer" @click="printArea?.imprimir()">
+            Imprimir / PDF
           </Button>
           <Button
             variant="tonal"
@@ -446,7 +486,13 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
     </div>
 
     <!-- ── Schedule grid ───────────────────────────────────────────────────── -->
-    <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto relative min-h-40">
+    <SchedulePrintArea
+      ref="printArea"
+      :titulo="horarioSeleccionado ? `Horario: ${horarioSeleccionado.nombre}` : 'Horario'"
+      :subtitulo="horarioSeleccionado ? `ID #${horarioSeleccionado.id}` : undefined"
+      :chips="printChips"
+      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto relative min-h-40"
+    >
       <div
         v-if="store.loading"
         class="absolute inset-0 z-10 flex items-center justify-center bg-card/70 rounded-xl"
@@ -465,7 +511,7 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
         @drop="onDrop"
         @click-block="onClickBlock"
       />
-    </div>
+    </SchedulePrintArea>
 
     <!-- ── Edit detail dialog ─────────────────────────────────────────────── -->
     <EditDetailDialog
@@ -482,7 +528,7 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
     <!-- ── Conflicts dialog ───────────────────────────────────────────────── -->
     <ConflictsDialog
       v-model:open="conflictsOpen"
-      :conflictos="store.conflictos"
+      :conflictos="store.conflictosLegibles"
       :total-conflictos="store.conflictosData?.total_conflictos ?? 0"
       :aptitud="store.conflictosData?.aptitud_recalculada ?? null"
       :loading="store.loading"

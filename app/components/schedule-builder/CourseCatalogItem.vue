@@ -36,7 +36,10 @@ function onDragStart(e: DragEvent) {
   e.dataTransfer?.setData('detalle', JSON.stringify(props.detalle))
 }
 
-function formatHour(h: string) {
+function formatHour(h: string | null | undefined) {
+  // Con datos reales la hora puede venir null (LEFT JOIN a periodos en el backend);
+  // sin este guard, un solo detalle sin hora tira toda la vista de Mi Horario.
+  if (!h) return '—'
   // trim seconds if present: "13:40:00" → "13:40"
   return h.length > 5 ? h.slice(0, 5) : h
 }
