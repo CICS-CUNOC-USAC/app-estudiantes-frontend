@@ -404,7 +404,7 @@ function onReiniciar() {
           <template v-if="personalStore.estudiante.carrera_id !== null || personalStore.estudiante.semestre !== null">
             <span class="w-px h-3 bg-border inline-block" />
             <span
-              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-card"
+              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-md bg-card"
             >
               Sem. {{ personalStore.estudiante.semestre ?? '?' }}
             </span>
@@ -412,21 +412,21 @@ function onReiniciar() {
           <!-- Estado de completitud -->
           <span
             v-if="personalStore.horarioCompleto"
-            class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
+            class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-md bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
           >
             <Icon name="lucide:check" class="size-3" />
             Horario completo
           </span>
           <span
             v-else-if="personalStore.cursosPendientesFaltantes.length > 0"
-            class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
+            class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-md  bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
           >
             Te falta agregar {{ personalStore.cursosPendientesFaltantes.length }} curso{{ personalStore.cursosPendientesFaltantes.length !== 1 ? 's' : '' }}
           </span>
           <template v-if="personalStore.conflictosLocales.length > 0">
             <button
               type="button"
-              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100 cursor-pointer hover:brightness-95 active:translate-y-px transition"
+              class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-md  bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100 cursor-pointer hover:brightness-95 active:translate-y-px transition"
               @click="conflictsOpen = true"
             >
               <Icon name="lucide:triangle-alert" class="size-3" />
@@ -473,18 +473,18 @@ function onReiniciar() {
 
     <!-- ── Skeleton de carga inicial: evita el parpadeo de "horario vacío" ── -->
     <template v-if="cargandoInicial">
-      <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 space-y-3">
+      <div class="border border-black rounded-xl  bg-card p-4 space-y-3">
         <div class="h-5 w-32 rounded bg-muted animate-pulse" />
         <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2">
-          <div v-for="i in 6" :key="i" class="h-14 rounded-lg bg-muted animate-pulse border-2 border-black/20" />
+          <div v-for="i in 6" :key="i" class="h-14 rounded-lg bg-muted animate-pulse border border-black/20" />
         </div>
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-[300px_1fr] xl:grid-cols-[340px_1fr] 2xl:grid-cols-[380px_1fr] gap-4 items-start">
-        <div class="hidden lg:block border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 space-y-1.5">
-          <div v-for="i in 6" :key="i" class="h-14 rounded-[0.6rem] bg-muted animate-pulse border-2 border-black/20" />
+        <div class="hidden lg:block border border-black rounded-xl  bg-card p-4 space-y-1.5">
+          <div v-for="i in 6" :key="i" class="h-14 rounded-[0.6rem] bg-muted animate-pulse border border-black/20" />
         </div>
-        <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4">
+        <div class="border border-black rounded-xl  bg-card p-4">
           <div class="grid grid-cols-[56px_repeat(5,1fr)] gap-1.5 mb-1.5">
             <div />
             <div v-for="i in 5" :key="i" class="h-8 rounded-lg bg-muted animate-pulse" />
@@ -502,7 +502,7 @@ function onReiniciar() {
     <!-- ── "Mi avance" academic panel ─────────────────────────────────────── -->
     <div
       v-if="personalStore.statsAcademicas"
-      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 space-y-3 print:hidden"
+      class="border border-black rounded-xl  bg-card p-4 space-y-3 print:hidden"
     >
       <div class="flex items-center justify-between gap-2 flex-wrap">
         <h2 class="text-sm font-black flex items-center gap-1.5">
@@ -515,19 +515,19 @@ function onReiniciar() {
       </div>
 
       <div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-2">
-        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+        <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
             {{ personalStore.statsAcademicas.cursosAprobados }}<span class="text-sm text-muted-foreground">/{{ personalStore.statsAcademicas.cursosTotales }}</span>
           </div>
           <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Cursos aprobados</div>
         </div>
-        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+        <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
             {{ personalStore.statsAcademicas.creditosGanados }}<span class="text-sm text-muted-foreground">/{{ personalStore.statsAcademicas.creditosCarrera }}</span>
           </div>
           <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Créditos ganados</div>
         </div>
-        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+        <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold tabular-nums leading-none text-foreground">
             {{ personalStore.statsAcademicas.creditosObligatoriosGanados }}<span class="text-sm text-muted-foreground">/{{ personalStore.statsAcademicas.creditosObligatoriosCarrera }}</span>
           </div>
@@ -539,7 +539,7 @@ function onReiniciar() {
           </div>
           <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Avance obligatorios ({{ personalStore.statsAcademicas.pctAvanceObligatorios }}%)</div>
         </div>
-        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+        <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold tabular-nums leading-none text-foreground">
             {{ personalStore.statsAcademicas.pctAvance }}%
           </div>
@@ -551,7 +551,7 @@ function onReiniciar() {
           </div>
           <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Avance de carrera</div>
         </div>
-        <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+        <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold tabular-nums leading-none text-foreground">
             {{ personalStore.statsAcademicas.creditosDisponibles }}
           </div>
@@ -559,7 +559,7 @@ function onReiniciar() {
         </div>
         <button
           type="button"
-          class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center cursor-pointer hover:brightness-95 active:translate-y-px transition"
+          class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center cursor-pointer hover:brightness-95 active:translate-y-px transition"
           :disabled="personalStore.conflictoIds.length === 0"
           :class="{ 'cursor-default hover:brightness-100 active:translate-y-0': personalStore.conflictoIds.length === 0 }"
           @click="conflictsOpen = true"
@@ -594,9 +594,9 @@ function onReiniciar() {
     <!-- ── Pending courses banner ─────────────────────────────────────────── -->
     <div
       v-if="personalStore.cursosPendientesFaltantes.length > 0"
-      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-amber-50 dark:bg-amber-950/30 p-4 print:hidden"
+      class="border border-black rounded-xl  bg-amber-50 dark:bg-amber-950/30 p-4 print:hidden"
     >
-      <p class="text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-1.5">
+      <p class="text-xs font-black mb-2 flex items-center gap-1.5">
         <Icon name="lucide:list-todo" class="size-4 text-cics-primary" />
         Te faltan por agregar (obligatorios de tu semestre)
       </p>
@@ -640,7 +640,7 @@ function onReiniciar() {
     <!-- ── Empty state / onboarding ───────────────────────────────────────── -->
     <div
       v-if="!personalStore.loading && personalStore.bloquesColocados.length === 0"
-      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-6 text-center space-y-3 print:hidden"
+      class="border border-black rounded-xl  bg-card p-6 text-center space-y-3 print:hidden"
     >
       <Icon name="lucide:calendar-plus" class="size-10 text-cics-primary mx-auto" />
       <p class="text-sm font-black">Aún no has armado tu horario</p>
@@ -661,7 +661,7 @@ function onReiniciar() {
     <!-- ── Error state ────────────────────────────────────────────────────── -->
     <div
       v-if="personalStore.error"
-      class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-red-50 dark:bg-red-950/30 p-4 flex flex-wrap items-center justify-between gap-3 print:hidden"
+      class="border border-black rounded-xl  bg-red-50 dark:bg-red-950/30 p-4 flex flex-wrap items-center justify-between gap-3 print:hidden"
     >
       <p class="text-sm font-bold text-red-700 dark:text-red-300 flex items-center gap-1.5">
         <Icon name="lucide:circle-alert" class="size-4" />
@@ -690,7 +690,7 @@ function onReiniciar() {
       <!-- ── Left: Course catalog panel ────────────────────────────────────── -->
       <aside
         :class="[
-          'border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 space-y-3 lg:sticky lg:top-4 flex-col print:hidden',
+          'border border-black rounded-xl  bg-card p-4 space-y-3 lg:sticky lg:top-4 flex-col print:hidden',
           'max-h-[calc(100vh-6rem)]',
           catalogoVisible ? 'flex' : 'hidden lg:flex',
         ]"
@@ -764,7 +764,7 @@ function onReiniciar() {
         titulo="Mi Horario"
         :subtitulo="personalStore.propuesto ? `Basado en: ${personalStore.propuesto.nombre}` : undefined"
         :chips="printChips"
-        class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto relative min-h-64"
+        class="border border-black rounded-xl  bg-card p-4 overflow-x-auto relative min-h-64"
       >
         <div
           v-if="personalStore.loading"

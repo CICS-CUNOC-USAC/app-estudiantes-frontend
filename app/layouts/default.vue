@@ -1,7 +1,7 @@
 <template>
   <SidebarProvider :default-open="false">
     <DefaultSidebar />
-    <SidebarFloatingToggle />
+    <!-- <SidebarFloatingToggle /> -->
     <div class="w-full">
       <nav
         class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
