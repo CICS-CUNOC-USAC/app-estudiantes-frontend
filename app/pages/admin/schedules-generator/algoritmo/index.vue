@@ -192,7 +192,7 @@ const mutacionItems = [
       <div class="pt-1">
         <span
           :class="[
-            'inline-flex items-center gap-1.5 text-[0.65rem] font-extrabold uppercase tracking-widest py-1 px-3 border-2 rounded-full',
+            'inline-flex items-center gap-1.5 text-[0.65rem] font-extrabold uppercase tracking-widest py-1 px-3 border rounded-full',
             'shadow-[2px_2px_0_0_rgba(0,0,0,1)] dark:shadow-[2px_2px_0_0_rgba(255,255,255,0.1)]',
             badgeState === 'idle'    && 'bg-surface-100 dark:bg-surface-800 text-muted-foreground border-black dark:border-surface-600',
             badgeState === 'running' && 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 border-black dark:border-surface-600',
@@ -221,7 +221,7 @@ const mutacionItems = [
       <div class="xl:col-span-2 flex flex-col gap-4">
 
         <!-- Config card -->
-        <div class="bg-card border-2 border-black dark:border-surface-600 rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] dark:shadow-[4px_4px_0_0_rgba(255,255,255,0.08)] p-6 flex flex-col gap-5">
+        <div class="bg-card border border-black dark:border-surface-600 rounded-xl   p-6 flex flex-col gap-5">
 
           <!-- Card header -->
           <div class="flex items-center justify-between">
@@ -355,7 +355,7 @@ const mutacionItems = [
                   label="Fin Tarde"
                 />
               </div>
-              <div class="flex items-start gap-2 bg-amber-50 dark:bg-amber-950/30 border-2 border-amber-500/60 rounded-lg p-2.5 text-xs text-amber-700 dark:text-amber-300">
+              <div class="flex items-start gap-2 bg-amber-50 dark:bg-amber-950/30 border border-amber-500/60 rounded-lg p-2.5 text-xs text-amber-700 dark:text-amber-300">
                 <Icon name="lucide:triangle-alert" class="size-4 shrink-0 mt-0.5" />
                 <span>Cambiar rangos horarios regenera los períodos automáticamente.</span>
               </div>
@@ -365,14 +365,14 @@ const mutacionItems = [
           <!-- Save alert -->
           <div
             v-if="store.saveSuccess"
-            class="flex items-center gap-2 bg-green-50 dark:bg-green-950/30 border-2 border-green-500/60 rounded-lg p-2.5 text-xs text-green-700 dark:text-green-300"
+            class="flex items-center gap-2 bg-green-50 dark:bg-green-950/30 border border-green-500/60 rounded-lg p-2.5 text-xs text-green-700 dark:text-green-300"
           >
             <Icon name="lucide:check-circle" class="size-4 shrink-0" />
             <span>Configuración guardada correctamente.</span>
           </div>
           <div
             v-if="store.error && !store.isRunning"
-            class="flex items-start gap-2 bg-red-50 dark:bg-red-950/30 border-2 border-red-500/60 rounded-lg p-2.5 text-xs text-red-700 dark:text-red-300"
+            class="flex items-start gap-2 bg-red-50 dark:bg-red-950/30 border border-red-500/60 rounded-lg p-2.5 text-xs text-red-700 dark:text-red-300"
           >
             <Icon name="lucide:circle-x" class="size-4 shrink-0 mt-0.5" />
             <span>{{ store.error }}</span>
@@ -393,10 +393,10 @@ const mutacionItems = [
         <!-- Result card (visible when horarioId is set) -->
         <div
           v-if="store.currentHorarioId"
-          class="bg-card border-2 border-black dark:border-surface-600 rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] dark:shadow-[4px_4px_0_0_rgba(255,255,255,0.08)] p-4"
+          class="bg-card border border-black dark:border-surface-600 rounded-xl   p-4"
         >
           <div class="flex items-center gap-2 mb-3">
-            <div class="size-6 rounded-full border-2 border-green-600 bg-green-50 dark:bg-green-950/50 flex items-center justify-center shrink-0">
+            <div class="size-6 rounded-full border border-green-600 bg-green-50 dark:bg-green-950/50 flex items-center justify-center shrink-0">
               <Icon name="lucide:check" class="size-3.5 text-green-600" />
             </div>
             <span class="text-sm font-bold text-foreground">Horario Generado</span>
@@ -447,10 +447,10 @@ const mutacionItems = [
         <!-- Execution card -->
         <div
           :class="[
-            'bg-card border-2 border-black dark:border-surface-600 rounded-xl p-6',
+            'bg-card border border-black dark:border-surface-600 rounded-xl p-6',
             store.isRunning
               ? 'shadow-[4px_4px_0_0_rgba(255,102,0,1)] dark:shadow-[4px_4px_0_0_rgba(255,102,0,0.5)] animate-[pulse-ring_1.6s_ease-in-out_infinite]'
-              : 'shadow-[4px_4px_0_0_rgba(0,0,0,1)] dark:shadow-[4px_4px_0_0_rgba(255,255,255,0.08)]',
+              : ' ',
           ]"
         >
           <!-- Header -->
@@ -507,7 +507,7 @@ const mutacionItems = [
               <span>Progreso de ejecución</span>
               <span class="font-mono font-bold">{{ progressPct.toFixed(1) }} %</span>
             </div>
-            <div class="h-2 bg-muted border-2 border-black dark:border-surface-600 rounded-full overflow-hidden">
+            <div class="h-2 bg-muted border border-black dark:border-surface-600 rounded-full overflow-hidden">
               <div
                 class="h-full bg-cics-primary rounded-full transition-all duration-300 ease-out"
                 :style="`width: ${progressPct}%`"
@@ -517,13 +517,13 @@ const mutacionItems = [
 
           <!-- Metrics -->
           <div class="grid grid-cols-3 gap-3 mb-4">
-            <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+            <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
               <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
                 {{ store.estado?.generacion ?? '—' }}
               </div>
               <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Generación</div>
             </div>
-            <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+            <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
               <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
                 {{ store.estado?.mejorAptitud !== null && store.estado?.mejorAptitud !== undefined
                     ? store.estado.mejorAptitud.toFixed(2)
@@ -531,7 +531,7 @@ const mutacionItems = [
               </div>
               <div class="text-[0.6rem] font-bold uppercase tracking-widest text-muted-foreground mt-1">Mejor Aptitud</div>
             </div>
-            <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
+            <div class="bg-muted border border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
               <div
                 class="text-xl font-extrabold tabular-nums leading-none"
                 :class="conflictoColor || 'text-foreground'"
@@ -545,7 +545,7 @@ const mutacionItems = [
           <!-- Exec error alert -->
           <div
             v-if="store.estado?.error"
-            class="flex items-start gap-2 bg-red-50 dark:bg-red-950/30 border-2 border-red-500/60 rounded-lg p-2.5 text-xs text-red-700 dark:text-red-300 mb-3"
+            class="flex items-start gap-2 bg-red-50 dark:bg-red-950/30 border border-red-500/60 rounded-lg p-2.5 text-xs text-red-700 dark:text-red-300 mb-3"
           >
             <Icon name="lucide:circle-x" class="size-4 shrink-0 mt-0.5" />
             <span>{{ store.estado.error }}</span>
@@ -565,7 +565,7 @@ const mutacionItems = [
         </div>
 
         <!-- Chart card -->
-        <div class="bg-card border-2 border-black dark:border-surface-600 rounded-xl shadow-[4px_4px_0_0_rgba(0,0,0,1)] dark:shadow-[4px_4px_0_0_rgba(255,255,255,0.08)] p-6">
+        <div class="bg-card border border-black dark:border-surface-600 rounded-xl   p-6">
           <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
             <div>
               <h2 class="text-base font-bold text-foreground">Evolución de Aptitud</h2>
