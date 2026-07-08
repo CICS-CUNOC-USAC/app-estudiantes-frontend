@@ -10,7 +10,8 @@ export const fetchSalones = async () => {
     return Array.isArray(response) ? response : []
   } catch (error: any) {
     toast.error('Error al obtener salones', {
-      description: error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
+      description:
+        error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
     })
     throw error
   }
@@ -27,7 +28,8 @@ export const fetchSalonById = async (id: number) => {
       toast.error('Salón no encontrado')
     } else {
       toast.error('Error al obtener salón', {
-        description: error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
+        description:
+          error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
       })
     }
     throw error
@@ -47,7 +49,8 @@ export const createSalon = async (data: CreateSalonInput) => {
     return response
   } catch (error: any) {
     toast.error('Error al crear salón', {
-      description: error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
+      description:
+        error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
     })
     throw error
   }
@@ -66,7 +69,8 @@ export const updateSalon = async (id: number, data: UpdateSalonInput) => {
     return response
   } catch (error: any) {
     toast.error('Error al actualizar salón', {
-      description: error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
+      description:
+        error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
     })
     throw error
   }

@@ -17,7 +17,14 @@ export interface ImportState {
   sectionLab?: ImportResponse
 }
 
-export type ImportType = 'teachers' | 'courses' | 'teacher-course' | 'classrooms' | 'labs' | 'sections' | 'section-lab'
+export type ImportType =
+  | 'teachers'
+  | 'courses'
+  | 'teacher-course'
+  | 'classrooms'
+  | 'labs'
+  | 'sections'
+  | 'section-lab'
 
 // Teachers types
 export interface Teacher {
@@ -231,4 +238,159 @@ export interface CreateSeccionLaboratorioInput {
   laboratorio_id: number
   salon_fijo_id?: number | null
   docente_fijo_id?: number | null
+}
+
+// ─── Horarios ──────────────────────────────────────────────────────────────
+
+export interface Horario {
+  id: number
+  nombre: string
+  fecha_generacion: string
+  aptitud_final: number | null
+  generaciones_ejecutadas: number | null
+  tiempo_ejecucion_ms: number | null
+  metodo_seleccion: string | null
+  metodo_cruce: string | null
+  metodo_mutacion: string | null
+  es_activo: boolean
+}
+
+export interface HorarioDetalle {
+  detalle_id: number
+  seccion_id: number | null
+  seccion_lab_id: number | null
+  salon_id: number | null
+  docente_id: number | null
+  dia_horario_id: number
+  periodo_inicio_id: number
+  periodo_fin_id: number
+  dia_especifico: string | null
+  modificado_manual: boolean
+  curso_id: number
+  curso_nombre: string
+  curso_codigo: string
+  semestre: number
+  curso_tipo: string
+  carrera_id: number | null
+  carrera_nombre: string | null
+  seccion_letra: string | null
+  salon_nombre: string | null
+  salon_es_laboratorio: boolean | null
+  docente_nombre: string | null
+  hora_inicio: string
+  hora_fin: string
+  es_manana: boolean
+  es_tarde: boolean
+  dias_nombre: string
+  dia_display: string
+  es_laboratorio: boolean
+}
+
+export interface HorarioCompleto {
+  horario: Horario
+  detalles: HorarioDetalle[]
+}
+
+export interface EditarDetalleInput {
+  salon_id?: number | null
+  docente_id?: number | null
+  periodo_inicio_id?: number
+  periodo_fin_id?: number
+  dia_horario_id?: number
+  dia_especifico?: string | null
+}
+
+export interface EditarDetalleResult {
+  detalle: HorarioDetalle
+  nueva_aptitud: number | null
+  advertencias: string[]
+}
+
+export interface ConflictoHorario {
+  tipo: string
+  descripcion?: string
+  penalizacion?: number
+  bono?: number
+  [key: string]: unknown
+}
+
+export interface ConflictosResponse {
+  aptitud: number
+  aptitud_recalculada: number
+  total_conflictos: number
+  total_penalizacion: number
+  total_bonos: number
+  conflictos: ConflictoHorario[]
+  bonos: ConflictoHorario[]
+}
+
+// ─── Horario Personal ─────────────────────────────────────────────────────
+
+export interface HorarioPersonalDetalle {
+  seccion_id?: number
+  seccion_lab_id?: number
+  // Posición personalizada (opcional): el estudiante puede mover un curso a otro
+  // día/hora distinto del horario oficial de su sección. Si están ausentes, se usa
+  // la posición real de la sección. Viaja en el mismo JSONB de horarios_personales,
+  // no requiere cambios de backend.
+  dia_horario_id?: number
+  periodo_inicio_id?: number
+}
+
+export interface HorarioPersonal {
+  estudiante: string
+  horario_origen_id: number | null
+  detalles: HorarioPersonalDetalle[]
+  actualizado: string | null
+}
+
+// ─── Algoritmo Genético ────────────────────────────────────────────────────
+
+export interface AlgoritmoConfig {
+  id?: number
+  tamano_poblacion: number
+  max_generaciones: number
+  aptitud_objetivo: number | null
+  tasa_mutacion: number
+  metodo_seleccion: 'torneo' | 'ruleta'
+  metodo_cruce: 'un_punto' | 'multipunto'
+  metodo_mutacion: 'intercambio' | 'reisercion'
+  duracion_periodo: number
+  hora_inicio_manana: string
+  hora_fin_manana: string
+  hora_inicio_tarde: string
+  hora_fin_tarde: string
+}
+
+export interface AlgoritmoEstado {
+  corriendo: boolean
+  generacion: number
+  mejorAptitud: number | null
+  conflictos: number | null
+  horarioId: number | null
+  error: string | null
+}
+
+export interface HistorialRow {
+  generacion: number
+  mejor_aptitud: number
+  conflictos: number
+}
+
+export type WsEvent =
+  | { type: 'connected';  payload: { message: string } }
+  | { type: 'estado';     payload: AlgoritmoEstado }
+  | { type: 'progreso';   payload: { generacion: number; mejorAptitud: number; conflictos: number } }
+  | { type: 'finalizado'; payload: { horarioId: number; stats: unknown } }
+  | { type: 'error';      payload: { message: string } }
+
+export interface EjecutarBody {
+  nombre?: string
+  tamano_poblacion?: number
+  max_generaciones?: number
+  metodo_seleccion?: AlgoritmoConfig['metodo_seleccion']
+  metodo_cruce?: AlgoritmoConfig['metodo_cruce']
+  metodo_mutacion?: AlgoritmoConfig['metodo_mutacion']
+  tasa_mutacion?: number
+  aptitud_objetivo?: number
 }

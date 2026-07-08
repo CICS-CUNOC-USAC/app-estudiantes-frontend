@@ -11,7 +11,7 @@
       <p class="mt-2">Gestiona los horarios y importa datos</p>
     </header>
 
-    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
       <CCardAlt
         title="Datos"
         description="Importar archivos CSV"
@@ -43,6 +43,15 @@
         to="/admin/schedules-generator/about"
         header-icon="icon-park-twotone:info"
         interactive
+      />
+
+      <CCardAlt
+        title="Algoritmo"
+        description="Configura y ejecuta el algoritmo genético. Monitorea la evolución en tiempo real."
+        header-icon="lucide:brain-circuit"
+        :elevated="true"
+        :interactive-inverse="true"
+        to="/admin/schedules-generator/algoritmo"
       />
     </div>
   </div>

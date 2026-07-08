@@ -14,6 +14,11 @@ export const DefaultLayoutItems = [
         itemLink: '/portal/general/horarios'
       },
       {
+        itemName: 'Horario Oficial (IA)',
+        itemIcon: 'icon-park-twotone:calendar-three',
+        itemLink: '/portal/general/horario-oficial'
+      },
+      {
         itemName: 'Programas de curso',
         itemIcon: 'icon-park-twotone:book-open',
         itemLink: '/portal/general/cursos/programas'

@@ -43,6 +43,7 @@
     "@tato30/vue-pdf": "^1.11.5",
     "@vee-validate/zod": "^4.15.1",
     "better-sqlite3": "^12.6.2",
+    "chart.js": "^4.5.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "jsdom": "^27.4.0",
