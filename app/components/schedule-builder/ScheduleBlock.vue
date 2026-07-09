@@ -11,9 +11,9 @@ interface HorarioDetalle {
   seccion_id: number | null
   seccion_lab_id: number | null
   curso_nombre?: string
-  seccion_letra?: string
-  salon_nombre?: string
-  docente_nombre?: string
+  seccion_letra?: string | null
+  salon_nombre?: string | null
+  docente_nombre?: string | null
   semestre?: number | string
 }
 

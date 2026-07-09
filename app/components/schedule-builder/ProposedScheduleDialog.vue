@@ -1,6 +1,7 @@
 <script setup lang="ts">
 interface Period {
   id: number
+  numero: number
   hora_inicio: string
   hora_fin: string
   es_manana: boolean
@@ -11,12 +12,17 @@ interface HorarioDetalle {
   detalle_id: number
   curso_nombre: string
   seccion_letra: string | null
+  seccion_id: number | null
+  seccion_lab_id: number | null
   salon_id: number | null
+  salon_nombre: string | null
+  salon_es_laboratorio: boolean | null
   docente_id: number | null
   periodo_inicio_id: number
   periodo_fin_id: number
   dia_horario_id: number
   es_laboratorio: boolean
+  modificado_manual: boolean
   [key: string]: unknown
 }
 
@@ -72,9 +78,10 @@ const emit = defineEmits<{
             </button>
           </div>
 
-          <!-- Schedule grid -->
+          <!-- Grilla por salones: el propuesto tiene varias secciones a la misma
+               hora (en salones distintos), la grilla semanal solo mostraría una -->
           <div class="mt-4">
-            <ScheduleGrid
+            <RoomScheduleGrid
               :editable="false"
               :readonly="true"
               :detalles="detalles"

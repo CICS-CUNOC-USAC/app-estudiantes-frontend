@@ -389,6 +389,38 @@ function onImprimir() {
   printArea.value?.imprimir()
 }
 
+// ── Pestañas de vista de días ─────────────────────────────────────────────────
+// "Todos los días" (default) = grilla semanal clásica de 5 columnas. Las otras
+// dos muestran un solo patrón como columna única ancha, porque L/Mi/V comparten
+// un mismo horario y Ma/J (días de lab) otro. El id 0 = semana completa (la
+// grilla recibe day-group undefined). Al imprimir siempre sale la semana
+// completa (grilla aparte, solo print).
+const diaTab = ref(0)
+const DIA_TABS = [
+  { id: 0, label: 'Todos los días', sub: 'Lun – Vie' },
+  { id: 1, label: 'Días normales', sub: 'Lun · Mié · Vie' },
+  { id: 2, label: 'Días de lab', sub: 'Mar · Jue' },
+]
+
+const resumenPorDia = computed(() => {
+  const res: Record<number, { bloques: number; conflictos: number }> = {
+    0: { bloques: 0, conflictos: 0 },
+    1: { bloques: 0, conflictos: 0 },
+    2: { bloques: 0, conflictos: 0 },
+  }
+  for (const b of personalStore.bloquesColocados) {
+    const r = res[b.dia_horario_id]
+    if (!r) continue
+    r.bloques++
+    res[0]!.bloques++
+    if (personalStore.conflictoIds.includes(b.detalle_id)) {
+      r.conflictos++
+      res[0]!.conflictos++
+    }
+  }
+  return res
+})
+
 const printChips = computed(() => {
   const chips: string[] = []
   if (personalStore.estudiante.semestre !== null) chips.push(`Semestre ${personalStore.estudiante.semestre}`)
@@ -505,10 +537,47 @@ async function onReintentar() {
             Cargando...
           </div>
         </div>
+        <!-- Pestañas de patrón de días (solo pantalla) -->
+        <div class="flex items-center gap-3 mb-3 print:hidden">
+          <div class="flex items-center border-2 border-black rounded-[0.625rem] overflow-hidden shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+            <button
+              v-for="(tab, i) in DIA_TABS"
+              :key="tab.id"
+              type="button"
+              :class="[
+                'px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5',
+                diaTab === tab.id ? 'bg-cics-blue text-white' : 'bg-card text-foreground hover:bg-muted',
+                i < DIA_TABS.length - 1 ? 'border-r-2 border-black' : '',
+              ]"
+              @click="diaTab = tab.id"
+            >
+              {{ tab.label }}
+              <span :class="diaTab === tab.id ? 'opacity-75' : 'text-muted-foreground'" class="text-[10px] font-medium hidden md:inline">
+                {{ tab.sub }}
+              </span>
+              <!-- En "Todos los días" cada choque ya se ve en la grilla; el badge
+                   solo avisa de choques que quedarían ocultos en otra pestaña -->
+              <span
+                v-if="tab.id !== 0 && resumenPorDia[tab.id]!.conflictos > 0"
+                class="text-[9px] font-extrabold rounded-full px-1.5 py-px bg-red-500 text-white border border-black"
+                :title="`${resumenPorDia[tab.id]!.conflictos} bloque(s) con choque en estos días`"
+              >
+                {{ resumenPorDia[tab.id]!.conflictos }}
+              </span>
+            </button>
+          </div>
+          <span class="text-[11px] text-muted-foreground hidden sm:inline">
+            {{ resumenPorDia[diaTab]!.bloques }} bloque{{ resumenPorDia[diaTab]!.bloques !== 1 ? 's' : '' }}
+            {{ diaTab === 0 ? 'en tu semana' : 'en estos días' }}
+          </span>
+        </div>
+
         <ScheduleGrid
+          class="print:hidden"
           :detalles="personalStore.bloquesColocados"
           :periodos="personalStore.periodos"
           :conflict-ids="personalStore.conflictoIds"
+          :day-group="diaTab === 0 ? undefined : diaTab"
           :editable="false"
           :readonly="false"
           :catalog-mode="true"
@@ -517,8 +586,20 @@ async function onReintentar() {
           @remove-block="onRemoveBlock"
           @click-block="onClickBlock"
         />
+
+        <!-- Semana completa, solo para imprimir: en papel no hay pestañas -->
+        <ScheduleGrid
+          class="hidden print:block"
+          :detalles="personalStore.bloquesColocados"
+          :periodos="personalStore.periodos"
+          :conflict-ids="personalStore.conflictoIds"
+          :editable="false"
+          :readonly="true"
+        />
+
         <p class="text-[10px] text-muted-foreground mt-2 print:hidden">
-          Tip: arrastra un curso a cualquier día/hora que prefieras (es solo tu organización personal,
+          Tip: con las pestañas ves toda la semana o solo <strong>Días normales</strong> /
+          <strong>Días de lab</strong> ampliados; arrastra un curso a la hora que prefieras (es solo tu organización personal,
           no cambia tu inscripción real); si choca con otro, se marca en rojo. Haz clic en un bloque
           para <strong>cambiar de sección</strong>, quitarlo o volver a su horario oficial.
         </p>

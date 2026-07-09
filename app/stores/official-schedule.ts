@@ -119,8 +119,23 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     loadingDetalle.value = true
     const idx = detalles.value.findIndex(d => d.detalle_id === detalleId)
     const prev = idx >= 0 ? { ...detalles.value[idx] } : null
-    // Optimista: aplica el cambio en memoria, sin refetch completo
-    if (idx >= 0) detalles.value[idx] = { ...detalles.value[idx], ...cambios, modificado_manual: true }
+    // Optimista: aplica el cambio en memoria, sin refetch completo. Los ids de
+    // salón/docente cambian pero el detalle también carga los NOMBRES (vienen
+    // del JOIN del backend): hay que sincronizarlos desde los catálogos o el
+    // bloque seguiría mostrando el salón/docente anterior.
+    const actual = idx >= 0 ? detalles.value[idx] : undefined
+    if (actual) {
+      const parche: Partial<HorarioDetalle> = { ...cambios, modificado_manual: true }
+      if ('salon_id' in cambios) {
+        const salon = salones.value.find(s => s.id === cambios.salon_id) ?? null
+        parche.salon_nombre = salon?.nombre ?? null
+        parche.salon_es_laboratorio = salon?.es_laboratorio ?? null
+      }
+      if ('docente_id' in cambios) {
+        parche.docente_nombre = docentes.value.find(d => d.id === cambios.docente_id)?.nombre ?? null
+      }
+      detalles.value[idx] = { ...actual, ...parche }
+    }
     try {
       const resp = await editarDetalle(horarioActual.value.id, detalleId, cambios)
       if (resp?.detalle && idx >= 0) {

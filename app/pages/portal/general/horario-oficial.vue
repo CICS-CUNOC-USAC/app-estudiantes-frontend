@@ -149,7 +149,7 @@ const printChips = computed(() => {
         :chips="printChips"
         class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4 overflow-x-auto"
       >
-        <ScheduleGrid
+        <RoomScheduleGrid
           :detalles="store.detallesFiltrados"
           :periodos="store.periodos"
           :editable="false"

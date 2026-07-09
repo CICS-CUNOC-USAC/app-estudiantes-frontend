@@ -161,38 +161,27 @@ async function onDelete() {
   }
 }
 
-const DIA_COLS: Record<number, number[]> = { 1: [1, 3, 5], 2: [2, 4] }
-
-async function onDrop(payload: { detalleId: number; nuevoPeriodoId: number; colIndex?: number }) {
+// El patrón de días (L/Mi/V vs Ma/J) lo fija la pestaña activa de la grilla,
+// así que un drop solo puede cambiar hora y/o salón, nunca el grupo de días.
+async function onDrop(payload: { detalleId: number; nuevoPeriodoId: number; salonId: number | null }) {
   const det = store.detalles.find(d => d.detalle_id === payload.detalleId)
   if (!det) return
-
-  // Restricción de patrón de días: un bloque Ma/J no puede soltarse en L/Mi/V y viceversa
-  if (payload.colIndex !== undefined) {
-    const colsValidas = DIA_COLS[det.dia_horario_id] ?? []
-    if (!colsValidas.includes(payload.colIndex)) {
-      if (det.dia_horario_id === 2) {
-        toast.error('Este bloque solo se mueve en Martes/Jueves')
-      }
-      else {
-        toast.error('Este bloque solo se mueve en Lunes/Miércoles/Viernes')
-      }
-      return
-    }
-  }
 
   const span = det.periodo_fin_id - det.periodo_inicio_id + 1
   const cambios: EditarDetalleInput = {
     periodo_inicio_id: payload.nuevoPeriodoId,
     periodo_fin_id: payload.nuevoPeriodoId + span - 1,
   }
+  const cambiaSalon = payload.salonId !== det.salon_id
+  if (cambiaSalon) cambios.salon_id = payload.salonId
+
   try {
     const resp = await store.editarDetalleAction(payload.detalleId, cambios)
     if (resp?.advertencias?.length) {
       toast.warning(`Movido con ${resp.advertencias.length} advertencia(s). Revisa conflictos.`)
     }
     else {
-      toast.success('Bloque reubicado')
+      toast.success(cambiaSalon ? 'Bloque reubicado (salón y horario actualizados)' : 'Bloque reubicado')
     }
   }
   catch {
@@ -234,7 +223,8 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           <h1 class="text-xl font-black tracking-tight">Horario Oficial — Visualizar y Editar</h1>
         </div>
         <p class="text-sm text-muted-foreground">
-          Visualiza los horarios ya generados, edítalos arrastrando los cursos y marca uno como oficial.
+          Visualiza los horarios ya generados y marca uno como oficial. Arrastra un curso a otra
+          fila para cambiar su hora o a otra columna para cambiar su salón.
         </p>
       </div>
       <span class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-card text-foreground self-start whitespace-nowrap">
@@ -502,10 +492,12 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           Cargando...
         </div>
       </div>
-      <ScheduleGrid
+      <RoomScheduleGrid
         :detalles="store.detallesFiltrados"
         :periodos="store.periodos"
         :conflict-ids="store.conflictoIds"
+        :salones="store.salones"
+        :show-empty-salones="true"
         :editable="true"
         :readonly="false"
         @drop="onDrop"
