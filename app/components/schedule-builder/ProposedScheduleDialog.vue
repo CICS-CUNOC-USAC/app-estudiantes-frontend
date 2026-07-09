@@ -78,8 +78,8 @@ const emit = defineEmits<{
             </button>
           </div>
 
-          <!-- Grilla por salones: el propuesto tiene varias secciones a la misma
-               hora (en salones distintos), la grilla semanal solo mostraría una -->
+          <!-- Room grid: the proposed schedule has several sections at the same
+               hour (different rooms); the weekly grid would only show one -->
           <div class="mt-4">
             <RoomScheduleGrid
               :editable="false"

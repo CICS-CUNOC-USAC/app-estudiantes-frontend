@@ -34,7 +34,7 @@ const emit = defineEmits<{
 
 const dragging = ref(false)
 
-// Codificación por color por semestre (paleta fija, con dark:)
+// Semester color coding (fixed palette with dark: variants)
 const SEMESTRE_COLORS = [
   'bg-orange-500 dark:bg-orange-400',
   'bg-sky-500 dark:bg-sky-400',
@@ -86,15 +86,14 @@ function onClick() {
       detalle.modificado_manual
         ? 'outline outline-2 outline-dashed outline-cics-primary outline-offset-1'
         : '',
-      // Estático (sin animate-pulse): el parpadeo continuo resultaba muy invasivo
-      // con varios conflictos en pantalla a la vez; el borde+ring ya es visible.
+      // Static on purpose (no animate-pulse): continuous blinking was too
+      // invasive with several conflicts on screen; border+ring is visible enough.
       isConflict
         ? 'border-red-500 shadow-[0_0_0_2px_rgba(239,68,68,0.5),2px_2px_0_0_rgba(0,0,0,1)]'
         : '',
       dragging ? 'opacity-40 rotate-1 scale-95' : '',
     ]"
   >
-    <!-- Barra lateral de color por semestre -->
     <span
       class="absolute left-0 top-0 bottom-0 w-1 rounded-l-[0.45rem]"
       :class="semestreColor"

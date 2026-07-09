@@ -32,14 +32,14 @@ async function onFiltroSemestre(val: string) {
   if (store.horarioActivo) await store.fetchHorarioAction(store.horarioActivo.id)
 }
 
-// Fecha de la versión publicada (fecha en que el algoritmo generó este horario)
+// Published version date (when the algorithm generated this schedule)
 const fechaActualizado = computed(() => {
   const f = store.horarioActivo?.fecha_generacion
   if (!f) return null
   return new Date(f).toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 })
 
-// ── Imprimir / PDF ──
+// ── Print / PDF ──
 const printArea = ref<{ imprimir: () => Promise<void> } | null>(null)
 
 const printChips = computed(() => {
@@ -72,7 +72,7 @@ const printChips = computed(() => {
             </span>
           </template>
         </div>
-        <!-- Nombre del horario = la versión publicada; la fecha dice qué tan reciente es -->
+        <!-- Schedule name = the published version; the date says how recent it is -->
         <div v-if="store.horarioActivo" class="flex items-center gap-2 flex-wrap text-sm">
           <span class="font-bold">{{ store.horarioActivo.nombre }}</span>
           <span v-if="fechaActualizado" class="text-xs text-muted-foreground">

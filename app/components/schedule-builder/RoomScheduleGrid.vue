@@ -2,11 +2,10 @@
 import { computed, ref } from 'vue'
 
 /**
- * Grilla de ocupación por salón: filas = periodos (horas), columnas = salones.
- * A la misma hora pueden existir muchos cursos (uno por salón), cosa que la
- * grilla semanal clásica no puede mostrar. Como dia_horario solo tiene dos
- * patrones (1 = L/Mi/V, 2 = Ma/J), el día se elige con una pestaña; al
- * imprimir salen AMBOS grupos, cada uno con su encabezado.
+ * Room-occupancy grid: rows = periods (hours), columns = rooms. Many courses
+ * can share the same hour (one per room), which the classic weekly grid cannot
+ * show. dia_horario only has two patterns (1 = Mon/Wed/Fri, 2 = Tue/Thu), so
+ * the day is picked with a tab; printing outputs BOTH groups.
  */
 
 interface Period {
@@ -46,9 +45,9 @@ const props = defineProps<{
   editable: boolean
   readonly: boolean
   conflictIds?: number[]
-  /** Catálogo de salones; junto con showEmptySalones agrega columnas vacías como destino de drop */
+  /** Room catalog; with showEmptySalones it adds empty columns as drop targets */
   salones?: Salon[]
-  /** Muestra TODOS los salones activos aunque no tengan cursos (vista de ocupación / edición) */
+  /** Show ALL active rooms even without courses (occupancy/editing view) */
   showEmptySalones?: boolean
 }>()
 
@@ -112,13 +111,13 @@ const grupos = computed(() =>
   }),
 )
 
-// Bloques que INICIAN en esta celda (puede haber más de uno: eso ya es un choque
-// de salón, pero debe verse, no ocultarse)
+// Blocks STARTING at this cell; more than one means a room clash, which must
+// stay visible, never hidden
 function bloquesEn(detallesDia: HorarioDetalle[], col: ColumnaSalon, periodId: number): HorarioDetalle[] {
   return detallesDia.filter(d => salonKey(d.salon_id) === col.key && d.periodo_inicio_id === periodId)
 }
 
-// ¿La celda está cubierta por un bloque multi-periodo que empezó antes?
+// Is this cell covered by a multi-period block that started earlier?
 function estaCubierta(detallesDia: HorarioDetalle[], col: ColumnaSalon, periodId: number): boolean {
   return detallesDia.some(d =>
     salonKey(d.salon_id) === col.key
@@ -147,7 +146,7 @@ function gridStyle(nCols: number) {
   return { gridTemplateColumns: `56px repeat(${nCols}, minmax(140px, 1fr))` }
 }
 
-// ── Drag & drop (solo editable) ───────────────────────────────────────────────
+// ── Drag & drop (editable only) ───────────────────────────────────────────────
 
 const dragOverCell = ref<string | null>(null)
 
@@ -180,7 +179,6 @@ function onDrop(e: DragEvent, detallesDia: HorarioDetalle[], col: ColumnaSalon, 
   const detalle = props.detalles.find(d => d.detalle_id === detalleId)
   if (!detalle) return
 
-  // El bloque debe caber dentro de los periodos existentes
   const span = detalle.periodo_fin_id - detalle.periodo_inicio_id + 1
   if (period.id + span - 1 > maxPeriodId.value) return
 
@@ -201,7 +199,7 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
 
 <template>
   <div>
-    <!-- Sin periodos la grilla no puede dibujar filas: hacerlo visible, nunca silencioso -->
+    <!-- Without periods no rows can be drawn: fail visibly, never silently -->
     <div
       v-if="periodos.length === 0"
       class="border-2 border-dashed border-red-400 rounded-xl p-6 text-center space-y-1"
@@ -215,7 +213,6 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
     </div>
 
     <template v-else>
-      <!-- Pestañas de patrón de días (en papel salen ambos grupos) -->
       <div class="flex items-center gap-3 mb-3 print:hidden">
         <div class="flex items-center border-2 border-black rounded-[0.625rem] overflow-hidden shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
           <button
@@ -243,7 +240,7 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
         </span>
       </div>
 
-      <!-- Un bloque por grupo de días: en pantalla solo el activo; al imprimir, ambos -->
+      <!-- One block per day group: only the active one on screen, both when printing -->
       <div
         v-for="g in grupos"
         :key="g.id"
@@ -266,7 +263,6 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
         <div v-else class="overflow-x-auto">
           <div class="min-w-fit">
 
-            <!-- Header: esquina + un encabezado por salón -->
             <div
               class="grid gap-1.5 mb-1.5 sticky top-0 z-10 bg-card py-1"
               :style="gridStyle(g.columnas.length)"
@@ -288,11 +284,9 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
               </div>
             </div>
 
-            <!-- Filas de periodos -->
             <div class="space-y-1.5">
               <div v-for="period in periodos" :key="period.id">
 
-                <!-- Separador Mañana / Tarde -->
                 <div
                   v-if="isFirstAfternoon(period)"
                   class="flex items-center gap-2 mt-3 mb-1.5 pl-14"
@@ -306,13 +300,10 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
                   :class="{ 'bg-muted/30 rounded-lg': period.es_tarde }"
                   :style="gridStyle(g.columnas.length)"
                 >
-                  <!-- Columna de hora -->
                   <div class="text-[9px] xl:text-[10px] font-bold text-muted-foreground text-right pr-1 pt-1 whitespace-pre-line leading-tight">{{ (period.hora_inicio ?? '').slice(0, 5) }}&#10;{{ (period.hora_fin ?? '').slice(0, 5) }}</div>
 
-                  <!-- Una celda por salón -->
                   <template v-for="col in g.columnas" :key="col.key">
-                    <!-- Celda con bloque(s) iniciando aquí: si hay más de uno es un
-                         choque de salón y se muestran lado a lado -->
+                    <!-- Blocks starting here; more than one is a room clash shown side by side -->
                     <div
                       v-if="bloquesEn(g.detalles, col, period.id).length > 0"
                       class="relative flex gap-1"
@@ -335,10 +326,9 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
                       />
                     </div>
 
-                    <!-- Celda cubierta por un bloque multi-periodo anterior -->
+                    <!-- Cell covered by a multi-period block that started earlier -->
                     <div v-else-if="estaCubierta(g.detalles, col, period.id)" />
 
-                    <!-- Celda vacía (destino de drop si es editable) -->
                     <div
                       v-else
                       class="border-2 border-dashed border-border rounded-lg min-h-11.5 transition-colors duration-100"

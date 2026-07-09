@@ -37,7 +37,7 @@ onMounted(async () => {
   await store.fetchHorariosAction()
   await store.fetchCatalogos()
   if (store.horarios.length > 0) {
-    // ?id= permite llegar desde el algoritmo con el horario recién generado seleccionado
+    // ?id= lets the algorithm page land here with the freshly generated schedule selected
     const queryId = route.query.id ? +String(route.query.id) : null
     const porQuery = queryId !== null ? store.horarios.find(h => h.id === queryId) : undefined
     const activo = porQuery ?? store.horarios.find(h => h.es_activo) ?? store.horarios[0]
@@ -58,8 +58,8 @@ const aptitudPct = computed(() => {
   return Math.round(a * 100)
 })
 
-// Items para CSelect (los valores viajan como string). La fecha corta permite
-// distinguir versiones con nombres parecidos.
+// Items for CSelect (values travel as strings). The short date helps tell
+// apart versions with similar names.
 const horarioItems = computed(() =>
   store.horarios.map(h => ({
     label: `#${h.id} · ${h.nombre}`
@@ -81,16 +81,16 @@ const carreraItems = computed(() =>
   store.carreras.map(c => ({ label: c.nombre, value: String(c.id) })),
 )
 
-// Fecha de la versión: cuándo generó el algoritmo este horario. La BD del
-// scheduler no guarda fecha por edición manual, así que si hay bloques con
-// modificado_manual se indica "con ediciones manuales posteriores".
+// Version date: when the algorithm generated this schedule. The scheduler DB
+// does not store a date per manual edit, so if any block has modificado_manual
+// the UI labels it "con ediciones manuales posteriores".
 const fechaGeneracion = computed(() => {
   const f = horarioSeleccionado.value?.fecha_generacion
   if (!f) return null
   return new Date(f).toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 })
 
-// ── Imprimir / PDF ──
+// ── Print / PDF ──
 const printArea = ref<{ imprimir: () => Promise<void> } | null>(null)
 
 const printChips = computed(() => {
@@ -161,8 +161,8 @@ async function onDelete() {
   }
 }
 
-// El patrón de días (L/Mi/V vs Ma/J) lo fija la pestaña activa de la grilla,
-// así que un drop solo puede cambiar hora y/o salón, nunca el grupo de días.
+// The day pattern (Mon/Wed/Fri vs Tue/Thu) is fixed by the grid's active tab,
+// so a drop can only change hour and/or room, never the day group.
 async function onDrop(payload: { detalleId: number; nuevoPeriodoId: number; salonId: number | null }) {
   const det = store.detalles.find(d => d.detalle_id === payload.detalleId)
   if (!det) return
@@ -340,7 +340,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
         </div>
       </div>
 
-      <!-- Hero de métricas -->
       <div v-if="horarioSeleccionado" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
@@ -378,7 +377,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
     <!-- ── Filters ─────────────────────────────────────────────────────────── -->
     <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4">
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Carrera -->
         <CSelect
           :model-value="filtroCarrera || null"
           :items="carreraItems"
@@ -390,7 +388,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           @update:model-value="onFiltroCarrera"
         />
 
-        <!-- Semestre -->
         <CSelect
           :model-value="filtroSemestre || null"
           :items="semestreItems"
@@ -402,7 +399,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           @update:model-value="onFiltroSemestre"
         />
 
-        <!-- Tipo toggle -->
         <div class="flex items-center border-2 border-black rounded-[0.625rem] overflow-hidden shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
           <button
             v-for="opt in ([{ label: 'Todos', val: '' }, { label: 'Cursos', val: 'cursos' }, { label: 'Labs', val: 'laboratorios' }] as const)"
