@@ -11,6 +11,11 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false
   },
+  experimental: {
+    // preserves the Nuxt/Vue context across await boundaries, so composables
+    // called from inside a catch block (after an awaited fetch rejects) keep working
+    asyncContext: true
+  },
   compatibilityDate: '2024-11-15',
   srcDir: 'app/',
   strapi: {
@@ -75,8 +80,18 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/color-mode',
     'nuxt-authorization',
-    'shadcn-nuxt'
+    'shadcn-nuxt',
+    'nuxt-og-image'
   ],
+  site: {
+    url: 'https://cics.cunoc.edu.gt'
+  },
+  ogImage: {
+    defaults: {
+      width: 1200,
+      height: 630
+    }
+  },
   vite: {
     plugins: [tailwindcss()],
     define: {

@@ -101,13 +101,18 @@ useCustomPageTitle(
     : 'Comunicado'
 )
 
-const { origin } = useRequestURL()
-const basePath = '/estudiantes'
 useSeoMeta({
-  ogImage: `${origin}${basePath}/api/og/comunicado/${postId}`,
-  twitterImage: `${origin}${basePath}/api/og/comunicado/${postId}`,
   twitterCard: 'summary_large_image',
   ogDescription: data.value?.data?.description ?? 'Comunicado CICS',
+})
+
+defineOgImage('Card.takumi', {
+  title: data.value?.data?.title ?? 'Comunicado',
+  subtitle: data.value?.data?.publishedAt
+    ? `Publicado el ${new Date(data.value.data.publishedAt).toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric' })}`
+    : (data.value?.data?.description ?? ''),
+  badge: 'Comunicado',
+  imageUrl: imageUrl.value,
 })
 
 definePageMeta({

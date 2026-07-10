@@ -81,13 +81,15 @@ useCustomPageTitle(
 )
 
 
-const { origin } = useRequestURL()
-const basePath = '/estudiantes'
 useSeoMeta({
-  ogImage: `${origin}${basePath}/api/og/post/${postId}/${postSlug}`,
-  twitterImage: `${origin}${basePath}/api/og/post/${postId}/${postSlug}`,
   twitterCard: 'summary_large_image',
   ogDescription: data.value?.meta ?? 'Publicación oficial CICS'
+})
+
+defineOgImage('Card.takumi', {
+  title: data.value?.title ?? 'Publicación oficial',
+  subtitle: data.value?.meta ?? '',
+  badge: 'Publicación Oficial',
 })
 
 definePageMeta({
