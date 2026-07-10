@@ -37,7 +37,7 @@ onMounted(async () => {
   await store.fetchHorariosAction()
   await store.fetchCatalogos()
   if (store.horarios.length > 0) {
-    // ?id= permite llegar desde el algoritmo con el horario recién generado seleccionado
+    // ?id= lets the algorithm page land here with the freshly generated schedule selected
     const queryId = route.query.id ? +String(route.query.id) : null
     const porQuery = queryId !== null ? store.horarios.find(h => h.id === queryId) : undefined
     const activo = porQuery ?? store.horarios.find(h => h.es_activo) ?? store.horarios[0]
@@ -58,8 +58,8 @@ const aptitudPct = computed(() => {
   return Math.round(a * 100)
 })
 
-// Items para CSelect (los valores viajan como string). La fecha corta permite
-// distinguir versiones con nombres parecidos.
+// Items for CSelect (values travel as strings). The short date helps tell
+// apart versions with similar names.
 const horarioItems = computed(() =>
   store.horarios.map(h => ({
     label: `#${h.id} · ${h.nombre}`
@@ -81,16 +81,16 @@ const carreraItems = computed(() =>
   store.carreras.map(c => ({ label: c.nombre, value: String(c.id) })),
 )
 
-// Fecha de la versión: cuándo generó el algoritmo este horario. La BD del
-// scheduler no guarda fecha por edición manual, así que si hay bloques con
-// modificado_manual se indica "con ediciones manuales posteriores".
+// Version date: when the algorithm generated this schedule. The scheduler DB
+// does not store a date per manual edit, so if any block has modificado_manual
+// the UI labels it "con ediciones manuales posteriores".
 const fechaGeneracion = computed(() => {
   const f = horarioSeleccionado.value?.fecha_generacion
   if (!f) return null
   return new Date(f).toLocaleDateString('es-GT', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' })
 })
 
-// ── Imprimir / PDF ──
+// ── Print / PDF ──
 const printArea = ref<{ imprimir: () => Promise<void> } | null>(null)
 
 const printChips = computed(() => {
@@ -161,38 +161,27 @@ async function onDelete() {
   }
 }
 
-const DIA_COLS: Record<number, number[]> = { 1: [1, 3, 5], 2: [2, 4] }
-
-async function onDrop(payload: { detalleId: number; nuevoPeriodoId: number; colIndex?: number }) {
+// The day pattern (Mon/Wed/Fri vs Tue/Thu) is fixed by the grid's active tab,
+// so a drop can only change hour and/or room, never the day group.
+async function onDrop(payload: { detalleId: number; nuevoPeriodoId: number; salonId: number | null }) {
   const det = store.detalles.find(d => d.detalle_id === payload.detalleId)
   if (!det) return
-
-  // Restricción de patrón de días: un bloque Ma/J no puede soltarse en L/Mi/V y viceversa
-  if (payload.colIndex !== undefined) {
-    const colsValidas = DIA_COLS[det.dia_horario_id] ?? []
-    if (!colsValidas.includes(payload.colIndex)) {
-      if (det.dia_horario_id === 2) {
-        toast.error('Este bloque solo se mueve en Martes/Jueves')
-      }
-      else {
-        toast.error('Este bloque solo se mueve en Lunes/Miércoles/Viernes')
-      }
-      return
-    }
-  }
 
   const span = det.periodo_fin_id - det.periodo_inicio_id + 1
   const cambios: EditarDetalleInput = {
     periodo_inicio_id: payload.nuevoPeriodoId,
     periodo_fin_id: payload.nuevoPeriodoId + span - 1,
   }
+  const cambiaSalon = payload.salonId !== det.salon_id
+  if (cambiaSalon) cambios.salon_id = payload.salonId
+
   try {
     const resp = await store.editarDetalleAction(payload.detalleId, cambios)
     if (resp?.advertencias?.length) {
       toast.warning(`Movido con ${resp.advertencias.length} advertencia(s). Revisa conflictos.`)
     }
     else {
-      toast.success('Bloque reubicado')
+      toast.success(cambiaSalon ? 'Bloque reubicado (salón y horario actualizados)' : 'Bloque reubicado')
     }
   }
   catch {
@@ -234,7 +223,8 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           <h1 class="text-xl font-black tracking-tight">Horario Oficial — Visualizar y Editar</h1>
         </div>
         <p class="text-sm text-muted-foreground">
-          Visualiza los horarios ya generados, edítalos arrastrando los cursos y marca uno como oficial.
+          Visualiza los horarios ya generados y marca uno como oficial. Arrastra un curso a otra
+          fila para cambiar su hora o a otra columna para cambiar su salón.
         </p>
       </div>
       <span class="inline-flex items-center gap-1 text-[0.6rem] font-extrabold uppercase tracking-[0.04em] py-[0.2rem] px-[0.55rem] border-2 border-black rounded-full shadow-[2px_2px_0_0_rgba(0,0,0,1)] bg-card text-foreground self-start whitespace-nowrap">
@@ -350,7 +340,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
         </div>
       </div>
 
-      <!-- Hero de métricas -->
       <div v-if="horarioSeleccionado" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
         <div class="bg-muted border-2 border-black dark:border-surface-600 rounded-lg p-2.5 text-center">
           <div class="text-xl font-extrabold text-cics-primary tabular-nums leading-none">
@@ -388,7 +377,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
     <!-- ── Filters ─────────────────────────────────────────────────────────── -->
     <div class="border-2 border-black rounded-xl shadow-[3px_3px_0_0_rgba(0,0,0,1)] bg-card p-4">
       <div class="flex flex-wrap items-center gap-3">
-        <!-- Carrera -->
         <CSelect
           :model-value="filtroCarrera || null"
           :items="carreraItems"
@@ -400,7 +388,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           @update:model-value="onFiltroCarrera"
         />
 
-        <!-- Semestre -->
         <CSelect
           :model-value="filtroSemestre || null"
           :items="semestreItems"
@@ -412,7 +399,6 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           @update:model-value="onFiltroSemestre"
         />
 
-        <!-- Tipo toggle -->
         <div class="flex items-center border-2 border-black rounded-[0.625rem] overflow-hidden shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
           <button
             v-for="opt in ([{ label: 'Todos', val: '' }, { label: 'Cursos', val: 'cursos' }, { label: 'Labs', val: 'laboratorios' }] as const)"
@@ -502,10 +488,12 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           Cargando...
         </div>
       </div>
-      <ScheduleGrid
+      <RoomScheduleGrid
         :detalles="store.detallesFiltrados"
         :periodos="store.periodos"
         :conflict-ids="store.conflictoIds"
+        :salones="store.salones"
+        :show-empty-salones="true"
         :editable="true"
         :readonly="false"
         @drop="onDrop"

@@ -30,6 +30,12 @@ const props = defineProps<{
   catalogMode?: boolean
   conflictIds?: number[]
   clickable?: boolean
+  /**
+   * Render ONLY one day pattern as a single wide column: 1 = Mon/Wed/Fri, 2 = Tue/Thu.
+   * The schedule repeats within a pattern, so one column is enough. The colIndex
+   * emitted on drop stays compatible (1 -> day 1, 2 -> day 2).
+   */
+  dayGroup?: number
 }>()
 
 const emit = defineEmits<{
@@ -38,9 +44,9 @@ const emit = defineEmits<{
   'remove-block': [detalle: HorarioDetalle]
 }>()
 
-// Marca si el drag actual terminó en una celda válida de la grilla (drop real).
-// Si un bloque colocado se suelta FUERA de cualquier celda (catalogMode), se interpreta
-// como "quitar arrastrando afuera".
+// Whether the current drag ended on a valid grid cell (a real drop). If a
+// placed block is released OUTSIDE any cell (catalogMode), it is interpreted
+// as "remove by dragging out".
 let dropHandled = false
 
 const conflictSet = computed(() => new Set(props.conflictIds ?? []))
@@ -53,6 +59,25 @@ const DIA_COLS: Record<number, number[]> = {
 
 const DAY_LABELS = ['L', 'Ma', 'Mi', 'J', 'V']
 
+// In dayGroup mode the grid is a single column: the group's colIndex (1 or 2)
+// belongs to its day's DIA_COLS, so getDetalle/isSpannedOver/drop work unchanged
+// and blocks from the other group simply never match.
+const dayColumns = computed<number[]>(() =>
+  props.dayGroup ? [props.dayGroup] : [1, 2, 3, 4, 5],
+)
+
+const dayLabels = computed<string[]>(() =>
+  props.dayGroup
+    ? [props.dayGroup === 2 ? 'Martes · Jueves' : 'Lunes · Miércoles · Viernes']
+    : DAY_LABELS,
+)
+
+const gridColsClass = computed<string>(() =>
+  props.dayGroup
+    ? 'grid-cols-[56px_1fr] xl:grid-cols-[64px_1fr]'
+    : 'grid-cols-[56px_repeat(5,minmax(130px,1fr))] xl:grid-cols-[64px_repeat(5,minmax(160px,1fr))]',
+)
+
 // Track which cells are being dragged over: key = "colIndex-periodId"
 const dragOverCell = ref<string | null>(null)
 
@@ -61,7 +86,7 @@ function isFirstAfternoon(period: Period): boolean {
   if (!period.es_tarde) return false
   const index = props.periodos.findIndex((p) => p.id === period.id)
   if (index <= 0) return false
-  return props.periodos[index - 1].es_manana
+  return props.periodos[index - 1]?.es_manana === true
 }
 
 // Returns the detalle (if any) that occupies the given column and starts at the given period
@@ -140,8 +165,8 @@ function onDrop(e: DragEvent, colIndex: number, period: Period) {
   }
   // Catalog items (not yet in grid): emit without span validation
 
-  // ¿La celda destino ya tiene otra sección colocada? (distinta a la que se arrastra)
-  // Permite a quien recibe el evento decidir si es un "cambio de sección" por drag.
+  // Is the target cell already occupied by another placed section? Lets the
+  // event receiver decide whether this is a drag-based section swap.
   const ocupante = getDetalle(colIndex, period.id)
   const celdaOcupadaPor = ocupante && ocupante.detalle_id !== detalleId ? ocupante.detalle_id : undefined
 
@@ -153,8 +178,8 @@ function onBlockDragStart(e: DragEvent, detalle: HorarioDetalle) {
   e.dataTransfer?.setData('detalleId', detalle.detalle_id.toString())
 }
 
-// Si un bloque colocado (catalogMode) se suelta fuera de cualquier celda válida,
-// no hubo drop → se interpreta como "arrastrar afuera para quitar".
+// If a placed block (catalogMode) is released outside any valid cell, no drop
+// happened: interpreted as "drag out to remove".
 function onBlockDragEnd(detalle: HorarioDetalle) {
   if (props.catalogMode && !dropHandled) {
     emit('remove-block', detalle)
@@ -164,7 +189,7 @@ function onBlockDragEnd(detalle: HorarioDetalle) {
 
 <template>
   <div class="overflow-x-auto">
-    <!-- Sin periodos la grilla no puede dibujar filas: hacerlo visible, nunca silencioso -->
+    <!-- Without periods no rows can be drawn: fail visibly, never silently -->
     <div
       v-if="periodos.length === 0"
       class="border-2 border-dashed border-red-400 rounded-xl p-6 text-center space-y-1"
@@ -177,15 +202,15 @@ function onBlockDragEnd(detalle: HorarioDetalle) {
       </p>
     </div>
 
-    <div v-else class="min-w-205">
+    <div v-else :class="dayGroup ? '' : 'min-w-205'">
 
-      <!-- Header row: empty time column + 5 day headers -->
-      <div class="grid grid-cols-[56px_repeat(5,minmax(130px,1fr))] xl:grid-cols-[64px_repeat(5,minmax(160px,1fr))] gap-1.5 mb-1.5 sticky top-0 z-10 bg-card py-1">
+      <!-- Header row: empty time column + day headers (5 days or 1 group) -->
+      <div class="grid gap-1.5 mb-1.5 sticky top-0 z-10 bg-card py-1" :class="gridColsClass">
         <!-- Empty corner above time column -->
         <div />
         <!-- Day headers -->
         <div
-          v-for="label in DAY_LABELS"
+          v-for="label in dayLabels"
           :key="label"
           class="bg-cics-blue text-white border-2 border-black rounded-lg text-center text-xs font-black uppercase tracking-wider py-1.5"
         >
@@ -199,7 +224,6 @@ function onBlockDragEnd(detalle: HorarioDetalle) {
           v-for="period in periodos"
           :key="period.id"
         >
-          <!-- Separador Mañana / Tarde -->
           <div
             v-if="isFirstAfternoon(period)"
             class="flex items-center gap-2 mt-3 mb-1.5 pl-14 xl:pl-16"
@@ -209,14 +233,14 @@ function onBlockDragEnd(detalle: HorarioDetalle) {
           </div>
 
           <div
-            class="grid grid-cols-[56px_repeat(5,minmax(130px,1fr))] xl:grid-cols-[64px_repeat(5,minmax(160px,1fr))] gap-1.5"
-            :class="{ 'bg-muted/30 rounded-lg': period.es_tarde }"
+            class="grid gap-1.5"
+            :class="[gridColsClass, { 'bg-muted/30 rounded-lg': period.es_tarde }]"
           >
             <!-- Time column -->
             <div class="text-[9px] xl:text-[10px] font-bold text-muted-foreground text-right pr-1 xl:pr-1.5 pt-1 whitespace-pre-line leading-tight">{{ (period.hora_inicio ?? '').slice(0,5) }}&#10;{{ (period.hora_fin ?? '').slice(0,5) }}</div>
 
-            <!-- 5 day cells (columns 1–5) -->
-            <template v-for="colIndex in [1, 2, 3, 4, 5]" :key="colIndex">
+            <!-- Day cells: 5 columns (week) or 1 (dayGroup mode) -->
+            <template v-for="colIndex in dayColumns" :key="colIndex">
               <!-- Cell occupied by a block starting here -->
               <div
                 v-if="getDetalle(colIndex, period.id)"

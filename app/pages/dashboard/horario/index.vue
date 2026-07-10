@@ -11,7 +11,7 @@ definePageMeta({
 
 const personalStore = usePersonalScheduleStore()
 
-// Ningún error de esta vista puede quedar silencioso: se muestra y se loguea
+// No error in this view may stay silent: it is shown and logged
 onErrorCaptured((err) => {
   console.error('[MiHorario] error interno:', err)
   toast.error(`Error interno en Mi Horario: ${(err as Error)?.message ?? String(err)}`)
@@ -20,10 +20,10 @@ onErrorCaptured((err) => {
 
 // ── Lifecycle ─────────────────────────────────────────────────────────────────
 
-// El store marca "loading" true/false en CADA llamada individual (cargarPropuesto,
-// cargarContextoEstudiante, cargar), así que entre una y otra hay un instante en
-// false → eso es el parpadeo de "horario vacío" que se veía al recargar. Este flag
-// solo se apaga cuando las TRES terminan, y controla el skeleton de la página.
+// The store toggles "loading" per individual call (cargarPropuesto,
+// cargarContextoEstudiante, cargar), so between calls there is a brief false
+// window that caused the "empty schedule" flicker on reload. This flag only
+// turns off once ALL THREE finish, and drives the page skeleton.
 const cargandoInicial = ref(true)
 
 onMounted(async () => {
@@ -172,7 +172,7 @@ const swapConflictivas = computed((): number[] =>
 
 // ── Handlers ──────────────────────────────────────────────────────────────────
 
-// dia_horario_id 1 = L/Mi/V (columnas 1,3,5), 2 = Ma/J (columnas 2,4) — igual que ScheduleGrid
+// dia_horario_id 1 = Mon/Wed/Fri (columns 1,3,5), 2 = Tue/Thu (columns 2,4) — same as ScheduleGrid
 function diaHorarioDeColumna(colIndex: number): number {
   return [1, 3, 5].includes(colIndex) ? 1 : 2
 }
@@ -186,7 +186,7 @@ function onPersonalDrop(payload: { detalleId: number; nuevoPeriodoId?: number; c
 
   const yaColocado = personalStore.estaSeleccionado(detalle)
 
-  // Atajo: soltar sobre la celda de OTRA sección del MISMO curso = cambiar de sección
+  // Shortcut: dropping onto the cell of ANOTHER section of the SAME course = switch section
   if (payload.celdaOcupadaPor) {
     const ocupante = personalStore.bloquesColocados.find(d => d.detalle_id === payload.celdaOcupadaPor)
     if (
@@ -202,9 +202,9 @@ function onPersonalDrop(payload: { detalleId: number; nuevoPeriodoId?: number; c
     }
   }
 
-  // Tu horario personal es de referencia, no el oficial: se coloca donde tú decidas.
-  // Se confirma con un modal (nunca se bloquea la acción); los choques quedan
-  // marcados en rojo en la grilla, no impiden mover el curso.
+  // The personal schedule is a reference, not the official one: blocks go
+  // wherever the student decides. A modal confirms the move (the action is
+  // never blocked); clashes are painted red on the grid and do not prevent it.
   if (payload.colIndex !== undefined && payload.nuevoPeriodoId !== undefined) {
     const dia = diaHorarioDeColumna(payload.colIndex)
     const span = detalle.periodo_fin_id - detalle.periodo_inicio_id
@@ -218,7 +218,7 @@ function onPersonalDrop(payload: { detalleId: number; nuevoPeriodoId?: number; c
     return
   }
 
-  // Sin celda específica (botón "+" del catálogo): se agrega en su horario oficial
+  // No specific cell (catalog "+" button): added at its official schedule slot
   if (yaColocado) {
     toast.info(`${detalle.curso_nombre} ya está en tu horario`)
     return
@@ -293,9 +293,9 @@ function onRemoveFromSwap() {
   swapDetalle.value = null
 }
 
-// Cuando el semestre del estudiante no tiene oferta, no se le bloquea: se le
-// advierte y puede duplicar igual con un alcance más amplio (su carrera, o el
-// propuesto completo si su carrera tampoco tiene secciones este ciclo).
+// When the student's semester has no offer they are not blocked: they get a
+// warning and can still duplicate with a wider scope (their career, or the
+// full proposed schedule if the career has no sections this term either).
 const duplicarSinOfertaOpen = ref(false)
 const duplicarAlcance = computed<'carrera' | 'todo'>(() =>
   personalStore.catalogoDeMiCarrera.length > 0 ? 'carrera' : 'todo',
@@ -389,6 +389,37 @@ function onImprimir() {
   printArea.value?.imprimir()
 }
 
+// ── Day view tabs ─────────────────────────────────────────────────────────────
+// "Todos los días" (default) = classic 5-column weekly grid. The other two show
+// a single pattern as one wide column, since Mon/Wed/Fri share one schedule and
+// Tue/Thu (lab days) another. id 0 = full week (day-group undefined). Printing
+// always outputs the full week (separate print-only grid).
+const diaTab = ref(0)
+const DIA_TABS = [
+  { id: 0, label: 'Todos los días', sub: 'Lun – Vie' },
+  { id: 1, label: 'Días normales', sub: 'Lun · Mié · Vie' },
+  { id: 2, label: 'Días de lab', sub: 'Mar · Jue' },
+]
+
+const resumenPorDia = computed(() => {
+  const res: Record<number, { bloques: number; conflictos: number }> = {
+    0: { bloques: 0, conflictos: 0 },
+    1: { bloques: 0, conflictos: 0 },
+    2: { bloques: 0, conflictos: 0 },
+  }
+  for (const b of personalStore.bloquesColocados) {
+    const r = res[b.dia_horario_id]
+    if (!r) continue
+    r.bloques++
+    res[0]!.bloques++
+    if (personalStore.conflictoIds.includes(b.detalle_id)) {
+      r.conflictos++
+      res[0]!.conflictos++
+    }
+  }
+  return res
+})
+
 const printChips = computed(() => {
   const chips: string[] = []
   if (personalStore.estudiante.semestre !== null) chips.push(`Semestre ${personalStore.estudiante.semestre}`)
@@ -431,7 +462,7 @@ async function onReintentar() {
       @ver-conflictos="conflictsOpen = true"
     />
 
-    <!-- ── Skeleton de carga inicial: evita el parpadeo de "horario vacío" ── -->
+    <!-- ── Initial loading skeleton: avoids the "empty schedule" flicker ── -->
     <PersonalScheduleSkeleton v-if="cargandoInicial" />
 
     <template v-else>
@@ -505,10 +536,46 @@ async function onReintentar() {
             Cargando...
           </div>
         </div>
+        <div class="flex items-center gap-3 mb-3 print:hidden">
+          <div class="flex items-center border-2 border-black rounded-[0.625rem] overflow-hidden shadow-[2px_2px_0_0_rgba(0,0,0,1)]">
+            <button
+              v-for="(tab, i) in DIA_TABS"
+              :key="tab.id"
+              type="button"
+              :class="[
+                'px-3 py-1.5 text-xs font-semibold transition-colors flex items-center gap-1.5',
+                diaTab === tab.id ? 'bg-cics-blue text-white' : 'bg-card text-foreground hover:bg-muted',
+                i < DIA_TABS.length - 1 ? 'border-r-2 border-black' : '',
+              ]"
+              @click="diaTab = tab.id"
+            >
+              {{ tab.label }}
+              <span :class="diaTab === tab.id ? 'opacity-75' : 'text-muted-foreground'" class="text-[10px] font-medium hidden md:inline">
+                {{ tab.sub }}
+              </span>
+              <!-- In "Todos los días" every clash is already visible on the grid;
+                   the badge only warns about clashes hidden in another tab -->
+              <span
+                v-if="tab.id !== 0 && resumenPorDia[tab.id]!.conflictos > 0"
+                class="text-[9px] font-extrabold rounded-full px-1.5 py-px bg-red-500 text-white border border-black"
+                :title="`${resumenPorDia[tab.id]!.conflictos} bloque(s) con choque en estos días`"
+              >
+                {{ resumenPorDia[tab.id]!.conflictos }}
+              </span>
+            </button>
+          </div>
+          <span class="text-[11px] text-muted-foreground hidden sm:inline">
+            {{ resumenPorDia[diaTab]!.bloques }} bloque{{ resumenPorDia[diaTab]!.bloques !== 1 ? 's' : '' }}
+            {{ diaTab === 0 ? 'en tu semana' : 'en estos días' }}
+          </span>
+        </div>
+
         <ScheduleGrid
+          class="print:hidden"
           :detalles="personalStore.bloquesColocados"
           :periodos="personalStore.periodos"
           :conflict-ids="personalStore.conflictoIds"
+          :day-group="diaTab === 0 ? undefined : diaTab"
           :editable="false"
           :readonly="false"
           :catalog-mode="true"
@@ -517,8 +584,20 @@ async function onReintentar() {
           @remove-block="onRemoveBlock"
           @click-block="onClickBlock"
         />
+
+        <!-- Full week, print only: paper has no tabs -->
+        <ScheduleGrid
+          class="hidden print:block"
+          :detalles="personalStore.bloquesColocados"
+          :periodos="personalStore.periodos"
+          :conflict-ids="personalStore.conflictoIds"
+          :editable="false"
+          :readonly="true"
+        />
+
         <p class="text-[10px] text-muted-foreground mt-2 print:hidden">
-          Tip: arrastra un curso a cualquier día/hora que prefieras (es solo tu organización personal,
+          Tip: con las pestañas ves toda la semana o solo <strong>Días normales</strong> /
+          <strong>Días de lab</strong> ampliados; arrastra un curso a la hora que prefieras (es solo tu organización personal,
           no cambia tu inscripción real); si choca con otro, se marca en rojo. Haz clic en un bloque
           para <strong>cambiar de sección</strong>, quitarlo o volver a su horario oficial.
         </p>

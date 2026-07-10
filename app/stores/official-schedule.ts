@@ -83,7 +83,7 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
 
       const result = await fetchHorario(id, query)
       horarioActual.value = result.horario
-      // Rellena periodo/hora null (LEFT JOIN del backend con datos reales)
+      // Fill null periodo/hora (backend LEFT JOIN) with real data
       detalles.value = normalizarDetalles(result.detalles, periodos.value)
     }
     catch (err: unknown) {
@@ -119,8 +119,22 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     loadingDetalle.value = true
     const idx = detalles.value.findIndex(d => d.detalle_id === detalleId)
     const prev = idx >= 0 ? { ...detalles.value[idx] } : null
-    // Optimista: aplica el cambio en memoria, sin refetch completo
-    if (idx >= 0) detalles.value[idx] = { ...detalles.value[idx], ...cambios, modificado_manual: true }
+    // Optimistic in-memory update, no full refetch. The detalle also carries
+    // room/teacher NAMES (from the backend JOIN), so they must be re-synced
+    // from the catalogs or the block would keep showing the previous ones.
+    const actual = idx >= 0 ? detalles.value[idx] : undefined
+    if (actual) {
+      const parche: Partial<HorarioDetalle> = { ...cambios, modificado_manual: true }
+      if ('salon_id' in cambios) {
+        const salon = salones.value.find(s => s.id === cambios.salon_id) ?? null
+        parche.salon_nombre = salon?.nombre ?? null
+        parche.salon_es_laboratorio = salon?.es_laboratorio ?? null
+      }
+      if ('docente_id' in cambios) {
+        parche.docente_nombre = docentes.value.find(d => d.id === cambios.docente_id)?.nombre ?? null
+      }
+      detalles.value[idx] = { ...actual, ...parche }
+    }
     try {
       const resp = await editarDetalle(horarioActual.value.id, detalleId, cambios)
       if (resp?.detalle && idx >= 0) {
@@ -131,7 +145,7 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
         const h = horarios.value.find(x => x.id === horarioActual.value!.id)
         if (h) h.aptitud_final = resp.nueva_aptitud
       }
-      return resp   // la página decide si mostrar advertencias
+      return resp   // the page decides whether to surface warnings
     }
     catch (e) {
       if (prev && idx >= 0) detalles.value[idx] = prev   // rollback
@@ -197,8 +211,8 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     })
   })
 
-  // detalle_id en conflicto (traslape de salón/docente en día+periodo compartidos),
-  // calculado localmente para no depender de un fetch por cada movimiento
+  // detalle_ids in conflict (room/teacher overlap on a shared day+period),
+  // computed locally to avoid a refetch on every move
   const conflictoIds = computed<number[]>(() => {
     const DIA_COLS: Record<number, number[]> = { 1: [1, 3, 5], 2: [2, 4] }
     const ids = new Set<number>()
@@ -223,8 +237,8 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     return [...ids]
   })
 
-  // Conflictos del backend traducidos a lenguaje natural (día, hora y nombres
-  // reales en lugar de "slot 24-1-8"); esta vista la usan docentes/coordinación
+  // Backend conflicts translated to natural language (real day, hour and names
+  // instead of "slot 24-1-8"); this view is used by teachers/coordination
   const conflictosLegibles = computed<ConflictoLegible[]>(() =>
     describirConflictos(conflictos.value, {
       periodos: periodos.value,
@@ -235,7 +249,7 @@ export const useOfficialScheduleStore = defineStore('official-schedule', () => {
     }),
   )
 
-  // ¿El horario cargado tiene bloques editados a mano después de generarse?
+  // Does the loaded schedule contain blocks manually edited after generation?
   const tieneEdicionManual = computed<boolean>(() =>
     detalles.value.some(d => d.modificado_manual),
   )
