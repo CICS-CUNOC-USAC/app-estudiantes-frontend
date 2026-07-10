@@ -117,3 +117,6 @@ export const eliminarHorario = async (id: number) => {
 
 export const csvUrl = (id: number): string =>
   `${import.meta.env.VITE_API_SCHEDULES_BASE_URL}/api/horarios/${id}/exportar/csv`
+
+export const pdfUrl = (id: number): string =>
+  `${import.meta.env.VITE_API_SCHEDULES_BASE_URL}/api/horarios/${id}/exportar/pdf`
