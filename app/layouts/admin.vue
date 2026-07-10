@@ -1,6 +1,7 @@
 <template>
   <SidebarProvider :default-open="true">
     <AdminSidebar />
+    <SidebarFloatingToggle />
     <div class="dark:bg-surface-800 w-full bg-white">
       <nav
         class="dark:bg-surface-800/80 fixed top-0 z-20 h-14 w-full bg-white/80 px-4 py-2.5 backdrop-blur-sm transition-shadow lg:hidden"
@@ -18,7 +19,10 @@
           </NuxtLink>
         </div>
       </nav>
-      <div class="mx-auto w-full max-w-7xl rounded-xl px-6 pb-4 pt-16 lg:pt-6">
+      <div
+        class="mx-auto w-full rounded-xl pb-4 pt-16 lg:pt-6"
+        :class="$route.meta.wideScreen ? 'px-3 sm:px-5 lg:px-7' : 'max-w-7xl px-6'"
+      >
         <NuxtPage />
       </div>
     </div>
@@ -27,6 +31,7 @@
 
 <script lang="ts" setup>
 import AdminSidebar from '~/components/partials/navigation/AdminSidebar.vue'
+import SidebarFloatingToggle from '~/components/partials/navigation/SidebarFloatingToggle.vue'
 import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
 
 const { hasScrolled } = useNavScrollShadow()

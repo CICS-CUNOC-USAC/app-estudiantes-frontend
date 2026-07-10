@@ -11,8 +11,19 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false
   },
+  experimental: {
+    // preserves the Nuxt/Vue context across await boundaries, so composables
+    // called from inside a catch block (after an awaited fetch rejects) keep working
+    asyncContext: true
+  },
   compatibilityDate: '2024-11-15',
   srcDir: 'app/',
+  strapi: {
+    version: 'v5',
+    url: process.env.STRAPI_URL || 'http://localhost:1337',
+    token: process.env.STRAPI_TOKEN || undefined
+  },
+  components: [{ path: '~/components', pathPrefix: false }],
   imports: {
     dirs: ['stores']
   },
@@ -26,7 +37,7 @@ export default defineNuxtConfig({
     head: {
       link: [
         // favicon
-        { rel: 'icon', type: 'image/x-icon', href: '/estudiantes/favicon.ico' },
+        { rel: 'icon', type: 'image/x-icon', href: '/estudiantes/favicon.ico' }
       ],
       meta: [
         {
@@ -42,10 +53,20 @@ export default defineNuxtConfig({
         { property: 'og:site_name', content: 'CICS App' },
         { property: 'og:type', content: 'website' },
         { property: 'og:title', content: 'CICS App | Portal' },
-        { property: 'og:description', content: 'Portal para los estudiantes de Ingeniería del Centro Universitario De Occidente' },
-        { property: 'og:image', content: 'https://cics.cunoc.edu.gt/estudiantes/og.png' },
+        {
+          property: 'og:description',
+          content:
+            'Portal para los estudiantes de Ingeniería del Centro Universitario De Occidente'
+        },
+        {
+          property: 'og:image',
+          content: 'https://cics.cunoc.edu.gt/estudiantes/og.png'
+        },
         { name: 'twitter:card', content: 'summary_large_image' },
-        { name: 'twitter:image', content: 'https://cics.cunoc.edu.gt/estudiantes/og.png' },
+        {
+          name: 'twitter:image',
+          content: 'https://cics.cunoc.edu.gt/estudiantes/og.png'
+        }
       ]
     }
   },
@@ -59,8 +80,18 @@ export default defineNuxtConfig({
     '@nuxt/content',
     '@nuxtjs/color-mode',
     'nuxt-authorization',
-    'shadcn-nuxt'
+    'shadcn-nuxt',
+    'nuxt-og-image'
   ],
+  site: {
+    url: 'https://cics.cunoc.edu.gt'
+  },
+  ogImage: {
+    defaults: {
+      width: 1200,
+      height: 630
+    }
+  },
   vite: {
     plugins: [tailwindcss()],
     define: {

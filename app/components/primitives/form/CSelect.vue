@@ -117,19 +117,32 @@ defineOptions({ inheritAttrs: false })
             cn(
               'relative h-full flex-1 rounded-none border-0 bg-transparent pr-4 pl-0 shadow-none focus-visible:border-0 focus-visible:ring-0',
               label ? 'items-end pb-1' : '',
-              hasPrepend ? 'pl-0' : 'pl-4',
-              hasAppend ? 'pr-10' : 'pr-4'
+              !hasPrepend ? 'rounded-l-lg pl-2' : '',
+              !hasAppend ? 'rounded-r-lg pr-2' : ''
             )
           "
         >
           <!-- floating label -->
           <label
             v-if="label"
-            class="text-muted-foreground pointer-events-none absolute top-1 left-0 z-10 text-xs select-none"
+            class="text-muted-foreground pointer-events-none absolute top-1 z-10 text-xs select-none"
           >
             {{ label }}
           </label>
           <SelectValue :placeholder="placeholder ?? ''" />
+          <!-- <button
+            v-if="clearable && modelValue"
+            type="button"
+            class="text-muted-foreground absolute top-1 right-2.5 z-20 flex size-4 cursor-pointer items-center justify-center rounded-sm opacity-0 transition duration-100 group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+            @click.stop="
+              () => {
+                emit('update:modelValue', null)
+                emit('valueChange', null)
+              }
+            "
+          >
+            <Icon name="icon-park-outline:close-small" class="size-3.5" />
+          </button> -->
         </SelectTrigger>
 
         <SelectContent>
@@ -147,7 +160,7 @@ defineOptions({ inheritAttrs: false })
       <button
         v-if="clearable && modelValue"
         type="button"
-        class="text-muted-foreground absolute top-1/2 right-10 z-20 flex size-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm opacity-0 transition duration-100 group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+        class="text-muted-foreground absolute top-3.5 right-2.5 z-20 flex size-4 -translate-y-1/2 cursor-pointer items-center justify-center rounded-sm opacity-0 transition duration-100 group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-neutral-200 dark:hover:bg-neutral-600"
         @click.stop="
           () => {
             emit('update:modelValue', null)

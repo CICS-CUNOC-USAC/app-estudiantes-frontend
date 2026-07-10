@@ -3,12 +3,13 @@
     <NuxtLoadingIndicator
       :throttle="130"
       :height="4"
-      color="var(--p-primary-400)"
+      color="var(--color-primary-400)"
     />
     <NuxtLayout />
     <Toaster
       position="top-center"
-      :close-button="false"
+      close-button
+      close-button-position="top-left"
       :toast-options="{
         unstyled: true,
         duration: 3000,
@@ -16,15 +17,14 @@
           actionButton:
             'bg-transparent text-sm text-primary-600 hover:text-primary-700 rounded-md hover:underline',
           toast:
-            'w-full py-2 text-sm px-3 border border-black/85 rounded-lg text-current font-sans flex items-center gap-3 shadow-lg backdrop-blur-sm',
+            'group w-full py-2 text-sm px-3 border border-black/85 rounded-lg text-current font-sans flex items-center gap-3 shadow-lg backdrop-blur-sm',
           default: 'dark:bg-surface-800/50 bg-surface-50/50',
           description: 'text-muted-foreground text-sm',
           warning: 'dark:bg-yellow-800/50 bg-yellow-200/50',
           error: 'dark:bg-red-800/50 bg-red-200/50 ',
           info: 'dark:bg-sky-800/50  bg-sky-200/50 ',
           success: 'dark:bg-green-800/50 bg-green-200/50',
-          closeButton:
-            'dark:!bg-surface-800/50 !text-surface-50 !border-black/85 !text-color'
+          closeButton: 'absolute -translate-y-[35%] -translate-x-[35%] top-0 left-0 bg-white dark:bg-surface-800/50 rounded-full p-1 text-muted-foreground hover:text-current transition-colors ring-1 ring-black dark:ring-white/10 opacity-0 group-hover:opacity-100 group-focus:opacity-100 duration-200',
         }
       }"
     >

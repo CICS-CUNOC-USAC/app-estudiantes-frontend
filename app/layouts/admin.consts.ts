@@ -66,5 +66,45 @@ export const ADMIN_LAYOUT_ITEMS = [
         subject: ['all', 'Loan'],
       },
     ]
+  },{
+    sectionName: 'Generador de horarios',
+    shortName: 'Generador',
+    items: [
+      {
+        itemName: 'Panel',
+        itemIcon: 'lucide:layout-dashboard',
+        itemLink: '/admin/schedules-generator',
+        action: [],
+        subject: [],
+      },
+      {
+        itemName: 'Datos',
+        itemIcon: 'lucide:database',
+        itemLink: '/admin/schedules-generator/data',
+        action: [],
+        subject: [],
+      },
+      {
+        itemName: 'Horarios',
+        itemIcon: 'lucide:calendar-range',
+        itemLink: '/admin/schedules-generator/schedules',
+        action: [],
+        subject: [],
+      },
+      {
+        itemName: 'Reportes',
+        itemIcon: 'lucide:chart-column',
+        itemLink: '/admin/schedules-generator/reports',
+        action: [],
+        subject: [],
+      },
+      {
+        itemName: 'Acerca de',
+        itemIcon: 'lucide:info',
+        itemLink: '/admin/schedules-generator/about',
+        action: [],
+        subject: [],
+      },
+    ]
   }
 ]
