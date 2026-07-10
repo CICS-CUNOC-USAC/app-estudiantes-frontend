@@ -93,18 +93,19 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     },
     async myProfile() {
       this.loading = true
-      const response = await $api<Staff>('/staff-auth/me')
-
-      if (response) {
+      try {
+        const response = await $api<Staff>('/staff-auth/me')
         this.user = response ?? null
-      } else {
-        toast.error('Error de sesión', {
-          description:
-            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde'
+      } catch {
+        onNuxtReady(() => {
+          toast.error('Error de sesión', {
+            description:
+              'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde'
+          })
         })
+      } finally {
+        this.loading = false
       }
-
-      this.loading = false
     },
     clear() {
       this.user = null

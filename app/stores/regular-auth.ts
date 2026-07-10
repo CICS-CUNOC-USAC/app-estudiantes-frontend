@@ -134,16 +134,19 @@ export const useRegularAuthStore = defineStore('regular-auth', {
     },
     async myProfile() {
       this.loading = true
-      const response = await $api<User>('/auth/me')
-      if (response) {
-        this.user = response
-      } else {
-        toast.error('Error de sesión', {
-          description:
-            'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde'
+      try {
+        const response = await $api<User>('/auth/me')
+        this.user = response ?? null
+      } catch {
+        onNuxtReady(() => {
+          toast.error('Error de sesión', {
+            description:
+              'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde'
+          })
         })
+      } finally {
+        this.loading = false
       }
-      this.loading = false
     },
     async updateProfile(payload: UserUpdatePayload) {
       this.loading = true

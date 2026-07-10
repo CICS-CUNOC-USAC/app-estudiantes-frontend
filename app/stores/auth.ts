@@ -55,7 +55,9 @@ export const useAuthStore = defineStore('auth', {
       // this.role = role.value ?? null
       const tokenCookie = useCookie('cicsapp-user-token')
       this.token = tokenCookie.value ?? null
-      if (tokenCookie.value) {
+      if (!tokenCookie.value) return
+
+      try {
         const decoded = jwtDecode<UserJwt>(tokenCookie.value)
         this.role = decoded.profile_id ? 'regular' : 'staff'
         this.isAuthenticated = true
@@ -68,6 +70,13 @@ export const useAuthStore = defineStore('auth', {
           regularAuthStore.authenticated = true
           await regularAuthStore.myProfile()
         }
+      } catch {
+        onNuxtReady(() => {
+          toast.error('Error de sesión', {
+            description:
+              'No se ha podido recuperar tu sesión, por favor vuelve a intentar más tarde'
+          })
+        })
       }
     },
     async fetchUser() {
