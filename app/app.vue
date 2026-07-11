@@ -59,7 +59,6 @@ useSeoMeta({
     route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App | Portal',
   description:
     'Portal para los estudiantes de Ingenieria del Centro Universitario De Occidente',
-  ogImage: 'https://cics.cunoc.edu.gt/estudiantes/og.png',
   ogTitle: () =>
     route.meta.title ? `${route.meta.title} | CICS App` : 'CICS App | Portal',
   ogDescription:

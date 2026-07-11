@@ -1,6 +1,6 @@
 <template>
   <Alert :variant="variant">
-    <Icon name="icon-park-twotone:help" />
+    <Icon v-if="icon" :name="icon" />
     <AlertTitle>{{ title }}</AlertTitle>
     <AlertDescription>
       <p>{{ subtitle }}</p>
@@ -22,11 +22,13 @@ import { Alert, AlertTitle, AlertDescription, type AlertVariants } from '~/compo
 withDefaults(defineProps<{
   title: string
   subtitle?: string
+  icon?: string
   backToLabel?: string
   backToRoute?: string
   variant?: AlertVariants["variant"]
 }>(), {
-  variant: "default"
+  variant: "default",
+  icon: "icon-park-twotone:info",
 })
 </script>
 <style scoped></style>

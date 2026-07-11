@@ -641,6 +641,59 @@
         </KebabMenu>
       </div>
     </div>
+    <div
+      class="border-surface-950/45 bg-surface-50 rounded border p-4 lg:p-8 dark:bg-neutral-700"
+    >
+      <h2 class="text-2xl font-semibold">Alertas/Mensajes</h2>
+      <CMessage
+        class="mt-4"
+        title="Alerta por defecto"
+        subtitle="Este es un mensaje normal"
+        variant="default"
+      />
+      <CMessage
+        class="mt-4"
+        title="Alerta por defecto"
+        subtitle="Este es un mensaje normal con botón de regreso"
+        variant="default"
+        back-to-label="Regresar a inicio"
+        back-to-route="/"
+      />
+      <CMessage
+        class="mt-4"
+        title="Alerta de información"
+        subtitle="Este es un mensaje de información."
+        variant="info"
+      />
+      <CMessage
+        class="mt-4"
+        title="Alerta de información"
+        icon="icon-park-twotone:ipad"
+        subtitle="Este es un mensaje de información con icono custom."
+        variant="info"
+        back-to-label="Regresar a inicio"
+        back-to-route="/"
+      />
+      <CMessage
+        class="mt-4"
+        title="Alerta de éxito"
+        subtitle="Este es un mensaje de éxito."
+        variant="success"
+      />
+      <CMessage
+        class="mt-4"
+        title="Alerta de advertencia"
+        subtitle="Este es un mensaje de advertencia."
+        variant="warning"
+      />
+      <CMessage
+        class="mt-4"
+        title="Alerta de error"
+        subtitle="Este es un mensaje de error."
+        variant="destructive"
+      />
+
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -648,6 +701,7 @@ import { toast } from 'vue-sonner'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import KebabMenu from '~/components/partials/KebabMenu.vue'
+import CMessage from '~/components/partials/CMessage.vue'
 
 const text = ref('')
 </script>
