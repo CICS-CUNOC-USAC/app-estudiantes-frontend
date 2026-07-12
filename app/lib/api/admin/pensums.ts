@@ -77,3 +77,24 @@ export async function addCourseToPensum(pensumId: number | string, payload: AddC
 export async function removeCourseFromPensum(pensumId: number | string, courseCode: string) {
   await $api(`/pensums/${pensumId}/courses/${courseCode}`, { method: 'DELETE' })
 }
+
+export type UpdateCourseInPensumPayload = {
+  courseName?: string
+  courseDescription?: string
+  courseCredits?: number
+  semester?: number
+  field?: number
+  mandatory?: boolean
+}
+
+export async function updateCourseInPensum(
+  pensumId: number | string,
+  courseCode: string,
+  payload: UpdateCourseInPensumPayload
+) {
+  const result = await $api(`/pensums/${pensumId}/courses/${courseCode}`, {
+    method: 'PATCH',
+    body: payload
+  })
+  return { result }
+}
