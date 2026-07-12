@@ -310,7 +310,7 @@ import {
 } from '~/components/ui/dialog'
 import CourseSearchInput from '~/components/admin/pensums/CourseSearchInput.vue'
 import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
-import { updateCourse, type UpdateCoursePayload } from '~/lib/api/admin/courses'
+import { updateCourseInPensum } from '~/lib/api/admin/pensums'
 import {
   fetchPrerequisites,
   createPrerequisite,
@@ -354,11 +354,16 @@ const { handleSubmit, resetForm } = useForm({
 })
 
 const onSubmit = handleSubmit((values) => {
-  mutate(values as UpdateCoursePayload)
+  mutate(values)
 })
 
 const { mutate, asyncStatus } = useMutation({
-  mutation: (data: UpdateCoursePayload) => updateCourse(props.courseCode, data),
+  mutation: (data: { name: string, description: string, credits: number }) =>
+    updateCourseInPensum(props.pensumId, props.courseCode, {
+      courseName: data.name,
+      courseDescription: data.description,
+      courseCredits: data.credits
+    }),
   onError(error) {
     const message = (error as FetchError).data?.message
     const parsedMessage = Array.isArray(message) ? message.join(', ') : message
