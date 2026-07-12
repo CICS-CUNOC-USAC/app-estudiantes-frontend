@@ -19,6 +19,18 @@ export const mapSeccionFkError = (message?: string): SeccionFkField | null => {
   return null
 }
 
+export const fetchSecciones = async () => {
+  try {
+    const response = await $apiSchedules<Seccion[]>('/api/secciones')
+    return Array.isArray(response) ? response : []
+  } catch (error: any) {
+    toast.error('Error al obtener secciones', {
+      description: error?.data?.error ?? error?.data?.message ?? 'Error desconocido'
+    })
+    throw error
+  }
+}
+
 export const fetchSeccionesByCurso = async (cursoId: number) => {
   try {
     const response = await $apiSchedules<Seccion[]>(`/api/secciones/curso/${cursoId}`)
