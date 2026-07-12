@@ -57,7 +57,7 @@ const errors = computed(() => {
   const ao = form.aptitud_objetivo
   if (ao !== null && ao !== undefined && String(ao) !== '') {
     const n = Number(ao)
-    if (isNaN(n) || n < 0 || n > 100) e.aptitud_objetivo = '0 – 100'
+    if (isNaN(n) || n < 0 || n > 500) e.aptitud_objetivo = '0 – 500'
   }
   return e
 })
@@ -265,7 +265,7 @@ const mutacionItems = [
                 type="number"
                 label="Aptitud Objetivo"
                 :error="errors.aptitud_objetivo"
-                message="0 – 100 (opcional)"
+                message="0 – 500 (opcional)"
               />
               <CInputText
                 v-model="form.tasa_mutacion"

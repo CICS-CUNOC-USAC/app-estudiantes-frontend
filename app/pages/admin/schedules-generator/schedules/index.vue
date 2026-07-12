@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { toast } from 'vue-sonner'
 import { Dialog } from '~/components/ui/dialog'
 import type { HorarioDetalle, EditarDetalleInput } from '~/lib/api/schedules-generator/types'
-import { csvUrl } from '~/lib/api/schedules-generator/horarios'
+import { csvUrl, pdfUrl } from '~/lib/api/schedules-generator/horarios'
 
 definePageMeta({
   layout: 'admin',
@@ -140,6 +140,35 @@ async function onOpenConflictos() {
 function onExportarCsv() {
   if (selectedHorarioId.value === null) return
   window.open(csvUrl(selectedHorarioId.value), '_blank')
+}
+
+async function onExportarPdf() {
+  if (selectedHorarioId.value === null) return
+
+  try {
+
+    const response = await fetch(pdfUrl(selectedHorarioId.value), {
+      method: 'GET',
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al generar el documento PDF');
+    }
+
+    const blob = await response.blob();
+    const pdfBlob = new Blob([blob], { type: 'application/pdf' });
+
+    const url = window.URL.createObjectURL(pdfBlob);
+
+    window.open(url, '_blank');
+
+    setTimeout(() => {
+      window.URL.revokeObjectURL(url);
+    }, 5000);
+
+  } catch (error) {
+    console.error("Error al visualizar:", error);
+  } 
 }
 
 async function onActivar() {
@@ -317,7 +346,7 @@ async function onSaveDetalle(cambios: EditarDetalleInput) {
           <Button severity="success" size="sm" icon="lucide:download" @click="onExportarCsv">
             Exportar CSV
           </Button>
-          <Button variant="tonal" size="sm" icon="lucide:printer" @click="printArea?.imprimir()">
+          <Button variant="tonal" size="sm" icon="lucide:printer" @click="onExportarPdf">
             Imprimir / PDF
           </Button>
           <Button
