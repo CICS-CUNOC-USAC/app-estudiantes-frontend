@@ -1,21 +1,22 @@
 <template>
   <SidebarProvider :default-open="false">
+    
     <DefaultSidebar />
     <!-- <SidebarFloatingToggle /> -->
     <div class="w-full">
-      <nav
-        class="fixed top-0 z-20 h-14 w-full border-b backdrop-blur-sm transition-shadow print:hidden"
-        :class="{
-          'border-transparent': !hasScrolled,
-          'border-neutral-200 shadow-md dark:border-neutral-700/75':
-            hasScrolled,
-          'dark:bg-surface-800/75 bg-white/80': !$route.meta.menuClass,
-          [$route.meta.menuClass as string]: $route.meta.menuClass
-        }"
-      >
-        <div
-          class="mx-auto flex h-full max-w-screen-2xl items-center justify-between px-4 py-3"
-        >
+      
+      <nav class="fixed top-0 z-20 w-full border-b backdrop-blur-sm transition-shadow print:hidden" :class="{
+        'border-transparent': !hasScrolled,
+        'border-neutral-200 shadow-md dark:border-neutral-700/75':
+          hasScrolled,
+        'dark:bg-surface-800/75 bg-white/80': !$route.meta.menuClass,
+        [$route.meta.menuClass as string]: $route.meta.menuClass
+      }">
+        
+        <CurrentAlert />
+
+        <div class="mx-auto flex h-full max-w-screen-2xl items-center justify-between px-4 py-3">
+          
           <div class="flex grow basis-0 items-center gap-x-3">
             <div class="inline-flex lg:hidden">
               <SidebarTrigger class="px-2"> </SidebarTrigger>
@@ -26,59 +27,38 @@
             >
               <Icon name="tabler:layout-sidebar-filled" />
             </button> -->
-            <NuxtLink
-              class="hidden items-center space-x-2 transition hover:opacity-80 lg:flex"
-              to="/"
-            >
+            <NuxtLink class="hidden items-center space-x-2 transition hover:opacity-80 lg:flex" to="/">
               <CICSLogo :width="60" fill="var(--color-primary-500)" />
               <span v-if="$route.meta.title">⋅</span>
               <div class="text-xs font-medium">{{ $route.meta.title }}</div>
             </NuxtLink>
             <Transition name="title-fade">
-              <NuxtLink
-                class="block text-sm lg:hidden"
-                to="/"
-                v-if="!searchOpen"
-              >
+              <NuxtLink class="block text-sm lg:hidden" to="/" v-if="!searchOpen">
                 <strong>CICS App</strong> ⋅ Portal
                 <div class="text-xs font-medium">{{ $route.meta.title }}</div>
               </NuxtLink>
             </Transition>
           </div>
 
+          
           <TopNavDesktopDashboard v-model="currentTrigger" class="hidden lg:flex" />
 
           <div class="relative flex grow basis-0 justify-end gap-x-1">
             <div class="flex items-center">
               <Transition name="fade-slide">
-                <form
-                  v-if="searchOpen"
-                  class="mr-2 h-full w-64 md:max-xl:w-44"
-                  @submit.prevent="handleSearch"
-                >
-                  <CInputText
-                    :clear-button="true"
-                    v-model="search"
-                    type="search"
-                    ref="$search"
-                    placeholder="Buscar en Ingeniería CUNOC"
-                    fill-height
-                  />
+                <form v-if="searchOpen" class="mr-2 h-full w-64 md:max-xl:w-44" @submit.prevent="handleSearch">
+                  <CInputText :clear-button="true" v-model="search" type="search" ref="$search"
+                    placeholder="Buscar en Ingeniería CUNOC" fill-height />
                 </form>
               </Transition>
 
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger as-child>
-                    <Button
-                      class="px-2"
-                      :icon="
-                        searchOpen
-                          ? 'icon-park-twotone:close-one'
-                          : 'icon-park-twotone:search'
-                      "
-                      @click="toggleSearch"
-                    />
+                    <Button class="px-2" :icon="searchOpen
+                        ? 'icon-park-twotone:close-one'
+                        : 'icon-park-twotone:search'
+                      " @click="toggleSearch" />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>Buscar en Ingeniería CUNOC</p>
@@ -90,14 +70,8 @@
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger as-child>
-                  <Button
-                    v-if="!searchOpen"
-                    icon="icon-park-twotone:people"
-                    size="small"
-                    :to="user ? '/dashboard/home' : '/login'"
-                    :label="user ? 'Espacio' : 'Ingresar'"
-                    class="min-w-0"
-                  />
+                  <Button v-if="!searchOpen" icon="icon-park-twotone:people" size="small"
+                    :to="user ? '/dashboard/home' : '/login'" :label="user ? 'Espacio' : 'Ingresar'" class="min-w-0" />
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>
@@ -133,16 +107,13 @@
       <template #container="{ closeCallback }">
         <SidebarNavigator @close="closeCallback" />
       </template>
-    </PDrawer> -->
+</PDrawer> -->
 
       <div class="d-flex flex-column">
-        <main
-          id="appcont"
-          class="mx-auto min-h-screen print:pt-14 "
-          :class="{
-            'max-w-screen-xl pt-20 px-5 lg:px-8': !$route.meta.extendScreen
-          }"
-        >
+        <main id="appcont" class="mx-auto min-h-screen print:pt-14 " :class="{
+          'max-w-7xl pt-20 px-5 lg:px-8': !$route.meta.extendScreen
+        }">
+        
           <NuxtPage @search="toggleSearch({ leaveOpen: true })" keepalive />
         </main>
       </div>
@@ -151,39 +122,28 @@
 </template>
 
 <script lang="ts" setup>
+import CurrentAlert from '~/components/dashboard/CurrentAlert.vue'
 import CICSLogo from '~/components/partials/CICSLogo.vue'
-import Button from '~/components/ui/button/Button.vue'
+import DefaultSidebar from '~/components/partials/navigation/DefaultSidebar.vue'
+import TopNavDesktopDashboard from '~/components/partials/navigation/TopNavDesktopDashboard.vue'
 import CInputText from '~/components/primitives/form/CInputText.vue'
+import Button from '~/components/ui/button/Button.vue'
+import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '~/components/ui/tooltip'
+
+import { useAuthStore } from '~/stores/auth'
 
 type CInputTextInstance = InstanceType<typeof CInputText>
-import { useAuthStore } from '~/stores/auth'
-import TopNavDesktopDashboard from '~/components/partials/navigation/TopNavDesktopDashboard.vue'
-import {
-  TooltipProvider,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent
-} from '~/components/ui/tooltip'
-import { SidebarProvider, SidebarTrigger } from '~/components/ui/sidebar'
-import DefaultSidebar from '~/components/partials/navigation/DefaultSidebar.vue'
-import SidebarFloatingToggle from '~/components/partials/navigation/SidebarFloatingToggle.vue'
 
 const { user, displayName, displayNameFull, getRole } =
   storeToRefs(useAuthStore())
 
-// const { meta } = useRoute()
-
-const drawer = ref(false)
-
 const { hasScrolled } = useNavScrollShadow()
-
-const { meta, k, control } = useMagicKeys()
-
-watchEffect(() => {
-  if ((meta.value || control.value) && k.value) {
-    toggleSearch({ leaveOpen: false })
-  }
-})
 
 const currentTrigger = ref('')
 
