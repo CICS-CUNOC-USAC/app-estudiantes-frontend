@@ -8,7 +8,44 @@
       </CardDescription>
     </CardHeader>
     <CardContent>
-      <div class="my-3 grid grid-cols-2 gap-4 md:grid-cols-3">
+      <div class="mb-4 rounded-md border border-black/10 bg-surface-50 p-3 text-xs dark:border-white/10 dark:bg-surface-800">
+        <p class="mb-1">
+          No almacenamos tu contraseña académica: solo se utiliza en esta
+          única consulta para obtener tu carrera y correo institucional y
+          así agilizar tu registro.
+        </p>
+        <p class="mb-2">
+          No obtenemos ninguna otra información de tu cuenta de SIRECA más
+          allá de lo mostrado en esta pantalla de registro. Cualquier otro
+          dato utilizado en funcionalidades como el Pensum es ingresado
+          manualmente por ti, no extraído de SIRECA.
+        </p>
+        <p class="mb-2">
+          Esto es verificable: la plataforma es de código abierto y su
+          código está disponible en
+          <a
+            href="https://github.com/CICS-CUNOC-USAC/app-estudiantes-frontend"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="underline"
+          >GitHub</a>.
+        </p>
+        <div class="flex items-center gap-2">
+          <Checkbox
+            id="acceptedDisclaimer"
+            v-model="acceptedDisclaimer"
+            class="cursor-pointer"
+          />
+          <label
+            for="acceptedDisclaimer"
+            class="cursor-pointer font-medium"
+          >
+            Acepto que mi contraseña académica se use únicamente en esta
+            consulta
+          </label>
+        </div>
+      </div>
+      <div class="my-3 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         <CInputText
           v-model="searchValues.ra"
           id="ra"
@@ -33,8 +70,8 @@
           icon="icon-park-twotone:search"
           label="Consultar"
           @click="getStudentInfo(searchValues)"
-          class="max-md:col-span-2"
-          :disabled="!searchValues.ra || !searchValues.pin"
+          class="sm:col-span-2 md:col-span-1"
+          :disabled="!searchValues.ra || !searchValues.pin || !acceptedDisclaimer"
           :loading="studentAsyncStatus === 'loading'"
         />
       </div>
@@ -101,11 +138,11 @@
       <form
         id="form-signup"
         @submit="onSubmit"
-        class="my-2 grid grid-cols-2 gap-2 md:grid-cols-3"
+        class="my-2 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3"
         v-if="success"
       >
-        <FieldGroup class="col-span-2 md:col-span-3">
-          <div class="grid grid-cols-2 gap-2 md:grid-cols-3">
+        <FieldGroup class="col-span-1 sm:col-span-2 md:col-span-3">
+          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
             <VeeField v-slot="{ field, errors }" name="username">
               <Field :data-invalid="!!errors.length">
                 <CInputText
@@ -115,7 +152,7 @@
                   label="Nombre de usuario"
                   prepend-icon="icon-park-twotone:people"
                   no-borders
-                  root-class="col-span-2 md:col-span-1"
+                  root-class="sm:col-span-2 md:col-span-1"
                   :error="errors[0]"
                 />
               </Field>
@@ -131,7 +168,6 @@
                   type="password"
                   prepend-icon="icon-park-twotone:lock"
                   no-borders
-                  root-class="col-span-1 md:col-span-1"
                   :error="errors[0]"
                 />
               </Field>
@@ -147,7 +183,6 @@
                   type="password"
                   prepend-icon="icon-park-twotone:lock"
                   no-borders
-                  root-class="col-span-1 md:col-span-1"
                   :error="errors[0]"
                 />
               </Field>
@@ -189,6 +224,7 @@ import { toast } from 'vue-sonner'
 import { z } from 'zod'
 import CInputText from '~/components/primitives/form/CInputText.vue'
 import Button from '~/components/ui/button/Button.vue'
+import { Checkbox } from '~/components/ui/checkbox'
 import {
   Card,
   CardContent,
@@ -217,6 +253,7 @@ defineProps({
 const loading = ref(false)
 const success = ref(false)
 const status = ref('')
+const acceptedDisclaimer = ref(false)
 
 const formSchema = z
   .object({

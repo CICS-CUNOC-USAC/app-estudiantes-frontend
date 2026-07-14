@@ -1,11 +1,12 @@
 <template>
-  <section class="signup-page px-2">
+  <section class="signup-page">
+    <div class="form">
       <SignupForm
-      class="form"
         :loading="loading"
         :error="error"
         @signup="signupUser($event)"
       />
+    </div>
   </section>
 </template>
 <script setup lang="ts">
@@ -27,9 +28,9 @@ const { signupUser } = useRegularAuthStore()
 @reference '~/assets/css/main.css';
 
 .signup-page {
-  @apply flex min-h-screen w-full items-center justify-center;
+  @apply flex min-h-screen w-full items-center justify-center py-10;
   .form {
-    /* @apply w-full md:max-w-3xl; */
+    @apply w-full px-3 md:max-w-2xl;
   }
 }
 </style>
