@@ -67,6 +67,11 @@ export const DefaultLayoutItems = [
     shortName: 'Recursos',
     items: [
       {
+        itemName: 'Grupos de Cursos',
+        itemIcon: 'icon-park-twotone:every-user',
+        itemLink: '/portal/recursos/grupos'
+      },
+      {
         itemName: 'Manuales',
         itemIcon: 'icon-park-twotone:book',
         itemLink: '/portal/recursos/manuales'

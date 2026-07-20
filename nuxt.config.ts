@@ -31,7 +31,9 @@ export default defineNuxtConfig({
     baseURL: process.env.BASE_URL || 'http://localhost:8000',
     strapiUrl: process.env.STRAPI_URL || 'http://localhost:1337',
     strapiToken: process.env.STRAPI_TOKEN || '',
-    strapiPrefix: process.env.STRAPI_PREFIX || 'api'
+    strapiPrefix: process.env.STRAPI_PREFIX || 'api',
+    strapiGroupsToken: process.env.STRAPI_GROUPS_TOKEN,
+    jwtKey: process.env.JWTKEY,
   },
   app: {
     head: {

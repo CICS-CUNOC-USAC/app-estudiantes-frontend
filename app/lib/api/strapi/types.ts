@@ -90,3 +90,48 @@ export const MAPPED_ALERT_TYPES: Record<AlertType, { icon: string; color: string
   advertencia: { icon: 'icon-park-twotone:attention', color: 'bg-yellow-500/50 dark:bg-yellow-600/40' },
   peligro: { icon: 'icon-park-twotone:caution', color: 'bg-red-500/50 dark:bg-red-600/40' }
 };
+
+//Groups related
+// Groups related
+
+export interface CourseGroup {
+  id: number
+  courseCode: string
+  courseNameCache: string
+  section?: string
+  platform: 'whatsapp' | 'telegram'
+  link: string
+  type: GroupType
+  academicPeriod: AcademicPeriod
+  visibility: 'abierto' | 'privado'
+  lecturer?: Lecturer
+  createdByUserId?: number
+  alternativeContact?: string
+  contactNotes?: string
+  active: boolean
+}
+
+export interface Lecturer {
+  id: number
+  fullName: string
+  email: string
+  telegramContact?: string
+  school?: string
+  bio?: string
+}
+
+export interface GroupType {
+  id: number
+  name: string
+  slug: string
+  description?: string
+}
+
+export interface AcademicPeriod {
+  id: number
+  name: string
+  code: string
+  startDate?: string
+  endDate?: string
+  current: boolean
+}
