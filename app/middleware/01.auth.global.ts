@@ -8,16 +8,18 @@ export default defineNuxtRouteMiddleware((to, _from) => {
 
   const token = useCookie('cicsapp-user-token') // Get token from cookies
 
-  if (
-    !user.value &&
-    (to.fullPath.includes('dashboard') ||
-      (to.fullPath.includes('admin') && !to.fullPath.includes('admin/login')))
-  ) {
+  // Match route segments, not arbitrary substrings of the path
+  const isDashboardRoute = to.path.startsWith('/dashboard')
+  const isAdminLoginRoute = to.path.startsWith('/admin/login')
+  const isAdminRoute = to.path.startsWith('/admin') && !isAdminLoginRoute
+  const isLoginRoute = to.path === '/login' || isAdminLoginRoute
+
+  if (!user.value && (isDashboardRoute || isAdminRoute)) {
     return navigateTo('/')
   }
 
   // If token and user exists and user is trying to access login page redirect to dashboard
-  if (token.value && user.value && to.fullPath.includes('login')) {
+  if (token.value && user.value && isLoginRoute) {
     if (getRole.value === 'regular') {
       return navigateTo('/dashboard/profile')
     } else {
@@ -25,7 +27,7 @@ export default defineNuxtRouteMiddleware((to, _from) => {
     }
   }
   // If token doesn't exist redirect to log in
-  if (!token.value && to?.fullPath.includes('dashboard')) {
+  if (!token.value && isDashboardRoute) {
     return navigateTo('/login')
   }
 
@@ -33,7 +35,7 @@ export default defineNuxtRouteMiddleware((to, _from) => {
   if (
     token.value &&
     getRole.value === 'regular' &&
-    to?.fullPath.includes('admin')
+    to.path.startsWith('/admin')
   ) {
     return navigateTo('/dashboard/home')
   }
@@ -42,7 +44,7 @@ export default defineNuxtRouteMiddleware((to, _from) => {
   if (
     token.value &&
     getRole.value !== 'regular' &&
-    to?.fullPath.includes('dashboard')
+    isDashboardRoute
   ) {
     return navigateTo('/admin/home')
   }

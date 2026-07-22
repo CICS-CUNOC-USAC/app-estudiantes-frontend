@@ -11,26 +11,28 @@
 
       <span>
         <Icon name="lucide:file-text" class="mb-1 mr-1.5 inline-block" />
-        Vista previa: Programa de curso #{{ id }}
+        Previsualización: Programa de curso #{{ id }}
       </span>
 
-      <Button icon="icon-park-twotone:download-three" variant="tonal" label="Descargar" class="ml-4"
+      <Button icon="icon-park-twotone:download-three" variant="tonal" label="Descargar/Abrir en nueva pestaña" class="ml-4"
         :href="`${pdfProgramURL}?program=${id}`" target="_blank" />
     </h1>
     <div class="">
 
       <ClientOnly>
-        <PdfPreview :pdf-url="`${pdfProgramURL}?program=${id}`" />
+        <!-- <PdfPreview :pdf-url="`${pdfProgramURL}?program=${id}`" /> -->
+         <iframe :src="`${pdfProgramURL}?program=${id}`" class="w-full h-[calc(100vh-12rem)]" />
       </ClientOnly>
     </div>
   </main>
 </template>
 <script setup lang="ts">
-import PdfPreview from '~/components/content/PdfPreview.vue'
+// import PdfPreview from '~/components/content/PdfPreview.vue'
 import Button from '~/components/ui/button/Button.vue'
 
 const route = useRoute()
-const pdfProgramURL = `${import.meta.env.VITE_APP_BASE_URL}/api/pdfprogram`;
+// const pdfProgramURL = `${import.meta.env.VITE_APP_BASE_URL}/api/pdfprogram`;
+const pdfProgramURL = `/api/pdfprogram`;
 const id = route.params.cursoId
 const fromSearch = route.query.fromSearch
 </script>

@@ -40,7 +40,7 @@
       </template>
       <template v-else-if="status === 'success' && data">
         <article class="mx-auto max-w-full!">
-          <div class="official-post-content" v-html="data?.content" />
+          <div ref="contentRef" class="official-post-content" v-html="data?.content" />
         </article>
       </template>
 
@@ -72,6 +72,26 @@ const fromSearch = route.query.fromSearch
 
 const { data, status, error } = await useFetch(
   `/api/official-post-detail/${postId}/${postSlug}`
+)
+
+const contentRef = useTemplateRef('contentRef')
+
+function markLoadingImages() {
+  const images = contentRef.value?.querySelectorAll('img')
+  images?.forEach((img) => {
+    if (img.complete) return
+    img.classList.add('is-loading')
+    const stopLoading = () => img.classList.remove('is-loading')
+    img.addEventListener('load', stopLoading, { once: true })
+    img.addEventListener('error', stopLoading, { once: true })
+  })
+}
+
+onMounted(markLoadingImages)
+
+watch(
+  () => data.value?.content,
+  () => nextTick(markLoadingImages)
 )
 
 useCustomPageTitle(
@@ -113,6 +133,10 @@ definePageMeta({
 
   img {
     @apply w-full rounded-lg shadow-md ring-2 ring-gray-300/75;
+  }
+
+  img.is-loading {
+    @apply aspect-video animate-pulse bg-primary/10 object-cover;
   }
 
   a:has(img) {
