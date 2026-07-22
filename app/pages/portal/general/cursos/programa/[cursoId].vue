@@ -31,8 +31,8 @@
 import Button from '~/components/ui/button/Button.vue'
 
 const route = useRoute()
-// const pdfProgramURL = `${import.meta.env.VITE_APP_BASE_URL}/api/pdfprogram`;
-const pdfProgramURL = `/api/pdfprogram`;
+const pdfProgramURL = `${import.meta.env.VITE_APP_BASE_URL}/api/pdfprogram`;
+// const pdfProgramURL = `/api/pdfprogram`;
 const id = route.params.cursoId
 const fromSearch = route.query.fromSearch
 </script>
