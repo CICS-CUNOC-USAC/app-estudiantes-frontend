@@ -92,8 +92,6 @@ export const MAPPED_ALERT_TYPES: Record<AlertType, { icon: string; color: string
 };
 
 //Groups related
-// Groups related
-
 export interface CourseGroup {
   id: number
   courseCode: string

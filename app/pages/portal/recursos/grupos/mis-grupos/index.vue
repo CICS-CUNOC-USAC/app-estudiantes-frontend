@@ -1,52 +1,44 @@
+
 <template>
   <main class="pb-10">
     <nav>
       <Button
         icon="icon-park-outline:arrow-left"
         variant="link"
-        label="Regresar al inicio"
+        label="Volver a grupos"
         class="text-muted-color-emphasis mb-4"
-        to="/"
+        to="/portal/recursos/grupos"
       />
     </nav>
 
     <header class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <h1 class="text-2xl font-semibold">
-          <Icon name="icon-park-twotone:every-user" class="mr-2 inline-block" />
-          Grupos de Cursos
+          <Icon name="icon-park-twotone:right-user" class="mr-2 inline-block" />
+          Mis Grupos
         </h1>
         <p class="text-muted-color mt-2 max-w-2xl">
-          Encuentra y gestiona grupos de cursos para el semestre actual
+          Gestiona los grupos de curso que has creado
         </p>
       </div>
 
       <div class="flex flex-wrap gap-2">
         <Button
-          label="Mis Grupos"
-          icon="icon-park-twotone:right-user"
-          @click="navigateTo('/portal/recursos/grupos/mis-grupos')"
+          label="Crear grupo"
+          icon="icon-park-outline:plus"
+          @click="openCreateModal"
         />
-        <HelpDialog title="Grupos de Cursos" content-path="/help/groups" />
+        <HelpDialog title="Mis Grupos" content-path="/help/groups" />
       </div>
     </header>
 
-    <GroupFilters
-      v-model:filters="filters"
-      :periods="academicPeriods"
-      :types="groupTypes"
-      :platforms="platformOptions"
-      :visibilities="visibilityOptions"
-      @search="applyFilters"
-      @clear="clearFilters"
-    />
-
-  
     <GroupResults
-      :groups="filteredGroups"
+      :groups="myGroups"
       :loading="loading"
       :user-id="currentUserId"
-      @refresh="reloadData"
+      empty-title="No has creado ningún grupo"
+      empty-subtitle="Crea tu primer grupo de estudio para compartir con otros estudiantes"
+      @refresh="loadMyGroups"
       @edit="openEditModal"
       @delete="confirmDelete"
       @join="joinGroup"
@@ -75,34 +67,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
-import GroupFilters from '~/components/portal/grupos/GroupFilters.vue'
 import GroupResults from '~/components/portal/grupos/GroupResults.vue'
 import GroupFormModal from '~/components/portal/grupos/GroupFormModal.vue'
 import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
 import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
 import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
-import { groupsMock } from '../../../../../server/utils/mocks'
+import { groupsMock } from '../../../../../../server/utils/mocks';
 
 const groupFormModalRef = ref<InstanceType<typeof GroupFormModal>>()
 const confirmDialogRef = ref<InstanceType<typeof ConfirmDialog>>()
 
-
 const allGroups = ref<CourseGroup[]>([...groupsMock])
+const myGroups = ref<CourseGroup[]>([])
 const loading = ref(false)
-const currentUserId = ref(100) 
-
-const filters = ref({
-  search: '',
-  periodId: null as number | null,
-  typeId: null as number | null,
-  platform: null as string | null,
-  visibility: null as string | null
-})
-
+const currentUserId = ref(100) // TODO: Get from auth store
 const sortOrder = ref('recent')
-const filteredGroups = ref<CourseGroup[]>([...allGroups.value])
 
 const showFormModal = ref(false)
 const editingGroup = ref<CourseGroup | null>(null)
@@ -111,60 +92,22 @@ const groupToDelete = ref<CourseGroup | null>(null)
 
 const academicPeriods = ref<AcademicPeriod[]>([
   { id: 1, name: '2024-2', code: '2024-2', current: true },
-  { id: 2, name: '2024-1', code: '2024-1', current: false },
-  { id: 3, name: '2023-2', code: '2023-2', current: false }
+  { id: 2, name: '2024-1', code: '2024-1', current: false }
 ])
 
 const groupTypes = ref<GroupType[]>([
-  { id: 1, name: 'Area Comun', slug: 'comun', description: 'Area comun' },
-  { id: 2, name: 'Sistemas', slug: 'sistemas', description: 'Sistemas' },
-  { id: 3, name: 'Mecanica', slug: 'mecanica', description: 'mecanica' }
-])
-
-const platformOptions = ref([
-  { label: 'WhatsApp', value: 'whatsapp' },
-  { label: 'Telegram', value: 'telegram' }
-])
-
-const visibilityOptions = ref([
-  { label: 'Abierto', value: 'abierto' },
-  { label: 'Privado', value: 'privado' }
+  { id: 1, name: 'Area Comun', slug: 'estudio', description: 'Grupo de estudio' },
+  { id: 2, name: 'Ayudantía', slug: 'ayudantia', description: 'Ayudantía del curso' }
 ])
 
 
-function applyFilters() {
+function loadMyGroups() {
   loading.value = true
-  
   setTimeout(() => {
-    let result = [...allGroups.value]
-    
-    if (filters.value.search) {
-      const query = filters.value.search.toLowerCase()
-      result = result.filter(g => 
-        g.courseCode.toLowerCase().includes(query) ||
-        g.courseNameCache.toLowerCase().includes(query)
-      )
-    }
-    
-    if (filters.value.periodId) {
-      result = result.filter(g => g.academicPeriod.id === filters.value.periodId)
-    }
-    
-    if (filters.value.typeId) {
-      result = result.filter(g => g.type.id === filters.value.typeId)
-    }
-
-    if (filters.value.platform) {
-      result = result.filter(g => g.platform === filters.value.platform)
-    }
-    
-    if (filters.value.visibility) {
-      result = result.filter(g => g.visibility === filters.value.visibility)
-    }
-    
-    result = applySortToResult(result, sortOrder.value)
-    
-    filteredGroups.value = result
+    myGroups.value = allGroups.value.filter(
+      g => g.createdByUserId === currentUserId.value
+    )
+    myGroups.value = applySortToResult(myGroups.value, sortOrder.value)
     loading.value = false
   }, 300)
 }
@@ -184,22 +127,15 @@ function applySortToResult(result: CourseGroup[], order: string): CourseGroup[] 
   }
 }
 
-function clearFilters() {
-  filters.value = {
-    search: '',
-    periodId: null,
-    typeId: null,
-    platform: null,
-    visibility: null
-  }
-  applyFilters()
-}
-
 function applySort(order: string) {
   sortOrder.value = order
-  applyFilters()
+  loadMyGroups()
 }
 
+function openCreateModal() {
+  editingGroup.value = null
+  showFormModal.value = true
+}
 
 function openEditModal(group: CourseGroup) {
   editingGroup.value = { ...group }
@@ -245,7 +181,7 @@ function saveGroup(groupData: Partial<CourseGroup>) {
     
     showFormModal.value = false
     editingGroup.value = null
-    applyFilters()
+    loadMyGroups()
     loading.value = false
   }, 500)
 }
@@ -286,7 +222,7 @@ function deleteGroup() {
     }
     
     groupToDelete.value = null
-    applyFilters()
+    loadMyGroups()
     loading.value = false
   }, 500)
 }
@@ -300,17 +236,12 @@ function joinGroup(group: CourseGroup) {
   }
 }
 
-function reloadData() {
-  toast.info('Actualizando datos...')
-  applyFilters()
-}
-
-
-watch([() => filters.value, () => sortOrder.value], () => {
-  applyFilters()
-}, { deep: true })
 
 onMounted(() => {
-  applyFilters()
+  loadMyGroups()
 })
+/*
+definePageMeta({
+  middleware: 'auth'
+})*/
 </script>

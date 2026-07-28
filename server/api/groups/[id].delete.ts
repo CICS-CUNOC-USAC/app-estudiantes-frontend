@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
   const strapi = strapiGroupsClient()
 
   const existing: any = await strapi(`/course-groups/${id}`)
-  if (existing.data.attributes.creadoPorUserId !== user.id) {
+  if (existing.data.attributes.createdByUserId !== user.id) {
     throw createError({ statusCode: 403, statusMessage: 'No puedes borrar este grupo' })
   }
 

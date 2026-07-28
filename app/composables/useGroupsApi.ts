@@ -39,7 +39,7 @@ export function useCourseGroupsApi() {
             }),
 
         duplicates: (params: Record<string, any>) =>
-            api('/duplicados', {
+            api('/duplicates', {
                 query: params,
             }),
     }
