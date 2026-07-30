@@ -1,16 +1,5 @@
-
 <template>
   <main class="pb-10">
-    <nav>
-      <Button
-        icon="icon-park-outline:arrow-left"
-        variant="link"
-        label="Volver a grupos"
-        class="text-muted-color-emphasis mb-4"
-        to="/portal/recursos/grupos"
-      />
-    </nav>
-
     <header class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <h1 class="text-2xl font-semibold">
@@ -26,9 +15,8 @@
         <Button
           label="Crear grupo"
           icon="icon-park-outline:plus"
-          @click="openCreateModal"
+          @click="navigateTo('/dashboard/mis-grupos/crear')"
         />
-        <HelpDialog title="Mis Grupos" content-path="/help/groups" />
       </div>
     </header>
 
@@ -36,22 +24,14 @@
       :groups="myGroups"
       :loading="loading"
       :user-id="currentUserId"
+      :dashboard-mode="true"
       empty-title="No has creado ningún grupo"
       empty-subtitle="Crea tu primer grupo de estudio para compartir con otros estudiantes"
       @refresh="loadMyGroups"
-      @edit="openEditModal"
+      @edit="handleEdit"
       @delete="confirmDelete"
       @join="joinGroup"
       @sort="applySort"
-    />
-
-    <GroupFormModal
-      ref="groupFormModalRef"
-      v-model:open="showFormModal"
-      :group="editingGroup"
-      :periods="academicPeriods"
-      :types="groupTypes"
-      @save="saveGroup"
     />
 
     <ConfirmDialog
@@ -67,22 +47,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+
+import { ref, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
 import GroupResults from '~/components/portal/grupos/GroupResults.vue'
-import GroupFormModal from '~/components/portal/grupos/GroupFormModal.vue'
 import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
-import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
 import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
-import { groupsMock } from '../../../../../../server/utils/mocks';
+import { groupsMock } from '../../../../server/utils/mocks';
 
-const groupFormModalRef = ref<InstanceType<typeof GroupFormModal>>()
 const confirmDialogRef = ref<InstanceType<typeof ConfirmDialog>>()
 
 const allGroups = ref<CourseGroup[]>([...groupsMock])
 const myGroups = ref<CourseGroup[]>([])
 const loading = ref(false)
-const currentUserId = ref(100) // TODO: Get from auth store
+const currentUserId = ref(100)
 const sortOrder = ref('recent')
 
 const showFormModal = ref(false)
@@ -99,6 +77,8 @@ const groupTypes = ref<GroupType[]>([
   { id: 1, name: 'Area Comun', slug: 'estudio', description: 'Grupo de estudio' },
   { id: 2, name: 'Ayudantía', slug: 'ayudantia', description: 'Ayudantía del curso' }
 ])
+
+
 
 
 function loadMyGroups() {
@@ -137,54 +117,10 @@ function openCreateModal() {
   showFormModal.value = true
 }
 
-function openEditModal(group: CourseGroup) {
-  editingGroup.value = { ...group }
-  showFormModal.value = true
+function handleEdit(group: CourseGroup) {
+  navigateTo(`/dashboard/mis-grupos/${group.id}/editar`)
 }
 
-function saveGroup(groupData: Partial<CourseGroup>) {
-  loading.value = true
-  
-  setTimeout(() => {
-    if (groupData.id) {
-      const existingGroup = allGroups.value.find(g => g.id === groupData.id)
-      if (existingGroup) {
-        const index = allGroups.value.indexOf(existingGroup)
-        allGroups.value[index] = updateGroup(existingGroup, groupData)
-        toast.success('Grupo actualizado exitosamente')
-      } else {
-        toast.error('No se encontró el grupo a editar')
-      }
-    } else {
-      const defaultType = groupTypes.value[0] || { id: 1, name: 'Estudio', slug: 'estudio' }
-      const defaultPeriod = academicPeriods.value[0] || { id: 1, name: '2024-2', code: '2024-2', current: true }
-      
-      const newGroup: CourseGroup = {
-        id: Math.max(...allGroups.value.map(g => g.id), 0) + 1,
-        courseCode: groupData.courseCode || '',
-        courseNameCache: groupData.courseNameCache || '',
-        section: groupData.section,
-        platform: groupData.platform || 'whatsapp',
-        link: groupData.link || '',
-        type: groupData.type ?? defaultType,
-        academicPeriod: groupData.academicPeriod ?? defaultPeriod,
-        visibility: groupData.visibility || 'abierto',
-        lecturer: groupData.lecturer,
-        createdByUserId: currentUserId.value,
-        alternativeContact: groupData.alternativeContact,
-        contactNotes: groupData.contactNotes,
-        active: true
-      }
-      allGroups.value.push(newGroup)
-      toast.success('Grupo creado exitosamente')
-    }
-    
-    showFormModal.value = false
-    editingGroup.value = null
-    loadMyGroups()
-    loading.value = false
-  }, 500)
-}
 
 function updateGroup(existing: CourseGroup, data: Partial<CourseGroup>): CourseGroup {
   return {
@@ -240,8 +176,9 @@ function joinGroup(group: CourseGroup) {
 onMounted(() => {
   loadMyGroups()
 })
-/*
+
 definePageMeta({
-  middleware: 'auth'
-})*/
+  layout: 'dashboard'
+})
+
 </script>

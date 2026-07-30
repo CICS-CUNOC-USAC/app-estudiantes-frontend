@@ -132,6 +132,12 @@ const items = [
     title: 'Biblioteca Digital',
     description: 'Libros disponibles en la biblioteca digital',
     to: '/dashboard/books/digital'
+  },
+  {
+    icon: 'icon-park-twotone:every-user',
+    title: 'Grupos de Cursos',
+    description: 'Grupos de cursos creados por ti',
+    to: '/dashboard/mis-grupos'
   }
 ]
 

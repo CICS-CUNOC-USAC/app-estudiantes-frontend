@@ -34,6 +34,11 @@ export const DashboardLayoutItems = [
         itemIcon: 'icon-park-twotone:book-one',
         itemLink: '/dashboard/books/physical'
       },
+      {
+        itemName: 'Grupos de Cursos',
+        itemIcon: 'icon-park-twotone:every-user',
+        itemLink: '/dashboard/mis-grupos'
+      }
     ]
   }
 ]

@@ -17,16 +17,11 @@
           Grupos de Cursos
         </h1>
         <p class="text-muted-color mt-2 max-w-2xl">
-          Encuentra y gestiona grupos de cursos para el semestre actual
+          Encuentra los grupos de cursos para el semestre actual
         </p>
       </div>
 
       <div class="flex flex-wrap gap-2">
-        <Button
-          label="Mis Grupos"
-          icon="icon-park-twotone:right-user"
-          @click="navigateTo('/portal/recursos/grupos/mis-grupos')"
-        />
         <HelpDialog title="Grupos de Cursos" content-path="/help/groups" />
       </div>
     </header>
@@ -42,14 +37,13 @@
     />
 
   
-    <GroupResults
+     <GroupResults
       :groups="filteredGroups"
       :loading="loading"
-      :user-id="currentUserId"
+      :dashboard-mode="false"
       @refresh="reloadData"
-      @edit="openEditModal"
-      @delete="confirmDelete"
       @join="joinGroup"
+      @share="shareGroup"
       @sort="applySort"
     />
 
@@ -62,31 +56,18 @@
       @save="saveGroup"
     />
 
-    <ConfirmDialog
-      ref="confirmDialogRef"
-      title="¿Eliminar grupo?"
-      :description="`¿Estás seguro de que quieres eliminar el grupo: '(${groupToDelete?.courseCode}) ${groupToDelete?.courseNameCache}'?`"
-      confirm-label="Eliminar"
-      confirm-severity="danger"
-      confirm-icon="icon-park-twotone:delete"
-      @confirm="deleteGroup"
-    />
   </main>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
 import GroupFilters from '~/components/portal/grupos/GroupFilters.vue'
 import GroupResults from '~/components/portal/grupos/GroupResults.vue'
-import GroupFormModal from '~/components/portal/grupos/GroupFormModal.vue'
-import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
 import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
 import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
 import { groupsMock } from '../../../../../server/utils/mocks'
 
-const groupFormModalRef = ref<InstanceType<typeof GroupFormModal>>()
-const confirmDialogRef = ref<InstanceType<typeof ConfirmDialog>>()
 
 
 const allGroups = ref<CourseGroup[]>([...groupsMock])
@@ -130,6 +111,10 @@ const visibilityOptions = ref([
   { label: 'Abierto', value: 'abierto' },
   { label: 'Privado', value: 'privado' }
 ])
+
+function shareGroup(){
+  //pending copy to clipboard
+}
 
 
 function applyFilters() {
@@ -268,11 +253,6 @@ function updateGroup(existing: CourseGroup, data: Partial<CourseGroup>): CourseG
   }
 }
 
-function confirmDelete(group: CourseGroup) {
-  groupToDelete.value = group
-  confirmDialogRef.value?.show()
-}
-
 function deleteGroup() {
   if (!groupToDelete.value) return
   
@@ -313,4 +293,12 @@ watch([() => filters.value, () => sortOrder.value], () => {
 onMounted(() => {
   applyFilters()
 })
+
+
+useCustomPageTitle('Grupos de cursos')
+
+definePageMeta({
+  title: 'Grupos de cursos',
+})
+
 </script>

@@ -42,14 +42,22 @@
       />
     </div>
 
-    <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-      <GroupCard
+    <div v-else-if="dashboardMode" class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <DashboardGroupCard
         v-for="group in groups"
         :key="group.id"
         :group="group"
-        :is-owner="isOwner(group)"
         @edit="(g) => emit('edit', g)"
         @delete="(g) => emit('delete', g)"
+        @join="(g) => emit('join', g)"
+      />
+    </div>
+
+    <div v-else class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <SimpleGroupCard
+        v-for="group in groups"
+        :key="group.id"
+        :group="group"
         @join="(g) => emit('join', g)"
         @share="(g) => emit('share', g)"
       />
@@ -58,8 +66,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import type { CourseGroup } from '~/lib/api/strapi/types'
+import SimpleGroupCard from './SimpleGroupCard.vue'
+import DashboardGroupCard from './DashboardGroupCard.vue'
 
 interface Props {
   groups: CourseGroup[]
@@ -67,6 +77,7 @@ interface Props {
   emptyTitle?: string
   emptySubtitle?: string
   userId?: number
+  dashboardMode?: boolean 
   sortOptions?: Array<{ label: string; value: string }>
 }
 
@@ -75,6 +86,7 @@ const props = withDefaults(defineProps<Props>(), {
   emptyTitle: 'No se encontraron grupos',
   emptySubtitle: 'Intenta ajustar los filtros o crea un nuevo grupo',
   userId: 0,
+  dashboardMode: false,
   sortOptions: () => [
     { label: 'Más recientes', value: 'recent' },
     { label: 'Más antiguos', value: 'oldest' },
@@ -92,12 +104,7 @@ const emit = defineEmits<{
   sort: [order: string]
 }>()
 
-
 const sortOrder = ref('recent')
-
-const isOwner = (group: CourseGroup): boolean => {
-  return group.createdByUserId === props.userId
-}
 
 const handleSortChange = (value: string) => {
   sortOrder.value = value
