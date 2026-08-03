@@ -1,13 +1,16 @@
 export function normalize(text: string): string {
   return text
     .toLowerCase()
-    .normalize('NFD').replace(/[̀-ͯ]/g, '') 
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '') 
     .replace(/[^a-z0-9]/g, '') 
 }
 
 function bigrams(text: string): string[] {
   const b: string[] = []
-  for (let i = 0; i < text.length - 1; i++) b.push(text.slice(i, i + 2))
+  for (let i = 0; i < text.length - 1; i++) {
+    b.push(text.slice(i, i + 2))
+  }
   return b
 }
 
@@ -27,4 +30,34 @@ export function diceCoefficient(a: string, b: string): number {
     }
   }
   return (2 * intersection) / (bigA.length + bigB.length)
+}
+
+
+export function normalizeSection(section: string): string {
+  if (!section) return ''
+  
+  const cleaned = section
+    .toUpperCase()
+    .replace(/[^A-Z]/g, '') 
+    .trim()
+  
+  return cleaned.charAt(0) || ''
+}
+
+export function areSectionsSimilar(sectionA: string, sectionB: string): boolean {
+  const normA = normalize(sectionA)
+  const normB = normalize(sectionB)
+  
+  if (!normA || !normB) return false
+  if (normA === normB) return true
+  
+  const coefficient = diceCoefficient(normA, normB)
+  return coefficient > 0.8
+}
+
+
+export function isValidSection(section: string): boolean {
+  if (!section) return false
+  const normalized = normalizeSection(section)
+  return /^[A-Z]$/.test(normalized) && normalized.length === 1
 }

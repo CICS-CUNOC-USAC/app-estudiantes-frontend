@@ -31,7 +31,7 @@
       @edit="handleEdit"
       @delete="confirmDelete"
       @join="joinGroup"
-      @sort="applySort"
+      @sort="applySort" 
     />
 
     <ConfirmDialog
@@ -52,7 +52,7 @@ import { ref, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
 import GroupResults from '~/components/portal/grupos/GroupResults.vue'
 import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
-import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
+import type { CourseGroup } from '~/lib/api/strapi/types'
 import { groupsMock } from '../../../../server/utils/mocks';
 
 const confirmDialogRef = ref<InstanceType<typeof ConfirmDialog>>()
@@ -63,22 +63,7 @@ const loading = ref(false)
 const currentUserId = ref(100)
 const sortOrder = ref('recent')
 
-const showFormModal = ref(false)
-const editingGroup = ref<CourseGroup | null>(null)
 const groupToDelete = ref<CourseGroup | null>(null)
-
-
-const academicPeriods = ref<AcademicPeriod[]>([
-  { id: 1, name: '2024-2', code: '2024-2', current: true },
-  { id: 2, name: '2024-1', code: '2024-1', current: false }
-])
-
-const groupTypes = ref<GroupType[]>([
-  { id: 1, name: 'Area Comun', slug: 'estudio', description: 'Grupo de estudio' },
-  { id: 2, name: 'Ayudantía', slug: 'ayudantia', description: 'Ayudantía del curso' }
-])
-
-
 
 
 function loadMyGroups() {
@@ -112,13 +97,9 @@ function applySort(order: string) {
   loadMyGroups()
 }
 
-function openCreateModal() {
-  editingGroup.value = null
-  showFormModal.value = true
-}
 
 function handleEdit(group: CourseGroup) {
-  navigateTo(`/dashboard/mis-grupos/${group.id}/editar`)
+  navigateTo(`/dashboard/mis-grupos/${group.courseCode}/editar`)
 }
 
 

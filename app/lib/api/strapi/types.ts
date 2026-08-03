@@ -110,7 +110,7 @@ export interface CourseGroup {
 }
 
 export interface Lecturer {
-  id: number
+  id?: number
   fullName: string
   email: string
   telegramContact?: string

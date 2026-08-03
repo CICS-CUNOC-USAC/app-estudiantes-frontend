@@ -22,6 +22,7 @@ export type PensumSemester = {
 export type PensumSemesterCourse = {
   pensum_id: number
   course_code: string
+  name: string
   semester: number
   field: number
   mandatory: boolean

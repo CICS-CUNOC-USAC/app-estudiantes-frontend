@@ -1,66 +1,79 @@
-<!-- app/pages/portal/grupos/[id]/editar/index.vue -->
 <template>
-  <GroupFormPage
-    :group="editingGroup"
+  <div v-if="loading" class="flex items-center justify-center h-64">
+    <p class="text-gray-500">Cargando grupo...</p>
+  </div>
+  <GroupEditForm
+    v-else-if="groupData"
+    :group="groupData"
     :periods="academicPeriods"
     :types="groupTypes"
-    return-to="mis-grupos"
     @save="handleSave"
+    @cancel="handleCancel"
   />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import GroupFormPage from '~/components/portal/grupos/GroupFormPage.vue'
+import { ref, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { toast } from 'vue-sonner'
+import GroupEditForm from '~/components/portal/grupos/GroupEditForm.vue'
 import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
+import { groupsMock } from '../../../../../../server/utils/mocks';
 
 const route = useRoute()
 const router = useRouter()
 
-// Estado
-const editingGroup = ref<CourseGroup | null>(null)
 const loading = ref(true)
+const groupData = ref<CourseGroup | null>(null)
 
-// Datos de catálogo (mock)
 const academicPeriods = ref<AcademicPeriod[]>([
   { id: 1, name: '2024-2', code: '2024-2', current: true },
   { id: 2, name: '2024-1', code: '2024-1', current: false }
 ])
 
 const groupTypes = ref<GroupType[]>([
-  { id: 1, name: 'Estudio', slug: 'estudio', description: 'Grupo de estudio' },
+  { id: 1, name: 'Area Comun', slug: 'estudio', description: 'Grupo de estudio' },
   { id: 2, name: 'Ayudantía', slug: 'ayudantia', description: 'Ayudantía del curso' }
 ])
 
-// Cargar datos del grupo a editar
-async function loadGroup() {
-  const id = Number(route.params.id)
-  
-  // Mock: buscar en los datos mock
-  const allGroups = [...groupsMock]
-  const found = allGroups.find(g => g.id === id)
-  
-  if (found) {
-    editingGroup.value = found
-  } else {
-    // Si no se encuentra, redirigir
-    //toast.error('Grupo no encontrado')
-    router.push('/portal/grupos/mis-grupos')
+const groupId = computed(() => String(route.params.courseId))
+
+async function fetchGroupById(id: string) {
+  loading.value = true
+  try {
+    // TODO: Reemplazar con llamada real a la API
+    // const response = await $api<CourseGroup>(`/grupos/${id}`)
+    // groupData.value = response
+    
+    const found = groupsMock.find(g => g.courseCode === id)
+    groupData.value = found || null
+    
+    if (!groupData.value) {
+      toast.error('Grupo no encontrado')
+      router.push('/dashboard/mis-grupos')
+    }
+  } catch (error) {
+    toast.error('Error al cargar el grupo')
+    router.push('/dashboard/mis-grupos')
+  } finally {
+    loading.value = false
   }
-  
-  loading.value = false
 }
 
-function handleSave(groupData: Partial<CourseGroup>) {
+function handleSave(data: Partial<CourseGroup>) {
+  toast.success('Grupo actualizado exitosamente')
+  router.push('/dashboard/mis-grupos')
+}
 
-  console.log('Actualizando grupo:', groupData)
+function handleCancel() {
+  router.push('/dashboard/mis-grupos')
 }
 
 onMounted(() => {
-  loadGroup()
+  fetchGroupById(groupId.value)
 })
 
 definePageMeta({
-  layout: 'dashboard',
+  layout: 'dashboard'
 })
 </script>

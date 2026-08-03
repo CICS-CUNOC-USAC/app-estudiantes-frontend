@@ -1,3 +1,5 @@
+import type { CourseGroup } from "~/lib/api/strapi/types"
+
 export function useCourseGroupsApi() {
     const tokenCookie = useCookie('cicsapp-user-token')
 
@@ -14,31 +16,31 @@ export function useCourseGroupsApi() {
         },
     })
 
-    return {
-        list: (filters: Record<string, any>) =>
-            api('/', { query: filters }),
+   return {
+        list: (filters?: Record<string, any>): Promise<CourseGroup[]> =>
+            api<CourseGroup[]>('/', { query: filters }),
 
-        get: (id: string) =>
-            api(`/${id}`),
+        get: (id: string): Promise<CourseGroup> =>
+            api<CourseGroup>(`/${id}`),
 
-        create: (data: any) =>
-            api('/', {
+        create: (data: Partial<CourseGroup>): Promise<CourseGroup> =>
+            api<CourseGroup>('/', {
                 method: 'POST',
                 body: data,
             }),
 
-        update: (id: string, data: any) =>
-            api(`/${id}`, {
+        update: (id: string, data: Partial<CourseGroup>): Promise<CourseGroup> =>
+            api<CourseGroup>(`/${id}`, {
                 method: 'PUT',
                 body: data,
             }),
 
-        remove: (id: string) =>
-            api(`/${id}`, {
+        remove: (id: string): Promise<void> =>
+            api<void>(`/${id}`, {
                 method: 'DELETE',
             }),
 
-        duplicates: (params: Record<string, any>) =>
+        duplicates: (params: Record<string, any>): Promise<any> =>
             api('/duplicates', {
                 query: params,
             }),

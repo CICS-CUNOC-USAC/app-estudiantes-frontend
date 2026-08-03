@@ -1,4 +1,3 @@
-<!-- app/components/portal/grupos/DashboardGroupCard.vue -->
 <template>
   <CCardAlt 
     :title="group.courseCode"
