@@ -1,4 +1,3 @@
-<!-- app/components/portal/grupos/SimpleGroupCard.vue -->
 <template>
   <CCardAlt 
     :title="group.courseCode"

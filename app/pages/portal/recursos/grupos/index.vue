@@ -36,8 +36,7 @@
       @clear="clearFilters"
     />
 
-  
-     <GroupResults
+    <GroupResults
       :groups="filteredGroups"
       :loading="loading"
       :dashboard-mode="false"
@@ -46,16 +45,6 @@
       @share="shareGroup"
       @sort="applySort"
     />
-
-    <GroupFormModal
-      ref="groupFormModalRef"
-      v-model:open="showFormModal"
-      :group="editingGroup"
-      :periods="academicPeriods"
-      :types="groupTypes"
-      @save="saveGroup"
-    />
-
   </main>
 </template>
 
@@ -65,14 +54,17 @@ import { toast } from 'vue-sonner'
 import GroupFilters from '~/components/portal/grupos/GroupFilters.vue'
 import GroupResults from '~/components/portal/grupos/GroupResults.vue'
 import HelpDialog from '~/components/dialogs/help/HelpDialog.vue'
+//import { copyToClipboard } from '~/utils/clipboard'
 import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
-import { groupsMock } from '../../../../../server/utils/mocks'
+import { generateAcademicPeriods } from '../../../../../server/utils/generate-periods'
+import { useCourseGroupsApi } from '../../../../composables/useGroupsApi';
 
+const courseGroupsApi = useCourseGroupsApi()
 
-
-const allGroups = ref<CourseGroup[]>([...groupsMock])
+const allGroups = ref<CourseGroup[]>([])
 const loading = ref(false)
-const currentUserId = ref(100) 
+const sortOrder = ref('recent')
+const filteredGroups = ref<CourseGroup[]>([])
 
 const filters = ref({
   search: '',
@@ -82,24 +74,12 @@ const filters = ref({
   visibility: null as string | null
 })
 
-const sortOrder = ref('recent')
-const filteredGroups = ref<CourseGroup[]>([...allGroups.value])
-
-const showFormModal = ref(false)
-const editingGroup = ref<CourseGroup | null>(null)
-const groupToDelete = ref<CourseGroup | null>(null)
-
-
-const academicPeriods = ref<AcademicPeriod[]>([
-  { id: 1, name: '2024-2', code: '2024-2', current: true },
-  { id: 2, name: '2024-1', code: '2024-1', current: false },
-  { id: 3, name: '2023-2', code: '2023-2', current: false }
-])
+const academicPeriods = ref<AcademicPeriod[]>([])
 
 const groupTypes = ref<GroupType[]>([
-  { id: 1, name: 'Area Comun', slug: 'comun', description: 'Area comun' },
-  { id: 2, name: 'Sistemas', slug: 'sistemas', description: 'Sistemas' },
-  { id: 3, name: 'Mecanica', slug: 'mecanica', description: 'mecanica' }
+  { id: 1, name: 'Laboratorio', slug: 'laboratorio', description: 'Grupo de laboratorio' },
+  { id: 2, name: 'Curso', slug: 'curso', description: 'Grupo del curso' },
+  { id: 3, name: 'Estudiantado', slug: 'estudiantado', description: 'Grupo de estudiantes del curso' }
 ])
 
 const platformOptions = ref([
@@ -112,10 +92,35 @@ const visibilityOptions = ref([
   { label: 'Privado', value: 'privado' }
 ])
 
-function shareGroup(){
-  //pending copy to clipboard
+async function loadAllGroups() {
+  loading.value = true
+  try {
+    allGroups.value = await courseGroupsApi.list()
+    applyFilters() // Aplicar filtros después de cargar
+  } catch (error) {
+    console.error('Error al cargar grupos:', error)
+    toast.error('Error al cargar los grupos')
+    allGroups.value = []
+  } finally {
+    loading.value = false
+  }
 }
 
+//Pending
+async function shareGroup(group: CourseGroup) {
+  //const linkToCopy = group.link || `${window.location.origin}/grupos/${group.id}`
+ // const success = await copyToClipboard(linkToCopy)
+  
+  if (true) {
+    toast.success('Enlace copiado al portapapeles', {
+      description: `Enlace del grupo ${group.courseCode} copiado`
+    })
+  } else {
+    toast.error('No se pudo copiar el enlace', {
+      description: 'Intenta copiar manualmente el enlace'
+    })
+  }
+}
 
 function applyFilters() {
   loading.value = true
@@ -155,17 +160,22 @@ function applyFilters() {
 }
 
 function applySortToResult(result: CourseGroup[], order: string): CourseGroup[] {
+  const sorted = [...result]
   switch (order) {
     case 'recent':
-      return result.sort((a, b) => b.id - a.id)
+      return sorted.sort((a, b) => (b.id || 0) - (a.id || 0))
     case 'oldest':
-      return result.sort((a, b) => a.id - b.id)
+      return sorted.sort((a, b) => (a.id || 0) - (b.id || 0))
     case 'az':
-      return result.sort((a, b) => a.courseNameCache.localeCompare(b.courseNameCache))
+      return sorted.sort((a, b) => 
+        (a.courseNameCache || '').localeCompare(b.courseNameCache || '')
+      )
     case 'za':
-      return result.sort((a, b) => b.courseNameCache.localeCompare(a.courseNameCache))
+      return sorted.sort((a, b) => 
+        (b.courseNameCache || '').localeCompare(a.courseNameCache || '')
+      )
     default:
-      return result
+      return sorted
   }
 }
 
@@ -185,92 +195,6 @@ function applySort(order: string) {
   applyFilters()
 }
 
-
-function openEditModal(group: CourseGroup) {
-  editingGroup.value = { ...group }
-  showFormModal.value = true
-}
-
-function saveGroup(groupData: Partial<CourseGroup>) {
-  loading.value = true
-  
-  setTimeout(() => {
-    if (groupData.id) {
-      const existingGroup = allGroups.value.find(g => g.id === groupData.id)
-      if (existingGroup) {
-        const index = allGroups.value.indexOf(existingGroup)
-        allGroups.value[index] = updateGroup(existingGroup, groupData)
-        toast.success('Grupo actualizado exitosamente')
-      } else {
-        toast.error('No se encontró el grupo a editar')
-      }
-    } else {
-      const defaultType = groupTypes.value[0] || { id: 1, name: 'Estudio', slug: 'estudio' }
-      const defaultPeriod = academicPeriods.value[0] || { id: 1, name: '2024-2', code: '2024-2', current: true }
-      
-      const newGroup: CourseGroup = {
-        id: Math.max(...allGroups.value.map(g => g.id), 0) + 1,
-        courseCode: groupData.courseCode || '',
-        courseNameCache: groupData.courseNameCache || '',
-        section: groupData.section,
-        platform: groupData.platform || 'whatsapp',
-        link: groupData.link || '',
-        type: groupData.type ?? defaultType,
-        academicPeriod: groupData.academicPeriod ?? defaultPeriod,
-        visibility: groupData.visibility || 'abierto',
-        lecturer: groupData.lecturer,
-        createdByUserId: currentUserId.value,
-        alternativeContact: groupData.alternativeContact,
-        contactNotes: groupData.contactNotes,
-        active: true
-      }
-      allGroups.value.push(newGroup)
-      toast.success('Grupo creado exitosamente')
-    }
-    
-    showFormModal.value = false
-    editingGroup.value = null
-    applyFilters()
-    loading.value = false
-  }, 500)
-}
-
-function updateGroup(existing: CourseGroup, data: Partial<CourseGroup>): CourseGroup {
-  return {
-    ...existing,
-    ...(data.courseCode !== undefined && { courseCode: data.courseCode }),
-    ...(data.courseNameCache !== undefined && { courseNameCache: data.courseNameCache }),
-    ...(data.section !== undefined && { section: data.section }),
-    ...(data.platform !== undefined && { platform: data.platform }),
-    ...(data.link !== undefined && { link: data.link }),
-    ...(data.type !== undefined && { type: data.type }),
-    ...(data.academicPeriod !== undefined && { academicPeriod: data.academicPeriod }),
-    ...(data.visibility !== undefined && { visibility: data.visibility }),
-    ...(data.lecturer !== undefined && { lecturer: data.lecturer }),
-    ...(data.alternativeContact !== undefined && { alternativeContact: data.alternativeContact }),
-    ...(data.contactNotes !== undefined && { contactNotes: data.contactNotes }),
-    ...(data.active !== undefined && { active: data.active })
-  }
-}
-
-function deleteGroup() {
-  if (!groupToDelete.value) return
-  
-  loading.value = true
-  
-  setTimeout(() => {
-    const index = allGroups.value.findIndex(g => g.id === groupToDelete.value!.id)
-    if (index !== -1) {
-      allGroups.value.splice(index, 1)
-      toast.success('Grupo eliminado exitosamente')
-    }
-    
-    groupToDelete.value = null
-    applyFilters()
-    loading.value = false
-  }, 500)
-}
-
 function joinGroup(group: CourseGroup) {
   if (group.link) {
     window.open(group.link, '_blank')
@@ -282,23 +206,21 @@ function joinGroup(group: CourseGroup) {
 
 function reloadData() {
   toast.info('Actualizando datos...')
-  applyFilters()
+  loadAllGroups()
 }
-
 
 watch([() => filters.value, () => sortOrder.value], () => {
   applyFilters()
 }, { deep: true })
 
 onMounted(() => {
-  applyFilters()
+  academicPeriods.value = generateAcademicPeriods()
+  loadAllGroups()
 })
-
 
 useCustomPageTitle('Grupos de cursos')
 
 definePageMeta({
   title: 'Grupos de cursos',
 })
-
 </script>

@@ -47,46 +47,61 @@
 </template>
 
 <script setup lang="ts">
-
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { toast } from 'vue-sonner'
 import GroupResults from '~/components/portal/grupos/GroupResults.vue'
 import ConfirmDialog from '~/components/dialogs/ConfirmDialog.vue'
 import type { CourseGroup } from '~/lib/api/strapi/types'
-import { groupsMock } from '../../../../server/utils/mocks';
+import { useCourseGroupsApi } from '../../../composables/useGroupsApi';
+
+const courseGroupsApi = useCourseGroupsApi()
+
+const authStore = useAuthStore()
+const currentUserId = computed(() => authStore.profile?.id || 0)
 
 const confirmDialogRef = ref<InstanceType<typeof ConfirmDialog>>()
 
-const allGroups = ref<CourseGroup[]>([...groupsMock])
 const myGroups = ref<CourseGroup[]>([])
 const loading = ref(false)
-const currentUserId = ref(100)
 const sortOrder = ref('recent')
-
 const groupToDelete = ref<CourseGroup | null>(null)
 
 
-function loadMyGroups() {
+async function loadMyGroups() {
+  if (!currentUserId.value) {
+    toast.warning('No se pudo identificar al usuario')
+    return
+  }
+
   loading.value = true
-  setTimeout(() => {
-    myGroups.value = allGroups.value.filter(
-      g => g.createdByUserId === currentUserId.value
-    )
+  try {
+    const allGroups = await courseGroupsApi.list()
+    
+    myGroups.value = allGroups.filter(g => g.createdByUserId === currentUserId.value)
     myGroups.value = applySortToResult(myGroups.value, sortOrder.value)
+  } catch (error) {
+    console.error('Error al cargar grupos:', error)
+    toast.error('Error al cargar tus grupos')
+    myGroups.value = []
+  } finally {
     loading.value = false
-  }, 300)
+  }
 }
 
 function applySortToResult(result: CourseGroup[], order: string): CourseGroup[] {
   switch (order) {
     case 'recent':
-      return result.sort((a, b) => b.id - a.id)
+      return [...result].sort((a, b) => (b.id || 0) - (a.id || 0))
     case 'oldest':
-      return result.sort((a, b) => a.id - b.id)
+      return [...result].sort((a, b) => (a.id || 0) - (b.id || 0))
     case 'az':
-      return result.sort((a, b) => a.courseNameCache.localeCompare(b.courseNameCache))
+      return [...result].sort((a, b) => 
+        (a.courseNameCache || '').localeCompare(b.courseNameCache || '')
+      )
     case 'za':
-      return result.sort((a, b) => b.courseNameCache.localeCompare(a.courseNameCache))
+      return [...result].sort((a, b) => 
+        (b.courseNameCache || '').localeCompare(a.courseNameCache || '')
+      )
     default:
       return result
   }
@@ -97,28 +112,8 @@ function applySort(order: string) {
   loadMyGroups()
 }
 
-
 function handleEdit(group: CourseGroup) {
-  navigateTo(`/dashboard/mis-grupos/${group.courseCode}/editar`)
-}
-
-
-function updateGroup(existing: CourseGroup, data: Partial<CourseGroup>): CourseGroup {
-  return {
-    ...existing,
-    ...(data.courseCode !== undefined && { courseCode: data.courseCode }),
-    ...(data.courseNameCache !== undefined && { courseNameCache: data.courseNameCache }),
-    ...(data.section !== undefined && { section: data.section }),
-    ...(data.platform !== undefined && { platform: data.platform }),
-    ...(data.link !== undefined && { link: data.link }),
-    ...(data.type !== undefined && { type: data.type }),
-    ...(data.academicPeriod !== undefined && { academicPeriod: data.academicPeriod }),
-    ...(data.visibility !== undefined && { visibility: data.visibility }),
-    ...(data.lecturer !== undefined && { lecturer: data.lecturer }),
-    ...(data.alternativeContact !== undefined && { alternativeContact: data.alternativeContact }),
-    ...(data.contactNotes !== undefined && { contactNotes: data.contactNotes }),
-    ...(data.active !== undefined && { active: data.active })
-  }
+  navigateTo(`/dashboard/mis-grupos/${group.id}/editar`)
 }
 
 function confirmDelete(group: CourseGroup) {
@@ -126,22 +121,22 @@ function confirmDelete(group: CourseGroup) {
   confirmDialogRef.value?.show()
 }
 
-function deleteGroup() {
+async function deleteGroup() {
   if (!groupToDelete.value) return
   
   loading.value = true
   
-  setTimeout(() => {
-    const index = allGroups.value.findIndex(g => g.id === groupToDelete.value!.id)
-    if (index !== -1) {
-      allGroups.value.splice(index, 1)
-      toast.success('Grupo eliminado exitosamente')
-    }
-    
+  try {
+    await courseGroupsApi.remove(String(groupToDelete.value.id))
+    toast.success('Grupo eliminado exitosamente')
     groupToDelete.value = null
-    loadMyGroups()
+    await loadMyGroups()
+  } catch (error) {
+    console.error('Error al eliminar grupo:', error)
+    toast.error('Error al eliminar el grupo')
+  } finally {
     loading.value = false
-  }, 500)
+  }
 }
 
 function joinGroup(group: CourseGroup) {
@@ -153,7 +148,6 @@ function joinGroup(group: CourseGroup) {
   }
 }
 
-
 onMounted(() => {
   loadMyGroups()
 })
@@ -161,5 +155,4 @@ onMounted(() => {
 definePageMeta({
   layout: 'dashboard'
 })
-
 </script>

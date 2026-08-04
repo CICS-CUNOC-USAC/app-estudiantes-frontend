@@ -11,7 +11,7 @@
 import { ref } from 'vue'
 import { toast } from 'vue-sonner'
 import GroupCreateForm from '~/components/portal/grupos/GroupCreateForm.vue'
-import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
+import type { GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
 import { generateAcademicPeriods } from '../../../../../server/utils/generate-periods';
 
 const router = useRouter()
@@ -24,8 +24,7 @@ const groupTypes = ref<GroupType[]>([
   { id: 3, name: 'Estudiantado', slug: 'estudiantado', description: 'Grupo de estudiantes del curso' }
 ])
 
-function handleSave(groupData: Partial<CourseGroup>) {
-  //Lógica de creación (POST a la API)
+function handleSave() {
   toast.success('Grupo creado exitosamente')
   router.push('/dashboard/mis-grupos')
 }

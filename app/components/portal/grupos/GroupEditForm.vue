@@ -46,14 +46,18 @@
                 <VeeField v-slot="{ componentField, errors }" name="section">
                   <Field :data-invalid="!!errors.length">
                     <CInputText
-                      v-bind="componentField"
+                      :model-value="componentField.modelValue"
                       label="Sección"
                       id="section"
                       no-borders
                       prepend-icon="icon-park-twotone:components"
-                      placeholder="Ej: A-01"
+                      placeholder="Ej: A"
                       :error="errors[0]"
+                      @update:model-value="onSectionInput"
                     />
+                    <p v-if="componentField.modelValue" class="text-xs text-gray-500 mt-1">
+                      Normalizado: <span class="font-mono">{{ normalizeSection(componentField.modelValue) }}</span>
+                    </p>
                   </Field>
                 </VeeField>
 
@@ -90,6 +94,16 @@
                     />
                   </Field>
                 </VeeField>
+              </div>
+
+              <!-- ✅ Advertencia de duplicados -->
+              <div v-if="duplicateWarning" class="mt-2 p-3 rounded-lg"
+                :class="isDuplicateBlocked ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800'">
+                <p class="text-sm"
+                  :class="isDuplicateBlocked ? 'text-red-700 dark:text-red-300' : 'text-yellow-700 dark:text-yellow-300'">
+                  <Icon :name="isDuplicateBlocked ? 'lucide:alert-circle' : 'lucide:alert-triangle'" class="mr-2 inline-block" />
+                  {{ duplicateWarning }}
+                </p>
               </div>
             </div>
           </template>
@@ -230,7 +244,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 import { useForm, Field as VeeField } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import { z } from 'zod'
@@ -241,6 +255,7 @@ import CSelect from '~/components/primitives/form/CSelect.vue'
 import CCardAlt from '~/components/primitives/card/CCardAlt.vue'
 import { Field, FieldGroup } from '~/components/ui/field'
 import type { CourseGroup, GroupType, AcademicPeriod } from '~/lib/api/strapi/types'
+import { normalizeSection, isValidSection } from '../../../../server/utils/text-similarity'
 
 interface Props {
   group: CourseGroup
@@ -253,6 +268,8 @@ const emit = defineEmits<{
   save: [data: Partial<CourseGroup>]
   cancel: []
 }>()
+
+const courseGroupsApi = useCourseGroupsApi()
 
 const loading = ref(false)
 const catalogLoading = ref(false)
@@ -267,8 +284,67 @@ const visibilityOptions = ref([
   { label: 'Privado', value: 'privado' }
 ])
 
+// ✅ Duplicados
+const duplicateWarning = ref<string | null>(null)
+const isDuplicateBlocked = ref(false)
+let duplicateTimeout: any = null
+
+function onSectionInput(value: string) {
+  const normalized = normalizeSection(value)
+  setValues({
+    section: normalized
+  })
+}
+
+async function checkDuplicates() {
+  const section = values.section
+  const periodId = values.academicPeriodId
+
+  if (!section || !periodId) {
+    duplicateWarning.value = null
+    isDuplicateBlocked.value = false
+    return
+  }
+
+  try {
+    const result = await courseGroupsApi.duplicates({
+      courseCode: props.group.courseCode,
+      section: section,
+      period: periodId
+    })
+
+    const filtered = result.filter((item: any) => item.id !== props.group.id)
+    
+    const highMatch = filtered.find((item: any) => item.similarity >= 0.92)
+    
+    if (highMatch) {
+      isDuplicateBlocked.value = true
+      duplicateWarning.value = `Ya existe otro grupo con sección similar: "${highMatch.attributes.section}" (${Math.round(highMatch.similarity * 100)}% coincidencia). Por favor, usa otra sección.`
+    } else {
+      const suggestions = filtered.filter((item: any) => item.similarity >= 0.6)
+      if (suggestions.length > 0) {
+        const suggestionText = suggestions.map((s: any) => 
+          `"${s.attributes.section}" (${Math.round(s.similarity * 100)}%)`
+        ).join(', ')
+        duplicateWarning.value = `Se encontraron secciones similares en otros grupos: ${suggestionText}. Considera usar otra sección.`
+        isDuplicateBlocked.value = false
+      } else {
+        duplicateWarning.value = null
+        isDuplicateBlocked.value = false
+      }
+    }
+  } catch (error) {
+    console.error('Error al verificar duplicados:', error)
+    isDuplicateBlocked.value = false
+  }
+}
+
 const formSchema = z.object({
-  section: z.string().nonempty('La sección del curso es requerida'),
+  section: z.string()
+    .nonempty('La sección del curso es requerida')
+    .refine((val) => isValidSection(val), {
+      message: 'La sección debe ser una letra (A, B, C, etc.)'
+    }),
   platform: z.string().nonempty('La plataforma es requerida'),
   link: z.string().nonempty('El enlace es requerido').url('Debe ser una URL válida'),
   visibility: z.string().nonempty('La visibilidad es requerida'),
@@ -279,7 +355,7 @@ const formSchema = z.object({
   contactNotes: z.string().optional()
 })
 
-const { handleSubmit, setValues } = useForm({
+const { handleSubmit, setValues, values } = useForm({
   validationSchema: toTypedSchema(formSchema),
   initialValues: {
     section: '',
@@ -293,6 +369,14 @@ const { handleSubmit, setValues } = useForm({
     contactNotes: ''
   },
   validateOnMount: false
+})
+
+watch([
+  () => values.section,
+  () => values.academicPeriodId
+], () => {
+  clearTimeout(duplicateTimeout)
+  duplicateTimeout = setTimeout(checkDuplicates, 500)
 })
 
 function loadGroupData() {
@@ -310,6 +394,13 @@ function loadGroupData() {
 }
 
 const onSubmit = handleSubmit(async (values) => {
+  if (isDuplicateBlocked.value) {
+    toast.error('No se puede actualizar el grupo', {
+      description: duplicateWarning.value || 'Ya existe otro grupo con una sección muy similar.'
+    })
+    return
+  }
+
   loading.value = true
   
   try {
@@ -326,7 +417,6 @@ const onSubmit = handleSubmit(async (values) => {
       alternativeContact: values.alternativeContact || undefined,
       contactNotes: values.contactNotes || undefined,
       lecturer: values.lecturerName ? {
-        id: Math.floor(Math.random() * 1000),
         fullName: values.lecturerName,
         email: '',
         school: ''
@@ -334,7 +424,6 @@ const onSubmit = handleSubmit(async (values) => {
     }
     
     emit('save', groupData)
-    toast.success('Grupo actualizado exitosamente')
   } catch (error) {
     toast.error('Error al actualizar el grupo', { 
       description: error instanceof Error ? error.message : 'Ocurrió un error inesperado' 

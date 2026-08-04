@@ -83,12 +83,22 @@
                     <CInputText :model-value="componentField.modelValue" label="Sección" id="section" no-borders
                       prepend-icon="icon-park-twotone:components" placeholder="Ej: A" :error="errors[0]"
                       @update:model-value="onSectionInput" />
-                   
+
                     <p v-if="componentField.modelValue" class="text-xs text-gray-500 mt-1">
                       Normalizado: <span class="font-mono">{{ normalizeSection(componentField.modelValue) }}</span>
                     </p>
                   </Field>
                 </VeeField>
+              </div>
+
+              <div v-if="duplicateWarning" class="mt-2 p-3 rounded-lg"
+                :class="isDuplicateBlocked ? 'bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800' : 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800'">
+                <p class="text-sm"
+                  :class="isDuplicateBlocked ? 'text-red-700 dark:text-red-300' : 'text-yellow-700 dark:text-yellow-300'">
+                  <Icon :name="isDuplicateBlocked ? 'lucide:alert-circle' : 'lucide:alert-triangle'"
+                    class="mr-2 inline-block" />
+                  {{ duplicateWarning }}
+                </p>
               </div>
             </div>
           </template>
@@ -131,8 +141,8 @@
               <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                 <VeeField v-slot="{ componentField, errors }" name="typeId">
                   <Field :data-invalid="!!errors.length">
-                    <CSelect v-bind="componentField" :items="props.types" clearable label="Tipo de grupo" id="type" no-borders
-                      prepend-icon="icon-park-twotone:category-management" placeholder="Seleccionar tipo"
+                    <CSelect v-bind="componentField" :items="props.types" clearable label="Tipo de grupo" id="type"
+                      no-borders prepend-icon="icon-park-twotone:category-management" placeholder="Seleccionar tipo"
                       option-label="name" option-value="id" :error="errors[0]" />
                   </Field>
                 </VeeField>
@@ -195,7 +205,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, nextTick } from 'vue'
+import { ref, computed, onMounted, nextTick, watch } from 'vue'
 import { useForm, Field as VeeField } from 'vee-validate'
 import { toTypedSchema } from '@vee-validate/zod'
 import { z } from 'zod'
@@ -457,7 +467,7 @@ const formSchema = z.object({
   contactNotes: z.string().optional()
 })
 
-const { handleSubmit, resetForm, setValues } = useForm({
+const { handleSubmit, resetForm, setValues, values } = useForm({
   validationSchema: toTypedSchema(formSchema),
   initialValues: {
     careerId: '',
@@ -467,8 +477,8 @@ const { handleSubmit, resetForm, setValues } = useForm({
     platform: '',
     link: '',
     visibility: '',
-    typeId: null, 
-    academicPeriodId: null, 
+    typeId: null,
+    academicPeriodId: null,
     lecturerName: '',
     alternativeContact: '',
     contactNotes: ''
@@ -477,7 +487,71 @@ const { handleSubmit, resetForm, setValues } = useForm({
 })
 
 
+const duplicateWarning = ref<string | null>(null)
+const isDuplicateBlocked = ref(false)
+let duplicateTimeout: any = null
+
+async function checkDuplicates() {
+  const courseCode = formValues.value.courseCode
+  const section = values.section
+  const periodId = values.academicPeriodId
+
+  if (!courseCode || !section || !periodId) {
+    duplicateWarning.value = null
+    isDuplicateBlocked.value = false
+    return
+  }
+
+  try {
+    const result = await courseGroupsApi.duplicates({
+      courseCode: courseCode,
+      section: section,
+      period: periodId
+    })
+
+    const highMatch = result.find((item: any) => item.similarity >= 0.92)
+
+    if (highMatch) {
+      isDuplicateBlocked.value = true
+      duplicateWarning.value = `Ya existe un grupo con sección similar: "${highMatch.attributes.section}" (${Math.round(highMatch.similarity * 100)}% coincidencia). Por favor, usa otra sección.`
+    } else {
+      const suggestions = result.filter((item: any) => item.similarity >= 0.6)
+      if (suggestions.length > 0) {
+        const suggestionText = suggestions.map((s: any) =>
+          `"${s.attributes.section}" (${Math.round(s.similarity * 100)}%)`
+        ).join(', ')
+        duplicateWarning.value = `Se encontraron secciones similares: ${suggestionText}. Considera usar otra sección.`
+        isDuplicateBlocked.value = false
+      } else {
+        duplicateWarning.value = null
+        isDuplicateBlocked.value = false
+      }
+    }
+  } catch (error) {
+    console.error('Error al verificar duplicados:')
+    isDuplicateBlocked.value = false
+  }
+}
+
+
+watch([
+  () => formValues.value.courseCode,
+  () => values.section,
+  () => values.academicPeriodId
+], () => {
+  clearTimeout(duplicateTimeout)
+  duplicateTimeout = setTimeout(checkDuplicates, 500)
+})
+
+
 const onSubmit = handleSubmit(async (values) => {
+  if (isDuplicateBlocked.value) {
+    toast.error('No se puede crear el grupo', {
+      description: duplicateWarning.value || 'Ya existe un grupo con una sección muy similar.'
+    })
+    return
+  }
+
   loading.value = true
 
   try {
@@ -504,10 +578,10 @@ const onSubmit = handleSubmit(async (values) => {
     const result = await courseGroupsApi.create(groupData)
     emit('save', result)
     toast.success('Grupo creado exitosamente')
-    
+
   } catch (error) {
     toast.error('Error al crear el grupo', {
-      description: error instanceof Error ? error.message : 'Ocurrió un error inesperado'
+      description: 'Ocurrió un error inesperado'
     })
   } finally {
     loading.value = false
