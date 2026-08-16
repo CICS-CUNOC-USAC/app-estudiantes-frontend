@@ -17,8 +17,7 @@
       />
     </header>
     <PersonalInfoDetails :src="user" />
-    <!-- <section class="profile-edit-section">
-    </section> -->
+    <SessionsInfo role="regular" />
   </main>
 </template>
 
@@ -26,6 +25,7 @@
 import { storeToRefs } from 'pinia'
 import Button from '~/components/ui/button/Button.vue'
 import PersonalInfoDetails from '~/components/profile/details/PersonalInfoDetails.vue'
+import SessionsInfo from '~/components/profile/details/SessionsInfo.vue'
 
 const authStore = useAuthStore()
 await authStore.fetchUser()

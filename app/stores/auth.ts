@@ -4,21 +4,10 @@ import { useRegularAuthStore } from './regular-auth'
 import { useStaffAuthStore } from './staff-auth'
 import { toast } from 'vue-sonner'
 
-type Profile = {
-  id: number
-  first_name: string
-  last_name: string
-  created_at: Date
-  updated_at: Date
-}
 type UserJwt = {
-  id: number
-  email: string
-  ra: string
-  profile_id: number
-  created_at: Date
-  updated_at: Date
-  profile: Profile
+  sub: number
+  type: 'user' | 'staff'
+  jti: string
   iat: number
   exp: number
 }
@@ -33,11 +22,25 @@ export const useAuthStore = defineStore('auth', {
     logout() {
       const router = useRouter()
       const tokenCookie = useCookie('cicsapp-user-token')
+      const refreshCookie = useCookie('cicsapp-refresh-token')
       const roleCookie = useCookie('cicsapp-roleuser')
       const regularAuthStore = useRegularAuthStore()
       const staffAuthStore = useStaffAuthStore()
+
+      // Revocar sesión en el backend (fire & forget)
+      if (refreshCookie.value) {
+        const endpoint =
+          roleCookie.value === 'staff' ? '/staff-auth/logout' : '/auth/logout'
+        $api(endpoint, {
+          method: 'POST',
+          body: { refresh_token: refreshCookie.value },
+        }).catch(() => {})
+      }
+
       tokenCookie.value = null
+      refreshCookie.value = null
       roleCookie.value = null
+
       // Clear the user in the respective store
       if (regularAuthStore.user?.profile_id) {
         regularAuthStore.clear()
@@ -51,16 +54,25 @@ export const useAuthStore = defineStore('auth', {
       toast.message('Sesión cerrada')
     },
     async fetchAuth() {
-      // const role = useCookie('cicsapp-roleuser')
-      // this.role = role.value ?? null
       const tokenCookie = useCookie('cicsapp-user-token')
-      this.token = tokenCookie.value ?? null
-      if (!tokenCookie.value) return
+      const refreshCookie = useCookie('cicsapp-refresh-token')
+      const roleCookie = useCookie('cicsapp-roleuser')
+
+      if (!tokenCookie.value && !refreshCookie.value) return
 
       try {
-        const decoded = jwtDecode<UserJwt>(tokenCookie.value)
-        this.role = decoded.profile_id ? 'regular' : 'staff'
+        if (tokenCookie.value) {
+          const decoded = jwtDecode<UserJwt>(tokenCookie.value)
+          this.role = decoded.type === 'user' ? 'regular' : 'staff'
+        } else {
+          this.role = roleCookie.value ?? null
+        }
+
+        if (!this.role) return
+
+        this.token = tokenCookie.value ?? null
         this.isAuthenticated = true
+
         if (this.role === 'staff') {
           const staffAuthStore = useStaffAuthStore()
           staffAuthStore.authenticated = true
@@ -89,8 +101,7 @@ export const useAuthStore = defineStore('auth', {
           const regularAuthStore = useRegularAuthStore()
           await regularAuthStore.myProfile()
         }
-      } catch (error) {
-      }
+      } catch (error) {}
     }
   },
   getters: {
