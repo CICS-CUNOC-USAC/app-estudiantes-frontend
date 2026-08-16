@@ -47,21 +47,20 @@ export type Staff = {
 
 type LoginResponse = {
   staff: Staff
-  token: string
+  access_token: string
+  refresh_token: string
 }
 
 export const useStaffAuthStore = defineStore('staff-auth', {
   state: () => ({
     authenticated: false,
     loading: false,
-    // error: null as any | {} as any | null,
     user: null as Staff | null,
     staffRoles: [] as any[]
   }),
   actions: {
     async loginStaff(payload: LoginPayload) {
       this.loading = true
-      // this.error = null
       const router = useRouter()
       // Fetch the data from the API
       const loginResponse = await $api<LoginResponse>('/staff-auth/login', {
@@ -71,8 +70,10 @@ export const useStaffAuthStore = defineStore('staff-auth', {
       // Success
       // Set cookies, user and role
       const tokenCookie = useCookie('cicsapp-user-token')
+      const refreshCookie = useCookie('cicsapp-refresh-token', { maxAge: 2592000 })
       const roleCookie = useCookie('cicsapp-roleuser')
-      tokenCookie.value = loginResponse.token
+      tokenCookie.value = loginResponse.access_token
+      refreshCookie.value = loginResponse.refresh_token
       roleCookie.value = 'staff'
       // Set the user in the store
       this.user = loginResponse.staff ?? null
@@ -83,7 +84,7 @@ export const useStaffAuthStore = defineStore('staff-auth', {
       // Set the token and role in the auth store
       const authStore = useAuthStore()
       authStore.role = 'staff'
-      authStore.token = loginResponse.token ?? ''
+      authStore.token = loginResponse.access_token ?? ''
       authStore.isAuthenticated = true
       // Redirect to the dashboard
       router.push('/admin/home')
@@ -110,7 +111,6 @@ export const useStaffAuthStore = defineStore('staff-auth', {
     clear() {
       this.user = null
       this.authenticated = false
-      // this.error = null
     }
   }
 })

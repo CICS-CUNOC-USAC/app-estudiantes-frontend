@@ -9,13 +9,15 @@
         Mi perfil
       </h1>
     </header>
-    <AdminPersonalInfoDetails :user="user" /> 
-     <AdminRolesInfo :user="user" />
+    <AdminPersonalInfoDetails :user="user" />
+    <AdminRolesInfo :user="user" />
+    <SessionsInfo role="staff" />
   </main>
 </template>
 <script lang="ts" setup>
 import AdminPersonalInfoDetails from '~/components/profile/details/AdminPersonalInfoDetails.vue'
 import AdminRolesInfo from '~/components/profile/details/AdminRolesInfo.vue'
+import SessionsInfo from '~/components/profile/details/SessionsInfo.vue'
 const { user } = storeToRefs(useStaffAuthStore())
 definePageMeta({
   layout: 'admin'

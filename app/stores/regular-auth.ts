@@ -51,9 +51,10 @@ export type User = {
   profile: Profile
 }
 
-export type LoginResponse = {
+type LoginResponse = {
   user: User
-  token: string
+  access_token: string
+  refresh_token: string
 }
 
 export const useRegularAuthStore = defineStore('regular-auth', {
@@ -75,8 +76,10 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       })
 
       const tokenCookie = useCookie('cicsapp-user-token')
+      const refreshCookie = useCookie('cicsapp-refresh-token', { maxAge: 2592000 })
       const roleCookie = useCookie('cicsapp-roleuser')
-      tokenCookie.value = loginResponse.token
+      tokenCookie.value = loginResponse.access_token
+      refreshCookie.value = loginResponse.refresh_token
       roleCookie.value = 'regular'
       // Set the user in the store
       this.user = loginResponse.user ?? null
@@ -84,14 +87,13 @@ export const useRegularAuthStore = defineStore('regular-auth', {
       // Set the token and role in the auth store
       const authStore = useAuthStore()
       authStore.role = 'regular'
-      authStore.token = loginResponse.token ?? ''
+      authStore.token = loginResponse.access_token ?? ''
       authStore.isAuthenticated = true
       // Redirect to the dashboard
       router.push('/dashboard/home')
 
       this.loading = false
       return { data: { value: loginResponse }, error: null }
-
     },
 
     async signupUser(payload: SignupPayload) {
@@ -105,8 +107,10 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         })
 
         const tokenCookie = useCookie('cicsapp-user-token')
+        const refreshCookie = useCookie('cicsapp-refresh-token', { maxAge: 2592000 })
         const roleCookie = useCookie('cicsapp-roleuser')
-        tokenCookie.value = response.token
+        tokenCookie.value = response.access_token
+        refreshCookie.value = response.refresh_token
         roleCookie.value = 'regular'
         // Set the user in the store
         this.user = response.user ?? null
@@ -114,15 +118,14 @@ export const useRegularAuthStore = defineStore('regular-auth', {
         // Set the token and role in the auth store
         const authStore = useAuthStore()
         authStore.role = 'regular'
-        authStore.token = response.token ?? ''
+        authStore.token = response.access_token ?? ''
         authStore.isAuthenticated = true
 
         router.push('/dashboard/home')
         toast.success(
           `Bienvenid@ ${this.user?.profile.first_name} ${this.user?.profile.last_name}`
         )
-      } catch (error) {
-        // example of error message: {statusCode: 400, message: [{email: "Email already exists"}, {ra: "RA already exists"}], error: "Bad Request"}, we want to get all the messages and show them in the toast as description so let's map the error.data.message
+      } catch (error: any) {
         toast.error('Error al registrar usuario', {
           description: error.data?.message
             .map((m: any) => Object.values(m))
