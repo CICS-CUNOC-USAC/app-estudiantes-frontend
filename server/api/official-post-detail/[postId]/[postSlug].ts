@@ -46,13 +46,10 @@ export default defineEventHandler(async (event) => {
     if (src) {
       if (src.includes('articulos')) {
         const newSrc = `http://ingenieria.cunoc.usac.edu.gt${src}`
-        // img.setAttribute('src', `http://ingenieria.cunoc.usac.edu.gt${src}`)
-        // example: https://wsrv.nl/?url=http://ingenieria.cunoc.usac.edu.gt/portal/carpetas/imagenes/vac_asignado.jpg
-        img.setAttribute('src', `https://wsrv.nl/?url=${newSrc}`)
+        img.setAttribute('src', proxiedOfficialImage(newSrc))
       } else {
         const newSrc = `${BASE_URL}/carpetas/imagenes/${src}`
-        // img.setAttribute('src', `${BASE_URL}/carpetas/imagenes/${src}`)
-        img.setAttribute('src', `https://wsrv.nl/?url=${newSrc}`)
+        img.setAttribute('src', proxiedOfficialImage(newSrc))
       }
     }
   })
