@@ -52,11 +52,12 @@
   --color-cics-silver-pale: #f8f5f3;
 
   /* --font-sans: 'Geist Sans', system-ui, sans-serif; */
-  --font-sans: 'Stack Sans Text', system-ui, sans-serif;
-  --font-heading: 'Stack Sans Headline', system-ui, sans-serif;
-  --font-heading-alt: 'Stack Sans Notch', system-ui, sans-serif;
-  --font-content: 'Geist', system-ui, sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  /* --font-sans: 'Stack Sans Text', system-ui, sans-serif; */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-heading: 'Inter Tight', system-ui, sans-serif;
+  --font-heading-alt: 'Inter Tight', system-ui, sans-serif;
+  --font-content: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   --animate-scaleIn: scaleIn 150ms ease;
   --animate-scaleOut: scaleOut 150ms ease;

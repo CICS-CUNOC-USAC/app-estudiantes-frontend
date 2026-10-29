@@ -46,6 +46,7 @@
         :description="item.description"
         :to="`/portal/post/${item.link}`"
         :small="item.posted_since"
+        :image="item.image ?? undefined"
       >
         <template #footer>
           <span
@@ -94,6 +95,7 @@ const { data, status, error } = useFetch<
     link: string
     original_link: string
     posted_since: string
+    image: string | null
   }[]
 >('/api/official-posts', {
   params: { page: page.value },
@@ -111,6 +113,7 @@ async function load() {
       link: string
       original_link: string
       posted_since: string
+      image: string | null
     }[]
   >('/api/official-posts', {
     params: { page: page.value + 1 }

@@ -38,12 +38,20 @@ export default defineEventHandler(async (event) => {
       .replace(/\n/g, '')
       .replace(/\t/g, '')
       .replace(/\sel/g, ' el ')
+    const postImageSrc = postContainer
+      .querySelector('.featurette-image')
+      ?.getAttribute('src')
+    // served through our own proxy to avoid mixed content
+    const postImage = postImageSrc
+      ? proxiedOfficialImage(new URL(postImageSrc, BASE_URL).href)
+      : null
     return {
       title: postTitle,
       description: postDescription,
       link: postLinkFinal,
       original_link: postLink?.join('/'),
-      posted_since: postPostedSince
+      posted_since: postPostedSince,
+      image: postImage
     }
   })
   return posts
